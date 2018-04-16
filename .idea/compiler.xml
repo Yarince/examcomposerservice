@@ -9,8 +9,5 @@
         <module name="examcomposerservice" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="examcomposerservice" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
 </project>
