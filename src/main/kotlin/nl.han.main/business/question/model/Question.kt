@@ -1,16 +1,11 @@
 package nl.han.main.business.question.model
 
-import nl.han.main.business.exam.model.ExamType
 import java.util.*
 
 data class Question (
         val questionId: Int,
         val questionType: QuestionType? = null,
         val questionText: String? = null,
-        val points: Int? = null,
-        val course: String? = null,
-        val semester: String? = null,
-        val examType: ExamType? = null,
         val subQuestions: Array<Question>? = null
         ) {
 

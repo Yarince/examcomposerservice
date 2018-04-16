@@ -12,6 +12,7 @@ data class Exam(
         val course: String? = null,
         val examType: ExamType? = null,
         val instructions: String? = null,
+        val location: String? = null,
         val questions: Array<Question>? = null
         ) {
 
