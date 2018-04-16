@@ -4,7 +4,8 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-open class Application
+class Application {
+}
 
 
 //Run this to start the spring server

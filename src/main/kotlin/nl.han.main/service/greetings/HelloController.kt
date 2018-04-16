@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.concurrent.atomic.AtomicLong
 
 @RestController
-private class GreetingController {
+private class HelloController {
 
     val counter = AtomicLong()
 
