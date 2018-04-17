@@ -2,7 +2,7 @@ package nl.han.main.model.question
 
 import io.swagger.annotations.ApiModelProperty
 
-abstract class Question(
+open class Question(
         @ApiModelProperty(notes = "The ID of the question")
         val questionId: Int,
         @ApiModelProperty(notes = "Text of the question")
