@@ -1,4 +1,4 @@
-package nl.han.main.business.question.model
+package nl.han.main.model.question
 
 enum class QuestionType {
     OPEN_QUESTION
