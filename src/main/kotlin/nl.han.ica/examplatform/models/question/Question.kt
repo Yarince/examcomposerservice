@@ -1,4 +1,4 @@
-package nl.han.main.model.question
+package nl.han.ica.examplatform.models.question
 
 abstract class Question (
         val questionId: Int,
