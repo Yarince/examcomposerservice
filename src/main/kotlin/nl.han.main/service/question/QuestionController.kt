@@ -1,7 +1,6 @@
 package nl.han.main.service.question
 
 import io.swagger.annotations.*
-import nl.han.main.model.question.OpenQuestion
 import nl.han.main.model.question.Question
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,5 +16,5 @@ class QuestionController {
     @ApiResponses(
             ApiResponse(code = 200, message = "Success")
     )
-    fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody requestBodyJson: Question) = "Replace this with the implementation method"
+    fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody requestBodyJson: Question) = requestBodyJson
 }
