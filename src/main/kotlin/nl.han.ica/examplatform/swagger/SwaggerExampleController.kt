@@ -1,7 +1,7 @@
-package nl.han.main.service.swagger
+package nl.han.ica.examplatform.swagger
 
 import io.swagger.annotations.*
-import nl.han.main.model.question.Question
+import nl.han.ica.examplatform.models.question.Question
 import org.springframework.web.bind.annotation.*
 
 @RestController

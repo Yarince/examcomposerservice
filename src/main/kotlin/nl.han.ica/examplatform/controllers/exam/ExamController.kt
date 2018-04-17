@@ -1,5 +1,8 @@
 package nl.han.ica.examplatform.controllers.exam
 
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.service.exam.ExamService
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,11 +19,16 @@ class ExamController {
     lateinit var examService: ExamService
 
     @GetMapping()
+    @ApiOperation(value = "Example: Get all exams", notes = "Some extra information about this endpoint", response = Array<Exam>::class)
     fun getExams() =
             examService.getExams() // Example "get all" end-point
 
     @PostMapping()
-    fun addExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
+    @ApiOperation(value = "Add an empty exam", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
+    @ApiResponses(
+            ApiResponse(code = 201, message = "Create"),
+            ApiResponse(code = 403, message = "Bad request")
+    )fun addExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
             examService.addExam(exam)
 
 }
