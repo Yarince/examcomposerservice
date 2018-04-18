@@ -34,8 +34,10 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionSuccess() {
-        val questionInserted = Question(0, "name", null, "APP", null, ExamType.EXAM, null)
+        val questionInserted = Question(0, "name", QuestionType.OPEN_QUESTION, "APP", null, ExamType.EXAM, null)
         val expectedResult = ResponseEntity(questionInserted, HttpStatus.CREATED)
+
+        doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)
 
         val result = questionService.addQuestion(questionInserted)
         assertNotNull(result)
