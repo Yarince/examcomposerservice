@@ -25,31 +25,7 @@ class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRes
         val result = restTemplate.getForEntity<String>("/exam")
         assertNotNull(result)
         assertEquals(result.statusCode, HttpStatus.OK)
-        assertEquals("""[
-            |{
-                |"name":"name-0",
-                |"durationInMinutes":10,
-                |"startTime":"1970-01-01T00:00:06.000+0000",
-                |"course":"APP",
-                |"examType":"EXAM",
-                |"examId":null,
-                |"endTime":"1970-01-01T00:00:06.010+0000",
-                |"instructions":null,
-                |"location":null,
-                |"questions":null
-            |},{
-                |"name":"name-0",
-                |"durationInMinutes":10,
-                |"startTime":"1970-01-01T00:00:06.000+0000",
-                |"course":"APP",
-                |"examType":"EXAM",
-                |"examId":null,
-                |"endTime":"1970-01-01T00:00:06.010+0000",
-                |"instructions":null,
-                |"location":null,
-                |"questions":null
-            |}
-            |]""".trimMargin(),
+        assertEquals("[{\"name\":\"name-0\",\"durationInMinutes\":10,\"startTime\":\"1970-01-01T00:00:06.000+0000\",\"course\":\"APP\",\"examType\":\"EXAM\",\"examId\":null,\"endTime\":\"1970-01-01T00:00:06.010+0000\",\"instructions\":null,\"location\":null,\"questions\":null},{\"name\":\"name-1\",\"durationInMinutes\":10,\"startTime\":\"1970-01-01T00:00:06.000+0000\",\"course\":\"APP\",\"examType\":\"EXAM\",\"examId\":null,\"endTime\":\"1970-01-01T00:00:06.010+0000\",\"instructions\":null,\"location\":null,\"questions\":null}]".trimMargin(),
                 result.body)
     }
 
