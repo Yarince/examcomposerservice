@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity
 import kotlin.test.assertEquals
 
 @RunWith(MockitoJUnitRunner::class)
-class ExamControllerTest {
+class QuestionControllerTest {
 
     @InjectMocks
     private
@@ -27,7 +27,7 @@ class ExamControllerTest {
     lateinit var questionService: QuestionService
 
     @Test
-    fun testGetExams() {
+    fun testCreateQuestion() {
         val expectedResultBody = Question(1, "", QuestionType.OPEN_QUESTION, "", null, ExamType.PRACTICE_EXAM, null)
         val expectedStatusCode = HttpStatus.CREATED
 
