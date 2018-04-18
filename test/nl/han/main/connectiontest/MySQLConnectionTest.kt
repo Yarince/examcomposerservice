@@ -23,7 +23,7 @@ internal class MySQLConnectionTest {
     fun testConnection() {
         val statement: Statement = testConnection!!.createStatement()
         MySQLConnection().closeStatement(statement)
-        assertTrue(statement.isClosed())
+        assertTrue(statement.isClosed)
     }
 
     @After

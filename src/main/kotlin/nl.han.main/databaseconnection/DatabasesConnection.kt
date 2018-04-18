@@ -19,24 +19,27 @@ class MySQLConnection {
     private var conn: Connection? = null
 
     fun getConnection(): Connection? {
-
-        val databaseProperties = Properties()
-        val propertiesFile = System.getProperty("user.dir") + "\\src\\main\\resources\\application.properties"
-        val reader = FileReader(propertiesFile)
-        databaseProperties.load(reader)
-
-        val drivers = databaseProperties.getProperty("jdbc.driverClassName")
-        val connectionURL = databaseProperties.getProperty("jdbc.url")
-        val username = databaseProperties.getProperty("jdbc.username")
-        val password = databaseProperties.getProperty("jdbc.password")
+        val databaseProperties = initializeProperties()
         try {
-            Class.forName(drivers)
-            conn = DriverManager.getConnection(connectionURL, username, password)
+            connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
             return conn
         } catch (e: SQLException){
             e.printStackTrace()
         }
         return null
+    }
+
+    private fun initializeProperties(): Properties {
+        val databaseProperties = Properties()
+        val propertiesFile = System.getProperty("user.dir") + "\\src\\main\\resources\\application.properties"
+        val reader = FileReader(propertiesFile)
+        databaseProperties.load(reader)
+        return databaseProperties
+    }
+
+    private fun connectDatabase(connectionURL: String, username: String, password: String, drivers: String) {
+        Class.forName(drivers)
+        conn = DriverManager.getConnection(connectionURL, username, password)
     }
 
     fun closeConnection(con: Connection?) {
@@ -57,9 +60,23 @@ class MySQLConnection {
             }
         } catch (e: SQLException) {
             e.printStackTrace()
-
         }
+    }
 
+    private fun getDatabaseConnectionUrl(properties: Properties): String {
+        return properties.getProperty("jdbc.url")
+    }
+
+    private fun getDatabaseUsername(properties: Properties): String {
+        return properties.getProperty("jdbc.username")
+    }
+
+    private fun getDatabasePassword(properties: Properties): String {
+        return properties.getProperty("jdbc.password")
+    }
+
+    private fun getDrivers(properties: Properties): String {
+        return properties.getProperty("jdbc.driverClassName")
     }
 
 }
