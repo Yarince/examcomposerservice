@@ -1,8 +1,8 @@
-package nl.han.main.service.question
+package nl.han.ica.examplatform.service.question
 
-import nl.han.ica.examplatform.service.question.QuestionService
-import nl.han.main.model.question.Question
-import nl.han.main.model.question.QuestionType
+import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.*
 import org.junit.Test

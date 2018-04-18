@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.question
 
-import nl.han.main.model.question.Question
+import nl.han.ica.examplatform.models.question.Question
 import org.springframework.stereotype.Repository
 
 @Repository

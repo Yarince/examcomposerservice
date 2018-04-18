@@ -1,6 +1,8 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
+import nl.han.ica.examplatform.models.exam.ExamType
+
 
 open class Question(
         @ApiModelProperty(notes = "The ID of the question")

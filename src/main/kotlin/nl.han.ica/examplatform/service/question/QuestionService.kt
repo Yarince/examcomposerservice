@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.service.question
 
-import nl.han.main.model.question.Question
+import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

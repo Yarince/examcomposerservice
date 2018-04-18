@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @Api("test", description = "Description of this API endpoint group")
-class ExampleController {
+class SwaggerExampleController {
 
     @RequestMapping("/test", method = [RequestMethod.GET])
     // This represents the endpoint in the swagger UI

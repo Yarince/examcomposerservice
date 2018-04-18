@@ -1,8 +1,8 @@
-package nl.han.main.controllers.question
+package nl.han.ica.examplatform.controllers.question
 
-import nl.han.main.model.question.ExamType
-import nl.han.main.model.question.Question
-import nl.han.main.model.question.QuestionType
+import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.service.question.QuestionService
 import org.junit.Assert.*
 import org.junit.Test

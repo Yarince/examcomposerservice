@@ -1,5 +1,7 @@
 package nl.han.ica.examplatform.models.question
 
+import nl.han.ica.examplatform.models.exam.ExamType
+
 class OpenQuestion(
         questionId: Int,
         questionText: String?,
