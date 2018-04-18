@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.controllers.exam
 
 import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.service.exam.ExamService
 import org.junit.Assert.*
 import org.junit.Test
@@ -11,6 +12,7 @@ import org.mockito.Mockito.doReturn
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import java.util.Date
 import kotlin.test.assertEquals
 
 
@@ -27,22 +29,20 @@ class ExamControllerTest {
 
     @Test
     fun testGetExams() {
-        doReturn(arrayOf(
-                Exam(0, "name-0"),
-                Exam(1, "name-1"))
+        val expected = arrayOf(
+                Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM),
+                Exam("name-1", 10, Date(6000), "APP", ExamType.EXAM))
+        doReturn(expected
         ).`when`(examService).getExams()
 
         val result = examController.getExams()
         assertNotNull(result)
-        assertArrayEquals(arrayOf(
-                Exam(0, "name-0"),
-                Exam(1, "name-1")),
-                result)
+        assertArrayEquals(expected, result)
     }
 
     @Test
     fun testAddExam() {
-        val expected = Exam(0, "test name")
+        val expected = Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM)
         doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(examService).addExam(expected)
         val result = examController.addExam(expected)
         assertNotNull(result)
