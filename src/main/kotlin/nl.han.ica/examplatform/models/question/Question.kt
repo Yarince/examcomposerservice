@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.exam.ExamType
 
 
-open class Question(
+data class Question(
         @ApiModelProperty(notes = "The ID of the question")
         val questionId: Int? = null,
 

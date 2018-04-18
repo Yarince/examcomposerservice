@@ -4,6 +4,7 @@ import io.swagger.annotations.*
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.service.question.QuestionService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -19,5 +20,5 @@ class QuestionController {
             ApiResponse(code = 201, message = "Created"),
             ApiResponse(code = 500, message = "Internal server error")
     )
-    fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question) = questionService.addQuestion(question)
+    fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
 }
