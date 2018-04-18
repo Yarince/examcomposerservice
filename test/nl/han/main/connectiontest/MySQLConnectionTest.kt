@@ -4,11 +4,10 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.sql.Connection
-import org
 
 internal class MySQLConnectionTest {
 
-    @Mock
+    
     private
     lateinit var connection: Connection
 
