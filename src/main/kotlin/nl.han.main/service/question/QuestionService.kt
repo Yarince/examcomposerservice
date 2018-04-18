@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class QuestionService {
+    lateinit var questionDAO: QuestionDAO
+
     fun addQuestion(question: Question): ResponseEntity<Question> {
         return try {
-            QuestionDAO.insertQuestion(question)
-            ResponseEntity(question, HttpStatus.CREATED)
+            ResponseEntity(questionDAO.insertQuestion(question), HttpStatus.CREATED)
         } catch (exception: Exception) {
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
