@@ -20,7 +20,6 @@ internal class MySQLConnectionTest {
     private var databaseConnection: MySQLConnection? = MySQLConnection
     private var testConnection: Connection? = null
 
-
     @Test
     fun testConnectionByOpeningAndClosingAStatement() {
         testConnection = databaseConnection?.getConnection()
@@ -35,5 +34,4 @@ internal class MySQLConnectionTest {
     fun after() {
         databaseConnection?.closeConnection(testConnection)
     }
-
 }
