@@ -1,17 +1,10 @@
-package nl.han.main.databaseconnection
+package nl.han.ica.examplatform.persistence.connectiontest
 
 import org.junit.jupiter.api.Test
 import java.sql.Connection
-import kotlin.test.assertNotNull
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.junit.After
-import org.junit.Before
-import ch.qos.logback.core.db.DBHelper.closeStatement
-import com.mysql.cj.api.MysqlConnection
-import java.sql.PreparedStatement
 import java.sql.Statement
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 
