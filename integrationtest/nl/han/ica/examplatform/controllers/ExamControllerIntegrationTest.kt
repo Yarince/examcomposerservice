@@ -90,7 +90,6 @@ class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRes
                 entity,
                 Any::class.java)
 
-        //assertNull(response.body)
         assertEquals(response.statusCode, HttpStatus.NOT_FOUND)
     }
 }

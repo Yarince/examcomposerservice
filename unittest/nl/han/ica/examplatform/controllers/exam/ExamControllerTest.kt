@@ -48,4 +48,14 @@ class ExamControllerTest {
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
     }
+
+    @Test
+    fun testGetExam() {
+        val idOfExamToGet = 1
+        val expected = Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM, examId = idOfExamToGet)
+        doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(examService).getExam(idOfExamToGet)
+        val result = examController.getExam(idOfExamToGet)
+        assertNotNull(result)
+        assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
+    }
 }
