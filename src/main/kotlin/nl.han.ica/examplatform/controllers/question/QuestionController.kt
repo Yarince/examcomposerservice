@@ -2,7 +2,7 @@ package nl.han.ica.examplatform.controllers.question
 
 import io.swagger.annotations.*
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.service.question.QuestionService
+import nl.han.ica.examplatform.business.question.QuestionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

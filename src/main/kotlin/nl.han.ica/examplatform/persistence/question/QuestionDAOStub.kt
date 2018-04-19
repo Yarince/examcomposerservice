@@ -4,7 +4,7 @@ import nl.han.ica.examplatform.models.question.Question
 import org.springframework.stereotype.Repository
 
 @Repository
-class QuestionDAO {
+class QuestionDAOStub {
     fun insertQuestion(question: Question): Question {
         print(question)
         // Here the database connection should be called on, creating a prepared statement to insert a question

@@ -1,9 +1,8 @@
-package nl.han.ica.examplatform.service.exam
+package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.business.exam.validator.ExamValidator
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
-import nl.han.ica.examplatform.persistence.exam.ExamDaoStub
+import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -18,7 +17,7 @@ class ExamService {
 
     fun addExam(exam: Exam): ResponseEntity<Exam> {
         ExamValidator.validate(exam) // Check if exam has a correct syntax
-        ExamDaoStub(exam) //Add to database
+        ExamDAOStub(exam) //Add to database
         return ResponseEntity(exam, HttpStatus.CREATED)
     }
 }

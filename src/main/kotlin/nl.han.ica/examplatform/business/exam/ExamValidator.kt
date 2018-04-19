@@ -1,6 +1,6 @@
-package nl.han.ica.examplatform.business.exam.validator
+package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.exceptions.responseExceptions.InvalidExamException
+import nl.han.ica.examplatform.controllers.responseExceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 
 class ExamValidator {

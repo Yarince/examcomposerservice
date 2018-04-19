@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.exam.validator
 
-import nl.han.ica.examplatform.exceptions.responseExceptions.InvalidExamException
+import nl.han.ica.examplatform.business.exam.ExamValidator
+import nl.han.ica.examplatform.controllers.responseExceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import org.junit.jupiter.api.Assertions.*

@@ -1,9 +1,10 @@
 package nl.han.ica.examplatform.service.question
 
+import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
-import nl.han.ica.examplatform.persistence.question.QuestionDAO
+import nl.han.ica.examplatform.persistence.question.QuestionDAOStub
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,7 +27,7 @@ class QuestionServiceTest {
 
     @Mock
     private
-    lateinit var questionDAO: QuestionDAO
+    lateinit var questionDAO: QuestionDAOStub
 
     @Test
     fun testAddQuestionSuccess() {

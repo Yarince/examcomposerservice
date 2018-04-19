@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.swagger
+package nl.han.ica.examplatform.config.swagger
 
 import io.swagger.annotations.*
 import nl.han.ica.examplatform.models.question.Question
