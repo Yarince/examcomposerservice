@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.service.question
+package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.exam.ExamType
