@@ -30,8 +30,8 @@ class ExamControllerTest {
     @Test
     fun testGetExams() {
         val expected = arrayOf(
-                Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM),
-                Exam("name-1", 10, Date(6000), "APP", ExamType.EXAM))
+                Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version =1, examType = ExamType.EXAM),
+                Exam(name = "name-1", durationInMinutes = 10, startTime = Date(6000), course = "APP", version =1, examType = ExamType.EXAM))
         doReturn(expected
         ).`when`(examService).getExams()
 
@@ -42,7 +42,7 @@ class ExamControllerTest {
 
     @Test
     fun testAddExam() {
-        val expected = Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM)
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version =1, examType = ExamType.EXAM)
         doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(examService).addExam(expected)
         val result = examController.addExam(expected)
         assertNotNull(result)
