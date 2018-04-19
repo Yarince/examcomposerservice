@@ -69,4 +69,28 @@ class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRes
         assertEquals(response.statusCode, HttpStatus.OK)
         assertEquals(requestParamExamId, response.body?.examId)
     }
+
+
+    @Test
+    fun testGetExamNotFound() {
+        // For now this is -9999, could be changed later when we know more about how the ID will be constructed
+        val requestParamExamId = -9999
+
+        val headers = HttpHeaders()
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE)
+
+        val builder = UriComponentsBuilder.fromPath("/exam")
+                .queryParam("id", requestParamExamId)
+
+        val entity = HttpEntity<Any>(headers)
+
+        val response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                Any::class.java)
+
+        //assertNull(response.body)
+        assertEquals(response.statusCode, HttpStatus.NOT_FOUND)
+    }
 }
