@@ -1,6 +1,5 @@
 package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import org.junit.Assert.*

@@ -1,6 +1,5 @@
 package nl.han.ica.examplatform.business.question
 
-import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
