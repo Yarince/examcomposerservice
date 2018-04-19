@@ -24,5 +24,8 @@ data class Question(
         val examType: ExamType = ExamType.PRACTICE_EXAM,
 
         @ApiModelProperty(notes = "A question can contain subquestions when the type is noQuestion")
-        val subQuestions: Array<Question>? = null
+        val subQuestions: Array<Question>? = null,
+
+        @ApiModelProperty(notes = "Only applicable if the question is a multipleChoice question. Array with strings containing the options")
+        val options: Array<String>? = null
 )
