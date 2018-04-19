@@ -10,25 +10,30 @@ import ch.qos.logback.core.db.DBHelper.closeStatement
 import com.mysql.cj.api.MysqlConnection
 import java.sql.PreparedStatement
 import java.sql.Statement
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 
 internal class MySQLConnectionTest {
 
-
-    private var testConnection: Connection? = MySQLConnection().getConnection()
+    private var databaseConnection: MySQLConnection? = MySQLConnection
+    private var testConnection: Connection? = null
 
 
     @Test
-    fun testConnection() {
-        val statement: Statement = testConnection!!.createStatement()
-        MySQLConnection().closeStatement(statement)
-        assertTrue(statement.isClosed)
+    fun testConnectionByOpeningAndClosingAStatement() {
+        testConnection = databaseConnection?.getConnection()
+        testConnection?.let {
+            val statement: Statement = it.createStatement()
+            databaseConnection?.closeStatement(statement)
+            assertTrue(statement.isClosed)
+        }
     }
 
     @After
     fun after() {
-        MySQLConnection().closeConnection(testConnection)
+        databaseConnection?.closeConnection(testConnection)
     }
 
 }
