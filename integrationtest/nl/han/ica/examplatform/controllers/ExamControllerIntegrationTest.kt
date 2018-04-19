@@ -13,6 +13,10 @@ import org.springframework.boot.test.web.client.postForEntity
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.util.*
 import org.springframework.http.*
+import org.springframework.http.HttpEntity
+import org.springframework.web.util.UriComponentsBuilder
+
+
 
 
 @ExtendWith(SpringExtension::class)
@@ -21,7 +25,7 @@ class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRes
 
     @Test
     fun testGetExams() {
-        val result = restTemplate.getForEntity<String>("/exam")
+        val result = restTemplate.getForEntity<String>("/exam/all")
         assertNotNull(result)
         assertEquals(result.statusCode, HttpStatus.OK)
         assertEquals("""[{"name":"name-0","durationInMinutes":10,"startTime":"1970-01-01T00:00:06.000+0000","course":"APP","examType":"EXAM","examId":null,"endTime":"1970-01-01T00:00:06.010+0000","instructions":null,"location":null,"questions":null},{"name":"name-1","durationInMinutes":10,"startTime":"1970-01-01T00:00:06.000+0000","course":"APP","examType":"EXAM","examId":null,"endTime":"1970-01-01T00:00:06.010+0000","instructions":null,"location":null,"questions":null}]""".trimMargin(),
@@ -41,5 +45,28 @@ class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRes
         assertEquals(result.statusCode, HttpStatus.CREATED)
         assertEquals(Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM)
                 , result.body)
+    }
+
+    @Test
+    fun testGetExamSuccess() {
+        val requestParamExamId = 1
+
+        val headers = HttpHeaders()
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE)
+
+        val builder = UriComponentsBuilder.fromPath("/exam")
+                .queryParam("id", requestParamExamId)
+
+        val entity = HttpEntity<Any>(headers)
+
+        val response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                Exam::class.java)
+
+        assertNotNull(response.body)
+        assertEquals(response.statusCode, HttpStatus.OK)
+        assertEquals(requestParamExamId, response.body?.examId)
     }
 }
