@@ -16,7 +16,7 @@ object MySQLConnection {
     */
     private var conn: Connection? = null
 
-    fun establishDatabaseConnection() {
+    private fun establishDatabaseConnection() {
         val databaseProperties = initializeProperties()
         try {
             conn = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
