@@ -1,11 +1,8 @@
 package nl.han.ica.examplatform.controllers
 
-import com.fasterxml.jackson.databind.SerializationFeature
-import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
-import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -18,7 +15,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
-
 
 
 @ExtendWith(SpringExtension::class)

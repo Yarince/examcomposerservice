@@ -17,10 +17,8 @@ import org.springframework.http.ResponseEntity
 import kotlin.test.assertEquals
 
 
-
 @RunWith(MockitoJUnitRunner::class)
 class QuestionServiceTest {
-
 
     @InjectMocks
     lateinit var questionService: QuestionService
@@ -40,5 +38,4 @@ class QuestionServiceTest {
         assertNotNull(result)
         assertEquals(expectedResult, result)
     }
-
 }
