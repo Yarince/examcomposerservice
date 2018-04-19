@@ -20,4 +20,8 @@ class ExamService {
         ExamDAOStub(exam) //Add to database
         return ResponseEntity(exam, HttpStatus.CREATED)
     }
+
+    fun getExam(id: Int): ResponseEntity<Exam> {
+        return ResponseEntity(Exam("", 1, Date(6000), "APP", ExamType.EXAM), HttpStatus.OK)
+    }
 }
