@@ -17,8 +17,6 @@ import org.springframework.http.HttpEntity
 import org.springframework.web.util.UriComponentsBuilder
 
 
-
-
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRestTemplate) {
