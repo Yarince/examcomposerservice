@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.service.exam.ExamService
+import nl.han.ica.examplatform.business.exam.ExamService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
