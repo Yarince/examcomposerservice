@@ -9,6 +9,15 @@ import java.sql.SQLException
 
 
 object MySQLConnection {
+
+    private val databaseProperties : Properties
+    /*
+    The value databseProperties is initialized in the init{} method
+     */
+    init {
+        databaseProperties = initializeProperties()
+    }
+
     /*
     In case that the database + the queries are ready to use this class has to be extended.
     It needs 2 more variables(preparedStatement+resultSet) and an extension of the getConnection
@@ -16,14 +25,13 @@ object MySQLConnection {
     */
     private var conn: Connection? = null
 
+
     private fun establishDatabaseConnection() {
-        val databaseProperties = initializeProperties()
         try {
             conn = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
         } catch (e: SQLException){
             e.printStackTrace()
         }
-        //closeConnection(conn)
     }
 
     fun getConnection() : Connection? {
@@ -33,8 +41,7 @@ object MySQLConnection {
 
     private fun initializeProperties(): Properties {
         val databaseProperties = Properties()
-        val propertiesFile = System.getProperty("user.dir") + "\\src\\main\\kotlin\\nl.han.ica\\examplatform\\config\\databaseconfig\\application.properties"
-        val reader = FileReader(propertiesFile)
+        val reader = FileReader(System.getProperty("user.dir") + "\\src\\main\\kotlin\\nl.han.ica\\examplatform\\config\\databaseconfig\\application.properties")
         databaseProperties.load(reader)
         return databaseProperties
     }
