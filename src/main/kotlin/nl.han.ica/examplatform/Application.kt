@@ -6,10 +6,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @SpringBootApplication
 @EnableSwagger2
-class Application
-
-
-//Run this to start the spring server
-fun main(args: Array<String>) {
-    SpringApplication.run(Application::class.java, *args)
+class Application {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            SpringApplication.run(Application::class.java, *args)
+        }
+    }
 }

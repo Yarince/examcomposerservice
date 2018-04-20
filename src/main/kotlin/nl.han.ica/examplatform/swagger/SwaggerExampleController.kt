@@ -21,5 +21,4 @@ class ExampleController {
     fun exampleEndpoint(@ApiParam(value = "Example json body parameter", required = true)
                         // The type of the request body specifies what kind of json should be sent in the body as param
                         @RequestBody requestBodyJson: Question) = "Replace this with the implementation method"
-
 }
