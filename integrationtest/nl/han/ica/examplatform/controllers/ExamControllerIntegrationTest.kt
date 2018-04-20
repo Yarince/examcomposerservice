@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.controllers
 
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,11 +24,24 @@ class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRes
 
     @Test
     fun testGetExams() {
-        val result = restTemplate.getForEntity<String>("/exam/all")
-        assertNotNull(result)
-        assertEquals(result.statusCode, HttpStatus.OK)
-        assertEquals("""[{"name":"name-0","durationInMinutes":10,"startTime":"1970-01-01T00:00:06.000+0000","course":"APP","examType":"EXAM","examId":null,"endTime":"1970-01-01T00:00:06.010+0000","instructions":null,"location":null,"questions":null},{"name":"name-1","durationInMinutes":10,"startTime":"1970-01-01T00:00:06.000+0000","course":"APP","examType":"EXAM","examId":null,"endTime":"1970-01-01T00:00:06.010+0000","instructions":null,"location":null,"questions":null}]""".trimMargin(),
-                result.body)
+        val expected = arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
+                SimpleExam(2, "SWA Toets 2", "SWA"),
+                SimpleExam(3, "APP Toets algoritmen", "APP")
+        )
+        val builder = UriComponentsBuilder.fromPath("/exam/all")
+        val entity = HttpEntity<Any>(HttpHeaders())
+
+        val response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                entity,
+                Array<SimpleExam>::class.java)
+
+        assertNotNull(response.body)
+        assertEquals(response.statusCode, HttpStatus.OK)
+        assertEquals(expected[0], response.body?.get(0))
+        assertEquals(expected.size, response.body?.size)
+        assertEquals(expected.last(), response.body?.last())
     }
 
     @Test

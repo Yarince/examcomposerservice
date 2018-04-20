@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.controllers.exam
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.business.exam.ExamService
+import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,15 +30,15 @@ class ExamControllerTest {
 
     @Test
     fun testGetExams() {
-        val expected = arrayOf(
-                Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM),
-                Exam("name-1", 10, Date(6000), "APP", ExamType.EXAM))
-        doReturn(expected
-        ).`when`(examService).getExams()
+        val expected = arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
+                SimpleExam(2, "SWA Toets 2", "SWA"),
+                SimpleExam(3, "APP Toets algoritmen", "APP")
+        )
+        doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(examService).getExams()
 
         val result = examController.getExams()
         assertNotNull(result)
-        assertArrayEquals(expected, result)
+        assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
     }
 
     @Test

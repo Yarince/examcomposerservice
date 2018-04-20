@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.persistence.exam
 import nl.han.ica.examplatform.controllers.responseExceptions.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import org.springframework.stereotype.Repository
@@ -12,6 +13,13 @@ import java.util.*
 class ExamDAOStub {
     fun insertExam(exam: Exam): Exam {
         return exam
+    }
+
+    fun getExams(): Array<SimpleExam> {
+        return arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
+                SimpleExam(2, "SWA Toets 2", "SWA"),
+                SimpleExam(3, "APP Toets algoritmen", "APP")
+        )
     }
 
     fun getExam(id: Int): Exam {

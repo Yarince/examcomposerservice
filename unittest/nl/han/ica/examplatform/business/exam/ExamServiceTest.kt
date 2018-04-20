@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import org.junit.Assert.*
 
@@ -29,13 +30,14 @@ internal class ExamServiceTest {
 
     @Test
     fun testGetExams() {
-        val expected = arrayOf(
-                Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM),
-                Exam("name-1", 10, Date(6000), "APP", ExamType.EXAM))
+        val expected = arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
+                SimpleExam(2, "SWA Toets 2", "SWA"),
+                SimpleExam(3, "APP Toets algoritmen", "APP")
+        )
 
         val result = examService.getExams()
         assertNotNull(result)
-        assertArrayEquals(expected, result)
+        assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
     }
 
     @Test
