@@ -7,7 +7,7 @@ import java.util.Date
 data class Exam(
         @ApiModelProperty(notes = "The ID of the exam")
         val examId: Int? = null,
-        @ApiModelProperty(notes = "The name of the exam", required = true, allowEmptyValue = false)
+        @ApiModelProperty( notes = "The name of the exam", required = true, allowEmptyValue = false)
         val name: String,
         @ApiModelProperty(notes = "The duration in minutes of the exam", required = true)
         val durationInMinutes: Int,
