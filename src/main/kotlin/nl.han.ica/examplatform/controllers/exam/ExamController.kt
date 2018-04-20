@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.business.exam.ExamService
+import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -20,9 +21,8 @@ class ExamController {
     lateinit var examService: ExamService
 
     @GetMapping("/all")
-    @ApiOperation(value = "Example: Get all exams", notes = "Some extra information about this endpoint", response = Array<Exam>::class)
-    fun getExams() =
-            examService.getExams() // Example "get all" end-point
+    @ApiOperation(value = "Get a list of minified exams", notes = "This returns a list of exams containing ID, name, ", response = Array<SimpleExam>::class)
+    fun getExams() = examService.getExams()
 
     @PostMapping()
     @ApiOperation(value = "Add an empty exam", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
