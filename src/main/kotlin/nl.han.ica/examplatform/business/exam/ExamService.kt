@@ -14,26 +14,16 @@ class ExamService {
     @Autowired
     lateinit var examDAO: ExamDAOStub
 
-    fun validateEmptyId(exam: Exam) {
-        // Check if the examId is empty
-        if (exam.examId != null)
-            throw InvalidExamException("examId must be left empty")
-    }
-
-    fun validateEmptyQuestions(exam: Exam) {
-        if (exam.questions !=null)
-            throw InvalidExamException("questions must be empty")
-    }
-
-    fun getExams(): Array<Exam> {
-        // Fetch from DB
-        return examDAO.getAllExams()
+    /**
+     * Check if an exam has questions and if the id is left empty
+     */
+    fun checkExam(exam: Exam) {
+        if (exam.questions != null) throw InvalidExamException("questions must be empty")
+        if (exam.examId != null) throw InvalidExamException("examId must be left empty")
     }
 
     fun addExam(exam: Exam): ResponseEntity<Exam> {
-        // Check if exam has a correct syntax
-        validateEmptyId(exam)
-        validateEmptyQuestions(exam)
+        checkExam(exam)
 
         val insertedObject = examDAO.insertExam(exam) //Add to database
 

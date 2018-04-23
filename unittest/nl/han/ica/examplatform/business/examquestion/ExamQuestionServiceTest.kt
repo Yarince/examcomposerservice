@@ -36,7 +36,7 @@ class ExamQuestionServiceTest {
     fun testCheckQuestion() {
         val question = Question()
         doReturn(true).`when`(questionDAO).exists(question)
-        examQuestionService.checkQuestion(Array(1, { question }))
+        examQuestionService.checkQuestion(arrayOf(question))
         verify(questionDAO, times(1)).exists(question)
     }
 
@@ -53,19 +53,14 @@ class ExamQuestionServiceTest {
         val question = Question()
         doReturn(false).`when`(questionDAO).exists(question)
         Assertions.assertThrows(InvalidExamException::class.java) {
-            examQuestionService.checkQuestion(Array(1, { question }))
+            examQuestionService.checkQuestion(arrayOf(question))
         }
-    }
-
-    @Test
-    fun testAddQuestionsToExamInvalidQuestions() {
-
     }
 
     @Test
     fun testAddQuestionToExam() {
         val expectedQuestion = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
-        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = Array(1, { expectedQuestion }))
+        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = arrayOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).updateExam(expectedExam)
         doReturn(true).`when`(questionDAO).exists(expectedQuestion)

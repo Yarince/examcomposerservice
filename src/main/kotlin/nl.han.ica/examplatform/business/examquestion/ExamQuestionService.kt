@@ -23,10 +23,9 @@ class ExamQuestionService {
 
     fun checkQuestion(questions: Array<Question>?) {
         questions?.let {
-            it.iterator().forEach({
-                if (!questionDAO.exists(it))
-                    throw InvalidExamException("Question ${it.questionId} does not exist.")
-            })
+            for (question in it)
+                if (!questionDAO.exists(question))
+                    throw InvalidExamException("Question ${question.questionId} does not exist.")
             return
         }
         throw InvalidExamException("Questions in exam are empty.")

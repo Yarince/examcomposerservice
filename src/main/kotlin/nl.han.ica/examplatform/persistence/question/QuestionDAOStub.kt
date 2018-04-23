@@ -12,8 +12,8 @@ class QuestionDAOStub {
         return question
     }
 
-    fun exists(question: Question): Boolean {
-        val questionDB = Array(1, { question })
+    fun exists(question: Question?): Boolean {
+        val questionDB = arrayOf(question)
 
         // check if a question exists in the database
         return question in questionDB

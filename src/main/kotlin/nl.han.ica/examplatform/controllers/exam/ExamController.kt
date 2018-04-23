@@ -22,11 +22,6 @@ class ExamController {
     @Autowired
     lateinit var examQuestionService: ExamQuestionService
 
-    @GetMapping()
-    @ApiOperation(value = "Example: Get all exams", notes = "Some extra information about this endpoint", response = Array<Exam>::class)
-    fun getExams() =
-            examService.getExams() // Example "get all" end-point
-
     @PostMapping()
     @ApiOperation(value = "Add an exam without questions", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
     @ApiResponses(

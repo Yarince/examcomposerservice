@@ -19,15 +19,6 @@ import java.util.*
 class ExamControllerIntegrationTest(@Autowired private val restTemplate: TestRestTemplate) {
 
     @Test
-    fun testGetExams() {
-        val result = restTemplate.getForEntity<String>("/exam")
-
-        assertEquals(result.statusCode, HttpStatus.OK)
-        assertEquals("""[{"examId":null,"name":"name-0","durationInMinutes":10,"startTime":"1970-01-01T00:00:06.000+0000","endTime":"1970-01-01T00:00:06.010+0000","course":"APP","version":1,"examType":"EXAM","instructions":null,"location":null,"questions":null},{"examId":null,"name":"name-1","durationInMinutes":10,"startTime":"1970-01-01T00:00:06.000+0000","endTime":"1970-01-01T00:00:06.010+0000","course":"APP","version":1,"examType":"EXAM","instructions":null,"location":null,"questions":null}]""".trimMargin(),
-                result.body)
-    }
-
-    @Test
     fun testAddExam() {
         val headers = HttpHeaders()
         val requestJson = """{"examId":null,"name":"name-0","durationInMinutes":10,"startTime":"1970-01-01T00:00:06.000+0000","endTime":"1970-01-01T00:00:06.010+0000","course":"APP","version":1,"examType":"EXAM","instructions":null,"location":null,"questions":null}"""

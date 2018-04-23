@@ -9,23 +9,19 @@ import java.util.concurrent.atomic.AtomicInteger
 @Repository
 class ExamDAOStub {
 
-    val counter = AtomicInteger()
-
     fun insertExam(exam: Exam): Exam {
         println(exam)
         // Database logic needs to be added here
-        return exam
-    }
 
-    fun getAllExams(): Array<Exam> {
-        // Database logic needs to be added here
-        // Example returns a array of 2 exams
-        return Array(2, { i -> Exam(name = "name-$i", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM) })
+        val insertedExam = exam.copy()
+        return insertedExam
     }
 
     fun updateExam(exam: Exam): Exam {
         println(exam)
         // Database logic needs to be added here
-        return exam
+
+        val updatedExam = exam.copy()
+        return updatedExam
     }
 }

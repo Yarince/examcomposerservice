@@ -35,19 +35,6 @@ class ExamControllerTest {
     lateinit var examQuestionService: ExamQuestionService
 
     @Test
-    fun testGetExams() {
-        val expected = arrayOf(
-                Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM),
-                Exam(name = "name-1", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM))
-        doReturn(expected
-        ).`when`(examService).getExams()
-
-        val result = examController.getExams()
-        assertNotNull(result)
-        assertArrayEquals(expected, result)
-    }
-
-    @Test
     fun testAddExam() {
         val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM)
         doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(examService).addExam(expected)

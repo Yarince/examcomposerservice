@@ -32,41 +32,35 @@ internal class ExamServiceTest {
     lateinit var examDAO: ExamDAOStub
 
     @Test
-    fun validateEmptyId() {
+    fun testCheckExamEmptyId() {
         val exam = Exam(5, "name-0", 10, Date(6000), course = "APP",
                 version = 1,
                 examType = ExamType.EXAM) // Faulty exam object
 
         Assertions.assertThrows(InvalidExamException::class.java) {
-            examService.validateEmptyId(exam)
+            examService.checkExam(exam)
         }
     }
 
     @Test
-    fun testValidateEmptyQuestions() {
-        val exam = Exam(5, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,
-                questions = Array(1, { Question() })) // Faulty exam object
+    fun testCheckExamEmptyQuestions() {
+        val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,
+                questions = arrayOf(Question())) // Faulty exam object
         Assertions.assertThrows(InvalidExamException::class.java) {
-            examService.validateEmptyQuestions(exam)
+            examService.checkExam(exam)
         }
     }
 
     @Test
-    fun getExams() {
-        val expected = arrayOf(
-                Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM),
-                Exam(name = "name-1", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM))
-
-        doReturn(expected).`when`(examDAO).getAllExams()
-
-
-        val result = examService.getExams()
-        assertArrayEquals(expected, result)
+    fun testCheckExamNoException() {
+        val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM)
+        examService.checkExam(exam)
     }
 
     @Test
     fun addExam() {
-        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM)
+        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM
+                , questions = null)
         val expectedResult = ResponseEntity(examInserted, HttpStatus.CREATED)
 
         doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
