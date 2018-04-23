@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.controllers.responseExceptions.InvalidExamException
+import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import org.springframework.beans.factory.annotation.Autowired
