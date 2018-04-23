@@ -6,7 +6,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @SpringBootApplication
 @EnableSwagger2
-
 class Application
 
 //Run this to start the spring server

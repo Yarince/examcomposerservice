@@ -5,10 +5,20 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class QuestionDAOStub {
-    fun insertQuestion(question: Question): Question {
-        print(question)
-        // Here the database connection should be called on, creating a prepared statement to insert a question
-        // This should also be able to throw an exception if it fails
-        return question
+
+    // var fetchDatabaseConnection : MySQLDatabaseConnection
+
+
+    fun insertQuestion(question: Question) {
+       /*
+       var sqlQuery = "INSERT INTO QUESTION (PARENTQUESTIONID, COURSECODE, QUESTIONTEXT, TYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS)
+                       VALUES (NULL, 1, NULL, question.questionText, question.questionType, NULL, NULL, NULL, NULL)"
+       var databaseConnection : Connection? = fetchDatabaseConnection.getConnection()
+       try {
+       var ps: PreparedStatement? = databaseConnection.prepareStatement(sqlQuery)
+
+
+       }
+        */
     }
 }
