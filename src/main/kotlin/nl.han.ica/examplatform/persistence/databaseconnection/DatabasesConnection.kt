@@ -6,8 +6,6 @@ import java.util.Properties
 import java.sql.DriverManager
 import java.sql.SQLException
 
-
-
 object MySQLConnection {
 
     private val databaseProperties : Properties
