@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.business.examquestion
 
+import nl.han.ica.examplatform.controllers.responseExceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
@@ -20,15 +21,15 @@ class ExamQuestionService {
     private
     lateinit var questionDAO: QuestionDAOStub
 
-    fun checkQuestion(questions: Array<Question>?): Boolean {
+    fun checkQuestion(questions: Array<Question>?) {
         questions?.let {
             it.iterator().forEach({
                 if (!questionDAO.exists(it))
-                    return false
+                    throw InvalidExamException("Question ${it.questionId} does not exist.")
             })
-            return true
+            return
         }
-        return false
+        throw InvalidExamException("Questions in exam are empty.")
     }
 
     fun addQuestionToExam(exam: Exam): ResponseEntity<Exam> {
