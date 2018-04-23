@@ -23,12 +23,12 @@ object MySQLConnection {
     It needs 2 more variables(preparedStatement+resultSet) and an extension of the getConnection
     method to retrieve data by prepared statements.
     */
-    private var conn: Connection? = null
+    private var establishedDatbaseConnection: Connection? = null
 
 
     private fun establishDatabaseConnection() {
         try {
-            conn = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
+            establishedDatbaseConnection = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
         } catch (e: SQLException){
             e.printStackTrace()
         }
@@ -36,7 +36,7 @@ object MySQLConnection {
 
     fun getConnection() : Connection? {
         establishDatabaseConnection()
-        return conn
+        return establishedDatbaseConnection
     }
 
     private fun initializeProperties(): Properties {
@@ -51,10 +51,10 @@ object MySQLConnection {
         return DriverManager.getConnection(connectionURL, username, password)
     }
 
-    fun closeConnection(con: Connection?) {
+    fun closeConnection(connetionToClose: Connection?) {
         try {
-            con?.close()
-            conn = null
+            connetionToClose?.close()
+            establishedDatbaseConnection = null
         } catch (e: SQLException) {
             e.printStackTrace()
         }
