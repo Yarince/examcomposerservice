@@ -4,18 +4,21 @@ import org.junit.jupiter.api.Test
 import java.sql.Connection
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.junit.After
+import org.mockito.Mock
 import java.sql.Statement
 import kotlin.test.assertTrue
 
 
 internal class MySQLConnectionTest {
 
-    private var databaseConnection: MySQLConnection? = MySQLConnection
-    private var testConnection: Connection? = null
+    private var databaseConnection = MySQLConnection
+
+    @Mock
+    private var testConnection = databaseConnection.getConnection()
+
 
     @Test
     fun testConnectionByOpeningAndClosingAStatement() {
-        testConnection = databaseConnection?.getConnection()
         testConnection?.let {
             val statement: Statement = it.createStatement()
             databaseConnection?.closeStatement(statement)
