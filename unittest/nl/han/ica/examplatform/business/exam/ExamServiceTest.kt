@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.business.exam
 import nl.han.ica.examplatform.controllers.responseExceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import org.junit.Assert.*
 
@@ -28,16 +29,35 @@ internal class ExamServiceTest {
 
     @Mock
     private
-    lateinit var examDAO : ExamDAOStub
+    lateinit var examDAO: ExamDAOStub
+
+    @Test
+    fun validateEmptyId() {
+        val exam = Exam(5, "name-0", 10, Date(6000), course = "APP",
+                version = 1,
+                examType = ExamType.EXAM) // Faulty exam object
+
+        Assertions.assertThrows(InvalidExamException::class.java) {
+            examService.validateEmptyId(exam)
+        }
+    }
+
+    @Test
+    fun testValidateEmptyQuestions() {
+        val exam = Exam(5, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,
+                questions = Array(1, { Question() })) // Faulty exam object
+        Assertions.assertThrows(InvalidExamException::class.java) {
+            examService.validateEmptyQuestions(exam)
+        }
+    }
 
     @Test
     fun getExams() {
         val expected = arrayOf(
-                Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version =1, examType = ExamType.EXAM),
-                Exam(name = "name-1", durationInMinutes = 10, startTime = Date(6000), course = "APP", version =1, examType = ExamType.EXAM))
+                Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM),
+                Exam(name = "name-1", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM))
 
-        //TODO
-//        doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
+        doReturn(expected).`when`(examDAO).getAllExams()
 
 
         val result = examService.getExams()
@@ -53,16 +73,5 @@ internal class ExamServiceTest {
 
         val result = examService.addExam(examInserted)
         assertEquals(expectedResult, result)
-    }
-
-    @Test
-    fun validateEmptyId() {
-            val exam = Exam(5, "name-0", 10, Date(6000), course = "APP",
-                    version =1,
-                    examType = ExamType.EXAM) // Faulty exam object
-
-            Assertions.assertThrows(InvalidExamException::class.java) {
-                examService.validateEmptyId(exam)
-        }
     }
 }

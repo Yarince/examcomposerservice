@@ -55,7 +55,7 @@ class ExamQuestionServiceTest {
         val expectedQuestion = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
         val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = Array(1, { expectedQuestion }))
 
-        doReturn(false).`when`(examDAO).updateExam(expectedExam)
+        doReturn(expectedExam).`when`(examDAO).updateExam(expectedExam)
 
         assertEquals(ResponseEntity(expectedExam, HttpStatus.ACCEPTED), examQuestionService.addQuestionToExam(expectedExam))
     }
