@@ -24,7 +24,11 @@ class QuestionControllerIntegrationTest(@Autowired private val restTemplate: Tes
     @Test
     fun testCreateQuestion() {
         val expectedResult = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
-        val requestJson = """{"course": "${expectedResult.course}", "examType": "${expectedResult.examType}", "questionType": "${expectedResult.questionType}"}"""
+        val requestJson = """{
+            "course": "${expectedResult.course}",
+            "examType": "${expectedResult.examType}",
+            "questionType": "${expectedResult.questionType}"
+            }""".trimMargin()
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
