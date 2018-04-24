@@ -5,14 +5,13 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
-import org.junit.Assert.*
+import junit.framework.TestCase.assertEquals
 
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.junit.MockitoJUnitRunner
 
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
 import org.springframework.http.HttpStatus
@@ -31,24 +30,20 @@ internal class ExamServiceTest {
     private
     lateinit var examDAO: ExamDAOStub
 
-    @Test
+    @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyId() {
         val exam = Exam(5, "name-0", 10, Date(6000), course = "APP",
                 version = 1,
                 examType = ExamType.EXAM) // Faulty exam object
 
-        Assertions.assertThrows(InvalidExamException::class.java) {
-            examService.checkExam(exam)
-        }
+        examService.checkExam(exam)
     }
 
-    @Test
+    @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
         val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,
                 questions = arrayOf(Question())) // Faulty exam object
-        Assertions.assertThrows(InvalidExamException::class.java) {
-            examService.checkExam(exam)
-        }
+        examService.checkExam(exam)
     }
 
     @Test
