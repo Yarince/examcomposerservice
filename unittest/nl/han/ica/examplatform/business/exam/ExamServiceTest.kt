@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.controllers.responseExceptions.InvalidExamException
+import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
@@ -37,6 +37,7 @@ internal class ExamServiceTest {
 
         examService.checkExam(exam)
     }
+
     @Test
     fun testGetExams() {
         val expected = arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
@@ -50,6 +51,7 @@ internal class ExamServiceTest {
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
     }
+
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
         val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,

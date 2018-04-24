@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.exam
 
-import nl.han.ica.examplatform.controllers.responseExceptions.ExamNotFoundException
+import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
@@ -21,12 +21,6 @@ class ExamDAOStub {
     fun getExam(id: Int): Exam {
         // Database query on exam with this ID.
         // If it does not exist, throw: ExamNotFoundException
-        // For testing purposes, ID -9999 throws a not found.
-        // This has to be changed later
-        if (id == -9999) {
-            throw ExamNotFoundException("Exam with id $id was not found.")
-        }
-
         // Here the DAO should query an exam, containing exam meta data, questions and answers
         // These values should then be put into an Exam object
         return Exam(examId = id,
@@ -51,8 +45,7 @@ class ExamDAOStub {
     fun insertExam(exam: Exam): Exam {
         println(exam)
         // Database logic needs to be added here
-        val insertedExam = exam.copy()
-        return insertedExam
+        return exam.copy()
     }
 
     fun updateExam(exam: Exam): Exam {

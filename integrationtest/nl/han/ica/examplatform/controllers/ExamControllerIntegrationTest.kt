@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.controllers
 
-import junit.framework.TestCase.*
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
@@ -17,16 +18,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
 import org.springframework.web.client.postForEntity
-import java.util.*
-import org.springframework.http.HttpEntity
-import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.util.UriComponentsBuilder
+import java.util.*
+
 
 @RunWith(SpringJUnit4ClassRunner::class)
 @PropertySource("classpath:application.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
 class ExamControllerIntegrationTest {
 
     @Value("\${local.server.port}")
@@ -149,29 +148,5 @@ class ExamControllerIntegrationTest {
         assertNotNull(response.body)
         assertEquals(response.statusCode, HttpStatus.OK)
         assertEquals(requestParamExamId, response.body?.examId)
-    }
-
-    @Test
-    fun testGetExamNotFound() {
-        // For now this is -9999, could be changed later when we know more about how the ID will be constructed
-        val requestParamExamId = -9999
-
-        val headers = HttpHeaders()
-        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE)
-
-        val builder = UriComponentsBuilder.fromHttpUrl("http://localhost:$port/exams/$requestParamExamId")
-        val entity = HttpEntity<Any>(headers)
-
-        try {
-            restTemplate.exchange(
-                    builder.toUriString(),
-                    HttpMethod.GET,
-                    entity,
-                    Any::class.java)
-            fail()
-        } catch (e: HttpClientErrorException) {
-            // Success
-            assertEquals(404, e.statusCode.value())
-        }
     }
 }
