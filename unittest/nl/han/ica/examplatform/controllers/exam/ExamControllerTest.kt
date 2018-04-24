@@ -28,25 +28,28 @@ class ExamControllerTest {
     private
     lateinit var examService: ExamService
 
-    @Test
-    fun testGetExams() {
-        val expected = arrayOf(
-                Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM),
-                Exam("name-1", 10, Date(6000), "APP", ExamType.EXAM))
-        doReturn(expected
-        ).`when`(examService).getExams()
-
-        val result = examController.getExams()
-        assertNotNull(result)
-        assertArrayEquals(expected, result)
-    }
+    @Mock
+    private
+    lateinit var examQuestionService: ExamQuestionService
 
     @Test
     fun testAddExam() {
-        val expected = Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM)
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM)
         doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(examService).addExam(expected)
         val result = examController.addExam(expected)
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
+    }
+
+    @Test
+    fun addQuestionToExam() {
+        val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = Array(1, {
+            Question(1, "Text", QuestionType.OPEN_QUESTION, "Course", null, ExamType.EXAM)
+        }))
+
+        doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
+        val result = examController.addQuestionToExam(expected)
+        assertNotNull(result)
+        assertEquals(ResponseEntity(expected, HttpStatus.ACCEPTED), result)
     }
 }

@@ -15,4 +15,11 @@ class QuestionDAOStub {
         // This should also be able to throw an exception if it fails
         return question
     }
+
+    fun exists(question: Question?): Boolean {
+        val questionDB = arrayOf(question)
+
+        // check if a question exists in the database
+        return question in questionDB
+    }
 }

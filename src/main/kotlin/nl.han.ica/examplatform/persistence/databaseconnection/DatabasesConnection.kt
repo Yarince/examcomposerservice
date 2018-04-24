@@ -40,7 +40,7 @@ object MySQLConnection {
 
     private fun initializeProperties(): Properties {
         val databaseProperties = Properties()
-        val reader = FileReader(System.getProperty("user.dir") + "\\src\\main\\kotlin\\nl.han.ica\\examplatform\\config\\databaseconfig\\application.properties")
+        val reader = FileReader(System.getProperty("user.dir") + "/src/main/kotlin/nl.han.ica/examplatform/config/databaseconfig/application.properties")
         databaseProperties.load(reader)
         return databaseProperties
     }
