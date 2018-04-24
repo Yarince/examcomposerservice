@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.persistence.connectiontest
 
-import org.junit.jupiter.api.Test
-import java.sql.Connection
+import org.junit.Test
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.junit.After
 import org.mockito.Mock
@@ -21,13 +20,13 @@ internal class MySQLConnectionTest {
     fun testConnectionByOpeningAndClosingAStatement() {
         testConnection?.let {
             val statement: Statement = it.createStatement()
-            databaseConnection?.closeStatement(statement)
+            databaseConnection.closeStatement(statement)
             assertTrue(statement.isClosed)
         }
     }
 
     @After
     fun after() {
-        databaseConnection?.closeConnection(testConnection)
+        databaseConnection.closeConnection(testConnection)
     }
 }
