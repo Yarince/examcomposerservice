@@ -1,14 +1,21 @@
 package nl.han.ica.examplatform.models.answer
 
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import io.swagger.annotations.ApiModelProperty
 
 /**
  * Answer given by a teacher for a open question
  */
 class OpenAnswer(
+        @ApiModelProperty(notes = "The is of the answer")
         override val questionId: Int,
+
+        @ApiModelProperty(notes = "The description of the answer")
         override val description: String,
+
+        @ApiModelProperty(notes = "The comment of the answer")
         override val comment: String,
+
+        @ApiModelProperty(notes = "TThe keywords of the answer")
         private val keywords: Keywords
 ) : Answer {
     init {

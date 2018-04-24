@@ -2,7 +2,10 @@ package nl.han.ica.examplatform.config.swagger
 
 import io.swagger.annotations.*
 import nl.han.ica.examplatform.models.question.Question
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Api("test", description = "Description of this API endpoint group")

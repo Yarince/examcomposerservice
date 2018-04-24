@@ -9,7 +9,10 @@ import nl.han.ica.examplatform.exceptions.answerExceptions.InvalidAnswerExceptio
 import nl.han.ica.examplatform.models.answer.OpenAnswer
 import nl.han.ica.examplatform.service.answer.AnswerService
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.util.logging.Logger
 
 /**
@@ -17,7 +20,7 @@ import java.util.logging.Logger
  */
 @RestController
 @RequestMapping("answers")
-class AnswerController (private val answerService: AnswerService){
+class AnswerController(private val answerService: AnswerService) {
     companion object {
         val LOG: Logger = Logger.getLogger(this::class.java.name)
     }
@@ -30,25 +33,23 @@ class AnswerController (private val answerService: AnswerService){
     )
     @ApiResponses(
             ApiResponse(code = 200, message = "Answer created and added to question"),
+            ApiResponse(code = 400, message = "Invalid answer"),
             ApiResponse(code = 500, message = "Something went wrong")
     )
-    fun addOpenAnswerToQuestion(@RequestBody answer: OpenAnswer) : HttpStatus {
+    fun addOpenAnswerToQuestion(@RequestBody answer: OpenAnswer): HttpStatus {
         return try {
             answerService.addAnswerToQuestion(answer)
             HttpStatus.OK
-        }
-        catch (exception: IllegalArgumentException){
+        } catch (exception: IllegalArgumentException) {
             LOG.info(exception.message)
             throw InvalidAnswerException(ErrorInfo(
                     exception.message.toString(),
                     "Invalid answer"
             ))
-        }
-        catch (exception: CouldNotAddAnswerToQuestionException){
+        } catch (exception: CouldNotAddAnswerToQuestionException) {
             LOG.info(exception.message)
             throw exception
-        }
-        catch (exception: RuntimeException) {
+        } catch (exception: RuntimeException) {
             LOG.warning(exception.message)
             throw exception
         }

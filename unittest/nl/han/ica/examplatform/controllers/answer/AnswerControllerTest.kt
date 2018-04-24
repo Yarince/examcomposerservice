@@ -40,13 +40,13 @@ internal class AnswerControllerTest {
     }
 
     @Test(expected = InvalidAnswerException::class)
-    fun testAddOpenAnswerToQuestionInvalidAnswerException(){
+    fun testAddOpenAnswerToQuestionInvalidAnswerException() {
         Mockito.doThrow(IllegalArgumentException("DAO Exception")).`when`(answerService).addAnswerToQuestion(openAnswer)
         answerController.addOpenAnswerToQuestion(openAnswer)
     }
 
     @Test(expected = CouldNotAddAnswerToQuestionException::class)
-    fun testAddOpenAnswerToQuestionCouldNotAddAnswerToQuestionException(){
+    fun testAddOpenAnswerToQuestionCouldNotAddAnswerToQuestionException() {
         val error = ErrorInfo(
                 developerMessage = "DAO Exception",
                 userMessage = "DAO Exception"
@@ -56,7 +56,7 @@ internal class AnswerControllerTest {
     }
 
     @Test(expected = RuntimeException::class)
-    fun testAddOpenAnswerToQuestionRuntimeException(){
+    fun testAddOpenAnswerToQuestionRuntimeException() {
         Mockito.doThrow(RuntimeException("DAO Exception")).`when`(answerService).addAnswerToQuestion(openAnswer)
         answerController.addOpenAnswerToQuestion(openAnswer)
     }

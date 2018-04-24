@@ -1,13 +1,11 @@
 package nl.han.ica.examplatform.controllers
 
-import nl.han.ica.examplatform.models.answer.OpenAnswer
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.client.postForEntity
 import org.springframework.http.*
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -24,9 +22,7 @@ class AnswerControllerIntegrationTest(@Autowired private val restTemplate: TestR
             "comment" : "com",
             "keywords" : ["key1", "key2"]
         }
-        """.trimMargin()
-
-        // https://stackoverflow.com/questions/33242126/spring-resttemplate-put-entity-to-server?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+        """
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON

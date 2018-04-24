@@ -1,9 +1,8 @@
 package nl.han.ica.examplatform.persistence.connectiontest
 
-import org.junit.jupiter.api.Test
-import java.sql.Connection
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.junit.After
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import java.sql.Statement
 import kotlin.test.assertTrue
@@ -15,7 +14,6 @@ internal class MySQLConnectionTest {
 
     @Mock
     private var testConnection = databaseConnection.getConnection()
-
 
     @Test
     fun testConnectionByOpeningAndClosingAStatement() {

@@ -1,9 +1,10 @@
 package nl.han.ica.examplatform.controllers.exam
 
+import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
-import nl.han.ica.examplatform.business.exam.ExamService
-import org.junit.Assert.*
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -12,7 +13,7 @@ import org.mockito.Mockito.doReturn
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.util.Date
+import java.util.*
 import kotlin.test.assertEquals
 
 

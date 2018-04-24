@@ -11,7 +11,7 @@ import java.util.*
 @Service
 class ExamService {
     fun getExams(): Array<Exam> {
-        return Array(2, { i -> Exam("name-$i", 10, Date(6000),"APP", ExamType.EXAM) })
+        return Array(2, { i -> Exam("name-$i", 10, Date(6000), "APP", ExamType.EXAM) })
         // Example returns a array of 2 exams
     }
 

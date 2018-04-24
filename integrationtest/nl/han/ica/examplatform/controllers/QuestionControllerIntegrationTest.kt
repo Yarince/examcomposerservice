@@ -28,7 +28,7 @@ class QuestionControllerIntegrationTest(@Autowired private val restTemplate: Tes
             "course": "${expectedResult.course}",
             "examType": "${expectedResult.examType}",
             "questionType": "${expectedResult.questionType}"
-            }""".trimMargin()
+            }"""
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON

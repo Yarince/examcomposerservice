@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.models.answer
 
 /**
- * This class represents a list of Keywords witch ar strings.
+ * This class represents a list of Keywords which ar strings.
  */
 class Keywords(private val keywords: Array<String>) : Collection<String> {
     override val size: Int

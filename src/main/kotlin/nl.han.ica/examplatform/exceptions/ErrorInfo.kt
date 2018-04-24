@@ -1,7 +1,5 @@
 package nl.han.ica.examplatform.exceptions
 
-import org.springframework.web.bind.annotation.ResponseBody
-
 /**
  * Representing the error send to the user of the API
  *
@@ -10,12 +8,12 @@ import org.springframework.web.bind.annotation.ResponseBody
  * errorCode        : (Optional) Code which represents the error
  * moreInfo         : (Optional) Url to site which has more information about the error
  */
-class ErrorInfo (
+class ErrorInfo(
         private val developerMessage: String,
         private val userMessage: String,
         private val errorCode: String? = null,
         private val moreInfo: String? = null
-){
+) {
     override fun toString(): String {
         return """
             {
