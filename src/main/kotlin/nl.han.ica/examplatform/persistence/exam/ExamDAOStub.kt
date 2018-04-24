@@ -11,10 +11,6 @@ import java.util.*
 
 @Repository
 class ExamDAOStub {
-    fun insertExam(exam: Exam): Exam {
-        return exam
-    }
-
     fun getExams(): Array<SimpleExam> {
         return arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
                 SimpleExam(2, "SWA Toets 2", "SWA"),
@@ -50,5 +46,18 @@ class ExamDAOStub {
                         examType = ExamType.EXAM)
                 )
         )
+    }
+
+    fun insertExam(exam: Exam): Exam {
+        println(exam)
+        // Database logic needs to be added here
+        val insertedExam = exam.copy()
+        return insertedExam
+    }
+
+    fun updateExam(exam: Exam): Exam {
+        println(exam)
+        // Database logic needs to be added here
+        return exam.copy()
     }
 }
