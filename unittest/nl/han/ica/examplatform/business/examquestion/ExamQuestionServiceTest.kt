@@ -9,7 +9,6 @@ import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import nl.han.ica.examplatform.persistence.question.QuestionDAOStub
 import org.junit.Assert.*
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -40,21 +39,17 @@ class ExamQuestionServiceTest {
         verify(questionDAO, times(1)).exists(question)
     }
 
-    @Test
+    @Test(expected = InvalidExamException::class)
     fun testCheckQuestionEmpty() {
-        Assertions.assertThrows(InvalidExamException::class.java) {
-            examQuestionService.checkQuestion(null)
-        }
+        examQuestionService.checkQuestion(null)
     }
 
 
-    @Test
+    @Test(expected = InvalidExamException::class)
     fun testCheckQuestionNotExisting() {
         val question = Question()
         doReturn(false).`when`(questionDAO).exists(question)
-        Assertions.assertThrows(InvalidExamException::class.java) {
-            examQuestionService.checkQuestion(arrayOf(question))
-        }
+        examQuestionService.checkQuestion(arrayOf(question))
     }
 
     @Test
