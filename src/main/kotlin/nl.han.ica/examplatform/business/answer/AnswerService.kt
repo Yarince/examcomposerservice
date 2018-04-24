@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.service.answer
+package nl.han.ica.examplatform.business.answer
 
 import nl.han.ica.examplatform.exceptions.ErrorInfo
 import nl.han.ica.examplatform.exceptions.answerExceptions.CouldNotAddAnswerToQuestionException

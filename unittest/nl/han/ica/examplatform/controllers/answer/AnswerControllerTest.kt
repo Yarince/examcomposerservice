@@ -5,7 +5,7 @@ import nl.han.ica.examplatform.exceptions.answerExceptions.CouldNotAddAnswerToQu
 import nl.han.ica.examplatform.exceptions.answerExceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answer.Keywords
 import nl.han.ica.examplatform.models.answer.OpenAnswer
-import nl.han.ica.examplatform.service.answer.AnswerService
+import nl.han.ica.examplatform.business.answer.AnswerService
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
