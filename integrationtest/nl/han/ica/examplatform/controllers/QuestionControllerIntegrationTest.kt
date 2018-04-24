@@ -1,25 +1,36 @@
 package nl.han.ica.examplatform.controllers
 
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.client.postForEntity
+import org.springframework.context.annotation.PropertySource
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.postForEntity
 
 
-@ExtendWith(SpringExtension::class)
+@RunWith(SpringJUnit4ClassRunner::class)
+@PropertySource("classpath:application.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class QuestionControllerIntegrationTest(@Autowired private val restTemplate: TestRestTemplate) {
+
+class QuestionControllerIntegrationTest {
+
+    @Value("\${local.server.port}")
+    var port: Int = 0
+
+    val restTemplate = RestTemplate()
 
     @Test
     fun testCreateQuestion() {
@@ -29,10 +40,10 @@ class QuestionControllerIntegrationTest(@Autowired private val restTemplate: Tes
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(requestJson, headers)
-        val result = restTemplate.postForEntity<Question>("/question", entity)
+        val result = restTemplate.postForEntity<Question>("http://localhost:$port/question", entity)
 
-        Assertions.assertNotNull(result)
-        Assertions.assertEquals(HttpStatus.CREATED, result.statusCode)
-        Assertions.assertEquals(expectedResult, result.body)
+        assertNotNull(result)
+        assertEquals(HttpStatus.CREATED, result.statusCode)
+        assertEquals(expectedResult, result.body)
     }
 }
