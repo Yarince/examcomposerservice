@@ -1,11 +1,11 @@
 package nl.han.ica.examplatform.controllers.answer
 
+import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.exceptions.ErrorInfo
 import nl.han.ica.examplatform.exceptions.answerExceptions.CouldNotAddAnswerToQuestionException
 import nl.han.ica.examplatform.exceptions.answerExceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answer.Keywords
 import nl.han.ica.examplatform.models.answer.OpenAnswer
-import nl.han.ica.examplatform.business.answer.AnswerService
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

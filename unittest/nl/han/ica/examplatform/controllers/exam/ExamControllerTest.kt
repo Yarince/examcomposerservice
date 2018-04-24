@@ -1,9 +1,11 @@
 package nl.han.ica.examplatform.controllers.exam
 
 import nl.han.ica.examplatform.business.exam.ExamService
+import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
-import org.junit.Assert.assertArrayEquals
+import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.models.question.QuestionType
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith

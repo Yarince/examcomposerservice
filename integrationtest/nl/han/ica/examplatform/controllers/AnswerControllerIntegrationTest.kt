@@ -1,17 +1,29 @@
 package nl.han.ica.examplatform.controllers
 
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.beans.factory.annotation.Autowired
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.context.annotation.PropertySource
 import org.springframework.http.*
-import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.web.client.RestTemplate
 
-@ExtendWith(SpringExtension::class)
+
+@RunWith(SpringJUnit4ClassRunner::class)
+@PropertySource("classpath:application.properties")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AnswerControllerIntegrationTest(@Autowired private val restTemplate: TestRestTemplate) {
+
+class AnswerControllerIntegrationTest {
+
+    @Value("\${local.server.port}")
+    var port: Int = 0
+
+    val restTemplate = RestTemplate()
 
     @Test
     fun testAddOpenAnswerToQuestion() {
@@ -27,9 +39,9 @@ class AnswerControllerIntegrationTest(@Autowired private val restTemplate: TestR
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(requestJson, headers)
-        val result = restTemplate.exchange("/answers", HttpMethod.PUT, entity, HttpStatus.OK::class.java)
+        val result = restTemplate.exchange("http://localhost:$port//answers", HttpMethod.PUT, entity, HttpStatus.OK::class.java)
 
-        Assertions.assertNotNull(result)
-        Assertions.assertEquals(expected, result.statusCode)
+        assertNotNull(result)
+        assertEquals(expected, result.statusCode)
     }
 }

@@ -3,11 +3,11 @@ package nl.han.ica.examplatform.controllers.answer
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
+import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.exceptions.ErrorInfo
 import nl.han.ica.examplatform.exceptions.answerExceptions.CouldNotAddAnswerToQuestionException
 import nl.han.ica.examplatform.exceptions.answerExceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answer.OpenAnswer
-import nl.han.ica.examplatform.business.answer.AnswerService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody

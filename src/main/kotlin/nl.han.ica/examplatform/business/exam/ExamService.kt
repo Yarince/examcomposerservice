@@ -20,6 +20,7 @@ class ExamService {
     fun checkExam(exam: Exam) {
         if (exam.questions != null) throw InvalidExamException("questions must be empty")
         if (exam.examId != null) throw InvalidExamException("examId must be left empty")
+    }
 
     fun addExam(exam: Exam): ResponseEntity<Exam> {
         checkExam(exam)
