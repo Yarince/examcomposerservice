@@ -43,13 +43,11 @@ class ExamDAOStub {
     }
 
     fun insertExam(exam: Exam): Exam {
-        println(exam)
         // Database logic needs to be added here
         return exam.copy()
     }
 
     fun updateExam(exam: Exam): Exam {
-        println(exam)
         // Database logic needs to be added here
         return exam.copy()
     }
