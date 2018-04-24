@@ -2,12 +2,12 @@ package nl.han.ica.examplatform.models.exam
 
 import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.question.Question
-import java.util.Date
+import java.util.*
 
 data class Exam(
         @ApiModelProperty(notes = "The ID of the exam")
         val examId: Int? = null,
-        @ApiModelProperty( notes = "The name of the exam", required = true, allowEmptyValue = false)
+        @ApiModelProperty(notes = "The name of the exam", required = true, allowEmptyValue = false)
         val name: String,
         @ApiModelProperty(notes = "The duration in minutes of the exam", required = true)
         val durationInMinutes: Int,
@@ -27,4 +27,19 @@ data class Exam(
         val location: String? = null,
         @ApiModelProperty(notes = "The questions in the exam")
         val questions: Array<Question>? = null
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Exam
+
+        if (!Arrays.equals(questions, other.questions)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return questions?.let { Arrays.hashCode(it) } ?: 0
+    }
+}
