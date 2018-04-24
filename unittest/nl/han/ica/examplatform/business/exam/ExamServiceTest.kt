@@ -1,7 +1,10 @@
 package nl.han.ica.examplatform.business.exam
 
+import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import org.junit.Assert.*
 
 import org.junit.runner.RunWith
@@ -9,6 +12,9 @@ import org.mockito.InjectMocks
 import org.mockito.junit.MockitoJUnitRunner
 
 import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.mockito.Mock
+import org.mockito.Mockito.doReturn
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import java.util.*
@@ -18,24 +24,48 @@ import java.util.*
 internal class ExamServiceTest {
 
     @InjectMocks
+    private
     lateinit var examService: ExamService
 
-    @Test
-    fun getExams() {
-        val expected = arrayOf(
-                Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM),
-                Exam("name-1", 10, Date(6000), "APP", ExamType.EXAM))
+    @Mock
+    private
+    lateinit var examDAO: ExamDAOStub
 
-        val result = examService.getExams()
-        assertNotNull(result)
-        assertArrayEquals(expected, result)
+    @Test
+    fun testCheckExamEmptyId() {
+        val exam = Exam(5, "name-0", 10, Date(6000), course = "APP",
+                version = 1,
+                examType = ExamType.EXAM) // Faulty exam object
+
+        Assertions.assertThrows(InvalidExamException::class.java) {
+            examService.checkExam(exam)
+        }
+    }
+
+    @Test
+    fun testCheckExamEmptyQuestions() {
+        val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,
+                questions = arrayOf(Question())) // Faulty exam object
+        Assertions.assertThrows(InvalidExamException::class.java) {
+            examService.checkExam(exam)
+        }
+    }
+
+    @Test
+    fun testCheckExamNoException() {
+        val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM)
+        examService.checkExam(exam)
     }
 
     @Test
     fun addExam() {
-        val expected = Exam("name-0", 10, Date(6000), "APP", ExamType.EXAM)
-        val result = examService.addExam(expected)
-        assertNotNull(result)
-        assertEquals(ResponseEntity(expected,HttpStatus.CREATED), result)
+        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM
+                , questions = null)
+        val expectedResult = ResponseEntity(examInserted, HttpStatus.CREATED)
+
+        doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
+
+        val result = examService.addExam(examInserted)
+        assertEquals(expectedResult, result)
     }
 }
