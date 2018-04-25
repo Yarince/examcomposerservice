@@ -26,20 +26,5 @@ data class Exam(
         @ApiModelProperty(notes = "The location of the exam")
         val location: String? = null,
         @ApiModelProperty(notes = "The questions in the exam")
-        val questions: Array<Question>? = null
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Exam
-
-        if (!Arrays.equals(questions, other.questions)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return questions?.let { Arrays.hashCode(it) } ?: 0
-    }
-}
+        val questions: ArrayList<Question>? = null
+)

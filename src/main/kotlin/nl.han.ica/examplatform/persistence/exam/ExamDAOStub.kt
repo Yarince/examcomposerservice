@@ -31,7 +31,7 @@ class ExamDAOStub {
                 name = "Exam $id",
                 location = "Nijmegen",
                 instructions = "Use of a calculator is prohibited",
-                questions = arrayOf(Question(questionId = 1,
+                questions = arrayListOf(Question(questionId = 1,
                         questionType = QuestionType.OPEN_QUESTION,
                         questionText = "Explain why DCAR is better",
                         examType = ExamType.EXAM), Question(questionId = 2,

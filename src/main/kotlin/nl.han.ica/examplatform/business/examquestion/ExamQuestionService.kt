@@ -21,7 +21,7 @@ class ExamQuestionService {
     private
     lateinit var questionDAO: QuestionDAOStub
 
-    fun checkQuestion(questions: Array<Question>?) {
+    fun checkQuestion(questions: ArrayList<Question>?) {
         questions?.let {
             for (question in it)
                 if (!questionDAO.exists(question))
