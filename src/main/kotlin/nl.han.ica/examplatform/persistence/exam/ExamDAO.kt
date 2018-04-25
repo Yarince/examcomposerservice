@@ -118,4 +118,30 @@ class ExamDAO {
 
         return exam
     }
+
+    fun addQuestionsToExam(exam: Exam): Exam {
+        val query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID) VALUES "
+        exam.questions?.let {
+            for (question in exam.questions) {
+                query.plus("(${exam.examId}, ${question.questionId})")
+                if (question != exam.questions.last()) query.plus(", ")
+            }
+        }
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+        preparedStatement = conn?.prepareStatement(query)
+
+        try {
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            throw DatabaseException("Error while interacting with the database")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+
+        return exam
+    }
 }
