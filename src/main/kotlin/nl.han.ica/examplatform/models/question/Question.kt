@@ -39,10 +39,8 @@ data class Question(
 
         // Have to figure out how we deal with these 2 variables. If they get removed they will break a whole lot.
         @ApiModelProperty(notes = "A question can contain subquestions when the type is noQuestion")
-        val subQuestions: Array<Question>? = null,
+        val subQuestions: Array<Question>? = null
 
-        @ApiModelProperty(notes = "SubID of a question, for example: a, b or c. If this question is not a subquestion this value should be null")
-        val subId: String? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

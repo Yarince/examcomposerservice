@@ -18,7 +18,4 @@ data class Course(
 
         @ApiModelProperty(notes = "The name of the course")
         val courseName: String
-
-) {
-
-}
+)
