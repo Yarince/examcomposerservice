@@ -16,8 +16,6 @@ class QuestionService {
     fun addQuestion(question: Question): ResponseEntity<Question> {
         return try {
             val insertedQuestion = questionDAO.insertQuestion(question)
-            print("Inserted question")
-            print(insertedQuestion)
             ResponseEntity(insertedQuestion, HttpStatus.CREATED)
         } catch (exception: Exception) {
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
