@@ -1,9 +1,8 @@
 package nl.han.ica.examplatform.controllers.answer
 
 import nl.han.ica.examplatform.business.answer.AnswerService
-import nl.han.ica.examplatform.exceptions.ErrorInfo
-import nl.han.ica.examplatform.exceptions.answerExceptions.CouldNotAddAnswerToQuestionException
-import nl.han.ica.examplatform.exceptions.answerExceptions.InvalidAnswerException
+import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
+import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answer.Keywords
 import nl.han.ica.examplatform.models.answer.OpenAnswer
 import org.junit.Assert
@@ -47,11 +46,7 @@ internal class AnswerControllerTest {
 
     @Test(expected = CouldNotAddAnswerToQuestionException::class)
     fun testAddOpenAnswerToQuestionCouldNotAddAnswerToQuestionException() {
-        val error = ErrorInfo(
-                developerMessage = "DAO Exception",
-                userMessage = "DAO Exception"
-        )
-        Mockito.doThrow(CouldNotAddAnswerToQuestionException(error)).`when`(answerService).addAnswerToQuestion(openAnswer)
+        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null, false, false)).`when`(answerService).addAnswerToQuestion(openAnswer)
         answerController.addOpenAnswerToQuestion(openAnswer)
     }
 

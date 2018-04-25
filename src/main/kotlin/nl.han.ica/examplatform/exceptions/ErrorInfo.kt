@@ -9,10 +9,10 @@ package nl.han.ica.examplatform.exceptions
  * moreInfo         : (Optional) Url to site which has more information about the error
  */
 class ErrorInfo(
-        private val developerMessage: String,
-        private val userMessage: String,
-        private val errorCode: String? = null,
-        private val moreInfo: String? = null
+        val developerMessage: String,
+        val userMessage: String,
+        val errorCode: String? = null,
+        val moreInfo: String? = null
 ) {
     override fun toString(): String {
         return """

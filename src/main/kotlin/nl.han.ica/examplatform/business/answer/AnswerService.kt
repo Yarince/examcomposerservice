@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.business.answer
 
-import nl.han.ica.examplatform.exceptions.ErrorInfo
-import nl.han.ica.examplatform.exceptions.answerExceptions.CouldNotAddAnswerToQuestionException
+import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
 import nl.han.ica.examplatform.models.answer.Answer
 import nl.han.ica.examplatform.persistence.answer.AnswerDAO
 import org.springframework.stereotype.Service
@@ -18,10 +17,7 @@ class AnswerService(private val answerDao: AnswerDAO) {
             answerDao.addAnswerToQuestion(answer)
         } catch (exception: Exception) {
             LOG.warning(exception.message)
-            throw CouldNotAddAnswerToQuestionException(ErrorInfo(
-                    developerMessage = "Answer could not be added to Question",
-                    userMessage = "Answer could not be added to Question"
-            ), exception)
+            throw CouldNotAddAnswerToQuestionException("Answer could not be added to Question", exception, true, true)
         }
     }
 }
