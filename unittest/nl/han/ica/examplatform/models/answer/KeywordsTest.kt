@@ -11,19 +11,19 @@ import kotlin.test.assertTrue
 internal class KeywordsTest {
 
     @Test
-    fun size() {
+    fun testSize() {
         val expected = 3
         val result = Keywords(arrayOf("01", "02", "03")).size
         assertEquals(expected, result)
     }
 
     @Test
-    fun createValidKeywords() {
+    fun testCreateValidKeywords() {
         Keywords(arrayOf("01", "02"))
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun createInvalidKeywords() {
+    fun testCreateInvalidKeywords() {
         val expected = Keywords::class.java
         val result = Keywords(arrayOf("01", "0 2")).javaClass
         assertNotNull(result)
@@ -31,19 +31,19 @@ internal class KeywordsTest {
     }
 
     @Test
-    fun doesContain() {
+    fun testDoesContain() {
         val keywords = Keywords(arrayOf("01", "02"))
         assertTrue(keywords.contains("02"))
     }
 
     @Test
-    fun doesNotContain() {
+    fun testDoesNotContain() {
         val keywords = Keywords(arrayOf("01", "02"))
         assertTrue(!keywords.contains("03"))
     }
 
     @Test
-    fun doesContainAll() {
+    fun testDoesContainAll() {
         val keywords = Keywords(arrayOf("01", "02", "03"))
         assertTrue(keywords.containsAll(
                 Keywords(arrayOf("01", "02"))
@@ -51,7 +51,7 @@ internal class KeywordsTest {
     }
 
     @Test
-    fun doesNotContainAll() {
+    fun testDoesNotContainAll() {
         val keywords = Keywords(arrayOf("01", "02", "03"))
         assertTrue(!keywords.containsAll(
                 Keywords(arrayOf("01", "04"))
@@ -59,19 +59,19 @@ internal class KeywordsTest {
     }
 
     @Test
-    fun isEmpty() {
+    fun testIsEmpty() {
         val keywords = Keywords(arrayOf())
         assertTrue(keywords.isEmpty())
     }
 
     @Test
-    fun isNotEmpty() {
+    fun testIsNotEmpty() {
         val keywords = Keywords(arrayOf("01"))
         assertTrue(!keywords.isEmpty())
     }
 
     @Test
-    fun iterator() {
+    fun testIterator() {
         val keywords = Keywords(arrayOf("01", "02"))
         val result = keywords.iterator()
         assertNotNull(result)

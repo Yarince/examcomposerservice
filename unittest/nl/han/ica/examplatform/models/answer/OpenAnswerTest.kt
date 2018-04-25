@@ -9,29 +9,29 @@ import kotlin.test.assertEquals
 class OpenAnswerTest {
 
     @Test
-    fun valid() {
+    fun testValid() {
         val expected = OpenAnswer::class.java
         val result = OpenAnswer(3, "des", "com", Keywords(arrayOf())).javaClass
         assertEquals(expected, result)
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun questionIdZero() {
+    fun testQuestionIdZero() {
         OpenAnswer(0, "des", "com", Keywords(arrayOf())).javaClass
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun questionIdNegative() {
+    fun testQuestionIdNegative() {
         OpenAnswer(-10, "des", "com", Keywords(arrayOf())).javaClass
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun descriptionEmpty() {
+    fun testDescriptionEmpty() {
         OpenAnswer(1, "", "com", Keywords(arrayOf())).javaClass
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun commentEmpty() {
+    fun testCommentEmpty() {
         OpenAnswer(1, "des", "", Keywords(arrayOf())).javaClass
     }
 }

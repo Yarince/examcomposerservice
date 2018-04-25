@@ -58,7 +58,7 @@ class ExamControllerTest {
     }
 
     @Test
-    fun addQuestionToExam() {
+    fun testAddQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = Array(1, {
             Question(1, "Text", QuestionType.OPEN_QUESTION, "Course", null, ExamType.EXAM)
         }))
