@@ -1,6 +1,5 @@
 package nl.han.ica.examplatform.persistence.exam
 
-import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
