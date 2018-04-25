@@ -20,6 +20,7 @@ import org.springframework.web.client.exchange
 import org.springframework.web.client.postForEntity
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 @RunWith(SpringJUnit4ClassRunner::class)

@@ -37,11 +37,11 @@ class ExamControllerTest {
 
     @Test
     fun testGetExams() {
-        val expected = arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
+        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", "SWA"),
                 SimpleExam(2, "SWA Toets 2", "SWA"),
                 SimpleExam(3, "APP Toets algoritmen", "APP")
         )
-        doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(examService).getExams()
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.OK)).`when`(examService).getExams()
 
         val result = examController.getExams()
         assertNotNull(result)
