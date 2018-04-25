@@ -48,7 +48,7 @@ class ExamDAO {
 
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
-        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, COURSECODE, EXAMTYPENAME, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = $id"
+        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, COURSECODE, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = $id"
         val examPreparedStatement: PreparedStatement?
         examPreparedStatement = conn?.prepareStatement(examQuery)
 
@@ -66,7 +66,7 @@ class ExamDAO {
                         questionText = questionRs.getString("QuestionText"),
                         questionType = QuestionType.from(questionRs.getString("QuestionType")),
                         course = questionRs.getString("CourseCode"),
-                        examType = ExamType.EXAM))
+                        examType = ExamType.from(questionRs.getInt("ExamTypeId"))))
             }
             val examRs = examPreparedStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
@@ -78,10 +78,11 @@ class ExamDAO {
             if (examRs.row < 1) throw ExamNotFoundException("Exam with ID $id was not found")
 
             result = Exam(examId = examRs.getInt("ExamID"),
-                    durationInMinutes = ((examRs.getDate("StartTime").time / 60000) - (examRs.getDate("EndTime").time / 60000)).toInt(),
-                    startTime = examRs.getDate("StartTime"),
+                    durationInMinutes = ((examRs.getTime("EndTime").time / 60000) - (examRs.getTime("StartTime").time / 60000)).toInt(),
+                    startTime = Date(examRs.getTimestamp("StartTime").time),
+                    endTime = Date(examRs.getTimestamp("EndTime").time),
                     course = examRs.getString("CourseCode"),
-                    examType = ExamType.EXAM,
+                    examType = ExamType.from(examRs.getInt("ExamTypeId")),
                     name = examRs.getString("ExamName"),
                     location = examRs.getString("Location"),
                     instructions = examRs.getString("Instructions"),
