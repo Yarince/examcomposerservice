@@ -5,7 +5,7 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
-import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
+import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAOStub
 import org.junit.Assert.*
 import org.junit.Test
@@ -26,7 +26,7 @@ class ExamQuestionServiceTest {
     lateinit var examQuestionService: ExamQuestionService
 
     @Mock
-    lateinit var examDAO: ExamDAOStub
+    lateinit var examDAO: ExamDAO
 
     @Mock
     lateinit var questionDAO: QuestionDAOStub
@@ -57,7 +57,7 @@ class ExamQuestionServiceTest {
         val expectedQuestion = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
         val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = arrayListOf(expectedQuestion))
 
-        doReturn(expectedExam).`when`(examDAO).updateExam(expectedExam)
+        doReturn(expectedExam).`when`(examDAO).addQuestionsToExam(expectedExam)
         doReturn(true).`when`(questionDAO).exists(expectedQuestion)
 
         assertEquals(ResponseEntity(expectedExam, HttpStatus.ACCEPTED), examQuestionService.addQuestionToExam(expectedExam))
