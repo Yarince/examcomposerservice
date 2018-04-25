@@ -48,7 +48,7 @@ class ExamDAO {
 
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
-        val examQuery = "SELECT EXAMID, STARTTIME, COURSECODE, EXAMTYPENAME, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = $id"
+        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, COURSECODE, EXAMTYPENAME, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = $id"
         val examPreparedStatement: PreparedStatement?
         examPreparedStatement = conn?.prepareStatement(examQuery)
 
@@ -58,17 +58,18 @@ class ExamDAO {
         val result: Exam
 
         try {
-            val questionRs = questionsStatement?.executeQuery() ?: throw DatabaseException("Error while interacting with the database")
+            val questionRs = questionsStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
             val questions = ArrayList<Question>()
             while (questionRs.next()) {
                 questions.add(Question(questionId = questionRs.getInt("QuestionID"),
                         questionText = questionRs.getString("QuestionText"),
-                        questionType = QuestionType.MULTIPLE_CHOICE_QUESTION,
+                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
                         course = questionRs.getString("CourseCode"),
-                        subId = "a",
                         examType = ExamType.EXAM))
             }
-            val examRs = examPreparedStatement?.executeQuery() ?: throw DatabaseException("Error while interacting with the database")
+            val examRs = examPreparedStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
 
             // Move to the last result, so we can use getRow on ResultSet
             examRs.last()
@@ -77,9 +78,9 @@ class ExamDAO {
             if (examRs.row < 1) throw ExamNotFoundException("Exam with ID $id was not found")
 
             result = Exam(examId = examRs.getInt("ExamID"),
-                    durationInMinutes = 999,
+                    durationInMinutes = ((examRs.getDate("StartTime").time / 60000) - (examRs.getDate("EndTime").time / 60000)).toInt(),
                     startTime = examRs.getDate("StartTime"),
-                    course = examRs.getString("COURSECODE"),
+                    course = examRs.getString("CourseCode"),
                     examType = ExamType.EXAM,
                     name = examRs.getString("ExamName"),
                     location = examRs.getString("Location"),
