@@ -48,13 +48,17 @@ class ExamDAO {
 
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
-        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, COURSECODE, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = $id"
-        val examPreparedStatement: PreparedStatement?
-        examPreparedStatement = conn?.prepareStatement(examQuery)
 
-        val questionsQuery = "SELECT * FROM QUESTION INNER JOIN QUESTION_IN_EXAM ON QUESTION.QUESTIONID = QUESTION_IN_EXAM.QUESTIONID INNER JOIN COURSE ON QUESTION.COURSEID = COURSE.COURSEID WHERE QUESTION_IN_EXAM.EXAMID = $id"
+        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, COURSECODE, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
+        val examStatement: PreparedStatement?
+        examStatement = conn?.prepareStatement(examQuery)
+        examStatement?.setInt(1, id)
+
+        val questionsQuery = "SELECT * FROM QUESTION INNER JOIN QUESTION_IN_EXAM ON QUESTION.QUESTIONID = QUESTION_IN_EXAM.QUESTIONID INNER JOIN COURSE ON QUESTION.COURSEID = COURSE.COURSEID WHERE QUESTION_IN_EXAM.EXAMID = ?"
         val questionsStatement: PreparedStatement?
         questionsStatement = conn?.prepareStatement(questionsQuery)
+        questionsStatement?.setInt(1, id)
+
         val result: Exam
 
         try {
@@ -68,7 +72,7 @@ class ExamDAO {
                         course = questionRs.getString("CourseCode"),
                         examType = ExamType.from(questionRs.getInt("ExamTypeId"))))
             }
-            val examRs = examPreparedStatement?.executeQuery()
+            val examRs = examStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
 
             // Move to the last result, so we can use getRow on ResultSet
@@ -92,7 +96,7 @@ class ExamDAO {
             e.printStackTrace()
             throw DatabaseException("Error while interacting with the database")
         } finally {
-            MySQLConnection.closeStatement(examPreparedStatement)
+            MySQLConnection.closeStatement(examStatement)
             MySQLConnection.closeConnection(conn)
         }
 
@@ -101,9 +105,18 @@ class ExamDAO {
 
     fun insertExam(exam: Exam): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
-        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (${exam.courseId.value}, ${exam.examType.examId}, '${exam.name}', '${exam.name}',  '${java.sql.Date(exam.startTime.time)}', '${java.sql.Date(exam.endTime.time)}', '${exam.instructions}', '${exam.version}', '${exam.location}')"
+        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
+        preparedStatement?.setInt(1, exam.courseId.value)
+        preparedStatement?.setInt(2, exam.examType.examId)
+        preparedStatement?.setString(3, exam.name)
+        preparedStatement?.setString(4, exam.name)
+        preparedStatement?.setDate(5, java.sql.Date(exam.startTime.time))
+        preparedStatement?.setDate(6, java.sql.Date(exam.endTime.time))
+        preparedStatement?.setString(7, exam.instructions)
+        preparedStatement?.setInt(8, exam.version)
+        preparedStatement?.setString(9, exam.location)
 
         try {
             preparedStatement?.executeUpdate()
