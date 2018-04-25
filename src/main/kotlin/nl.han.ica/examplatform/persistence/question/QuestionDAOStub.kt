@@ -1,25 +1,51 @@
 package nl.han.ica.examplatform.persistence.question
 
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
 
 @Repository
 class QuestionDAOStub {
 
-    // var fetchDatabaseConnection : MySQLDatabaseConnection
+    var database = MySQLConnection
+    var dbConnection : Connection? = null
+    var preparedStatement : PreparedStatement? = null
 
 
     fun insertQuestion(question: Question) : Question {
-            print(question)
-            // Here the database connection should be called on, creating a prepared statement to insert a question
-            // This should also be able to throw an exception if it fails
-            return question
+        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) " +
+                "VALUES (${question.questionId}, ${question.parentQuestionId},${question.examTypeId.value},${question.courseId.value},\"${question.questionText}\",\"${question.questionType}\",${question.sequenceNumber},\"${question.answerText}\",\"${question.answerKeywords}\",\"${question.assessmentComments}\")"
+      try {
+          dbConnection = MySQLConnection.getConnection()
+          preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
+          preparedStatement?.executeUpdate()
+      } catch (e : SQLException) {
+          e.printStackTrace()
+      } finally {
+          database.closeConnection(dbConnection)
+      }
+        return question
     }
 
     fun exists(question: Question?): Boolean {
-        val questionDB = arrayOf(question)
-
-        // check if a question exists in the database
-        return question in questionDB
+        val sqlQueryStringSelectIfQuestionExistsString = "SELECT QUESTIONTEXT FROM QUESTION WHERE QUESTIONID = ${question?.questionId}"
+        try {
+            dbConnection = MySQLConnection.getConnection()
+            preparedStatement = dbConnection?.prepareStatement(sqlQueryStringSelectIfQuestionExistsString)
+            var rs : ResultSet? = preparedStatement?.executeQuery()
+            print(rs?.next())
+            if(rs?.next() == true) {
+                return true
+            }
+        } catch (e : SQLException) {
+            e.printStackTrace()
+        } finally {
+            database.closeConnection(dbConnection)
+        }
+        return false
     }
 }

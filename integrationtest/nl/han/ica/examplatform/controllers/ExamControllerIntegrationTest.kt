@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.controllers
 
 import junit.framework.TestCase.*
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
@@ -106,10 +107,14 @@ class ExamControllerIntegrationTest {
                 examType = ExamType.EXAM,
                 questions = arrayOf(
                         Question(1,
-                                "Openvraag text",
+                                null,
+                                ExamType.EXAM,
+                                CourseType.APP,
+                                null,
                                 QuestionType.OPEN_QUESTION,
-                                "APP",
-                                null, ExamType.EXAM,
+                                null,
+                                null,
+                                null,
                                 null)))
                 , result.body)
     }

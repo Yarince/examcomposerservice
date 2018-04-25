@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.examquestion
 
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
@@ -33,7 +34,7 @@ class ExamQuestionServiceTest {
 
     @Test
     fun testCheckQuestion() {
-        val question = Question()
+        val question = Question(parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = null, answerKeywords = null, assessmentComments = null)
         doReturn(true).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayOf(question))
         verify(questionDAO, times(1)).exists(question)
@@ -47,14 +48,14 @@ class ExamQuestionServiceTest {
 
     @Test(expected = InvalidExamException::class)
     fun testCheckQuestionNotExisting() {
-        val question = Question()
+        val question = Question(parentQuestionId = null, sequenceNumber = null, answerText = null, answerKeywords = null, assessmentComments = null)
         doReturn(false).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayOf(question))
     }
 
     @Test
     fun testAddQuestionToExam() {
-        val expectedQuestion = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
+        val expectedQuestion = Question(parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = null, answerKeywords = null, assessmentComments = null)
         val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = arrayOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).updateExam(expectedExam)

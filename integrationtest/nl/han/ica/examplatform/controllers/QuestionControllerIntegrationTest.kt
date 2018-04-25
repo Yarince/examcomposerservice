@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.controllers
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
@@ -34,8 +35,8 @@ class QuestionControllerIntegrationTest {
 
     @Test
     fun testCreateQuestion() {
-        val expectedResult = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
-        val requestJson = """{"course": "${expectedResult.course}", "examType": "${expectedResult.examType}", "questionType": "${expectedResult.questionType}"}"""
+        val expectedResult = Question(parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = null, answerKeywords = null, assessmentComments =null)
+        val requestJson = """{"course": "${expectedResult.courseId}", "examType": "${expectedResult.examTypeId}", "questionType": "${expectedResult.questionType}"}"""
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
