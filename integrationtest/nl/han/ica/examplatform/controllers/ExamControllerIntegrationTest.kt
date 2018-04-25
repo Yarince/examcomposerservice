@@ -9,6 +9,7 @@ import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,7 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.PropertySource
 import org.springframework.http.*
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
 import org.springframework.web.client.postForEntity
@@ -38,15 +41,25 @@ class ExamControllerIntegrationTest {
 
     val restTemplate = RestTemplate()
 
-    private var databaseConnection : Connection? = null
+    private var databaseConnection: Connection? = null
 
     @Before
+    @Transactional
     fun setUp() {
         databaseConnection = MySQLConnection.getConnection()
-        var sqlString : String =
-                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) \n" +
-                "VALUES (999, NULL, 1, 1, \"Openvraag text\", 1, null, \"leeg\", null, null);"
-        var preparedStatement : PreparedStatement? = databaseConnection?.prepareStatement(sqlString)
+        val sqlString =
+                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (999, NULL, 1, 1, \"Openvraag text\", 1, null, \"leeg\", null, null);"
+        val preparedStatement: PreparedStatement? = databaseConnection?.prepareStatement(sqlString)
+        preparedStatement?.executeUpdate()
+    }
+
+    @After
+    @Rollback
+    fun tearDown() {
+        databaseConnection = MySQLConnection.getConnection()
+        val sqlString =
+                "DELETE from QUESTION where QuestionID = 999"
+        val preparedStatement: PreparedStatement? = databaseConnection?.prepareStatement(sqlString)
         preparedStatement?.executeUpdate()
     }
 
