@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.exam
 
-import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
@@ -31,13 +31,16 @@ class ExamDAOStub {
                 name = "Exam $id",
                 location = "Nijmegen",
                 instructions = "Use of a calculator is prohibited",
-                questions = arrayOf(Question(questionId = 1,
-                        questionType = QuestionType.OPEN_QUESTION,
-                        questionText = "Explain why DCAR is better",
-                        examType = ExamType.EXAM), Question(questionId = 2,
-                        questionType = QuestionType.MULTIPLE_CHOICE_QUESTION,
-                        questionText = "Choose between A, B and C",
-                        examType = ExamType.EXAM)
+                questions = arrayOf(Question(1,
+                        null,
+                        ExamType.EXAM,
+                        CourseType.APP,
+                        null,
+                        QuestionType.OPEN_QUESTION,
+                        null,
+                        null,
+                        null,
+                        null)
                 )
         )
     }

@@ -2,11 +2,14 @@ package nl.han.ica.examplatform.controllers
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
@@ -19,6 +22,8 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
 import org.springframework.web.client.postForEntity
 import org.springframework.web.util.UriComponentsBuilder
+import java.sql.Connection
+import java.sql.PreparedStatement
 import java.util.*
 
 
@@ -32,6 +37,18 @@ class ExamControllerIntegrationTest {
     var port: Int = 0
 
     val restTemplate = RestTemplate()
+
+    private var databaseConnection : Connection? = null
+
+    @Before
+    fun setUp() {
+        databaseConnection = MySQLConnection.getConnection()
+        var sqlString : String =
+                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) \n" +
+                "VALUES (999, NULL, 1, 1, \"Openvraag text\", 1, null, \"leeg\", null, null);"
+        var preparedStatement : PreparedStatement? = databaseConnection?.prepareStatement(sqlString)
+        preparedStatement?.executeUpdate()
+    }
 
     @Test
     fun testGetExams() {
@@ -94,13 +111,17 @@ class ExamControllerIntegrationTest {
                                 "location":null,
                                 "questions":[
                                 {
-                                    "questionId": 1,
+                                    "answerKeywords": null,
+                                    "answerText": "leeg",
+                                    "assessmentComments": null,
+                                    "courseId": "APP",
+                                    "examTypeId": "EXAM",
+                                    "parentQuestionId": null,
+                                    "questionId": 999,
                                     "questionText": "Openvraag text",
                                     "questionType": "OPEN_QUESTION",
-                                    "course": "APP",
-                                    "subId": null,
-                                    "examType": "EXAM",
-                                    "subQuestions": null
+                                    "sequenceNumber": null,
+                                    "subId": "string"
                                     }
                                 ]
                             }"""
@@ -123,14 +144,15 @@ class ExamControllerIntegrationTest {
                                 null,
                                 ExamType.EXAM,
                                 CourseType.APP,
-                                null,
+                                "Openvraag text",
                                 QuestionType.OPEN_QUESTION,
                                 null,
-                                null,
+                                "leeg",
                                 null,
                                 null)))
                 , result.body)
     }
+
 
     @Test
     fun testGetExamSuccess() {

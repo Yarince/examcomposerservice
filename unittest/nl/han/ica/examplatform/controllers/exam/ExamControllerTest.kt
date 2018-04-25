@@ -8,7 +8,10 @@ import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
+import org.junit.After
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -17,11 +20,16 @@ import org.mockito.Mockito.doReturn
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.test.annotation.Rollback
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.transaction.annotation.Transactional
+import java.sql.Connection
+import java.sql.PreparedStatement
 import java.util.Date
 import kotlin.test.assertEquals
 
-
 @RunWith(MockitoJUnitRunner::class)
+@Transactional
 class ExamControllerTest {
 
     @InjectMocks
@@ -61,7 +69,7 @@ class ExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = Array(1, {
-            Question(parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = null, answerKeywords = null, assessmentComments = null)
+            Question(parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = null, answerKeywords = null, assessmentComments = null)
         }))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)

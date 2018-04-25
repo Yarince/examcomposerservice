@@ -37,7 +37,6 @@ class QuestionDAOStub {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringSelectIfQuestionExistsString)
             var rs : ResultSet? = preparedStatement?.executeQuery()
-            print(rs?.next())
             if(rs?.next() == true) {
                 return true
             }
