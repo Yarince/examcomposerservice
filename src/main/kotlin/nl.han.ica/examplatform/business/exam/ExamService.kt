@@ -34,7 +34,7 @@ class ExamService {
 
     fun addExam(exam: Exam): ResponseEntity<Exam> {
         checkExam(exam)
-        val insertedObject = examDAOStub.insertExam(exam) //Add to database
+        val insertedObject = examDAO.insertExam(exam) //Add to database
         return ResponseEntity(insertedObject, HttpStatus.CREATED)
     }
 

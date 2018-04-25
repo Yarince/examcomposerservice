@@ -20,10 +20,10 @@ import kotlin.collections.ArrayList
 class ExamDAO {
 
     fun getExams(): ArrayList<SimpleExam> {
-        val dbConnection: Connection? = MySQLConnection.getConnection()
-        val sqlQueryStringInsertString = "SELECT EXAMID, EXAMNAME, COURSECODE FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
+        val conn: Connection? = MySQLConnection.getConnection()
+        val examQuery = "SELECT EXAMID, EXAMNAME, COURSECODE FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
         val preparedStatement: PreparedStatement?
-        preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertString)
+        preparedStatement = conn?.prepareStatement(examQuery)
 
         val result = ArrayList<SimpleExam>()
         try {
@@ -40,7 +40,7 @@ class ExamDAO {
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
-            MySQLConnection.closeConnection(dbConnection)
+            MySQLConnection.closeConnection(conn)
         }
 
         return result
@@ -97,5 +97,24 @@ class ExamDAO {
         }
 
         return result
+    }
+
+    fun insertExam(exam: Exam): Exam {
+        val conn: Connection? = MySQLConnection.getConnection()
+        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (1, ${exam.examType.examId}, '${exam.name}', '${exam.name}',  '${java.sql.Date(exam.startTime.time)}', '${java.sql.Date(exam.endTime.time)}', '${exam.instructions}', '${exam.version}', '${exam.location}')"
+        val preparedStatement: PreparedStatement?
+        preparedStatement = conn?.prepareStatement(insertExamQuery)
+
+        try {
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            throw DatabaseException("Error while interacting with the database")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+
+        return exam
     }
 }
