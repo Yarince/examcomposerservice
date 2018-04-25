@@ -119,7 +119,7 @@ class ExamControllerIntegrationTest {
                 startTime = Date(6000),
                 course = "APP",
                 examType = ExamType.EXAM,
-                questions = arrayOf(
+                questions = arrayListOf(
                         Question(1,
                                 "Openvraag text",
                                 QuestionType.OPEN_QUESTION,

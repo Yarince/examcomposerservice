@@ -35,7 +35,7 @@ class ExamQuestionServiceTest {
     fun testCheckQuestion() {
         val question = Question()
         doReturn(true).`when`(questionDAO).exists(question)
-        examQuestionService.checkQuestion(arrayOf(question))
+        examQuestionService.checkQuestion(arrayListOf(question))
         verify(questionDAO, times(1)).exists(question)
     }
 
@@ -49,13 +49,13 @@ class ExamQuestionServiceTest {
     fun testCheckQuestionNotExisting() {
         val question = Question()
         doReturn(false).`when`(questionDAO).exists(question)
-        examQuestionService.checkQuestion(arrayOf(question))
+        examQuestionService.checkQuestion(arrayListOf(question))
     }
 
     @Test
     fun testAddQuestionToExam() {
         val expectedQuestion = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
-        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = arrayOf(expectedQuestion))
+        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = arrayListOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).updateExam(expectedExam)
         doReturn(true).`when`(questionDAO).exists(expectedQuestion)

@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.persistence.exam
 
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
@@ -101,7 +102,7 @@ class ExamDAO {
 
     fun insertExam(exam: Exam): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
-        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (1, ${exam.examType.examId}, '${exam.name}', '${exam.name}',  '${java.sql.Date(exam.startTime.time)}', '${java.sql.Date(exam.endTime.time)}', '${exam.instructions}', '${exam.version}', '${exam.location}')"
+        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (${exam.courseId.value}, ${exam.examType.examId}, '${exam.name}', '${exam.name}',  '${java.sql.Date(exam.startTime.time)}', '${java.sql.Date(exam.endTime.time)}', '${exam.instructions}', '${exam.version}', '${exam.location}')"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
 

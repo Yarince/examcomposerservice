@@ -55,7 +55,7 @@ internal class ExamServiceTest {
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
         val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,
-                questions = arrayOf(Question())) // Faulty exam object
+                questions = arrayListOf(Question())) // Faulty exam object
         examService.checkExam(exam)
     }
 
