@@ -132,17 +132,26 @@ class ExamDAO {
     }
 
     fun addQuestionsToExam(exam: Exam): Exam {
+        if (exam.questions == null) throw DatabaseException("Please provide questions to add to exam")
+
         val query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID) VALUES "
-        exam.questions?.let {
-            for (question in exam.questions) {
-                query.plus("(${exam.examId}, ${question.questionId})")
-                if (question != exam.questions.last()) query.plus(", ")
-            }
+        for (question in exam.questions) {
+            query.plus("(?, ?)")
+            if (question != exam.questions.last()) query.plus(", ")
         }
+
 
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(query)
+
+        var index = 0
+        for (question in exam.questions) {
+            index++
+            preparedStatement?.setInt(index, exam.examId ?: throw DatabaseException("Please provide examID"))
+            index++
+            preparedStatement?.setInt(index, question.questionId ?: throw DatabaseException("Can't insert question without ID"))
+        }
 
         try {
             preparedStatement?.executeUpdate()
