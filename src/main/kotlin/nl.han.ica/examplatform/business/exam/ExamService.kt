@@ -39,7 +39,7 @@ class ExamService {
     }
 
     fun getExam(id: Int): ResponseEntity<Exam> {
-        return ResponseEntity(examDAOStub.getExam(id), HttpStatus.OK)
+        return ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
     }
 }
 
