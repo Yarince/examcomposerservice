@@ -2,11 +2,15 @@ package nl.han.ica.examplatform.controllers
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
@@ -14,13 +18,16 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.PropertySource
 import org.springframework.http.*
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
 import org.springframework.web.client.postForEntity
 import org.springframework.web.util.UriComponentsBuilder
+import java.sql.Connection
+import java.sql.PreparedStatement
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 @RunWith(SpringJUnit4ClassRunner::class)
@@ -34,12 +41,40 @@ class ExamControllerIntegrationTest {
 
     val restTemplate = RestTemplate()
 
+    private var databaseConnection: Connection? = null
+
+    private val testQuestion = Question(questionId = 99999)
+    private val testExam = Exam(99999, "TestExam", 0, Date(1000), Date(1000), "APP", CourseType.APP, 1, ExamType.EXAM, "Use a calculator", "Nijmegen", arrayListOf(testQuestion))
+
+    @Before
+    @Transactional
+    fun setUp() {
+        databaseConnection = MySQLConnection.getConnection()
+        val insertQuestionQuery = "INSERT INTO QUESTION (QUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTYPE) VALUES (${testQuestion.questionId}, 1, 1, '${testQuestion.questionType.fieldName}')"
+        val insertExamQuery = "INSERT INTO EXAM (EXAMID, COURSEID, EXAMTYPEID, EXAMNAME, EXAMCODE) VALUES (${testExam.examId}, ${testExam.courseId.value}, ${testExam.examType.examId}, '${testExam.name}', '${testExam.name}')"
+        val preparedStatementQuestion = databaseConnection?.prepareStatement(insertQuestionQuery)
+        preparedStatementQuestion?.executeUpdate()
+
+        val preparedStatementExam = databaseConnection?.prepareStatement(insertExamQuery)
+        preparedStatementExam?.executeUpdate()
+    }
+
+    @After
+    @Rollback
+    fun tearDown() {
+        databaseConnection = MySQLConnection.getConnection()
+        val deleteQuestionQuery = "DELETE from QUESTION where QuestionID = ${testQuestion.questionId}"
+        val deleteExamQuery = "DELETE FROM EXAM WHERE EXAMID = ${testExam.examId}"
+        val preparedStatementQuery: PreparedStatement? = databaseConnection?.prepareStatement(deleteQuestionQuery)
+        preparedStatementQuery?.executeUpdate()
+
+        val preparedStatementExam: PreparedStatement? = databaseConnection?.prepareStatement(deleteExamQuery)
+        preparedStatementExam?.executeUpdate()
+    }
+
     @Test
     fun testGetExams() {
-        val expected = arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
-                SimpleExam(2, "SWA Toets 2", "SWA"),
-                SimpleExam(3, "APP Toets algoritmen", "APP")
-        )
+        val expected = SimpleExam(testExam.examId!!, testExam.name, testExam.course)
         val builder = UriComponentsBuilder.fromHttpUrl("http://localhost:$port/exams")
         val entity = HttpEntity<Any>(HttpHeaders())
 
@@ -51,9 +86,12 @@ class ExamControllerIntegrationTest {
 
         assertNotNull(response.body)
         assertEquals(response.statusCode, HttpStatus.OK)
-        assertEquals(expected[0], response.body?.get(0))
-        assertEquals(expected.size, response.body?.size)
-        assertEquals(expected.last(), response.body?.last())
+        var success = false
+        for (item in response.body!!) {
+            if (item.examId == expected.examId) success = true
+        }
+
+        assertEquals(true, success)
     }
 
     @Test

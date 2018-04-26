@@ -4,7 +4,6 @@ import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamExcepti
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
-import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,9 +12,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class ExamService {
-
-    @Autowired
-    lateinit var examDAOStub: ExamDAOStub
 
     @Autowired
     lateinit var examDAO: ExamDAO
