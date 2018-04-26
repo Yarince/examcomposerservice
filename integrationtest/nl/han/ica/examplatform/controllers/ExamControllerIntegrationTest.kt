@@ -47,7 +47,6 @@ class ExamControllerIntegrationTest {
     @Before
     @Transactional
         fun setUp() {
-
         testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
             databaseConnection = MySQLConnection.getConnection()
             val sqlString =

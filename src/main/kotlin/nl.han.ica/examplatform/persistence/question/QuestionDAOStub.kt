@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.question
 
+import net.bytebuddy.implementation.bytecode.Throw
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -21,7 +22,8 @@ class QuestionDAOStub {
               dbConnection = MySQLConnection.getConnection()
               preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
               preparedStatement?.setInt(1, question.questionId?:0)
-              preparedStatement?.setInt(2, question.parentQuestionId?:0)
+//              preparedStatement?.setInt(2, question.parentQuestionId?: throw RuntimeException("Dit is null"))
+              if (question.parentQuestionId == null) preparedStatement?.setNull(2, java.sql.Types.INTEGER) else preparedStatement?.setInt(2, question.parentQuestionId)
               preparedStatement?.setInt(3, question.examTypeId.value)
               preparedStatement?.setInt(4, question.courseId.value)
               preparedStatement?.setString(5, question.questionText)
