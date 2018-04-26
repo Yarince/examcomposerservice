@@ -41,16 +41,21 @@ class ExamControllerIntegrationTest {
 
     val restTemplate = RestTemplate()
 
+    var testQuestion : Question? = null
+
     private var databaseConnection: Connection? = null
     @Before
     @Transactional
-    fun setUp() {
-        var testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
-        print(testQuestion?.examTypeId)
-        databaseConnection = MySQLConnection.getConnection()
-        val sqlString =
-                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (999, NULL, 1, 1, \"Openvraag text\", 1, null, \"leeg\", null, null);"
+        fun setUp() {
+
+        testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
+            databaseConnection = MySQLConnection.getConnection()
+            val sqlString =
+                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (${testQuestion?.questionId}, ${testQuestion?.parentQuestionId}, ${testQuestion?.examTypeId?.value}, ${testQuestion?.courseId?.value}, ?, ?, ${testQuestion?.sequenceNumber}, ?, ${testQuestion?.answerKeywords}, ${testQuestion?.assessmentComments});"
         val preparedStatement = databaseConnection?.prepareStatement(sqlString)
+        preparedStatement?.setString(1, testQuestion?.questionText)
+        preparedStatement?.setString(2, testQuestion?.questionType.toString())
+        preparedStatement?.setString(3, testQuestion?.answerText)
         preparedStatement?.executeUpdate()
     }
 
@@ -59,7 +64,7 @@ class ExamControllerIntegrationTest {
     fun tearDown() {
         databaseConnection = MySQLConnection.getConnection()
         val sqlString =
-                "DELETE from QUESTION where QuestionID = 999"
+                "DELETE from QUESTION where QuestionID = ${testQuestion?.questionId}"
         val preparedStatement: PreparedStatement? = databaseConnection?.prepareStatement(sqlString)
         preparedStatement?.executeUpdate()
     }
