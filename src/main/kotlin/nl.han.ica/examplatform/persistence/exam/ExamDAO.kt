@@ -110,7 +110,7 @@ class ExamDAO {
         preparedStatement = conn?.prepareStatement(insertExamQuery)
         preparedStatement?.setInt(1, exam.courseId.value)
         preparedStatement?.setInt(2, exam.examType.examId)
-        preparedStatement?.setString(3, exam.name)
+        preparedStatement?.setString(3, exam.name)//TODO BRUH
         preparedStatement?.setString(4, exam.name)
         preparedStatement?.setDate(5, java.sql.Date(exam.startTime.time))
         preparedStatement?.setDate(6, java.sql.Date(exam.endTime.time))

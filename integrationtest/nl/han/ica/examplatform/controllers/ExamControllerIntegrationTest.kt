@@ -7,6 +7,9 @@ import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
@@ -14,13 +17,16 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.PropertySource
 import org.springframework.http.*
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
 import org.springframework.web.client.postForEntity
 import org.springframework.web.util.UriComponentsBuilder
+import org.springframework.transaction.annotation.Transactional
+import java.sql.Connection
+import java.sql.PreparedStatement
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 @RunWith(SpringJUnit4ClassRunner::class)
@@ -33,6 +39,70 @@ class ExamControllerIntegrationTest {
     var port: Int = 0
 
     val restTemplate = RestTemplate()
+
+
+    var testExam: SimpleExam? = null
+
+
+    //TODO Make test data
+    val testExamArray = arrayOf(
+            Exam(1, "SWA Toets 1", 100,null,"SWA"),
+            Exam(2, "SWA Toets 1", "SWA"),
+            Exam(3, "APP Toets algoritmen", "APP")
+    )
+
+    private var conn: Connection? = null
+
+    @Before
+    @Transactional
+    fun setUp() {
+
+        conn = MySQLConnection.getConnection()
+
+        // Clear the DB for this test
+        val sqlDeleteString = "delete from EXAM; delete from COURSE"
+        val preparedStatement1 = conn?.prepareStatement(sqlDeleteString)
+        preparedStatement1?.executeUpdate()
+
+        //TODO INSERT new COURSE
+
+
+        for (exam in testExamArray) {
+        //TODO INSERT CORRECT DATA
+            val insertExamQuery = "INSERT INTO EXAM ( EXAMID, EXAMNAME,COURSEID) VALUES (?, ?, ?)"
+
+            val preparedStatement2: PreparedStatement? = conn?.prepareStatement(insertExamQuery)
+            preparedStatement2?.setInt(3, exam.course)
+            preparedStatement2?.setInt(2, exam.examType.examId)
+            preparedStatement2?.setString(1, exam.name)
+            preparedStatement2?.setDate(5, java.sql.Date(exam.startTime.time))
+            preparedStatement2?.setDate(6, java.sql.Date(exam.endTime.time))
+            preparedStatement2?.setString(7, exam.instructions)
+            preparedStatement2?.setInt(8, exam.version)
+            preparedStatement2?.setString(9, exam.location)
+            preparedStatement2?.executeUpdate()
+        }
+
+
+
+        val sqlString =
+                "INSERT INTO EXAM (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) " +
+                        "VALUES (${testQuestion?.questionId}, ${testQuestion?.parentQuestionId}, ${testQuestion?.examTypeId?.value}, ${testQuestion?.courseId?.value}, ?, ?, ${testQuestion?.sequenceNumber}, ?, ${testQuestion?.answerKeywords}, ${testQuestion?.assessmentComments});"
+        val preparedStatement3 = conn?.prepareStatement(sqlString)
+        preparedStatement3?.setString(1, testQuestion?.questionText)
+        preparedStatement3?.setString(2, testQuestion?.questionType.toString())
+        preparedStatement3?.setString(3, testQuestion?.answerText)
+        preparedStatement3?.executeUpdate()
+
+    }
+
+    @After
+    @Rollback
+    fun afterEach(){
+        //TODO rollback
+    }
+
+
 
     @Test
     fun testGetExams() {
