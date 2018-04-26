@@ -41,16 +41,14 @@ class ExamControllerIntegrationTest {
 
     val restTemplate = RestTemplate()
 
-    var testQuestion : Question? = null
+    var testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
 
     private var databaseConnection: Connection? = null
     @Before
     @Transactional
         fun setUp() {
-        testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
-            databaseConnection = MySQLConnection.getConnection()
-            val sqlString =
-                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (${testQuestion?.questionId}, ${testQuestion?.parentQuestionId}, ${testQuestion?.examTypeId?.value}, ${testQuestion?.courseId?.value}, ?, ?, ${testQuestion?.sequenceNumber}, ?, ${testQuestion?.answerKeywords}, ${testQuestion?.assessmentComments});"
+        databaseConnection = MySQLConnection.getConnection()
+        val sqlString = "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (${testQuestion?.questionId}, ${testQuestion?.parentQuestionId}, ${testQuestion?.examTypeId?.value}, ${testQuestion?.courseId?.value}, ?, ?, ${testQuestion?.sequenceNumber}, ?, ${testQuestion?.answerKeywords}, ${testQuestion?.assessmentComments});"
         val preparedStatement = databaseConnection?.prepareStatement(sqlString)
         preparedStatement?.setString(1, testQuestion?.questionText)
         preparedStatement?.setString(2, testQuestion?.questionType.toString())
