@@ -147,10 +147,8 @@ class ExamDAO {
 
         var index = 0
         for (question in exam.questions) {
-            index++
-            preparedStatement?.setInt(index, exam.examId ?: throw DatabaseException("Please provide examID"))
-            index++
-            preparedStatement?.setInt(index, question.questionId ?: throw DatabaseException("Can't insert question without ID"))
+            preparedStatement?.setInt(index++, exam.examId ?: throw DatabaseException("Please provide examID"))
+            preparedStatement?.setInt(index++, question.questionId ?: throw DatabaseException("Can't insert question without ID"))
         }
 
         try {
