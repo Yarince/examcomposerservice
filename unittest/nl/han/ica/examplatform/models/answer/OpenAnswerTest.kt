@@ -2,10 +2,11 @@ package nl.han.ica.examplatform.models.answer
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.runners.JUnit4
 import kotlin.test.assertEquals
 
-@RunWith(MockitoJUnitRunner::class)
+
+@RunWith(JUnit4::class)
 class OpenAnswerTest {
 
     @Test
