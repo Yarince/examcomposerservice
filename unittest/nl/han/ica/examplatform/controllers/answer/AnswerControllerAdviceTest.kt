@@ -29,5 +29,4 @@ class AnswerControllerAdviceTest {
         assertEquals(expectedErrorInfo.toString(), response.body?.toString())
         assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
     }
-
 }

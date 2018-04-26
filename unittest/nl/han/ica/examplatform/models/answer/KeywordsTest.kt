@@ -1,8 +1,6 @@
 package nl.han.ica.examplatform.models.answer
 
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 

@@ -8,7 +8,7 @@ package nl.han.ica.examplatform.models
  * errorCode        : (Optional) Code which represents the error
  * moreInfo         : (Optional) Url to site which has more information about the error
  */
-class ErrorInfo (
+class ErrorInfo(
         val developerMessage: String,
         val userMessage: String,
         val errorCode: String? = null,
