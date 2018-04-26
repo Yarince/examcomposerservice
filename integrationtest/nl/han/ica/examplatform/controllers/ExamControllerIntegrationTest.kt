@@ -42,14 +42,14 @@ class ExamControllerIntegrationTest {
     val restTemplate = RestTemplate()
 
     private var databaseConnection: Connection? = null
-
     @Before
     @Transactional
     fun setUp() {
         var testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
+        print(testQuestion?.examTypeId)
         databaseConnection = MySQLConnection.getConnection()
         val sqlString =
-                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (${testQuestion.questionId}, ${testQuestion.parentQuestionId}, ${testQuestion.examTypeId}, ${testQuestion.courseId}, ${testQuestion.questionText}, ${testQuestion.questionType}, ${testQuestion.sequenceNumber}, ${testQuestion.answerText}, ${testQuestion.answerKeywords}, ${testQuestion.assessmentComments});"
+                "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (999, NULL, 1, 1, \"Openvraag text\", 1, null, \"leeg\", null, null);"
         val preparedStatement = databaseConnection?.prepareStatement(sqlString)
         preparedStatement?.executeUpdate()
     }
