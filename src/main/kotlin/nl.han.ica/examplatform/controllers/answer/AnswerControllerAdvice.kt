@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.controllers.answer
 
-import nl.han.ica.examplatform.exceptions.ErrorInfo
+import nl.han.ica.examplatform.models.ErrorInfo
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -25,7 +25,7 @@ class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
                 developerMessage = exception.message.orEmpty(),
                 userMessage = "Answer could not be added tot the question")
 
-        //RFC_1123_DATE_TIME	RFC 1123 / RFC 822	'Tue, 3 Jun 2008 11:05:30 GMT'
+        // RFC_1123_DATE_TIME  time format 'Tue, 3 Jun 2008 11:05:30 GMT'
         val date = ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)
         val status = HttpStatus.BAD_REQUEST
 

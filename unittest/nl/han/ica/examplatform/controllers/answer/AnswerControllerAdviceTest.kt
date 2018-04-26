@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.controllers.answer
 
-import nl.han.ica.examplatform.exceptions.ErrorInfo
+import nl.han.ica.examplatform.models.ErrorInfo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner

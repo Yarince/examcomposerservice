@@ -13,14 +13,8 @@ class OpenAnswer(
         override val description: String,
 
         @ApiModelProperty(notes = "A comment on the answer")
-        override val comment: String,
+        override val comment: String?,
 
         @ApiModelProperty(notes = "The keywords of the answer")
         private val keywords: Keywords
-) : Answer {
-    init {
-        require(questionId > 0) { "Id has to be greater than zero" }
-        require(description.isNotEmpty()) { "Description can not be empty" }
-        require(comment.isNotEmpty()) { "Comment can not be empty" }
-    }
-}
+) : Answer

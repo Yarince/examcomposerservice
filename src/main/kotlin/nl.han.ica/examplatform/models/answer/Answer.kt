@@ -7,5 +7,5 @@ package nl.han.ica.examplatform.models.answer
 interface Answer {
     val questionId: Int
     val description: String
-    val comment: String
+    val comment: String?
 }

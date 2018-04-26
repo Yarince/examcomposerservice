@@ -6,8 +6,7 @@ import org.junit.runners.JUnit4
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@RunWith(JUnit4::class)
-internal class KeywordsTest {
+class KeywordsTest {
 
     @Test
     fun testCreateValidKeywords() {

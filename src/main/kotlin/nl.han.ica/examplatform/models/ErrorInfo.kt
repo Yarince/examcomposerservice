@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.exceptions
+package nl.han.ica.examplatform.models
 
 /**
  * Representing the error send to the user of the API
@@ -8,21 +8,9 @@ package nl.han.ica.examplatform.exceptions
  * errorCode        : (Optional) Code which represents the error
  * moreInfo         : (Optional) Url to site which has more information about the error
  */
-class ErrorInfo(
+class ErrorInfo (
         val developerMessage: String,
         val userMessage: String,
         val errorCode: String? = null,
         val moreInfo: String? = null
-) {
-    override fun toString(): String {
-        return """
-            {
-                developerMessage : $developerMessage,
-                userMessage : $userMessage,
-                errorCode : $errorCode,
-                moreInfo : $moreInfo
-            }
-        """
-    }
-}
-
+)
