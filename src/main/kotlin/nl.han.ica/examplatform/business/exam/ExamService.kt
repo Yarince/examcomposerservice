@@ -24,7 +24,7 @@ class ExamService {
     /**
      * Check if an exam has questions and if the id is left empty
      *
-     * @param exam Exam that needs to be validated
+     * @param exam [Exam] that needs to be validated
      * @throws InvalidExamException If properties of the exam are not correct
      */
     fun checkExam(exam: Exam) {
