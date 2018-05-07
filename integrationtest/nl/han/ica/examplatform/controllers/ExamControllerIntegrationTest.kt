@@ -43,13 +43,14 @@ class ExamControllerIntegrationTest {
 
     private var databaseConnection: Connection? = null
 
-    private val testQuestion = Question(questionId = 99999)
-    private val testExam = Exam(99999, "TestExam", 0, Date(1000), Date(1000), "APP", CourseType.APP, 1, ExamType.EXAM, "Use a calculator", "Nijmegen", arrayListOf(testQuestion))
+    private val testQuestion = Question(questionId = -99999999)
+    private val testExam = Exam(-99999999, "TestExam", 0, Date(1000), Date(1000), "APP", CourseType.APP, 1, ExamType.EXAM, "Use a calculator", "Nijmegen", arrayListOf(testQuestion))
 
     @Before
     @Transactional
     fun setUp() {
         databaseConnection = MySQLConnection.getConnection()
+        // Insert some testdata that will be rolled back later
         val insertQuestionQuery = "INSERT INTO QUESTION (QUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTYPE) VALUES (${testQuestion.questionId}, 1, 1, '${testQuestion.questionType.fieldName}')"
         val insertExamQuery = "INSERT INTO EXAM (EXAMID, COURSEID, EXAMTYPEID, EXAMNAME, EXAMCODE) VALUES (${testExam.examId}, ${testExam.courseId.value}, ${testExam.examType.examId}, '${testExam.name}', '${testExam.name}')"
         val preparedStatementQuestion = databaseConnection?.prepareStatement(insertQuestionQuery)
