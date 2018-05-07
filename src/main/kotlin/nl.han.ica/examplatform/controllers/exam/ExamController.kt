@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
-import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
+import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -46,12 +46,13 @@ class ExamController {
     )
     fun getExam(@ApiParam(value = "The ID of the exam you want to retrieve", required = true) @PathVariable("id") id: Int): ResponseEntity<Exam> =
             examService.getExam(id)
+
     @PutMapping()
     @ApiOperation(value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request")
-    )fun addQuestionToExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
+    )
+    fun addQuestionToExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
             examQuestionService.addQuestionToExam(exam)
-
 }
