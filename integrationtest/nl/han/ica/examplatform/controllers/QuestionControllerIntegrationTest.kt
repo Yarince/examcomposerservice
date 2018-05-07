@@ -40,7 +40,7 @@ class QuestionControllerIntegrationTest {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(requestJson, headers)
-        val result = restTemplate.postForEntity<Question>("http://localhost:$port/question", entity)
+        val result = restTemplate.postForEntity<Question>("http://localhost:$port/ecs/question", entity)
 
         assertNotNull(result)
         assertEquals(HttpStatus.CREATED, result.statusCode)
