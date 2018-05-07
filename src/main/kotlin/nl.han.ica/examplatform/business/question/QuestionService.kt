@@ -13,6 +13,12 @@ class QuestionService {
     @Autowired
     lateinit var questionDAO: QuestionDAOStub
 
+    /**
+     * Add a new Question to the database
+     *
+     * @param question [Question] to be added in the database
+     * @return ResponseEntity<[Question]> with new question inserted and an assigned id
+     */
     fun addQuestion(question: Question): ResponseEntity<Question> {
         return try {
             val insertedQuestion = questionDAO.insertQuestion(question)
