@@ -72,7 +72,7 @@ class ExamControllerIntegrationTest {
                 SimpleExam(2, "SWA Toets 2", "SWA"),
                 SimpleExam(3, "APP Toets algoritmen", "APP")
         )
-        val builder = UriComponentsBuilder.fromHttpUrl("http://localhost:$port/exams")
+        val builder = UriComponentsBuilder.fromHttpUrl("http://localhost:$port/ecs/exams")
         val entity = HttpEntity<Any>(HttpHeaders())
 
         val response = restTemplate.exchange(
@@ -106,7 +106,7 @@ class ExamControllerIntegrationTest {
 
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(requestJson, headers)
-        val result = restTemplate.postForEntity<Exam>("http://localhost:$port/exams", entity)
+        val result = restTemplate.postForEntity<Exam>("http://localhost:$port/ecs/exams", entity)
 
         assertEquals(HttpStatus.CREATED, result.statusCode)
         assertEquals(Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM)
@@ -144,7 +144,7 @@ class ExamControllerIntegrationTest {
 
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(requestJson, headers)
-        val result = restTemplate.exchange<Exam>("http://localhost:$port/exams", HttpMethod.PUT, entity)
+        val result = restTemplate.exchange<Exam>("http://localhost:$port/ecs/exams", HttpMethod.PUT, entity)
 
         assertNotNull(result)
         assertEquals(result.statusCode, HttpStatus.ACCEPTED)
@@ -176,7 +176,7 @@ class ExamControllerIntegrationTest {
         val headers = HttpHeaders()
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE)
 
-        val builder = UriComponentsBuilder.fromHttpUrl("http://localhost:$port/exams/$requestParamExamId")
+        val builder = UriComponentsBuilder.fromHttpUrl("http://localhost:$port/ecs/exams/$requestParamExamId")
 
         val entity = HttpEntity<Any>(headers)
 
