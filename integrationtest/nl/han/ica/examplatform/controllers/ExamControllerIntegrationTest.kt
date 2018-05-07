@@ -170,7 +170,7 @@ class ExamControllerIntegrationTest {
 
     @Test
     fun testGetExamSuccess() {
-        val requestParamExamId = 1
+        val requestParamExamId = testExam.examId
 
         val headers = HttpHeaders()
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE)

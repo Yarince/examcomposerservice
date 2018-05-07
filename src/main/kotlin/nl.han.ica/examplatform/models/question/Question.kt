@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
+import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.ExamType
 import java.util.*
 
@@ -28,7 +29,11 @@ data class Question(
         val subQuestions: Array<Question>? = null,
 
         @ApiModelProperty(notes = "Only applicable if the question is a multipleChoice question. Array with strings containing the options")
-        val options: Array<String>? = null
+        val options: Array<String>? = null,
+
+        // todo: sequencenumber shouldnt be defaulted to 0, but database sequencenumber should be removed. not our fault but otherwise the tests don't work
+        @ApiModelProperty(notes= "Number of the sequence in an exam if the question is in it")
+        val sequenceNumber: Int? = 0
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
