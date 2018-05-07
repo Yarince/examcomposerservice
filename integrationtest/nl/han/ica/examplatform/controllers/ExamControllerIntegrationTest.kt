@@ -41,7 +41,7 @@ class ExamControllerIntegrationTest {
 
     val restTemplate = RestTemplate()
 
-    var testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
+    val testQuestion = Question(questionId = 999, parentQuestionId = null, examTypeId = ExamType.EXAM, courseId = CourseType.APP, questionText = "Openvraag text", questionType = QuestionType.OPEN_QUESTION, sequenceNumber = null, answerText = "leeg", answerKeywords = null, assessmentComments = null)
 
     private var databaseConnection: Connection? = null
     @Before
