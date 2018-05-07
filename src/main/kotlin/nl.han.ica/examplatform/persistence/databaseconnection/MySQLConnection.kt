@@ -10,7 +10,6 @@ import java.sql.SQLException
  * A singleton object that handles the connection with the MySQL database
  **
  * @property databaseProperties [Properties] holds the databaseproperties, such as the connection URL, username and password.
- * @property establishedDatabaseConnection [Connection] Optional that can contain a database connection
  * @constructor Initialises the database-properties.
  */
 object MySQLConnection {
@@ -21,31 +20,17 @@ object MySQLConnection {
         databaseProperties = initializeProperties()
     }
 
-    /*
-    todo: In case that the database + the queries are ready to use this class has to be extended.
-    todo: It needs 2 more variables(preparedStatement+resultSet) and an extension of the getConnection method to retrieve data by prepared statements.
-    */
-    private var establishedDatabaseConnection: Connection? = null
-
-
-    /**
-     * Establishes a connection and fills the [establishedDatabaseConnection] property with that connection
-     */
-    private fun establishDatabaseConnection() {
-        try {
-            establishedDatabaseConnection = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-    }
-
     /**
      * Retrieves a connection and returns it
      * @return a database [Connection] on which queries can be executed
      */
     fun getConnection(): Connection? {
-        establishDatabaseConnection()
-        return establishedDatabaseConnection
+        return try {
+            connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            null
+        }
     }
 
     /**
@@ -79,7 +64,6 @@ object MySQLConnection {
     fun closeConnection(connectionToClose: Connection?) {
         try {
             connectionToClose?.close()
-            establishedDatabaseConnection = null
         } catch (e: SQLException) {
             e.printStackTrace()
         }
