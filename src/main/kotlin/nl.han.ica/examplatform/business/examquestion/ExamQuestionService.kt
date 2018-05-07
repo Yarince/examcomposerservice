@@ -26,7 +26,7 @@ class ExamQuestionService {
     private lateinit var questionDAO: QuestionDAOStub
 
     /**
-     * Validate if all [Question]s exist
+     * Validate if all Questions exist
      *
      * @param questions Array of [Question]s to be checked
      * @throws InvalidExamException If one of the questions does not exist or are empty
@@ -42,7 +42,7 @@ class ExamQuestionService {
     }
 
     /**
-     * Assign a [Question] to an existing [Exam] the database
+     * Assign a Question to an existing Exam the database
      *
      * @param exam [Exam] to be updated in the database
      * @return ResponseEntity<[Question]> updated object from database
