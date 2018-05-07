@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 SET SQL_SAFE_UPDATES = 0;
 
 DELETE FROM TEACHER_IN_COURSE;
