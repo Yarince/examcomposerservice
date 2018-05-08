@@ -30,7 +30,6 @@ data class Question(
         @ApiModelProperty(notes = "Only applicable if the question is a multipleChoice question. Array with strings containing the options")
         val options: Array<String>? = null,
 
-        // todo: sequencenumber shouldnt be defaulted to 0, but database sequencenumber should be removed. not our fault but otherwise the tests don't work
         @ApiModelProperty(notes= "Number of the sequence in an exam if the question is in it")
         val sequenceNumber: Int? = 0
 ) {
