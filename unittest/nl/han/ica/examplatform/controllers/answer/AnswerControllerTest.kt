@@ -27,8 +27,7 @@ internal class AnswerControllerTest {
     private val openAnswer: OpenAnswer = OpenAnswer(
             5,
             "dir",
-            "com",
-            Keywords(arrayOf("key"))
+            Keywords(arrayListOf("com"))
     )
 
     @Test

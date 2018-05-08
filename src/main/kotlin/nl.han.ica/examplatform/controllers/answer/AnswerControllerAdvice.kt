@@ -23,7 +23,7 @@ class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
     fun handleInvalidAnswerException(exception: Throwable): ResponseEntity<ErrorInfo> {
         val errorInfo = ErrorInfo(
                 developerMessage = exception.message.orEmpty(),
-                userMessage = "Answer could not be added tot the question")
+                userMessage = "Answer could not be added to the question")
 
         // RFC_1123_DATE_TIME  time format 'Tue, 3 Jun 2008 11:05:30 GMT'
         val date = ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME)
