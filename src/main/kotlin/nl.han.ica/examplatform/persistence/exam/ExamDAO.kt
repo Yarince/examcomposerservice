@@ -148,8 +148,7 @@ class ExamDAO {
         for (question in exam.questions) {
             preparedStatement?.setInt(++index, exam.examId ?: throw DatabaseException("Please provide examID"))
             preparedStatement?.setInt(++index, question.questionId ?: throw DatabaseException("Can't insert question without ID"))
-            preparedStatement?.setInt(++index, question.sequenceNumber ?: throw DatabaseException("Can't insert question without sequencenumber"))
-
+            preparedStatement?.setInt(++index, question.sequenceNumber ?: throw DatabaseException("Can't insert question without sequence number"))
         }
 
         try {
