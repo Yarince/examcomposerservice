@@ -14,13 +14,17 @@ import org.springframework.stereotype.Service
 class ExamQuestionService {
 
     @Autowired
-    private
-    lateinit var examDAO: ExamDAOStub
+    private lateinit var examDAO: ExamDAOStub
 
     @Autowired
-    private
-    lateinit var questionDAO: QuestionDAOStub
+    private lateinit var questionDAO: QuestionDAOStub
 
+    /**
+     * Validate if all Questions exist
+     *
+     * @param questions Array of [Question]s to be checked
+     * @throws InvalidExamException If one of the questions does not exist or are empty
+     */
     fun checkQuestion(questions: Array<Question>?) {
         questions?.let {
             for (question in it)
@@ -31,6 +35,12 @@ class ExamQuestionService {
         throw InvalidExamException("Questions in exam are empty.")
     }
 
+    /**
+     * Assign a Question to an existing Exam in the database
+     *
+     * @param exam [Exam] to be updated in the database
+     * @return ResponseEntity<[Question]> updated object from database
+     */
     fun addQuestionToExam(exam: Exam): ResponseEntity<Exam> {
         checkQuestion(exam.questions)
 
