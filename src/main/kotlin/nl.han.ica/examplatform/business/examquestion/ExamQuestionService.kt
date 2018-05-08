@@ -36,7 +36,7 @@ class ExamQuestionService {
     }
 
     /**
-     * Add a Question to an existing Exam in the database
+     * Assign a Question to an existing Exam in the database
      *
      * @param exam [Exam] to be updated in the database
      * @return ResponseEntity<[Question]> updated object from database
