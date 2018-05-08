@@ -62,7 +62,7 @@ class ExamDAO {
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
 
-        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, COURSECODE, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
+        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
         val examStatement: PreparedStatement?
         examStatement = conn?.prepareStatement(examQuery)
         examStatement?.setInt(1, id)
@@ -98,7 +98,7 @@ class ExamDAO {
                     durationInMinutes = ((examRs.getTime("EndTime").time / 60000) - (examRs.getTime("StartTime").time / 60000)).toInt(),
                     startTime = Date(examRs.getTimestamp("StartTime").time),
                     endTime = Date(examRs.getTimestamp("EndTime").time),
-                    course = examRs.getString("CourseCode"),
+                    courseId = examRs.getInt("CourseID"),
                     examType = ExamType.from(examRs.getInt("ExamTypeId")),
                     name = examRs.getString("ExamName"),
                     location = examRs.getString("Location"),
@@ -127,7 +127,7 @@ class ExamDAO {
         val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
-        preparedStatement?.setInt(1, exam.courseId.value)
+        preparedStatement?.setInt(1, exam.courseId)
         preparedStatement?.setInt(2, exam.examType.examId)
         preparedStatement?.setString(3, exam.name) // todo: discuss this with database team about examcode, change later
         preparedStatement?.setString(4, exam.name)

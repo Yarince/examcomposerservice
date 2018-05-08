@@ -29,7 +29,7 @@ internal class ExamServiceTest {
 
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyId() {
-        val exam = Exam(5, "name-0", 10, Date(6000), course = "APP",
+        val exam = Exam(5, "name-0", 10, Date(6000), courseId = 1,
                 version = 1,
                 examType = ExamType.EXAM) // Faulty exam object
 
@@ -52,20 +52,20 @@ internal class ExamServiceTest {
 
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
-        val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM,
+        val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM,
                 questions = arrayListOf(Question())) // Faulty exam object
         examService.checkExam(exam)
     }
 
     @Test
     fun testCheckExamNoException() {
-        val exam = Exam(null, "name-0", 10, Date(6000), course = "APP", version = 1, examType = ExamType.EXAM)
+        val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM)
         examService.checkExam(exam)
     }
 
     @Test
     fun testAddExam() {
-        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM)
+        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = ExamType.EXAM)
         val expectedResult = ResponseEntity(examInserted, HttpStatus.CREATED)
 
         doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
@@ -76,7 +76,7 @@ internal class ExamServiceTest {
     @Test
     fun testGetExam() {
         val idOfExamToGet = 1
-        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM, examId = idOfExamToGet)
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = ExamType.EXAM, examId = idOfExamToGet)
         doReturn(expected).`when`(examDAO).getExam(idOfExamToGet)
         val result = examService.getExam(idOfExamToGet)
         assertNotNull(result)
