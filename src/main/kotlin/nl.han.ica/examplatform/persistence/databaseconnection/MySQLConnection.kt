@@ -1,10 +1,9 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection.databaseProperties
 import java.io.FileReader
 import java.sql.*
-import java.util.Properties
-import java.sql.DriverManager
-import java.sql.SQLException
+import java.util.*
 
 /**
  * A singleton object that handles the connection with the MySQL database
@@ -73,7 +72,7 @@ object MySQLConnection {
      * Closes a prepared statement
      * @param stmt [Statement] that should be closed
      */
-    fun closeStatement(stmt: Statement) {
+    fun closeStatement(stmt: PreparedStatement) {
         try {
             stmt.close()
         } catch (e: SQLException) {

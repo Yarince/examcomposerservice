@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.persistence.answer
 
 import nl.han.ica.examplatform.models.answer.Answer
-import nl.han.ica.examplatform.models.answer.OpenAnswer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -36,7 +35,7 @@ class AnswerDAO {
             e.printStackTrace()
         } finally {
             MySQLConnection.closeConnection(dbConnection)
-            MySQLConnection.closeStatement(preparedStatement)
+            preparedStatement?.close()
         }
     }
 
