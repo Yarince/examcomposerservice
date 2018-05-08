@@ -13,15 +13,9 @@ import org.springframework.stereotype.Service
 @Service
 class ExamQuestionService {
 
-    /**
-     * Connection to database for [Exam]
-     */
     @Autowired
     private lateinit var examDAO: ExamDAOStub
 
-    /**
-     * Connection to database for [Question]
-     */
     @Autowired
     private lateinit var questionDAO: QuestionDAOStub
 
@@ -42,7 +36,7 @@ class ExamQuestionService {
     }
 
     /**
-     * Assign a Question to an existing Exam the database
+     * Assign a Question to an existing Exam in the database
      *
      * @param exam [Exam] to be updated in the database
      * @return ResponseEntity<[Question]> updated object from database

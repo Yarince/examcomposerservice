@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 class QuestionService {
 
     @Autowired
-    lateinit var questionDAO: QuestionDAOStub
+    private lateinit var questionDAO: QuestionDAOStub
 
     /**
      * Add a new Question to the database
