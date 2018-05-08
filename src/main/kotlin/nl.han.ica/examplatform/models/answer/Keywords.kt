@@ -53,7 +53,7 @@ class Keywords(private val keywords: ArrayList<String>) : Collection<String> {
     }
 
     /**
-     * Overrides the standard toString method
+     * Overrides the standard toString method to retrieve all the [keywords] in a String
      */
     override fun toString(): String {
         val sb = StringBuilder()
