@@ -1,20 +1,19 @@
 package nl.han.ica.examplatform.business.exam
 
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
-import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
-import junit.framework.TestCase.*
 import nl.han.ica.examplatform.models.question.Question
-
+import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
-import org.mockito.junit.MockitoJUnitRunner
-
-import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
+import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import java.util.*
@@ -67,12 +66,10 @@ internal class ExamServiceTest {
 
     @Test
     fun testAddExam() {
-        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM
-                , questions = null)
+        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM, questions = null)
         val expectedResult = ResponseEntity(examInserted, HttpStatus.CREATED)
 
         doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
-
         val result = examService.addExam(examInserted)
         assertEquals(expectedResult, result)
     }

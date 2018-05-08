@@ -2,22 +2,15 @@ package nl.han.ica.examplatform.controllers
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
-import nl.han.ica.examplatform.models.exam.ExamType
-import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.PropertySource
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
+import org.springframework.http.*
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.postForEntity
 
 
 @RunWith(SpringJUnit4ClassRunner::class)
@@ -25,7 +18,7 @@ import org.springframework.web.client.postForEntity
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
-class QuestionControllerIntegrationTest {
+class AnswerControllerIntegrationTest {
 
     @Value("\${local.server.port}")
     var port: Int = 0
@@ -33,21 +26,22 @@ class QuestionControllerIntegrationTest {
     val restTemplate = RestTemplate()
 
     @Test
-    fun testCreateQuestion() {
-        val expectedResult = Question(course = "APP", examType = ExamType.EXAM, questionType = QuestionType.OPEN_QUESTION)
+    fun testAddOpenAnswerToQuestion() {
+        val expected: HttpStatus = HttpStatus.OK
         val requestJson = """{
-            "course": "${expectedResult.course}",
-            "examType": "${expectedResult.examType}",
-            "questionType": "${expectedResult.questionType}"
-            }"""
+            "questionId" : 5,
+            "description" : "dis",
+            "comment" : "com",
+            "keywords" : ["key1", "key2"]
+        }
+        """
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity(requestJson, headers)
-        val result = restTemplate.postForEntity<Question>("http://localhost:$port/ecs/question", entity)
+        val result = restTemplate.exchange("http://localhost:$port//answers", HttpMethod.PUT, entity, HttpStatus.OK::class.java)
 
         assertNotNull(result)
-        assertEquals(HttpStatus.CREATED, result.statusCode)
-        assertEquals(expectedResult, result.body)
+        assertEquals(expected, result.statusCode)
     }
 }

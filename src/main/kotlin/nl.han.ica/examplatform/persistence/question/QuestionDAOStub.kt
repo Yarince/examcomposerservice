@@ -9,10 +9,11 @@ class QuestionDAOStub {
     // var fetchDatabaseConnection : MySQLDatabaseConnection
 
 
-    fun insertQuestion(question: Question) : Question {
-            // Here the database connection should be called on, creating a prepared statement to insert a question
-            // This should also be able to throw an exception if it fails
-            return question
+    fun insertQuestion(question: Question): Question {
+
+        // Here the database connection should be called on, creating a prepared statement to insert a question
+        // This should also be able to throw an exception if it fails
+        return question
     }
 
     fun exists(question: Question?): Boolean {
