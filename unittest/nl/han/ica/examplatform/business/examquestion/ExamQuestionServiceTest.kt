@@ -8,7 +8,7 @@ import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
 import nl.han.ica.examplatform.persistence.question.QuestionDAOStub
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks

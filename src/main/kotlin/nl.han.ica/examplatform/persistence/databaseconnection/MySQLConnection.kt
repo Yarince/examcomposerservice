@@ -1,16 +1,16 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import java.io.FileReader
-import java.sql.*
-import java.util.Properties
+import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
-
+import java.sql.Statement
+import java.util.*
 
 object MySQLConnection {
 
+    private val databaseProperties: Properties
 
-    private val databaseProperties : Properties
     /*
     The value databseProperties is initialized in the init{} method
      */
@@ -25,16 +25,15 @@ object MySQLConnection {
     */
     private var establishedDatbaseConnection: Connection? = null
 
-
     private fun establishDatabaseConnection() {
         try {
             establishedDatbaseConnection = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
-        } catch (e: SQLException){
+        } catch (e: SQLException) {
             e.printStackTrace()
         }
     }
 
-    fun getConnection() : Connection? {
+    fun getConnection(): Connection? {
         establishDatabaseConnection()
         return establishedDatbaseConnection
     }
@@ -60,7 +59,7 @@ object MySQLConnection {
         }
     }
 
-    fun closeStatement(stmt : Statement) {
+    fun closeStatement(stmt: Statement) {
         try {
             stmt.close()
         } catch (e: SQLException) {
@@ -83,5 +82,4 @@ object MySQLConnection {
     private fun getDrivers(properties: Properties): String {
         return properties.getProperty("jdbc.driverClassName")
     }
-
 }
