@@ -68,9 +68,9 @@ object MySQLConnection {
      * Closes a prepared statement
      * @param stmt [Statement] that should be closed
      */
-    fun closeStatement(stmt: PreparedStatement) {
+    fun closeStatement(stmt: PreparedStatement?) {
         try {
-            stmt.close()
+            stmt?.close()
         } catch (e: SQLException) {
             e.printStackTrace()
         }
