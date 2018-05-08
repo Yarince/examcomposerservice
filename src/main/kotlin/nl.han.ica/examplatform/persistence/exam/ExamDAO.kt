@@ -15,10 +15,17 @@ import java.sql.SQLException
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * This class handles all the Database operations for [Exam]
+ */
 @Repository
 class ExamDAO {
 
+    /**
+     * This function gets a list of minimized exams
+     *
+     * @return [ArrayList] a list of [SimpleExam]
+     */
     fun getExams(): ArrayList<SimpleExam> {
         val conn: Connection? = MySQLConnection.getConnection()
         val examQuery = "SELECT EXAMID, EXAMNAME, COURSECODE FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
@@ -46,6 +53,12 @@ class ExamDAO {
         return result
     }
 
+    /**
+     * Gets all information about an exam
+     *
+     * @param id [Int] The ID of which all information should be queried
+     * @return returns the [Exam]
+     */
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
 
@@ -103,6 +116,12 @@ class ExamDAO {
         return result
     }
 
+    /**
+     * Inserts an exam into the database
+     *
+     * @param exam the [Exam] that should be inserted
+     * @return the inserted [Exam]
+     */
     fun insertExam(exam: Exam): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
         val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -131,6 +150,12 @@ class ExamDAO {
         return exam
     }
 
+    /**
+     * Adds single or multiple questions to an exam
+     *
+     * @param exam the [Exam] containing all [Question]s
+     * @return the updated [Exam]
+     */
     fun addQuestionsToExam(exam: Exam): Exam {
         if (exam.questions == null || exam.questions.size < 1) throw DatabaseException("Please provide questions to add to exam")
 
