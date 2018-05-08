@@ -17,7 +17,7 @@ internal class MySQLConnectionTest {
     @Test
     fun testConnectionByOpeningAndClosingAStatement() {
         testConnection?.let {
-            val statement: PreparedStatement = it.prepareStatement("SELECT 1 FROM TESTTABLE")
+            val statement: PreparedStatement = it.prepareStatement("SELECT 1 FROM QUESTION")
             databaseConnection.closeStatement(statement)
             assertTrue(statement.isClosed)
         }

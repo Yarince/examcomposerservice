@@ -24,7 +24,7 @@ internal class AnswerServiceTest {
     @Test(expected = CouldNotAddAnswerToQuestionException::class)
     fun testAddAnswerToQuestionError() {
         val answer = mock<Answer>()
-        Mockito.doThrow(RuntimeException("DAO Exception")).`when`(answerDAO).addOpenAnswerToQuestion(answer)
+        Mockito.doThrow(RuntimeException("DAO Exception")).`when`(answerDAO).addAnswerToQuestion(answer)
         answerService.addAnswerToQuestion(answer)
     }
 }
