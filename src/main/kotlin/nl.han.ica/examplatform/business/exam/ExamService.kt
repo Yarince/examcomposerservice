@@ -15,11 +15,8 @@ import org.springframework.stereotype.Service
 @Service
 class ExamService {
 
-    /**
-     * Connection to database for [Exam]
-     */
     @Autowired
-    lateinit var examDAO: ExamDAOStub
+    private lateinit var examDAO: ExamDAOStub
 
     /**
      * Check if an exam has questions and if the id is left empty
@@ -54,7 +51,7 @@ class ExamService {
     }
 
     /**
-     * Get a specific [Exam] from the database
+     * Get a specific Exam from the database
      *
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
