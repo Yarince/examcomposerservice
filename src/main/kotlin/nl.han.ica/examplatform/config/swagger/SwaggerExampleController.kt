@@ -2,7 +2,10 @@ package nl.han.ica.examplatform.config.swagger
 
 import io.swagger.annotations.*
 import nl.han.ica.examplatform.models.question.Question
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Api("test", description = "Description of this API endpoint group")
@@ -21,5 +24,4 @@ class SwaggerExampleController {
     fun exampleEndpoint(@ApiParam(value = "Example json body parameter", required = true)
                         // The type of the request body specifies what kind of json should be sent in the body as param
                         @RequestBody requestBodyJson: Question) = "Replace this with the implementation method"
-
 }

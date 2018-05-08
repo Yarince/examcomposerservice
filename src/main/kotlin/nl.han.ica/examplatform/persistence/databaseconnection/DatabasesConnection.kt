@@ -8,9 +8,10 @@ import java.sql.SQLException
 
 object MySQLConnection {
 
-    private val databaseProperties : Properties
+    private val databaseProperties: Properties
+
     /*
-    The value databseProperties is initialized in the init{} method
+    The value databaseProperties is initialized in the init{} method
      */
     init {
         databaseProperties = initializeProperties()
@@ -23,16 +24,15 @@ object MySQLConnection {
     */
     private var establishedDatabaseConnection: Connection? = null
 
-
     private fun establishDatabaseConnection() {
         try {
             establishedDatabaseConnection = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
-        } catch (e: SQLException){
+        } catch (e: SQLException) {
             e.printStackTrace()
         }
     }
 
-    fun getConnection() : Connection? {
+    fun getConnection(): Connection? {
         establishDatabaseConnection()
         return establishedDatabaseConnection
     }
@@ -58,7 +58,7 @@ object MySQLConnection {
         }
     }
 
-    fun closeStatement(stmt : Statement?) {
+    fun closeStatement(stmt: Statement?) {
         try {
             stmt?.close()
         } catch (e: SQLException) {
@@ -81,5 +81,4 @@ object MySQLConnection {
     private fun getDrivers(properties: Properties): String {
         return properties.getProperty("jdbc.driverClassName")
     }
-
 }

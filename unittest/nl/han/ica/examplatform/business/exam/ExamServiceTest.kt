@@ -7,11 +7,9 @@ import nl.han.ica.examplatform.models.exam.SimpleExam
 import junit.framework.TestCase.*
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
-
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.junit.MockitoJUnitRunner
-
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.doReturn
@@ -71,7 +69,6 @@ internal class ExamServiceTest {
         val expectedResult = ResponseEntity(examInserted, HttpStatus.CREATED)
 
         doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
-
         val result = examService.addExam(examInserted)
         assertEquals(expectedResult, result)
     }
