@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
-import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.ExamType
 import java.util.*
 

@@ -8,7 +8,7 @@ data class Course(
         val courseId: Int,
 
         @ApiModelProperty(notes = "The code of the course")
-        val courseCode: CourseType = CourseType.APP,
+        val courseCode: String,
 
         @ApiModelProperty(notes = "The id of the semester this course is available")
         val semesterId: Int,

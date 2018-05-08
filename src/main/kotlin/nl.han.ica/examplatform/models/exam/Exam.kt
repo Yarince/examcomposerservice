@@ -2,7 +2,6 @@ package nl.han.ica.examplatform.models.exam
 
 import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.course.CourseType
 import java.util.Date
 
 data class Exam(
@@ -16,10 +15,8 @@ data class Exam(
         val startTime: Date,
         @ApiModelProperty(notes = "The end time of the exam")
         val endTime: Date = Date(startTime.time + durationInMinutes),
-        @ApiModelProperty(notes = "The course of the exam")
-        val course: String,
-        @ApiModelProperty(notes = "The course that the question is for. For example: APP or SWA", required = true)
-        val courseId: CourseType = CourseType.APP,
+        @ApiModelProperty(notes = "The ID of the course that the question is for", required = true)
+        val courseId: Int,
         @ApiModelProperty(notes = "The version of the exam")
         val version: Int = 1,
         @ApiModelProperty(notes = "The type of the exam can be practice test or exam")
