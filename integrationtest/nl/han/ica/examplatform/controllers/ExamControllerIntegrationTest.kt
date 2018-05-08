@@ -19,6 +19,8 @@ import org.springframework.context.annotation.PropertySource
 import org.springframework.http.*
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.annotation.Rollback
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
@@ -34,6 +36,7 @@ import java.util.*
 @PropertySource("classpath:application.properties")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration
 class ExamControllerIntegrationTest {
 
     @Value("\${local.server.port}")
@@ -45,25 +48,24 @@ class ExamControllerIntegrationTest {
 
     private var databaseConnection: Connection? = null
     @Before
-    @Transactional
         fun setUp() {
         databaseConnection = MySQLConnection.getConnection()
-        val sqlString = "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (${testQuestion?.questionId}, ${testQuestion?.parentQuestionId}, ${testQuestion?.examTypeId?.value}, ${testQuestion?.courseId?.value}, ?, ?, ${testQuestion?.sequenceNumber}, ?, ${testQuestion?.answerKeywords}, ${testQuestion?.assessmentComments});"
-        val preparedStatement = databaseConnection?.prepareStatement(sqlString)
-        preparedStatement?.setString(1, testQuestion?.questionText)
-        preparedStatement?.setString(2, testQuestion?.questionType.toString())
-        preparedStatement?.setString(3, testQuestion?.answerText)
-        preparedStatement?.executeUpdate()
+//        val sqlString = "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) VALUES (${testQuestion?.questionId}, ${testQuestion?.parentQuestionId}, ${testQuestion?.examTypeId?.value}, ${testQuestion?.courseId?.value}, ?, ?, ${testQuestion?.sequenceNumber}, ?, ${testQuestion?.answerKeywords}, ${testQuestion?.assessmentComments});"
+//        val preparedStatement = databaseConnection?.prepareStatement(sqlString)
+//        preparedStatement?.setString(1, testQuestion?.questionText)
+//        preparedStatement?.setString(2, testQuestion?.questionType.toString())
+//        preparedStatement?.setString(3, testQuestion?.answerText)
+//        preparedStatement?.executeUpdate()
     }
 
     @After
-    @Rollback
     fun tearDown() {
-        databaseConnection = MySQLConnection.getConnection()
-        val sqlString =
-                "DELETE from QUESTION where QuestionID = ${testQuestion?.questionId}"
-        val preparedStatement: PreparedStatement? = databaseConnection?.prepareStatement(sqlString)
-        preparedStatement?.executeUpdate()
+//        databaseConnection = MySQLConnection.getConnection()
+//        val sqlString =
+//                "DELETE from QUESTION where QuestionID = ${testQuestion?.questionId}"
+          //      "ROLLBACK;"
+//        val preparedStatement: PreparedStatement? = databaseConnection?.prepareStatement(sqlString)
+//        preparedStatement?.executeUpdate()
     }
 
     @Test
@@ -114,6 +116,8 @@ class ExamControllerIntegrationTest {
     }
 
     @Test
+    @Transactional
+    @Sql("DeleteTables_InsertTestData.sql")
     fun testAddQuestionToExam() {
         val headers = HttpHeaders()
         val requestJson = """{
