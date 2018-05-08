@@ -1,25 +1,20 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import java.io.FileReader
-import java.sql.*
+import java.sql.Connection
+import java.sql.DriverManager
+import java.sql.SQLException
+import java.sql.Statement
 import java.util.*
 
 object MySQLConnection {
 
     private val databaseProperties: Properties
 
-    /*
-    The value databseProperties is initialized in the init{} method
-     */
     init {
         databaseProperties = initializeProperties()
     }
 
-    /*
-    In case that the database + the queries are ready to use this class has to be extended.
-    It needs 2 more variables(preparedStatement+resultSet) and an extension of the getConnection
-    method to retrieve data by prepared statements.
-    */
     private var establishedDatbaseConnection: Connection? = null
 
     private fun establishDatabaseConnection() {
