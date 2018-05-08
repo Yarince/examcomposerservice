@@ -30,7 +30,7 @@ class ExamService {
     }
 
     /**
-     * Get all [Exam]s from the database
+     * Get all Exams from the database
      *
      * @return [ResponseEntity]<Array<[SimpleExam]>> All exams currently in the database in a simplified view
      */
@@ -39,7 +39,7 @@ class ExamService {
     }
 
     /**
-     * Add an new [Exam] to the database
+     * Add an new Exam to the database
      *
      * @param exam [Exam] to be added in the database
      * @return ResponseEntity<[Exam]> with new exam inserted and an assigned id
