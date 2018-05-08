@@ -10,7 +10,7 @@ class AnswerService(private val answerDao: AnswerDAO) {
 
     fun addAnswerToQuestion(answer: Answer) {
         try {
-            answerDao.addAnswerToQuestion(answer)
+            answerDao.addOpenAnswerToQuestion(answer)
         } catch (exception: Exception) {
             throw CouldNotAddAnswerToQuestionException("Answer could not be added to Question", exception, true, true)
         }

@@ -1,10 +1,7 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import java.io.FileReader
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.SQLException
-import java.sql.Statement
+import java.sql.*
 import java.util.*
 
 object MySQLConnection {
@@ -59,9 +56,9 @@ object MySQLConnection {
         }
     }
 
-    fun closeStatement(stmt: Statement) {
+    fun closeStatement(stmt: Statement?) {
         try {
-            stmt.close()
+            stmt?.close()
         } catch (e: SQLException) {
             e.printStackTrace()
         }

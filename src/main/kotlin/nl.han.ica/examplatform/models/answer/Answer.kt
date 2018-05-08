@@ -5,7 +5,8 @@ package nl.han.ica.examplatform.models.answer
  * This is not the answer that is given by a student.
  */
 interface Answer {
+
     val questionId: Int
-    val description: String
-    val comment: String?
+    val answerText: String
+    val answerKeywords: Keywords?
 }
