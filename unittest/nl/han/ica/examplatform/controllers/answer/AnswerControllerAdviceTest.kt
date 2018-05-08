@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-    @RunWith(MockitoJUnitRunner::class)
-    class AnswerControllerAdviceTest {
+@RunWith(MockitoJUnitRunner::class)
+class AnswerControllerAdviceTest {
 
     private val answerControllerAdvice: AnswerControllerAdvice = AnswerControllerAdvice()
     private val throwable: Throwable = Throwable("Answer contains invalid values")
