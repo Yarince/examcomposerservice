@@ -8,12 +8,12 @@ import java.sql.SQLException
 
 /**
  * A singleton object that handles the connection with the MySQL database
- *
- * @property databaseProperties [Properties] holds the databaseproperties, such as the connection URL, username and password.
- * @constructor Initialises the database-properties using the kotlin init method instead of a default constructor, to support the singleton
  */
 object MySQLConnection {
 
+    /**
+     * Holds the database properties, such as the connection URL, username and password.
+     */
     private val databaseProperties: Properties
 
     init {
