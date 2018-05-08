@@ -1,18 +1,17 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import java.io.FileReader
-import java.sql.Connection
+import java.sql.*
+import java.util.Properties
 import java.sql.DriverManager
 import java.sql.SQLException
-import java.sql.Statement
-import java.util.*
 
 object MySQLConnection {
 
     private val databaseProperties: Properties
 
     /*
-    The value databseProperties is initialized in the init{} method
+    The value databaseProperties is initialized in the init{} method
      */
     init {
         databaseProperties = initializeProperties()
@@ -23,11 +22,11 @@ object MySQLConnection {
     It needs 2 more variables(preparedStatement+resultSet) and an extension of the getConnection
     method to retrieve data by prepared statements.
     */
-    private var establishedDatbaseConnection: Connection? = null
+    private var establishedDatabaseConnection: Connection? = null
 
     private fun establishDatabaseConnection() {
         try {
-            establishedDatbaseConnection = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
+            establishedDatabaseConnection = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
         } catch (e: SQLException) {
             e.printStackTrace()
         }
@@ -35,7 +34,7 @@ object MySQLConnection {
 
     fun getConnection(): Connection? {
         establishDatabaseConnection()
-        return establishedDatbaseConnection
+        return establishedDatabaseConnection
     }
 
     private fun initializeProperties(): Properties {
@@ -50,18 +49,18 @@ object MySQLConnection {
         return DriverManager.getConnection(connectionURL, username, password)
     }
 
-    fun closeConnection(connetionToClose: Connection?) {
+    fun closeConnection(connectionToClose: Connection?) {
         try {
-            connetionToClose?.close()
-            establishedDatbaseConnection = null
+            connectionToClose?.close()
+            establishedDatabaseConnection = null
         } catch (e: SQLException) {
             e.printStackTrace()
         }
     }
 
-    fun closeStatement(stmt: Statement) {
+    fun closeStatement(stmt: Statement?) {
         try {
-            stmt.close()
+            stmt?.close()
         } catch (e: SQLException) {
             e.printStackTrace()
         }
