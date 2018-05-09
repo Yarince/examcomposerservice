@@ -181,8 +181,10 @@
                         <phase>verify</phase>
                         <configuration>
                             <target name="ktlint">
-                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
-                                      classpathref="maven.plugin.classpath" classname="com.github.shyiko.ktlint.Main">
+                                <java taskname="ktlint" dir="${basedir}"
+                                      fork="true" failonerror="true"
+                                      classpathref="maven.plugin.classpath"
+                                      classname="com.github.shyiko.ktlint.Main">
                                     <arg value="src/**/*.kt"/>
                                     <!-- to generate report in checkstyle format prepend following args: -->
                                     <!-- <arg value="- -reporter=plain"/> -->
@@ -223,6 +225,8 @@
                                     <arg value="${basedir}/src/main/kotlin"/>
                                     <arg value="--filters"/>
                                     <arg value=".*/target/.*,.*/resources/.*"/>
+                                    <arg value="--config"/>
+                                    <arg value="${basedir}/src/main/resources/detektconfig.yml"/>
                                     <arg value="--output"/>
                                     <arg value="${basedir}/reports"/>
                                     <arg value="--output-name"/>
