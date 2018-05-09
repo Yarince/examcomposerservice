@@ -3,7 +3,7 @@ package nl.han.ica.examplatform.business.exam
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
-import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
+import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
 class ExamService {
 
     @Autowired
-    private lateinit var examDAO: ExamDAOStub
+    lateinit var examDAO: ExamDAO
 
     /**
      * Check if an exam has questions and if the id is left empty
@@ -34,7 +34,7 @@ class ExamService {
      *
      * @return [ResponseEntity]<Array<[SimpleExam]>> All exams currently in the database in a simplified view
      */
-    fun getExams(): ResponseEntity<Array<SimpleExam>> {
+    fun getExams(): ResponseEntity<ArrayList<SimpleExam>> {
         return ResponseEntity(examDAO.getExams(), HttpStatus.OK)
     }
 
