@@ -4,7 +4,7 @@ import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.junit.After
 import org.junit.Test
 import org.mockito.Mock
-import java.sql.Statement
+import java.sql.PreparedStatement
 import kotlin.test.assertTrue
 
 internal class MySQLConnectionTest {
@@ -17,7 +17,7 @@ internal class MySQLConnectionTest {
     @Test
     fun testConnectionByOpeningAndClosingAStatement() {
         testConnection?.let {
-            val statement: Statement = it.createStatement()
+            val statement: PreparedStatement = it.prepareStatement("SELECT 1 FROM QUESTION")
             databaseConnection.closeStatement(statement)
             assertTrue(statement.isClosed)
         }

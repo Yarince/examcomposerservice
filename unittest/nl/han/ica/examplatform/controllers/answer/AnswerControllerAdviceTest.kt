@@ -18,7 +18,7 @@ class AnswerControllerAdviceTest {
     fun testHandleInvalidAnswerException() {
         val expectedErrorInfo = ErrorInfo(
                 developerMessage = "Answer contains invalid values",
-                userMessage = "Answer could not be added tot the question"
+                userMessage = "Answer could not be added to the question"
         )
 
         val response = answerControllerAdvice
