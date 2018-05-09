@@ -10,7 +10,7 @@ class OpenAnswer(
         override val questionId: Int,
 
         @ApiModelProperty(notes = "The description of the answer")
-        override val answerText: String,
+        override val answer: String,
 
         @ApiModelProperty(notes = "The keywords of the answer")
         override val answerKeywords: Keywords?

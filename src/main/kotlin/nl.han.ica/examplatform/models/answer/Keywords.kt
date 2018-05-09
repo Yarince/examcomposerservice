@@ -18,7 +18,7 @@ class Keywords(private val keywords: ArrayList<String>) : Collection<String> {
     /**
      * This method checks if keywords contains a certain element
      *
-     * @param [element] The element you want to find in [keywords]
+     * @param [element] The string you want to find in [keywords]
      */
     override fun contains(element: String): Boolean {
         return keywords.contains(element)
@@ -27,7 +27,7 @@ class Keywords(private val keywords: ArrayList<String>) : Collection<String> {
     /**
      * This method checks if keywords contains a certain collection of elements
      *
-     * @param elements The [elements] you want to find in [keywords]
+     * @param elements The strings you want to find in [keywords]
      */
     override fun containsAll(elements: Collection<String>): Boolean {
         for (element in elements) {

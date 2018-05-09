@@ -7,6 +7,6 @@ package nl.han.ica.examplatform.models.answer
 interface Answer {
 
     val questionId: Int
-    val answerText: String
+    val answer: String
     val answerKeywords: Keywords?
 }
