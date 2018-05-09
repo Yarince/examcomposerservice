@@ -28,7 +28,7 @@ class ExamDAO {
      */
     fun getExams(): ArrayList<SimpleExam> {
         val conn: Connection? = MySQLConnection.getConnection()
-        val examQuery = "SELECT EXAMID, EXAMNAME, COURSECODE FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
+        val examQuery = "SELECT EXAMID, EXAMNAME, COURSEID FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(examQuery)
 
@@ -39,7 +39,7 @@ class ExamDAO {
             while (resultSet!!.next()) {
                 result.add(SimpleExam(resultSet.getInt("ExamID"),
                         resultSet.getString("ExamName"),
-                        resultSet.getString("CourseCode")))
+                        resultSet.getInt("COURSEID")))
             }
 
         } catch (e: SQLException) {
@@ -62,6 +62,7 @@ class ExamDAO {
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
 
+        /*TODO select correct columns*/
         val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
         val examStatement: PreparedStatement?
         examStatement = conn?.prepareStatement(examQuery)
@@ -79,11 +80,15 @@ class ExamDAO {
                     ?: throw DatabaseException("Error while interacting with the database")
             val questions = ArrayList<Question>()
             while (questionRs.next()) {
-                questions.add(Question(questionId = questionRs.getInt("QuestionID"),
+                questions.add(Question(
+                        questionId = questionRs.getInt("QuestionID"),
                         questionText = questionRs.getString("QuestionText"),
                         questionType = QuestionType.from(questionRs.getString("QuestionType")),
-                        courseId = questionRs.getInt("CourseID"),
-                        examTypeId = ExamType.from(questionRs.getInt("ExamTypeId"))))
+                        /*TODO get columns*/
+                        questionPoints = questionRs.getFloat(""),
+                        questionOrderInExam = questionRs.getInt(""),
+                        questionOrderText = questionRs.getString("")
+                ))
             }
             val examRs = examStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
@@ -172,8 +177,10 @@ class ExamDAO {
         var index = 0
         for (question in exam.questions) {
             preparedStatement?.setInt(++index, exam.examId ?: throw DatabaseException("Please provide examID"))
-            preparedStatement?.setInt(++index, question.questionId ?: throw DatabaseException("Can't insert question without ID"))
-            preparedStatement?.setInt(++index, question.sequenceNumber ?: throw DatabaseException("Can't insert question without sequence number"))
+            preparedStatement?.setInt(++index, question.questionId
+                    ?: throw DatabaseException("Can't insert question without ID"))
+            preparedStatement?.setInt(++index, question.questionOrderInExam
+                    ?: throw DatabaseException("Can't insert question without sequence number"))
         }
 
         try {

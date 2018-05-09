@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.models.answer
+package nl.han.ica.examplatform.models.answerModel.answer
 
 import org.junit.Test
 import kotlin.test.assertEquals
