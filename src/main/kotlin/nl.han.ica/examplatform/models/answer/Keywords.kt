@@ -3,7 +3,7 @@ package nl.han.ica.examplatform.models.answer
 /**
  * This class represents a list of Keywords which are strings.
  *
- * @constructor [keywords] The keywords for different [Answer]s
+ * @constructor [Keywords] The keywords for different [Answer]s
  */
 class Keywords(private val keywords: ArrayList<String>) : Collection<String> {
     override val size: Int
