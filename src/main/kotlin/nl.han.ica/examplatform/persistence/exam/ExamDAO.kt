@@ -82,8 +82,8 @@ class ExamDAO {
                 questions.add(Question(questionId = questionRs.getInt("QuestionID"),
                         questionText = questionRs.getString("QuestionText"),
                         questionType = QuestionType.from(questionRs.getString("QuestionType")),
-                        course = questionRs.getString("CourseCode"),
-                        examType = ExamType.from(questionRs.getInt("ExamTypeId"))))
+                        courseId = questionRs.getInt("CourseID"),
+                        examTypeId = ExamType.from(questionRs.getInt("ExamTypeId"))))
             }
             val examRs = examStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
