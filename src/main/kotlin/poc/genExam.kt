@@ -18,29 +18,40 @@ fun generateExam() {
 
     // Group questions by tag
     val possibleSubjects = questions.groupBy { it.tags }
+    println(possibleSubjects)
+    val possibleSubjectsKeysArray = questions.groupBy { it.tags }.keys
+
 
     // The list of which the questions should be added to
     val practiceExam = ArrayList<Question>()
 
-    possibleSubjects.forEach {
-        println(practiceExam.size % (questions.size / 2))
-        if (practiceExam.size > 0) if (practiceExam.size % (questions.size / 2) == 0) println("this")
-        practiceExam.add(it.value[ThreadLocalRandom.current().nextInt(0, it.value.size)])
-    }
+    // Random:
+    // ThreadLocalRandom.current().nextInt(0, max)
 
+    addQuestionsToExam(questions, practiceExam, possibleSubjects, possibleSubjectsKeysArray.toList())
     practiceExam.forEach {
         println(it)
     }
-
-
 }
 
-fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>) {
+fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: Map<String, List<Question>>, possibleSubjectsKeysArray: List<String>, currentSubject: String? = null) {
+    // If the exam contains 50% of the questions, exit this function
+    if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return println("List should be full")
 
+    val currentSubjectNN = possibleSubjects[possibleSubjectsKeysArray[0]]
+
+    currentSubjectNN?.let {
+        // add Random question if not null
+        // todo: only add if half of these questions are not added yet
+        exam.add(it[ThreadLocalRandom.current().nextInt(0, it.size)])
+    }
+
+    //val iteration = if (possibleSubjects.values
+    addQuestionsToExam(questions, exam, possibleSubjects, possibleSubjectsKeysArray)
 }
 
 
-fun loadQuestions(): Array<Question> {
+private fun loadQuestions(): Array<Question> {
     val gson = Gson()
     val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/datasetQuestions.json"))
     return gson.fromJson(reader, Array<Question>::class.java)
