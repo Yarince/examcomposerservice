@@ -22,12 +22,12 @@ class AnswerController(private val answerService: AnswerService) {
     @PutMapping
     @ApiOperation(
             value = "Creates OpenAnswer and adds it to the question",
-            notes = "If the question already has an answer it wil be overwritten",
+            notes = "If the question already has an correctQuestionAnswer it wil be overwritten",
             response = HttpStatus::class
     )
     @ApiResponses(
             ApiResponse(code = 200, message = "Answer created and added to question"),
-            ApiResponse(code = 400, message = "Invalid answer"),
+            ApiResponse(code = 400, message = "Invalid correctQuestionAnswer"),
             ApiResponse(code = 500, message = "Something went wrong")
     )
     fun addOpenAnswerToQuestion(@RequestBody answer: OpenAnswer): HttpStatus {

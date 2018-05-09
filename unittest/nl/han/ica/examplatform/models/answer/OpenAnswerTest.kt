@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class OpenAnswerTest {
 
     @Test
-    fun testValidCommentString() {
+    fun testValidCorrectQuestionAnswerString() {
         val expected = OpenAnswer::class.java
         val result = OpenAnswer(3, "des", Keywords(arrayListOf())).javaClass
         assertEquals(expected, result)
