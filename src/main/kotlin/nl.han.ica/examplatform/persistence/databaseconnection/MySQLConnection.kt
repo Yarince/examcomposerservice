@@ -23,6 +23,7 @@ object MySQLConnection {
 
     /**
      * Retrieves a connection and returns it
+     *
      * @return a database [Connection] on which queries can be executed
      */
     fun getConnection(): Connection? {
@@ -36,6 +37,7 @@ object MySQLConnection {
 
     /**
      * Reads the database properties, loads them into a [Properties] object and returns them
+     *
      * @return loaded database properties
      */
     private fun initializeProperties(): Properties {
@@ -47,6 +49,7 @@ object MySQLConnection {
 
     /**
      * Handles the database connection using the MySQL driver
+     *
      * @param connectionURL the URL of the DB that should be connected with
      * @param username the username that will be used to connect
      * @param password the corresponding password of the user
@@ -59,7 +62,8 @@ object MySQLConnection {
     }
 
     /**
-     * Closes the a database connection
+     * Closes a database connection
+     *
      * @param connectionToClose [Connection] that should be closed
      */
     fun closeConnection(connectionToClose: Connection?) {
@@ -72,6 +76,7 @@ object MySQLConnection {
 
     /**
      * Closes a prepared statement
+     *
      * @param stmt [Statement] that should be closed
      */
     fun closeStatement(stmt: Statement?) {
