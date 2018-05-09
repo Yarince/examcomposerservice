@@ -27,7 +27,7 @@ class AnswerDAO : IAnswerDAO{
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(insertAnswerQuery)
-            preparedStatement?.setString(1, answer.correctQuestionAnswer)
+            preparedStatement?.setString(1, answer.correctAnswer)
             preparedStatement?.setString(2, answer.answerKeywords.toString())
             preparedStatement?.setInt(3, answer.questionId)
             preparedStatement?.executeUpdate()
