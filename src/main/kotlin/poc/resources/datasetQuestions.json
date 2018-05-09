@@ -48,5 +48,10 @@
     "questionId": 10,
     "tags": "Patterns",
     "actualAnswer": "Pipes and filters"
+  },
+  {
+    "questionId": 11,
+    "tags": "Test tag",
+    "actualAnswer": "Pipes and filters"
   }
 ]

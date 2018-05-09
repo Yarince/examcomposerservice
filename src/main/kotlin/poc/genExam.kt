@@ -32,23 +32,34 @@ fun generateExam() {
     }
 }
 
-fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: Map<String, List<Question>>, possibleSubjectsKeysArray: List<String>, iterator: Int = 0) {
+fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: Map<String, List<Question>>, possibleSubjectsKeysArray: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
-    if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return println("List should be full")
+    if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return println("Exit recursive function")
 
     // Gets the list of questions in the current subject
     val currentSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]
 
     // If it's not null, add a random question to the exam
     currentSubjectList?.let {
-        exam.add(it[ThreadLocalRandom.current().nextInt(0, it.size)])
+        // todo: check if question hasnt been added yet
+        val randomNumber = ThreadLocalRandom.current().nextInt(0, it.size)
+        exam.add(it[randomNumber])
+        // remove question from list of possible questions
+        // val mutableSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]?.toMutableList()
+        // mutableSubjectList?.remove(0)
     }
 
     // This makes it so the questions are cycled between subjects
-    val newIterator = if (iterator == possibleSubjectsKeysArray.size - 1) iterator - 1 else iterator + 1
+    val newIt = if (iteratorForward) iterator + 1 else iterator - 1
+
+    var newItForward: Boolean = iteratorForward
+    if (newIt >= possibleSubjectsKeysArray.size - 1)
+        newItForward = false
+    else if (newIt < 1)
+        newItForward = true
 
     // Recursively add more questions
-    addQuestionsToExam(questions, exam, possibleSubjects, possibleSubjectsKeysArray, newIterator)
+    addQuestionsToExam(questions, exam, possibleSubjects, possibleSubjectsKeysArray, newIt, newItForward)
 }
 
 
@@ -56,4 +67,3 @@ private fun loadQuestions(): Array<Question> {
     val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/datasetQuestions.json"))
     return Gson().fromJson(reader, Array<Question>::class.java)
 }
-
