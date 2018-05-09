@@ -7,9 +7,15 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+/**
+ * Database access object that handles all database queries regarding [Question]
+ */
 @Repository
 class QuestionDAO {
 
+    /**
+     * Adds a question to the database
+     */
     fun insertQuestion(question: Question): Question {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
@@ -39,6 +45,9 @@ class QuestionDAO {
         return question
     }
 
+    /**
+     * Checks if a question already exists in the database
+     */
     fun exists(question: Question?): Boolean {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
