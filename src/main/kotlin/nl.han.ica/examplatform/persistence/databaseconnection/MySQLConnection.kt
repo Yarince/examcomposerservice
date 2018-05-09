@@ -1,42 +1,45 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import java.io.FileReader
-import java.sql.*
-import java.util.Properties
+import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
+import java.sql.Statement
+import java.util.*
 
+/**
+ * A singleton object that handles the connection with the MySQL database
+ */
 object MySQLConnection {
 
+    /**
+     * Holds the database properties, such as the connection URL, username and password.
+     */
     private val databaseProperties: Properties
 
-    /*
-    The value databaseProperties is initialized in the init{} method
-     */
     init {
         databaseProperties = initializeProperties()
     }
 
-    /*
-    In case that the database + the queries are ready to use this class has to be extended.
-    It needs 2 more variables(preparedStatement+resultSet) and an extension of the getConnection
-    method to retrieve data by prepared statements.
-    */
-    private var establishedDatabaseConnection: Connection? = null
-
-    private fun establishDatabaseConnection() {
-        try {
-            establishedDatabaseConnection = connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
+    /**
+     * Retrieves a connection and returns it
+     *
+     * @return a database [Connection] on which queries can be executed
+     */
+    fun getConnection(): Connection? {
+        return try {
+            connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
         } catch (e: SQLException) {
             e.printStackTrace()
+            null
         }
     }
 
-    fun getConnection(): Connection? {
-        establishDatabaseConnection()
-        return establishedDatabaseConnection
-    }
-
+    /**
+     * Reads the database properties, loads them into a [Properties] object and returns them
+     *
+     * @return loaded database properties
+     */
     private fun initializeProperties(): Properties {
         val databaseProperties = Properties()
         val reader = FileReader(System.getProperty("user.dir") + "/src/main/kotlin/nl.han.ica/examplatform/config/databaseconfig/application.properties")
@@ -44,20 +47,38 @@ object MySQLConnection {
         return databaseProperties
     }
 
+    /**
+     * Handles the database connection using the MySQL driver
+     *
+     * @param connectionURL the URL of the DB that should be connected with
+     * @param username the username that will be used to connect
+     * @param password the corresponding password of the user
+     * @param drivers the database drivers that are being used to connect
+     * @return a MySQL database [Connection]
+     */
     private fun connectDatabase(connectionURL: String, username: String, password: String, drivers: String): Connection {
         Class.forName(drivers)
         return DriverManager.getConnection(connectionURL, username, password)
     }
 
+    /**
+     * Closes a database connection
+     *
+     * @param connectionToClose [Connection] that should be closed
+     */
     fun closeConnection(connectionToClose: Connection?) {
         try {
             connectionToClose?.close()
-            establishedDatabaseConnection = null
         } catch (e: SQLException) {
             e.printStackTrace()
         }
     }
 
+    /**
+     * Closes a prepared statement
+     *
+     * @param stmt [Statement] that should be closed
+     */
     fun closeStatement(stmt: Statement?) {
         try {
             stmt?.close()
