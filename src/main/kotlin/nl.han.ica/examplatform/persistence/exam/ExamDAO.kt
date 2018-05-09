@@ -2,8 +2,9 @@ package nl.han.ica.examplatform.persistence.exam
 
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
-import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.exam.OfficialExam
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
@@ -16,14 +17,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 /**
- * This class handles all the Database operations for [Exam]
+ * This class handles all the Database operations for [OfficialExam]
  */
 @Repository
 class ExamDAO {
 
-    fun generatePracticeExam() {
-
-
+    fun generatePracticeExam() : PracticeExam? {
+        return null
     }
 
     /**
@@ -62,9 +62,9 @@ class ExamDAO {
      * Gets all information about an exam
      *
      * @param id [Int] The ID of which all information should be queried
-     * @return returns the [Exam]
+     * @return returns the [OfficialExam]
      */
-    fun getExam(id: Int): Exam {
+    fun getExam(id: Int): OfficialExam {
         val conn: Connection? = MySQLConnection.getConnection()
 
         val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
@@ -77,7 +77,7 @@ class ExamDAO {
         questionsStatement = conn?.prepareStatement(questionsQuery)
         questionsStatement?.setInt(1, id)
 
-        val result: Exam
+        val result: OfficialExam
 
         try {
             val questionRs = questionsStatement?.executeQuery()
@@ -97,9 +97,9 @@ class ExamDAO {
             examRs.last()
 
             // This is the row of of the last result, so if this is smaller than 0
-            if (examRs.row < 1) throw ExamNotFoundException("Exam with ID $id was not found")
+            if (examRs.row < 1) throw ExamNotFoundException("OfficialExam with ID $id was not found")
 
-            result = Exam(examId = examRs.getInt("ExamID"),
+            result = OfficialExam(examId = examRs.getInt("ExamID"),
                     durationInMinutes = ((examRs.getTime("EndTime").time / 60000) - (examRs.getTime("StartTime").time / 60000)).toInt(),
                     startTime = Date(examRs.getTimestamp("StartTime").time),
                     endTime = Date(examRs.getTimestamp("EndTime").time),
@@ -122,25 +122,25 @@ class ExamDAO {
     }
 
     /**
-     * Inserts an exam into the database
+     * Inserts an officialExam into the database
      *
-     * @param exam the [Exam] that should be inserted
-     * @return the inserted [Exam]
+     * @param officialExam the [OfficialExam] that should be inserted
+     * @return the inserted [OfficialExam]
      */
-    fun insertExam(exam: Exam): Exam {
+    fun insertExam(officialExam: OfficialExam): OfficialExam {
         val conn: Connection? = MySQLConnection.getConnection()
         val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
-        preparedStatement?.setInt(1, exam.courseId)
-        preparedStatement?.setInt(2, exam.examType.examId)
-        preparedStatement?.setString(3, exam.name)
-        preparedStatement?.setString(4, exam.name)
-        preparedStatement?.setDate(5, java.sql.Date(exam.startTime.time))
-        preparedStatement?.setDate(6, java.sql.Date(exam.endTime.time))
-        preparedStatement?.setString(7, exam.instructions)
-        preparedStatement?.setInt(8, exam.version)
-        preparedStatement?.setString(9, exam.location)
+        preparedStatement?.setInt(1, officialExam.courseId)
+        preparedStatement?.setInt(2, officialExam.examType.examId)
+        preparedStatement?.setString(3, officialExam.name)
+        preparedStatement?.setString(4, officialExam.name)
+        preparedStatement?.setDate(5, java.sql.Date(officialExam.startTime.time))
+        preparedStatement?.setDate(6, java.sql.Date(officialExam.endTime.time))
+        preparedStatement?.setString(7, officialExam.instructions)
+        preparedStatement?.setInt(8, officialExam.version)
+        preparedStatement?.setString(9, officialExam.location)
 
         try {
             preparedStatement?.executeUpdate()
@@ -152,22 +152,22 @@ class ExamDAO {
             MySQLConnection.closeConnection(conn)
         }
 
-        return exam
+        return officialExam
     }
 
     /**
-     * Adds single or multiple questions to an exam
+     * Adds single or multiple questions to an officialExam
      *
-     * @param exam the [Exam] containing all [Question]s
-     * @return the updated [Exam]
+     * @param officialExam the [OfficialExam] containing all [Question]s
+     * @return the updated [OfficialExam]
      */
-    fun addQuestionsToExam(exam: Exam): Exam {
-        if (exam.questions == null || exam.questions.size < 1) throw DatabaseException("Please provide questions to add to exam")
+    fun addQuestionsToExam(officialExam: OfficialExam): OfficialExam {
+        if (officialExam.questions == null || officialExam.questions.size < 1) throw DatabaseException("Please provide questions to add to officialExam")
 
         var query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER) VALUES "
-        for (question in exam.questions) {
+        for (question in officialExam.questions) {
             query = query.plus("(?, ?, ?)")
-            if (question != exam.questions.last()) query = query.plus(", ")
+            if (question != officialExam.questions.last()) query = query.plus(", ")
         }
 
         val conn: Connection? = MySQLConnection.getConnection()
@@ -175,8 +175,8 @@ class ExamDAO {
         preparedStatement = conn?.prepareStatement(query)
 
         var index = 0
-        for (question in exam.questions) {
-            preparedStatement?.setInt(++index, exam.examId ?: throw DatabaseException("Please provide examID"))
+        for (question in officialExam.questions) {
+            preparedStatement?.setInt(++index, officialExam.examId ?: throw DatabaseException("Please provide examID"))
             preparedStatement?.setInt(++index, question.questionId ?: throw DatabaseException("Can't insert question without ID"))
             preparedStatement?.setInt(++index, question.sequenceNumber ?: throw DatabaseException("Can't insert question without sequence number"))
         }
@@ -191,6 +191,6 @@ class ExamDAO {
             MySQLConnection.closeConnection(conn)
         }
 
-        return exam
+        return officialExam
     }
 }

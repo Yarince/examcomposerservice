@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.examquestion
 
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
-import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.OfficialExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAOStub
@@ -31,10 +31,10 @@ class ExamQuestionService {
         throw InvalidExamException("Questions in exam are empty.")
     }
 
-    fun addQuestionToExam(exam: Exam): ResponseEntity<Exam> {
-        checkQuestion(exam.questions)
+    fun addQuestionToExam(officialExam: OfficialExam): ResponseEntity<OfficialExam> {
+        checkQuestion(officialExam.questions)
 
-        val updatedObject = examDAO.addQuestionsToExam(exam)
+        val updatedObject = examDAO.addQuestionsToExam(officialExam)
 
         return ResponseEntity(updatedObject, HttpStatus.ACCEPTED)
     }
