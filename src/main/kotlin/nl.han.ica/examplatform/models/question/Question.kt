@@ -15,7 +15,7 @@ data class Question(
         @ApiModelProperty(notes = "The type of the exam. This could be an EXAM, or a PRACTICE_EXAM", required = true)
         val examTypeId: ExamType = ExamType.PRACTICE_EXAM,
 
-        @ApiModelProperty(notes = "The course that the question is for. For example: APP or SWA", required = true)
+        @ApiModelProperty(notes = "The course id that the question is for.", required = true)
         val courseId: Int,
 
         @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
