@@ -16,7 +16,7 @@ fun generateExam() {
     val questions = loadQuestions()
 
     // Group questions by tag
-    val possibleSubjects = questions.groupBy { it.tags }
+    val possibleSubjects = questions.groupBy { it.tags }.toMutableMap()
     // Put all subject keys in a list
     val possibleSubjectsKeysArray = questions.groupBy { it.tags }.keys.toList()
 
@@ -32,7 +32,7 @@ fun generateExam() {
     }
 }
 
-fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: Map<String, List<Question>>, possibleSubjectsKeysArray: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
+fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<String, List<Question>>, possibleSubjectsKeysArray: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return println("Exit recursive function")
 
@@ -41,12 +41,14 @@ fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, po
 
     // If it's not null, add a random question to the exam
     currentSubjectList?.let {
-        // todo: check if question hasnt been added yet
+        if (it.isEmpty()) return@let
         val randomNumber = ThreadLocalRandom.current().nextInt(0, it.size)
         exam.add(it[randomNumber])
-        // remove question from list of possible questions
-        // val mutableSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]?.toMutableList()
-        // mutableSubjectList?.remove(0)
+
+        // Remove the question that was just added, so no duplicates are in the exam
+        val mutableQuestionList = it.toMutableList()
+        mutableQuestionList.remove(it[randomNumber])
+        possibleSubjects.replace(possibleSubjectsKeysArray[iterator], mutableQuestionList.toList())
     }
 
     // This makes it so the questions are cycled between subjects
