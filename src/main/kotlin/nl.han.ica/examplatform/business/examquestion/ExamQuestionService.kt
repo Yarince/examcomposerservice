@@ -3,8 +3,8 @@ package nl.han.ica.examplatform.business.examquestion
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.persistence.exam.ExamDAOStub
-import nl.han.ica.examplatform.persistence.question.QuestionDAOStub
+import nl.han.ica.examplatform.persistence.exam.ExamDAO
+import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,13 +15,13 @@ class ExamQuestionService {
 
     @Autowired
     private
-    lateinit var examDAO: ExamDAOStub
+    lateinit var examDAO: ExamDAO
 
     @Autowired
     private
-    lateinit var questionDAO: QuestionDAOStub
+    lateinit var questionDAO: QuestionDAO
 
-    fun checkQuestion(questions: Array<Question>?) {
+    fun checkQuestion(questions: ArrayList<Question>?) {
         questions?.let {
             for (question in it)
                 if (!questionDAO.exists(question))
@@ -34,7 +34,7 @@ class ExamQuestionService {
     fun addQuestionToExam(exam: Exam): ResponseEntity<Exam> {
         checkQuestion(exam.questions)
 
-        val updatedObject = examDAO.updateExam(exam)
+        val updatedObject = examDAO.addQuestionsToExam(exam)
 
         return ResponseEntity(updatedObject, HttpStatus.ACCEPTED)
     }

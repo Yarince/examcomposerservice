@@ -1,11 +1,10 @@
 package nl.han.ica.examplatform.controllers.exam
 
-import nl.han.ica.examplatform.business.exam.ExamService
-import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
-import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import org.junit.Assert.assertNotNull
@@ -17,7 +16,7 @@ import org.mockito.Mockito.doReturn
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.util.*
+import java.util.Date
 import kotlin.test.assertEquals
 
 
@@ -38,11 +37,11 @@ class ExamControllerTest {
 
     @Test
     fun testGetExams() {
-        val expected = arrayOf(SimpleExam(1, "SWA Toets 1", "SWA"),
+        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", "SWA"),
                 SimpleExam(2, "SWA Toets 2", "SWA"),
                 SimpleExam(3, "APP Toets algoritmen", "APP")
         )
-        doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(examService).getExams()
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.OK)).`when`(examService).getExams()
 
         val result = examController.getExams()
         assertNotNull(result)
@@ -51,7 +50,7 @@ class ExamControllerTest {
 
     @Test
     fun testAddExam() {
-        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM)
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM)
         doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(examService).addExam(expected)
         val result = examController.addExam(expected)
         assertNotNull(result)
@@ -59,10 +58,9 @@ class ExamControllerTest {
     }
 
     @Test
-    fun testAddQuestionToExam() {
-        val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", version = 1, examType = ExamType.EXAM, questions = Array(1, {
-            Question(1, null, ExamType.EXAM, CourseType.APP, null, QuestionType.OPEN_QUESTION, null, null, null, null)
-        }))
+    fun addQuestionToExam() {
+        val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(
+            Question(1, "Text", QuestionType.OPEN_QUESTION, "Course", null, ExamType.EXAM)))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = examController.addQuestionToExam(expected)
@@ -73,7 +71,7 @@ class ExamControllerTest {
     @Test
     fun testGetExam() {
         val idOfExamToGet = 1
-        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), course = "APP", examType = ExamType.EXAM, examId = idOfExamToGet)
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = ExamType.EXAM, examId = idOfExamToGet)
         doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(examService).getExam(idOfExamToGet)
         val result = examController.getExam(idOfExamToGet)
         assertNotNull(result)
