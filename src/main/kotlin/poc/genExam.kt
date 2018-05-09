@@ -36,19 +36,24 @@ fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, po
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return println("List should be full")
 
-    val currentSubjectNN = possibleSubjects[possibleSubjectsKeysArray[iterator]]
+    // Gets the list of questions in the current subject
+    val currentSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]
 
-    currentSubjectNN?.let {
+    // If it's not null, add a random question to the exam
+    currentSubjectList?.let {
         exam.add(it[ThreadLocalRandom.current().nextInt(0, it.size)])
     }
+
+    // This makes it so the questions are cycled between subjects
     val newIterator = if (iterator == possibleSubjectsKeysArray.size - 1) iterator - 1 else iterator + 1
+
+    // Recursively add more questions
     addQuestionsToExam(questions, exam, possibleSubjects, possibleSubjectsKeysArray, newIterator)
 }
 
 
 private fun loadQuestions(): Array<Question> {
-    val gson = Gson()
     val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/datasetQuestions.json"))
-    return gson.fromJson(reader, Array<Question>::class.java)
+    return Gson().fromJson(reader, Array<Question>::class.java)
 }
 
