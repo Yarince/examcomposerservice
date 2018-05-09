@@ -60,7 +60,7 @@ class OfficialExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = OfficialExam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(
-            Question(1, "Text", QuestionType.OPEN_QUESTION, "Course", null, ExamType.EXAM)))
+            Question(1, null, ExamType.EXAM, 1, null, QuestionType.OPEN_QUESTION, null, null, null, null)))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = officialExamController.addQuestionToExam(expected)

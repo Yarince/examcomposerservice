@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.exam.PracticeExamService
-import nl.han.ica.examplatform.models.exam.PracticeExam
+import nl.han.ica.examplatform.models.exam.OfficialExam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,5 +24,5 @@ class PracticeExamController {
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(): ResponseEntity<PracticeExam?> = practiceExamService.generatePracticeExam()
+    fun generatePracticeExam(): ResponseEntity<OfficialExam?> = practiceExamService.generatePracticeExam()
 }
