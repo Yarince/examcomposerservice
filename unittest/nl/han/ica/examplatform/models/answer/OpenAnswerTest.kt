@@ -11,11 +11,4 @@ class OpenAnswerTest {
         val result = OpenAnswer(3, "des", Keywords(arrayListOf())).javaClass
         assertEquals(expected, result)
     }
-
-    @Test
-    fun testValidCommentNull() {
-        val expected = OpenAnswer::class.java
-        val result = OpenAnswer(3, "des", Keywords(arrayListOf())).javaClass
-        assertEquals(expected, result)
-    }
 }
