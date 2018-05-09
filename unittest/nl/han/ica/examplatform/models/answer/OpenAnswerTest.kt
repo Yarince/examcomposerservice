@@ -6,16 +6,9 @@ import kotlin.test.assertEquals
 class OpenAnswerTest {
 
     @Test
-    fun testValidCommentString() {
+    fun testValidCorrectQuestionAnswerString() {
         val expected = OpenAnswer::class.java
-        val result = OpenAnswer(3, "des", "com", Keywords(arrayOf())).javaClass
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun testValidCommentNull() {
-        val expected = OpenAnswer::class.java
-        val result = OpenAnswer(3, "des", null, Keywords(arrayOf())).javaClass
+        val result = OpenAnswer(3, "des", Keywords(arrayListOf())).javaClass
         assertEquals(expected, result)
     }
 }

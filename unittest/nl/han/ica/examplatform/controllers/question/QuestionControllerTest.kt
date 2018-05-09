@@ -28,7 +28,7 @@ class QuestionControllerTest {
 
     @Test
     fun testCreateQuestion() {
-        val expectedResultBody = Question(1, "", QuestionType.OPEN_QUESTION, "", null, ExamType.PRACTICE_EXAM, null)
+        val expectedResultBody = Question(1, null, ExamType.EXAM, 1, null, QuestionType.OPEN_QUESTION, null, null, null, null)
         val expectedStatusCode = HttpStatus.CREATED
 
         doReturn(ResponseEntity(expectedResultBody, expectedStatusCode)).`when`(questionService).addQuestion(expectedResultBody)

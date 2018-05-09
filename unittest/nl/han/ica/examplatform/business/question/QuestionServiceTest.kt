@@ -3,7 +3,7 @@ package nl.han.ica.examplatform.business.question
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
-import nl.han.ica.examplatform.persistence.question.QuestionDAOStub
+import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,11 +24,11 @@ class QuestionServiceTest {
 
     @Mock
     private
-    lateinit var questionDAO: QuestionDAOStub
+    lateinit var questionDAO: QuestionDAO
 
     @Test
     fun testAddQuestionSuccess() {
-        val questionInserted = Question(0, "name", QuestionType.OPEN_QUESTION, "APP", null, ExamType.EXAM, null)
+        val questionInserted = Question(0, null, ExamType.EXAM, 1, "name", QuestionType.OPEN_QUESTION, null, null, null, null, null)
         val expectedResult = ResponseEntity(questionInserted, HttpStatus.CREATED)
 
         doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)

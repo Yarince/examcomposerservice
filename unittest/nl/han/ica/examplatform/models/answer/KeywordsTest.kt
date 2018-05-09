@@ -8,13 +8,13 @@ class KeywordsTest {
 
     @Test
     fun testCreateValidKeywords() {
-        Keywords(arrayOf("01", "02"))
+        Keywords(arrayListOf("01", "02"))
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun testCreateInvalidKeywords() {
         val expected = Keywords::class.java
-        val result = Keywords(arrayOf("01", "0 2")).javaClass
+        val result = Keywords(arrayListOf("01", "0 2")).javaClass
         assertNotNull(result)
         assertEquals(expected, result)
     }

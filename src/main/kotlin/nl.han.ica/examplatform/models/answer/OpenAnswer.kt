@@ -6,15 +6,12 @@ import io.swagger.annotations.ApiModelProperty
  * Answer given by a teacher for a open question
  */
 class OpenAnswer(
-        @ApiModelProperty(notes = "The is of the answer")
+        @ApiModelProperty(notes = "The is of the correctAnswer")
         override val questionId: Int,
 
-        @ApiModelProperty(notes = "The description of the answer")
-        override val description: String,
+        @ApiModelProperty(notes = "The description of the correctAnswer")
+        override val correctAnswer: String,
 
-        @ApiModelProperty(notes = "A comment on the answer")
-        override val comment: String?,
-
-        @ApiModelProperty(notes = "The keywords of the answer")
-        private val keywords: Keywords
+        @ApiModelProperty(notes = "The keywords of the correctAnswer")
+        override val answerKeywords: Keywords?
 ) : Answer
