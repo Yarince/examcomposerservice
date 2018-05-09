@@ -1,0 +1,52 @@
+[
+  {
+    "questionId": 1,
+    "tags": "Architecture evaluation",
+    "actualAnswer": "DCAR"
+  },
+  {
+    "questionId": 2,
+    "tags": "Architecture evaluation",
+    "actualAnswer": "ATAM"
+  },
+  {
+    "questionId": 3,
+    "tags": "Architecture evaluation",
+    "actualAnswer": "Quality Attribute"
+  },
+  {
+    "questionId": 4,
+    "tags": "Quality attributes",
+    "actualAnswer": "Capacity"
+  },
+  {
+    "questionId": 5,
+    "tags": "Quality attributes",
+    "actualAnswer": "Confidentiality"
+  },
+  {
+    "questionId": 6,
+    "tags": "Quality attributes",
+    "actualAnswer": "Time behaviour"
+  },
+  {
+    "questionId": 7,
+    "tags": "Patterns",
+    "actualAnswer": "Microservices"
+  },
+  {
+    "questionId": 8,
+    "tags": "Patterns",
+    "actualAnswer": "Blackboard"
+  },
+  {
+    "questionId": 9,
+    "tags": "Patterns",
+    "actualAnswer": "Publish and subscribe"
+  },
+  {
+    "questionId": 10,
+    "tags": "Patterns",
+    "actualAnswer": "Pipes and filters"
+  }
+]
