@@ -18,36 +18,39 @@ fun generateExam() {
 
     // Group questions by tag
     val possibleSubjects = questions.groupBy { it.tags }
-    println(possibleSubjects)
-    val possibleSubjectsKeysArray = questions.groupBy { it.tags }.keys
-
+    // Put all subject keys in a list
+    val possibleSubjectsKeysArray = questions.groupBy { it.tags }.keys.toList()
 
     // The list of which the questions should be added to
     val practiceExam = ArrayList<Question>()
 
-    // Random:
-    // ThreadLocalRandom.current().nextInt(0, max)
+    // Recursively add questions to exam
+    addQuestionsToExam(questions, practiceExam, possibleSubjects, possibleSubjectsKeysArray)
 
-    addQuestionsToExam(questions, practiceExam, possibleSubjects, possibleSubjectsKeysArray.toList())
+    // Print exam contents
     practiceExam.forEach {
         println(it)
     }
 }
 
-fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: Map<String, List<Question>>, possibleSubjectsKeysArray: List<String>, currentSubject: String? = null) {
+fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: Map<String, List<Question>>, possibleSubjectsKeysArray: List<String>, iterator: Int = 0) {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return println("List should be full")
 
-    val currentSubjectNN = possibleSubjects[possibleSubjectsKeysArray[0]]
+    println("1")
+    val currentSubjectNN = possibleSubjects[possibleSubjectsKeysArray[iterator]]
 
     currentSubjectNN?.let {
         // add Random question if not null
         // todo: only add if half of these questions are not added yet
+        // val examGroupedByTags = exam.groupBy { it.tags }
+        // examGroupedByTags[possibleSubjectsKeysArray[iterator]]
+
         exam.add(it[ThreadLocalRandom.current().nextInt(0, it.size)])
     }
-
     //val iteration = if (possibleSubjects.values
-    addQuestionsToExam(questions, exam, possibleSubjects, possibleSubjectsKeysArray)
+    val newIterator = if (iterator == possibleSubjectsKeysArray.size - 1) iterator - 1 else iterator + 1
+    addQuestionsToExam(questions, exam, possibleSubjects, possibleSubjectsKeysArray, newIterator)
 }
 
 
