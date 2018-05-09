@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.controllers.question
 
 import nl.han.ica.examplatform.business.question.QuestionService
-import nl.han.ica.examplatform.models.course.CourseType
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
@@ -29,7 +28,7 @@ class QuestionControllerTest {
 
     @Test
     fun testCreateQuestion() {
-        val expectedResultBody = Question(1, null, ExamType.EXAM, CourseType.APP, null, QuestionType.OPEN_QUESTION, null, null, null, null)
+        val expectedResultBody = Question(1, null, ExamType.EXAM, 1, null, QuestionType.OPEN_QUESTION, null, null, null, null)
         val expectedStatusCode = HttpStatus.CREATED
 
         doReturn(ResponseEntity(expectedResultBody, expectedStatusCode)).`when`(questionService).addQuestion(expectedResultBody)
