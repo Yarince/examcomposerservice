@@ -3,6 +3,9 @@ package poc
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import java.io.FileReader
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.collections.ArrayList
 
 fun main(args: Array<String>) {
     generateExam()
@@ -13,8 +16,26 @@ data class Question(val questionId: Int, val tags: String, val actualAnswer: Str
 fun generateExam() {
     val questions = loadQuestions()
 
+    // Group questions by tag
     val possibleSubjects = questions.groupBy { it.tags }
-    possibleSubjects.forEach { println(it) }
+
+    // The list of which the questions should be added to
+    val practiceExam = ArrayList<Question>()
+
+    possibleSubjects.forEach {
+        println(practiceExam.size % (questions.size / 2))
+        if (practiceExam.size > 0) if (practiceExam.size % (questions.size / 2) == 0) println("this")
+        practiceExam.add(it.value[ThreadLocalRandom.current().nextInt(0, it.value.size)])
+    }
+
+    practiceExam.forEach {
+        println(it)
+    }
+
+
+}
+
+fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>) {
 
 }
 
