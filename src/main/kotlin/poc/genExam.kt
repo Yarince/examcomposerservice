@@ -3,7 +3,6 @@ package poc
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import java.io.FileReader
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.ArrayList
 
@@ -37,18 +36,11 @@ fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, po
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return println("List should be full")
 
-    println("1")
     val currentSubjectNN = possibleSubjects[possibleSubjectsKeysArray[iterator]]
 
     currentSubjectNN?.let {
-        // add Random question if not null
-        // todo: only add if half of these questions are not added yet
-        // val examGroupedByTags = exam.groupBy { it.tags }
-        // examGroupedByTags[possibleSubjectsKeysArray[iterator]]
-
         exam.add(it[ThreadLocalRandom.current().nextInt(0, it.size)])
     }
-    //val iteration = if (possibleSubjects.values
     val newIterator = if (iterator == possibleSubjectsKeysArray.size - 1) iterator - 1 else iterator + 1
     addQuestionsToExam(questions, exam, possibleSubjects, possibleSubjectsKeysArray, newIterator)
 }
