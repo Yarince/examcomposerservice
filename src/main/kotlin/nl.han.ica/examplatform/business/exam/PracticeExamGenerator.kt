@@ -1,10 +1,12 @@
 package nl.han.ica.examplatform.business.exam
 
+import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import java.util.concurrent.ThreadLocalRandom
 
-fun generateExam(courseId: Int, categories: Array<String>) {
+fun generateExam(courseId: Int, categories: Array<String>): PracticeExam {
     val questions = QuestionDAO().getQuestions(courseId, categories)
 
     // Group questions by tag
@@ -18,15 +20,12 @@ fun generateExam(courseId: Int, categories: Array<String>) {
     // Recursively add questions to exam
     addQuestionsToExam(questions, practiceExam, possibleSubjects, possibleSubjectsKeysArray)
 
-    // Print exam contents
-    practiceExam.forEach {
-        println(it)
-    }
+    return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
 
 fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<Array<String>, List<Question>>, possibleSubjectsKeysArray: List<Array<String>>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
-    if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return println("Exit recursive function")
+    if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return
 
     // Gets the list of questions in the current subject
     val currentSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]
