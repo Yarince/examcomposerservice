@@ -24,8 +24,8 @@ class SwaggerConfig {
 
     private fun apiInfo(): ApiInfo {
         return ApiInfoBuilder()
-                .title("OfficialExam Composer Service")
-                .description("API specification of the OfficialExam Composer Service")
+                .title("Exam Composer Service")
+                .description("API specification of the Exam Composer Service")
                 .version("0.1")
                 .build()
     }

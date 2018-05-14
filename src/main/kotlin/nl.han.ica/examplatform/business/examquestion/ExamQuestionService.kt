@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.examquestion
 
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
-import nl.han.ica.examplatform.models.exam.OfficialExam
+import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
@@ -41,13 +41,13 @@ class ExamQuestionService {
     /**
      * Assign a Question to an existing Exam in the database
      *
-     * @param officialExam [OfficialExam] to be updated in the database
+     * @param exam [Exam] to be updated in the database
      * @return ResponseEntity<[Question]> updated object from database
      */
-    fun addQuestionToExam(officialExam: OfficialExam): ResponseEntity<OfficialExam> {
-        checkQuestion(officialExam.questions)
+    fun addQuestionToExam(exam: Exam): ResponseEntity<Exam> {
+        checkQuestion(exam.questions)
 
-        val updatedObject = examDAO.addQuestionsToExam(officialExam)
+        val updatedObject = examDAO.addQuestionsToExam(exam)
 
         return ResponseEntity(updatedObject, HttpStatus.ACCEPTED)
     }

@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 
 /**
- * Exception thrown when there is an error in [OfficialExam]
+ * Exception thrown when there is an error in [Exam]
  * It is bound to a HTTP status [HttpStatus.BAD_REQUEST]
  *
  * @property message [String] Message in exception

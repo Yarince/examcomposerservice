@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
-import nl.han.ica.examplatform.models.exam.OfficialExam
+import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service
  * Exam service for handling requests related to the Exam model.
  */
 @Service
-class OfficialExamService {
+class ExamService {
 
     @Autowired
     lateinit var examDAO: ExamDAO
 
     /**
-     * Check if an officialExam has questions and if the id is left empty
+     * Check if an exam has questions and if the id is left empty
      *
-     * @param officialExam [OfficialExam] that needs to be validated
+     * @param exam [Exam] that needs to be validated
      * @throws InvalidExamException If properties of the exam are not correct
      */
-    fun checkExam(officialExam: OfficialExam) {
-        if (officialExam.questions != null) throw InvalidExamException("questions must be empty")
-        if (officialExam.examId != null) throw InvalidExamException("examId must be left empty")
+    fun checkExam(exam: Exam?) {
+        if (exam?.questions != null) throw InvalidExamException("questions must be empty")
+        if (exam?.examId != null) throw InvalidExamException("examId must be left empty")
     }
 
     /**
@@ -41,22 +41,33 @@ class OfficialExamService {
     /**
      * Add an new Exam to the database
      *
-     * @param officialExam [OfficialExam] to be added in the database
-     * @return ResponseEntity<[OfficialExam]> with new exam inserted and an assigned id
+     * @param exam [Exam] to be added in the database
+     * @return ResponseEntity<[Exam]> with new exam inserted and an assigned id
      */
-    fun addExam(officialExam: OfficialExam): ResponseEntity<OfficialExam> {
-        checkExam(officialExam)
-        val insertedObject = examDAO.insertExam(officialExam) //Add to database
+    fun addExam(exam: Exam): ResponseEntity<Exam> {
+        checkExam(exam)
+        val insertedObject = examDAO.insertExam(exam) //Add to database
         return ResponseEntity(insertedObject, HttpStatus.CREATED)
     }
 
     /**
      * Get a specific Exam from the database
      *
-     * @return [ResponseEntity]<[OfficialExam]> Fetched from the database
+     * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
-    fun getExam(id: Int): ResponseEntity<OfficialExam> {
+    fun getExam(id: Int): ResponseEntity<Exam> {
         return ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
+    }
+
+    /**
+     * Generate a practice practice [Exam]
+     *
+     * @return [ResponseEntity]<Exam> practice [Exam]
+     */
+    fun generatePracticeExam() : ResponseEntity<Exam?> {
+        val practiceExam: Exam? = examDAO.generatePracticeExam()
+        checkExam(practiceExam)
+        return ResponseEntity(practiceExam, HttpStatus.CREATED)
     }
 }
 

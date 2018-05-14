@@ -1,9 +1,9 @@
 package nl.han.ica.examplatform.controllers.exam
 
-import nl.han.ica.examplatform.business.exam.OfficialExamService
+import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
+import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
-import nl.han.ica.examplatform.models.exam.OfficialExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
@@ -21,19 +21,27 @@ import kotlin.test.assertEquals
 
 
 @RunWith(MockitoJUnitRunner::class)
-class OfficialExamControllerTest {
+class ExamControllerTest {
 
     @InjectMocks
     private
-    lateinit var officialExamController: OfficialExamController
+    lateinit var examController: ExamController
 
     @Mock
     private
-    lateinit var officialExamService: OfficialExamService
+    lateinit var examService: ExamService
 
     @Mock
     private
     lateinit var examQuestionService: ExamQuestionService
+
+    @Test
+    fun generatePracticeExam() {
+        val expected = null
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam()
+        val result = examController.generatePracticeExam()
+        assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
+    }
 
     @Test
     fun testGetExams() {
@@ -41,29 +49,29 @@ class OfficialExamControllerTest {
                 SimpleExam(2, "SWA Toets 2", "SWA"),
                 SimpleExam(3, "APP Toets algoritmen", "APP")
         )
-        doReturn(ResponseEntity<Any>(expected, HttpStatus.OK)).`when`(officialExamService).getExams()
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.OK)).`when`(examService).getExams()
 
-        val result = officialExamController.getExams()
+        val result = examController.getExams()
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
     }
 
     @Test
     fun testAddExam() {
-        val expected = OfficialExam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM)
-        doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(officialExamService).addExam(expected)
-        val result = officialExamController.addExam(expected)
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM)
+        doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(examService).addExam(expected)
+        val result = examController.addExam(expected)
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
     }
 
     @Test
     fun addQuestionToExam() {
-        val expected = OfficialExam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(
+        val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(
             Question(1, null, ExamType.EXAM, 1, null, QuestionType.OPEN_QUESTION, null, null, null, null)))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
-        val result = officialExamController.addQuestionToExam(expected)
+        val result = examController.addQuestionToExam(expected)
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.ACCEPTED), result)
     }
@@ -71,9 +79,9 @@ class OfficialExamControllerTest {
     @Test
     fun testGetExam() {
         val idOfExamToGet = 1
-        val expected = OfficialExam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = ExamType.EXAM, examId = idOfExamToGet)
-        doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(officialExamService).getExam(idOfExamToGet)
-        val result = officialExamController.getExam(idOfExamToGet)
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = ExamType.EXAM, examId = idOfExamToGet)
+        doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(examService).getExam(idOfExamToGet)
+        val result = examController.getExam(idOfExamToGet)
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
     }
