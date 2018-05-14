@@ -64,8 +64,8 @@ class ExamService {
      *
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
-    fun generatePracticeExam() : ResponseEntity<Exam?> {
-        val practiceExam: Exam? = examDAO.generatePracticeExam()
+    fun generatePracticeExam(course: String) : ResponseEntity<Exam?> {
+        val practiceExam: Exam? = examDAO.generatePracticeExam(course)
         checkExam(practiceExam)
         return ResponseEntity(practiceExam, HttpStatus.CREATED)
     }
