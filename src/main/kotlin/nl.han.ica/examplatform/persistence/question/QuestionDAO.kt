@@ -1,6 +1,9 @@
 package nl.han.ica.examplatform.persistence.question
 
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
+import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection
@@ -71,6 +74,31 @@ class QuestionDAO {
     }
 
     fun getQuestions(courseId: Int, categories: Array<String>): Array<Question> {
-        return arrayOf()
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedStatement: PreparedStatement? = null
+
+        val sqlQueryStringInsertQuestionString = "SELECT * FROM QUESTION WHERE COURSEID = ?" //todo: update with categories once this is implemented in the db
+
+        val questions = ArrayList<Question>()
+        try {
+            preparedStatement = conn?.prepareStatement(sqlQueryStringInsertQuestionString)
+            preparedStatement?.setInt(1, courseId)
+            val questionRs = preparedStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
+
+            while (questionRs.next()) {
+                questions.add(Question(questionId = questionRs.getInt("QuestionID"),
+                        questionText = questionRs.getString("QuestionText"),
+                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
+                        courseId = questionRs.getInt("CourseID"),
+                        examTypeId = ExamType.from(questionRs.getInt("ExamTypeId"))))
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedStatement)
+        }
+        return questions.toTypedArray()
     }
 }
