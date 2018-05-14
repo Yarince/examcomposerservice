@@ -81,13 +81,15 @@ class ExamDAO {
             val questions = ArrayList<Question>()
             while (questionRs.next()) {
                 questions.add(Question(
-                        questionId = questionRs.getInt("QuestionID"),
-                        questionText = questionRs.getString("QuestionText"),
-                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
                         // Todo: wait for columns to be added in the database. [BTGGOM-460]
-                        questionPoints = questionRs.getFloat("?"),
-                        questionOrderInExam = questionRs.getInt("?"),
-                        questionOrderText = questionRs.getString("?")
+                        questionId = questionRs.getInt("QuestionID"),
+                        questionOrderInExam = 1,// questionRs.getInt("?"),
+                        questionOrderText = "Question 1",//questionRs.getString("?")
+                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
+                        questionText = questionRs.getString("QuestionText"),
+                        questionPoints = 5F, //questionRs.getFloat("?"),
+                        options = arrayOf("Ja", "Nee"),
+                        subQuestions = null // Todo: Add subQuestions from database
                 ))
             }
             val examRs = examStatement?.executeQuery()

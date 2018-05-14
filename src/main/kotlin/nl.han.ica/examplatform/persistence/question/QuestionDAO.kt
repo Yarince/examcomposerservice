@@ -21,8 +21,7 @@ class QuestionDAO {
         var preparedStatement: PreparedStatement? = null
 
         // Todo: change insert string. To match with questionModel and Database [BTGGOM-460]
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, QUESTIONORDERINEXAM)" +
-                "VALUES (?, ?, ?, ?)"
+        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER) VALUES (?, ?, ?, ?)"
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
@@ -58,6 +57,7 @@ class QuestionDAO {
             }
         } catch (e: SQLException) {
             e.printStackTrace()
+            print(e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             preparedStatement?.close()
