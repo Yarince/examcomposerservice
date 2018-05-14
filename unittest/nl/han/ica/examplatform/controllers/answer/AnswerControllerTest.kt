@@ -26,7 +26,7 @@ internal class AnswerControllerTest {
 
     private val answer: Answer = Answer(
             5,
-            arrayOf(Keyword("sad", 7.7))
+            arrayOf(Keyword("sad", 7.7F))
     )
 
     @Test

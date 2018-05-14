@@ -36,9 +36,9 @@ class ExamControllerTest {
 
     @Test
     fun testGetExams() {
-        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", "SWA"),
-                SimpleExam(2, "SWA Toets 2", "SWA"),
-                SimpleExam(3, "APP Toets algoritmen", "APP")
+        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", 1),
+                SimpleExam(2, "SWA Toets 2", 1),
+                SimpleExam(3, "APP Toets algoritmen", 1)
         )
         doReturn(ResponseEntity<Any>(expected, HttpStatus.OK)).`when`(examService).getExams()
 
@@ -59,7 +59,7 @@ class ExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(
-            Question(questionId = 1, courseId = 1)))
+                Question(questionId = 1, questionPoints = 5F)))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = examController.addQuestionToExam(expected)

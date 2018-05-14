@@ -6,12 +6,20 @@ import nl.han.ica.examplatform.persistence.answer.AnswerDAO
 import org.springframework.stereotype.Service
 
 @Service
-class AnswerService(private val answerDao: AnswerDAO) {
+class AnswerService {
 
+    private lateinit var answerDao: AnswerDAO
+
+    /**
+     * Add an Answer to a Question
+     *
+     * @param answer The [Answer] you want to add
+
+     */
     fun addAnswerToQuestion(answer: Answer) {
         try {
             answerDao.addAnswerToQuestion(answer)
-        } catch (exception: Exception) {
+        } catch (exception: RuntimeException) {
             throw CouldNotAddAnswerToQuestionException("Answer could not be added to Question", exception, true, true)
         }
     }

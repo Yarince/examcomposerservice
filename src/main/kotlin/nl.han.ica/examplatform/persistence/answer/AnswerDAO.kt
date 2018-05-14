@@ -15,9 +15,9 @@ import java.sql.SQLException
 class AnswerDAO : IAnswerDAO{
 
     /**
-     * This is used to add an Answer to a Question
+     * Add an Answer to a Question in the database
      *
-     * @param question The [Question] you want to add an [Answer] to
+     * @param answer The [Answer] you want to add to a [Question]
      */
     override fun addAnswerToQuestion(answer: Answer) {
         val insertAnswerQuery = "UPDATE QUESTION SET ANSWERTEXT = ?, ANSWERKEYWORDS = ? WHERE QUESTIONID = ?"
