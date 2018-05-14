@@ -36,7 +36,7 @@ class ExamControllerTest {
     lateinit var examQuestionService: ExamQuestionService
 
     @Test
-    fun generatePracticeExam() {
+    fun testGeneratePracticeExam() {
         val expected = null
         doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam("SWA")
         val result = examController.generatePracticeExam("SWA")
