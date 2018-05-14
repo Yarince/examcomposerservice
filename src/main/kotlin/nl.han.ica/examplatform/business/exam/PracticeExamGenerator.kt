@@ -1,6 +1,5 @@
 package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
