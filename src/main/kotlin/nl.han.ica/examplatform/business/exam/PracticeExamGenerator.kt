@@ -1,12 +1,16 @@
 package nl.han.ica.examplatform.business.exam
 
-fun generateExam() {
-    val questions = loadQuestions()
+import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.question.QuestionDAO
+import java.util.concurrent.ThreadLocalRandom
+
+fun generateExam(courseId: Int, categories: Array<String>) {
+    val questions = QuestionDAO().getQuestions(courseId, categories)
 
     // Group questions by tag
-    val possibleSubjects = questions.groupBy { it.tags }.toMutableMap()
+    val possibleSubjects = questions.groupBy { it.categories }.toMutableMap()
     // Put all subject keys in a list
-    val possibleSubjectsKeysArray = questions.groupBy { it.tags }.keys.toList()
+    val possibleSubjectsKeysArray = questions.groupBy { it.categories }.keys.toList()
 
     // The list of which the questions should be added to
     val practiceExam = ArrayList<Question>()
@@ -20,7 +24,7 @@ fun generateExam() {
     }
 }
 
-fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<String, List<Question>>, possibleSubjectsKeysArray: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
+fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<Array<String>, List<Question>>, possibleSubjectsKeysArray: List<Array<String>>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return println("Exit recursive function")
 

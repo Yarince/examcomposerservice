@@ -40,8 +40,11 @@ data class Question(
         @ApiModelProperty(notes = "Only applicable if the question is a multipleChoice question. Array with strings containing the options")
         val options: Array<String>? = null,
 
-        @ApiModelProperty(notes= "Number of the sequence in an exam if the question is in it")
-        val sequenceNumber: Int? = 0
+        @ApiModelProperty(notes = "Number of the sequence in an exam if the question is in it")
+        val sequenceNumber: Int? = 0,
+
+        @ApiModelProperty(notes = "The categories that this question is about")
+        val categories: Array<String> = emptyArray()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

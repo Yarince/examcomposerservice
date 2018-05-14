@@ -69,4 +69,8 @@ class QuestionDAO {
         }
         return false
     }
+
+    fun getQuestions(courseId: Int, categories: Array<String>): Array<Question> {
+        return arrayOf()
+    }
 }
