@@ -38,8 +38,8 @@ class ExamControllerTest {
     @Test
     fun testGeneratePracticeExam() {
         val expected = null
-        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam("SWA")
-        val result = examController.generatePracticeExam("SWA")
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1)
+        val result = examController.generatePracticeExam(1)
         assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
     }
 
