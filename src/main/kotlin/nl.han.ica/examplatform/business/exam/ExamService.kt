@@ -42,7 +42,7 @@ class ExamService {
      * Add an new Exam to the database
      *
      * @param exam [Exam] to be added in the database
-     * @return ResponseEntity<[Exam]> with new exam inserted and an assigned id
+     * @return [ResponseEntity]<[Exam]> with new exam inserted and an assigned id
      */
     fun addExam(exam: Exam): ResponseEntity<Exam> {
         checkExam(exam)
@@ -53,6 +53,7 @@ class ExamService {
     /**
      * Get a specific Exam from the database
      *
+     * @param id [Int] The ID of the exam that should be retrieved
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
     fun getExam(id: Int): ResponseEntity<Exam> {
@@ -62,6 +63,7 @@ class ExamService {
     /**
      * Generate a practice practice [Exam]
      *
+     * @param courseId [Int] The ID of the course of which the exam should be generated
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
     fun generatePracticeExam(courseId: Int) : ResponseEntity<Exam?> {

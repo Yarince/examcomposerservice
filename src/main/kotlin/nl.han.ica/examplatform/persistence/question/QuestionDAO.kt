@@ -18,6 +18,9 @@ class QuestionDAO {
 
     /**
      * Adds a question to the database
+     *
+     * @param question [Question] The question that should be inserted
+     * @return [Question] the question that was inserted
      */
     fun insertQuestion(question: Question): Question {
         var dbConnection: Connection? = null
@@ -50,6 +53,9 @@ class QuestionDAO {
 
     /**
      * Checks if a question already exists in the database
+     *
+     * @param question [Question] The question that should be checked on existing
+     * @return [Boolean] true if it exists, false if it doesn't
      */
     fun exists(question: Question?): Boolean {
         var dbConnection: Connection? = null
