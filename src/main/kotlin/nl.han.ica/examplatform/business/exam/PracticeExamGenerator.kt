@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.business.exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
+import java.lang.IndexOutOfBoundsException
 import java.util.concurrent.ThreadLocalRandom
 
 fun generateExam(courseId: Int, categories: Array<String>): PracticeExam {
@@ -27,7 +28,13 @@ private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Quest
     if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return
 
     // Gets the list of questions in the current subject
-    val currentSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]
+    val currentSubjectList: List<Question>?
+    try {
+        currentSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]
+    } catch (e: IndexOutOfBoundsException) {
+        println(e)
+        return
+    }
 
     // If it's not null, add a random question to the exam
     currentSubjectList?.let {

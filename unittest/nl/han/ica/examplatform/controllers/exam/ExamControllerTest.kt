@@ -2,9 +2,7 @@ package nl.han.ica.examplatform.controllers.exam
 
 import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
-import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.models.exam.ExamType
-import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import org.junit.Assert.assertNotNull
@@ -37,9 +35,9 @@ class ExamControllerTest {
 
     @Test
     fun testGeneratePracticeExam() {
-        val expected = null
-        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1)
-        val result = examController.generatePracticeExam(1)
+        val expected = PracticeExam(name = "Practice exam", courseId = 1, questions = arrayListOf())
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1, arrayOf("QA", "ASR"))
+        val result = examController.generatePracticeExam(PracticeExamRequestBody(1, arrayOf("QA", "ASR")))
         assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
     }
 
