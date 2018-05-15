@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import nl.han.ica.examplatform.business.exam.generateExam
+import nl.han.ica.examplatform.models.exam.PracticeExam
 
 /**
  * Exam service for handling requests related to the Exam model.
@@ -66,10 +68,8 @@ class ExamService {
      * @param courseId [Int] The ID of the course of which the exam should be generated
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
-    fun generatePracticeExam(courseId: Int) : ResponseEntity<Exam?> {
-        val practiceExam: Exam? = examDAO.generatePracticeExam(courseId)
-        checkExam(practiceExam)
-        return ResponseEntity(practiceExam, HttpStatus.CREATED)
+    fun generatePracticeExam(courseId: Int, categories: Array<String>) : ResponseEntity<PracticeExam> {
+        return ResponseEntity(generateExam(courseId, categories), HttpStatus.CREATED)
     }
 }
 

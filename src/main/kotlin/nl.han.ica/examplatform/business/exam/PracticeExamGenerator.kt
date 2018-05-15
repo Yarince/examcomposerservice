@@ -22,7 +22,7 @@ fun generateExam(courseId: Int, categories: Array<String>): PracticeExam {
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
 
-fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<Array<String>, List<Question>>, possibleSubjectsKeysArray: List<Array<String>>, iterator: Int = 0, iteratorForward: Boolean = true) {
+private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<Array<String>, List<Question>>, possibleSubjectsKeysArray: List<Array<String>>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return
 
