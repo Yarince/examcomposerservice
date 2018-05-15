@@ -24,6 +24,13 @@ class ExamController {
     @Autowired
     lateinit var examQuestionService: ExamQuestionService
 
+    @PostMapping("/practice-exam")
+    @ApiOperation(value = "Add an exam without questions", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
+    @ApiResponses(
+            ApiResponse(code = 201, message = "Create"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<Exam?> = examService.generatePracticeExam(courseId)
+
     @GetMapping
     @ApiOperation(value = "Get a list of minified exams", notes = "This returns a list of exams containing ID, name, ", response = Array<SimpleExam>::class)
     fun getExams() = examService.getExams()

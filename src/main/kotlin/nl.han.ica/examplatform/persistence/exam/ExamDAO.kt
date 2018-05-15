@@ -21,6 +21,10 @@ import kotlin.collections.ArrayList
 @Repository
 class ExamDAO {
 
+    fun generatePracticeExam(courseId: Int): Exam? {
+        return null
+    }
+
     /**
      * This function gets a list of minimized exams
      *
