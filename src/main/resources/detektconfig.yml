@@ -20,8 +20,8 @@ console-reports:
 output-reports:
   active: true
   exclude:
+  - 'PlainOutputReport'
   #  - 'HtmlOutputReport'
-  #  - 'PlainOutputReport'
   #  - 'XmlOutputReport'
 
 # Link to the default config of Detekt
