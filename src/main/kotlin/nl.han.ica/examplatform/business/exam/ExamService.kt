@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import nl.han.ica.examplatform.business.exam.generateExam
 import nl.han.ica.examplatform.models.exam.PracticeExam
+import nl.han.ica.examplatform.persistence.question.QuestionDAO
 
 /**
  * Exam service for handling requests related to the Exam model.
@@ -19,6 +20,9 @@ class ExamService {
 
     @Autowired
     lateinit var examDAO: ExamDAO
+
+    @Autowired
+    lateinit var questionDAO: QuestionDAO
 
     /**
      * Check if an exam has questions and if the id is left empty
@@ -69,7 +73,7 @@ class ExamService {
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
     fun generatePracticeExam(courseId: Int, categories: Array<String>) : ResponseEntity<PracticeExam> {
-        return ResponseEntity(generateExam(courseId, categories), HttpStatus.CREATED)
+        return ResponseEntity(generateExam(courseId, categories, questionDAO), HttpStatus.CREATED)
     }
 }
 

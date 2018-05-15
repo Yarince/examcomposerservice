@@ -3,36 +3,37 @@ package nl.han.ica.examplatform.business.exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
+import org.springframework.beans.factory.annotation.Autowired
 import java.lang.IndexOutOfBoundsException
 import java.util.concurrent.ThreadLocalRandom
 
-fun generateExam(courseId: Int, categories: Array<String>): PracticeExam {
-    val questions = QuestionDAO().getQuestions(courseId, categories)
+fun generateExam(courseId: Int, categories: Array<String>, questionDAO: QuestionDAO): PracticeExam {
+    val questions = questionDAO.getQuestions(courseId, categories)
 
-    // Group questions by tag
-    val possibleSubjects = questions.groupBy { it.categories }.toMutableMap()
-    // Put all subject keys in a list
-    val possibleSubjectsKeysArray = questions.groupBy { it.categories }.keys.toList()
+    val possibleSubjects: MutableMap<String, List<Question>> = mutableMapOf()
+    for (category in categories) {
+        possibleSubjects[category] = questions.filter { it.categories.contains(category) }
+    }
 
     // The list of which the questions should be added to
     val practiceExam = ArrayList<Question>()
 
     // Recursively add questions to exam
-    addQuestionsToExam(questions, practiceExam, possibleSubjects, possibleSubjectsKeysArray)
+    addQuestionsToExam(questions, practiceExam, possibleSubjects, categories.toList())
 
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
 
-private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<Array<String>, List<Question>>, possibleSubjectsKeysArray: List<Array<String>>, iterator: Int = 0, iteratorForward: Boolean = true) {
+private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, possibleSubjects: MutableMap<String, List<Question>>, possibleSubjectsKeysArray: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
-    if (exam.size > 0) if (exam.size % (questions.size / 1) == 0) return
+    if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return
 
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
     try {
         currentSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]
     } catch (e: IndexOutOfBoundsException) {
-        println(e)
+        println(e) // todo better error handling
         return
     }
 
