@@ -73,6 +73,13 @@ class QuestionDAO {
         return false
     }
 
+    /**
+     * Gets all questions of a course, within specific categories
+     *
+     * @param courseId [Int] The ID of course of which the questions should be retrieved
+     * @param categories [Array] An array containing all the categories of which the questions should be retrieved
+     * @return [Array]<[Question]> An array of all questions corresponding to the course and categories
+     */
     fun getQuestions(courseId: Int, categories: Array<String>): Array<Question> {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
