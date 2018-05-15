@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 @Repository
 class ExamDAO {
 
-    fun generatePracticeExam(course: String): Exam? {
+    fun generatePracticeExam(courseId: Int): Exam? {
         return null
     }
 
