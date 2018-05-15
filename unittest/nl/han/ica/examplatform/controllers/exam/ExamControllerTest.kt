@@ -1,12 +1,11 @@
 package nl.han.ica.examplatform.controllers.exam
 
-import nl.han.ica.examplatform.business.exam.ExamService
-import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,7 +15,7 @@ import org.mockito.Mockito.doReturn
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import java.util.*
+import java.util.Date
 import kotlin.test.assertEquals
 
 
@@ -36,18 +35,10 @@ class ExamControllerTest {
     lateinit var examQuestionService: ExamQuestionService
 
     @Test
-    fun testGeneratePracticeExam() {
-        val expected = null
-        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1)
-        val result = examController.generatePracticeExam(1)
-        assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
-    }
-
-    @Test
     fun testGetExams() {
-        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", "SWA"),
-                SimpleExam(2, "SWA Toets 2", "SWA"),
-                SimpleExam(3, "APP Toets algoritmen", "APP")
+        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", 1),
+                SimpleExam(2, "SWA Toets 2", 1),
+                SimpleExam(3, "APP Toets algoritmen", 1)
         )
         doReturn(ResponseEntity<Any>(expected, HttpStatus.OK)).`when`(examService).getExams()
 
@@ -68,7 +59,7 @@ class ExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(
-            Question(1, null, ExamType.EXAM, 1, null, QuestionType.OPEN_QUESTION, null, null, null, null)))
+                Question(questionId = 1, questionPoints = 5F)))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = examController.addQuestionToExam(expected)

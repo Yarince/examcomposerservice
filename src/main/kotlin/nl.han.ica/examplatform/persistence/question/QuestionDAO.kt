@@ -20,21 +20,15 @@ class QuestionDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        // Todo: change insert string. To match with questionModel and Database [BTGGOM-460]
+        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER) VALUES (?, ?, ?, ?)"
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
             preparedStatement?.setInt(1, question.questionId ?: 0)
-            if (question.parentQuestionId == null) preparedStatement?.setNull(2, java.sql.Types.INTEGER) else preparedStatement?.setInt(2, question.parentQuestionId)
-            preparedStatement?.setInt(3, question.examTypeId.examId)
-            preparedStatement?.setInt(4, question.courseId)
-            preparedStatement?.setString(5, question.questionText)
-            preparedStatement?.setString(6, question.questionType.toString())
-            if (question.sequenceNumber == null) preparedStatement?.setNull(7, java.sql.Types.INTEGER) else preparedStatement?.setInt(7, question.sequenceNumber)
-            preparedStatement?.setString(8, question.answerText)
-            preparedStatement?.setString(9, question.answerKeywords)
-            preparedStatement?.setString(10, question.assessmentComments)
+            preparedStatement?.setString(2, question.questionText)
+            preparedStatement?.setString(3, question.questionType.toString())
+            if (question.questionOrderInExam == null) preparedStatement?.setNull(4, java.sql.Types.INTEGER) else preparedStatement?.setInt(4, question.questionOrderInExam)
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -63,6 +57,7 @@ class QuestionDAO {
             }
         } catch (e: SQLException) {
             e.printStackTrace()
+            print(e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             preparedStatement?.close()

@@ -32,7 +32,7 @@ class ExamDAO {
      */
     fun getExams(): ArrayList<SimpleExam> {
         val conn: Connection? = MySQLConnection.getConnection()
-        val examQuery = "SELECT EXAMID, EXAMNAME, COURSECODE FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
+        val examQuery = "SELECT EXAMID, EXAMNAME, EXAM.COURSEID FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(examQuery)
 
@@ -43,7 +43,7 @@ class ExamDAO {
             while (resultSet!!.next()) {
                 result.add(SimpleExam(resultSet.getInt("ExamID"),
                         resultSet.getString("ExamName"),
-                        resultSet.getString("CourseCode")))
+                        resultSet.getInt("COURSEID")))
             }
 
         } catch (e: SQLException) {
@@ -66,6 +66,7 @@ class ExamDAO {
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
 
+        // Todo: select correct columns [BTGGOM-460]
         val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
         val examStatement: PreparedStatement?
         examStatement = conn?.prepareStatement(examQuery)
@@ -83,11 +84,17 @@ class ExamDAO {
                     ?: throw DatabaseException("Error while interacting with the database")
             val questions = ArrayList<Question>()
             while (questionRs.next()) {
-                questions.add(Question(questionId = questionRs.getInt("QuestionID"),
-                        questionText = questionRs.getString("QuestionText"),
+                questions.add(Question(
+                        // Todo: wait for columns to be added in the database. [BTGGOM-460]
+                        questionId = questionRs.getInt("QuestionID"),
+                        questionOrderInExam = 1,// questionRs.getInt("?"),
+                        questionOrderText = "Question 1",//questionRs.getString("?")
                         questionType = QuestionType.from(questionRs.getString("QuestionType")),
-                        courseId = questionRs.getInt("CourseID"),
-                        examTypeId = ExamType.from(questionRs.getInt("ExamTypeId"))))
+                        questionText = questionRs.getString("QuestionText"),
+                        questionPoints = 5F, //questionRs.getFloat("?"),
+                        options = arrayOf("Ja", "Nee"),
+                        subQuestions = null // Todo: Add subQuestions from database
+                ))
             }
             val examRs = examStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
@@ -163,7 +170,7 @@ class ExamDAO {
     fun addQuestionsToExam(exam: Exam): Exam {
         if (exam.questions == null || exam.questions.size < 1) throw DatabaseException("Please provide questions to add to exam")
 
-        var query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER) VALUES "
+        var query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER) VALUES"
         for (question in exam.questions) {
             query = query.plus("(?, ?, ?)")
             if (question != exam.questions.last()) query = query.plus(", ")
@@ -176,8 +183,10 @@ class ExamDAO {
         var index = 0
         for (question in exam.questions) {
             preparedStatement?.setInt(++index, exam.examId ?: throw DatabaseException("Please provide examID"))
-            preparedStatement?.setInt(++index, question.questionId ?: throw DatabaseException("Can't insert question without ID"))
-            preparedStatement?.setInt(++index, question.sequenceNumber ?: throw DatabaseException("Can't insert question without sequence number"))
+            preparedStatement?.setInt(++index, question.questionId
+                    ?: throw DatabaseException("Can't insert question without ID"))
+            preparedStatement?.setInt(++index, question.questionOrderInExam
+                    ?: throw DatabaseException("Can't insert question without sequence number"))
         }
 
         try {
