@@ -55,7 +55,7 @@ class ExamService {
      *
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
-        fun getExam(id: Int): ResponseEntity<Exam> {
+    fun getExam(id: Int): ResponseEntity<Exam> {
         return ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
     }
 
