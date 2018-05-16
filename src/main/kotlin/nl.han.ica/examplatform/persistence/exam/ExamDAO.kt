@@ -39,7 +39,7 @@ class ExamDAO {
             while (resultSet!!.next()) {
                 result.add(SimpleExam(resultSet.getInt("ExamID"),
                         resultSet.getString("ExamName"),
-                        resultSet.getString("CourseCode")))
+                        resultSet.getInt(1)))
             }
 
         } catch (e: SQLException) {
