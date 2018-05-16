@@ -16,7 +16,7 @@ data class Exam(
         @ApiModelProperty(notes = "The end time of the exam")
         val endTime: Date = Date(startTime.time + durationInMinutes),
         @ApiModelProperty(notes = "The ID of the course that the question is for", required = true)
-         val courseId: Int,
+        val courseId: Int,
         @ApiModelProperty(notes = "The version of the exam")
         val version: Int = 1,
         @ApiModelProperty(notes = "The type of the exam can be practice test or exam")
