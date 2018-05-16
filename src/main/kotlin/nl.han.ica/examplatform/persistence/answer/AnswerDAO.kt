@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.answer
 
-import nl.han.ica.examplatform.models.answer.Answer
+import nl.han.ica.examplatform.models.answerModel.answer.Answer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -15,9 +15,9 @@ import java.sql.SQLException
 class AnswerDAO : IAnswerDAO{
 
     /**
-     * This is used to add an Answer to a Question
+     * Add an Answer to a Question in the database
      *
-     * @param question The [Question] you want to add an [Answer] to
+     * @param answer The [Answer] you want to add to a [Question]
      */
     override fun addAnswerToQuestion(answer: Answer) {
         val insertAnswerQuery = "UPDATE QUESTION SET ANSWERTEXT = ?, ANSWERKEYWORDS = ? WHERE QUESTIONID = ?"
@@ -27,7 +27,6 @@ class AnswerDAO : IAnswerDAO{
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(insertAnswerQuery)
-            preparedStatement?.setString(1, answer.correctAnswer)
             preparedStatement?.setString(2, answer.answerKeywords.toString())
             preparedStatement?.setInt(3, answer.questionId)
             preparedStatement?.executeUpdate()
