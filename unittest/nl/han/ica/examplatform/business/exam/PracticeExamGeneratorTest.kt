@@ -21,17 +21,17 @@ internal class PracticeExamGeneratorTest {
     @Test
     fun testGenerateExamSuccess() {
         val courseId = 1
-        val categories = arrayOf("ATAM", "DCAR", "SRS")
+        val categories = arrayOf("ATAM", "DCAR")
         val expectedQuestions = arrayOf(
-                Question(courseId = courseId, questionText = "Question 1", categories = arrayOf("QA", "ATAM")),
-                Question(courseId = courseId, questionText = "Question 2", categories = arrayOf("QA")),
-                Question(courseId = courseId, questionText = "Question 3", categories = arrayOf("QA", "ASR")),
-                Question(courseId = courseId, questionText = "Question 4", categories = arrayOf("ASR")),
-                Question(courseId = courseId, questionText = "Question 5", categories = arrayOf("ASR", "DCAR", "QA")),
-                Question(courseId = courseId, questionText = "Question 6", categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionText = "Question 7", categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionText = "Question 8", categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionText = "Question 9", categories = arrayOf("DCAR"))
+                Question(courseId = courseId, questionId = 1, categories = arrayOf("QA", "ATAM")),
+                Question(courseId = courseId, questionId = 2, categories = arrayOf("QA")),
+                Question(courseId = courseId, questionId = 3, categories = arrayOf("QA", "ASR")),
+                Question(courseId = courseId, questionId = 4, categories = arrayOf("ASR")),
+                Question(courseId = courseId, questionId = 5, categories = arrayOf("ASR", "DCAR", "QA")),
+                Question(courseId = courseId, questionId = 6, categories = arrayOf("DCAR")),
+                Question(courseId = courseId, questionId = 7, categories = arrayOf("DCAR")),
+                Question(courseId = courseId, questionId = 8, categories = arrayOf("DCAR")),
+                Question(courseId = courseId, questionId = 9, categories = arrayOf("DCAR"))
         )
 
         doReturn(expectedQuestions).`when`(questionDAO).getQuestions(courseId, categories)
@@ -51,6 +51,7 @@ internal class PracticeExamGeneratorTest {
         assertTrue(categories.contentEquals(allCategoriesInResult))
 
         // Check if there are duplicate questions
+        result.questions.forEach { println(it) }
         assertEquals(result.questions.size, result.questions.distinctBy { Pair(it.questionText, it.categories) }.size)
     }
 }
