@@ -1,21 +1,27 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.env.Environment
+import org.springframework.stereotype.Component
 import java.io.FileReader
 import java.sql.*
 import java.util.*
+import javax.sql.DataSource
 
 /**
  * A singleton object that handles the connection with the MySQL database
  */
+
 object MySQLConnection {
 
     /**
      * Holds the database properties, such as the connection URL, username and password.
      */
-    private val databaseProperties: Properties
+    //private val databaseProperties: Properties
 
     init {
-        databaseProperties = initializeProperties()
+        //databaseProperties = initializeProperties()
     }
 
     /**
@@ -25,7 +31,9 @@ object MySQLConnection {
      */
     fun getConnection(): Connection? {
         return try {
-            connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
+            //connectDatabase(getDatabaseConnectionUrl(databaseProperties), getDatabaseUsername(databaseProperties), getDatabasePassword(databaseProperties), getDrivers(databaseProperties))
+            connectDatabase("jdbc:mysql://94.124.143.66/EXAMDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "milo", "password", "com.mysql.jdbc.Driver")
+            //connectDatabase(environment.getProperty("spring.datasource.url"), environment.getProperty("spring.datasource.username"), environment.getProperty("spring.datasource.password"), environment.getProperty("spring.datasource.driver-class-name"))
         } catch (e: SQLException) {
             e.printStackTrace()
             null
@@ -38,6 +46,7 @@ object MySQLConnection {
      * @return loaded database properties
      */
     private fun initializeProperties(): Properties {
+
         val databaseProperties = Properties()
         val reader = FileReader(System.getProperty("user.dir") + "/src/main/kotlin/nl.han.ica/examplatform/config/databaseconfig/application.properties")
         databaseProperties.load(reader)
