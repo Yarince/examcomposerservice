@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * REST controller for interaction with decryption code
+ * REST controller for interaction with decryption code.
  */
 @RestController
 @RequestMapping("decryptioncode")
@@ -30,13 +30,6 @@ class DecryptionCodeController(private val decryptionCodeService: DecryptionCode
         ApiResponse(code = 500, message = "Something went wrong")
     )
     fun getDecryptionCode(@RequestBody examId: Int): ResponseEntity<String> {
-        try {
-            return ResponseEntity(
-                decryptionCodeService.getDecryptionCode(examId),
-                HttpStatus.OK
-            )
-        } catch (exception: IllegalArgumentException) {
-            throw InvalidExamException("Given exam id is not valid")
-        }
+        return decryptionCodeService.getDecryptionCode(examId)
     }
 }
