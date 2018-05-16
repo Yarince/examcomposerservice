@@ -31,6 +31,8 @@ private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Quest
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
     try {
+        possibleSubjectsKeysArray.elementAtOrElse(iterator, { println("throw") }) // todo: create exception for this
+        if (!possibleSubjects.containsKey(possibleSubjectsKeysArray[iterator])) println("2nd throw")
         currentSubjectList = possibleSubjects[possibleSubjectsKeysArray[iterator]]
     } catch (e: IndexOutOfBoundsException) {
         println(e) // todo better error handling
