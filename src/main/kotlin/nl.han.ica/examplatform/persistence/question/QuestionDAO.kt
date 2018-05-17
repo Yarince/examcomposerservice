@@ -17,6 +17,7 @@ class QuestionDAO {
      * Adds a question to the database
      */
     fun insertQuestion(question: Question): Question {
+        var questionToReturn = question
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
@@ -29,14 +30,25 @@ class QuestionDAO {
             preparedStatement?.setString(2, question.questionText)
             preparedStatement?.setString(3, question.questionType.toString())
             if (question.questionOrderInExam == null) preparedStatement?.setNull(4, java.sql.Types.INTEGER) else preparedStatement?.setInt(4, question.questionOrderInExam)
-            preparedStatement?.executeUpdate()
+
+            val insertedRows = preparedStatement?.executeUpdate()
+            if (insertedRows == 1) {
+                val idQuery = "SELECT LAST_INSERT_ID() AS ID"
+                val idPreparedStatement = dbConnection?.prepareStatement(idQuery)
+                val result = idPreparedStatement?.executeQuery()
+                result?.let {
+                    while (result.next()) {
+                        questionToReturn = question.copy(questionId = result.getInt("ID"))
+                    }
+                }
+            }
         } catch (e: SQLException) {
             e.printStackTrace()
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             MySQLConnection.closeStatement(preparedStatement)
         }
-        return question
+        return questionToReturn
     }
 
     /**
