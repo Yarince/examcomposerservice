@@ -134,6 +134,8 @@ class ExamDAO {
      * @return the inserted [Exam]
      */
     fun insertExam(exam: Exam): Exam {
+        var examToReturn = exam
+
         val conn: Connection? = MySQLConnection.getConnection()
         val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         val preparedStatement: PreparedStatement?
@@ -149,7 +151,17 @@ class ExamDAO {
         preparedStatement?.setString(9, exam.location)
 
         try {
-            preparedStatement?.executeUpdate()
+            val insertedRows = preparedStatement?.executeUpdate()
+            if (insertedRows == 1) {
+                val idQuery = "SELECT LAST_INSERT_ID() AS ID"
+                val idPreparedStatement = conn?.prepareStatement(idQuery)
+                val result = idPreparedStatement?.executeQuery()
+                result?.let {
+                    while (result.next()) {
+                        examToReturn = examToReturn.copy(examId = result.getInt("ID"))
+                    }
+                }
+            }
         } catch (e: SQLException) {
             e.printStackTrace()
             throw DatabaseException("Error while interacting with the database")
@@ -158,7 +170,7 @@ class ExamDAO {
             MySQLConnection.closeConnection(conn)
         }
 
-        return exam
+        return examToReturn
     }
 
     /**
