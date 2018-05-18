@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.answer
 
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository

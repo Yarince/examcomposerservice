@@ -55,7 +55,7 @@ class ExamQuestionServiceTest {
     @Test
     fun testAddQuestionToExam() {
         val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = QuestionType.OPEN_QUESTION, questionPoints = 5F)
-        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(expectedQuestion))
+        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseCode = "APP", version = 1, examType = ExamType.EXAM, questions = arrayListOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).addQuestionsToExam(expectedExam)
         doReturn(true).`when`(questionDAO).exists(expectedQuestion)

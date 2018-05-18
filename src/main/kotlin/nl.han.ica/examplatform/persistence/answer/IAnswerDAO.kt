@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.answer
 
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
 
 interface IAnswerDAO {
 

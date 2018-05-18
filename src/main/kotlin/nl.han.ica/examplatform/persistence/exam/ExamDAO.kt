@@ -8,6 +8,7 @@ import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
+import nl.han.ica.examplatform.persistence.databaseexceptions.CourseNotFoundException
 import org.springframework.stereotype.Repository
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -67,7 +68,7 @@ class ExamDAO {
         val conn: Connection? = MySQLConnection.getConnection()
 
         // Todo: select correct columns [BTGGOM-460]
-        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
+        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, COURSECODE, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
         val examStatement: PreparedStatement?
         examStatement = conn?.prepareStatement(examQuery)
         examStatement?.setInt(1, id)
@@ -92,7 +93,6 @@ class ExamDAO {
                         questionType = QuestionType.from(questionRs.getString("QuestionType")),
                         questionText = questionRs.getString("QuestionText"),
                         questionPoints = 5F, //questionRs.getFloat("?"),
-                        options = arrayOf("Ja", "Nee"),
                         subQuestions = null // Todo: Add subQuestions from database
                 ))
             }
@@ -109,7 +109,7 @@ class ExamDAO {
                     durationInMinutes = ((examRs.getTime("EndTime").time / 60000) - (examRs.getTime("StartTime").time / 60000)).toInt(),
                     startTime = Date(examRs.getTimestamp("StartTime").time),
                     endTime = Date(examRs.getTimestamp("EndTime").time),
-                    courseId = examRs.getInt("CourseID"),
+                    courseCode = examRs.getString("COURSECODE"),
                     examType = ExamType.from(examRs.getInt("ExamTypeId")),
                     name = examRs.getString("ExamName"),
                     location = examRs.getString("Location"),
@@ -135,10 +135,24 @@ class ExamDAO {
      */
     fun insertExam(exam: Exam): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
+
+        val courseQuery= "SELECT COURSEID FROM COURSE WHERE COURSECODE = ?"
+        val courseStatement: PreparedStatement?
+        courseStatement = conn?.prepareStatement(courseQuery)
+        courseStatement?.setString(1, exam.courseCode)
+
+        val courseRs = courseStatement?.executeQuery()
+                ?: throw DatabaseException("Error while fetching courseId from the database")
+        // Move to the last result, so we can use getRow on ResultSet
+        courseRs.last()
+
+        // This is the row of of the last result, so if this is smaller than 0
+        if (courseRs.row < 1) throw CourseNotFoundException("Course with code ${exam.courseCode} was not found")
+
         val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
-        preparedStatement?.setInt(1, exam.courseId)
+        preparedStatement?.setInt(1, courseRs.getInt("COURSEID"))
         preparedStatement?.setInt(2, exam.examType.examId)
         preparedStatement?.setString(3, exam.name)
         preparedStatement?.setString(4, exam.name)

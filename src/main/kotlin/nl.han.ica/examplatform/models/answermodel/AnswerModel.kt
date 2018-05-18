@@ -1,6 +1,6 @@
-package nl.han.ica.examplatform.models.answerModel
+package nl.han.ica.examplatform.models.answermodel
 
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import java.util.*
 
 data class AnswerModel(
