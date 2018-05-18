@@ -104,7 +104,7 @@
 
     <build>
         <finalName>ExamComposerService</finalName>
-        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/unittest/</testSourceDirectory>
         <plugins>
             <plugin>
