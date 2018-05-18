@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <kotlin.version>1.2.40</kotlin.version>
+        <kotlin.version>1.2.41</kotlin.version>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
@@ -92,11 +92,19 @@
             <version>2.7.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.nhaarman</groupId>
+            <artifactId>mockito-kotlin</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
         <finalName>ExamComposerService</finalName>
-        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/unittest/</testSourceDirectory>
         <plugins>
             <plugin>
@@ -128,13 +136,14 @@
                 <executions>
                     <execution>
                         <id>compile</id>
-                        <phase>compile</phase>
+                        <phase>process-sources</phase>
                         <goals>
                             <goal>compile</goal>
                         </goals>
 
                         <configuration>
                             <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
                                 <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
                             </sourceDirs>
                         </configuration>
@@ -164,9 +173,168 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals> <goal>compile</goal> </goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals> <goal>testCompile</goal> </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+
+                    <execution>
+                        <id>ktlint</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${basedir}"
+                                      fork="true" failonerror="true"
+                                      classpathref="maven.plugin.classpath"
+                                      classname="com.github.shyiko.ktlint.Main">
+                                    <arg value="src/**/*.kt"/>
+                                    <!-- to generate report in checkstyle format prepend following args: -->
+                                    <!-- <arg value="- -reporter=plain"/> -->
+                                    <!-- <arg value="- -reporter=checkstyle,output=${project.build.directory}/ktlint.xml"/> -->
+                                    <!-- see https://github.com/shyiko/ktlint#usage for more -->
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals><goal>run</goal></goals>
+                    </execution>
+
+                    <execution>
+                        <id>ktlint-format</id>
+                        <configuration>
+                            <target name="ktlint">
+                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
+                                      classpathref="maven.plugin.classpath" classname="com.github.shyiko.ktlint.Main">
+                                    <arg value="-F"/>
+                                    <arg value="src/**/*.kt"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals><goal>run</goal></goals>
+                    </execution>
+
+                    <execution>
+                        <!-- This can be run separately with mvn antrun:run@detekt -->
+                        <id>detekt</id>
+                        <phase>verify</phase>
+                        <configuration>
+                            <target name="detekt">
+                                <java taskname="detekt" dir="${basedir}"
+                                      fork="true"
+                                      failonerror="true"
+                                      classname="io.gitlab.arturbosch.detekt.cli.Main"
+                                      classpathref="maven.plugin.classpath">
+                                    <arg value="--input"/>
+                                    <arg value="${basedir}/src/main/kotlin"/>
+                                    <arg value="--filters"/>
+                                    <arg value=".*/target/.*,.*/resources/.*"/>
+                                    <arg value="--config"/>
+                                    <arg value="${basedir}/src/main/resources/detektconfig.yml"/>
+                                    <arg value="--output"/>
+                                    <arg value="${basedir}/reports"/>
+                                    <arg value="--output-name"/>
+                                    <arg value="detekt-report"/>
+                                    <arg value="--baseline"/>
+                                    <arg value="${basedir}/reports/baseline.xml"/>
+                                </java>
+                            </target>
+                        </configuration>
+                        <goals><goal>run</goal></goals>
+                    </execution>
+
+                </executions>
+                <dependencies>
+
+                    <dependency>
+                        <groupId>io.gitlab.arturbosch.detekt</groupId>
+                        <artifactId>detekt-cli</artifactId>
+                        <version>1.0.0.RC6-4</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>com.github.shyiko</groupId>
+                        <artifactId>ktlint</artifactId>
+                        <version>0.23.1</version>
+                    </dependency>
+
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <configuration>
+                    <output>file</output>
+                    <append>true</append>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.21.0</version>
             </plugin>
+
         </plugins>
     </build>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>arturbosch-code-analysis</id>
+            <name>arturbosch-code-analysis (for detekt)</name>
+            <url>https://dl.bintray.com/arturbosch/code-analysis/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>

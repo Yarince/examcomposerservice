@@ -1,4 +1,5 @@
 .idea
 target
+reports
 /examcomposerservice.iml
 *.DS_Store

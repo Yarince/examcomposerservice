@@ -1,10 +1,9 @@
 package nl.han.ica.examplatform.controllers.question
 
-import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
-import nl.han.ica.examplatform.business.question.QuestionService
-import org.junit.Assert.*
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -28,7 +27,7 @@ class QuestionControllerTest {
 
     @Test
     fun testCreateQuestion() {
-        val expectedResultBody = Question(1, "", QuestionType.OPEN_QUESTION, "", null, ExamType.PRACTICE_EXAM, null)
+        val expectedResultBody = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = QuestionType.OPEN_QUESTION, questionPoints = 5F)
         val expectedStatusCode = HttpStatus.CREATED
 
         doReturn(ResponseEntity(expectedResultBody, expectedStatusCode)).`when`(questionService).addQuestion(expectedResultBody)

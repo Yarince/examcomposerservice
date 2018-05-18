@@ -4,5 +4,5 @@ package nl.han.ica.examplatform.models.exam
 data class SimpleExam(
         val examId: Int,
         val name: String,
-        val course: String
+        val courseId: Int
 )
