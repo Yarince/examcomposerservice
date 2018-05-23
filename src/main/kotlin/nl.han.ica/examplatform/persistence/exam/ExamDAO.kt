@@ -4,6 +4,7 @@ import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
@@ -21,7 +22,7 @@ import kotlin.collections.ArrayList
 @Repository
 class ExamDAO {
 
-    fun generatePracticeExam(courseId: Int): Exam? {
+    fun generatePracticeExam(courseId: Int): PracticeExam? {
         return null
     }
 

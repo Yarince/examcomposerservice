@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -29,7 +30,7 @@ class ExamController {
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<Exam?> = examService.generatePracticeExam(courseId)
+    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<PracticeExam?> = examService.generatePracticeExam(courseId)
 
     @GetMapping
     @ApiOperation(value = "Get a list of minified exams", notes = "This returns a list of exams containing ID, name, ", response = Array<SimpleExam>::class)

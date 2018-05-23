@@ -10,7 +10,7 @@ data class PracticeExam(
         val courseId: Int,
         @ApiModelProperty(notes = "The version of the practice exam")
         val version: Int? = 1,
-        @ApiModelProperty(notes = "The type of the exam can be practice test or exam")
+        @ApiModelProperty(notes = "The type of the exam is a Practice Exam")
         val examType: ExamType = ExamType.PRACTICE_EXAM,
         @ApiModelProperty(notes = "The questions in the exam")
         val questions: ArrayList<Question>
