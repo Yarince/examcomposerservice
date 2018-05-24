@@ -10,14 +10,19 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("exams")
 class ExamController {
 
-    //Load examService as Spring Bean
+    // Load examService as Spring Bean
     @Autowired
     lateinit var examService: ExamService
 

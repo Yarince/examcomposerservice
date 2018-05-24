@@ -1,12 +1,12 @@
 package nl.han.ica.examplatform.models.answerModel
 
 import nl.han.ica.examplatform.models.answerModel.answer.Answer
-import java.util.*
+import java.util.Arrays
 
 data class AnswerModel(
-        val answerModelId: Int? = null,
-        val examId: Int,
-        val answers: Array<Answer>? = null
+    val answerModelId: Int? = null,
+    val examId: Int,
+    val answers: Array<Answer>? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

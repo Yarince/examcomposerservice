@@ -38,5 +38,4 @@ class AnswerController(private val answerService: AnswerService) {
             throw InvalidAnswerException("Answer contains invalid values", exception, false, false)
         }
     }
-
 }

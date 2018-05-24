@@ -12,7 +12,7 @@ import java.sql.SQLException
  * The DAO class for [Answer]
  */
 @Repository
-class AnswerDAO : IAnswerDAO{
+class AnswerDAO : IAnswerDAO {
 
     /**
      * Add an Answer to a Question in the database
@@ -21,8 +21,8 @@ class AnswerDAO : IAnswerDAO{
      */
     override fun addAnswerToQuestion(answer: Answer) {
         val insertAnswerQuery = "UPDATE QUESTION SET ANSWERTEXT = ?, ANSWERKEYWORDS = ? WHERE QUESTIONID = ?"
-        var dbConnection : Connection? = null
-        var preparedStatement : PreparedStatement? = null
+        var dbConnection: Connection? = null
+        var preparedStatement: PreparedStatement? = null
 
         try {
             dbConnection = MySQLConnection.getConnection()

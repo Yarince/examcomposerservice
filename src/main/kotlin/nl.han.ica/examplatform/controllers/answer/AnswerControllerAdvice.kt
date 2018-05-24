@@ -1,14 +1,19 @@
 package nl.han.ica.examplatform.controllers.answer
 
 import nl.han.ica.examplatform.models.ErrorInfo
-import org.springframework.http.*
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.EnumSet
+import java.util.Locale
 import java.util.logging.Logger
 
 @ControllerAdvice(assignableTypes = [AnswerController::class])

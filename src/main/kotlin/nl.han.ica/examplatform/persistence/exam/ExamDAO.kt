@@ -12,8 +12,7 @@ import org.springframework.stereotype.Repository
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Date
 
 /**
  * This class handles all the Database operations for [Exam]
@@ -42,10 +41,9 @@ class ExamDAO {
 
             while (resultSet!!.next()) {
                 result.add(SimpleExam(resultSet.getInt("ExamID"),
-                        resultSet.getString("ExamName"),
-                        resultSet.getInt("COURSEID")))
+                    resultSet.getString("ExamName"),
+                    resultSet.getInt("COURSEID")))
             }
-
         } catch (e: SQLException) {
             e.printStackTrace()
             throw DatabaseException("Error while interacting with the database")
@@ -81,23 +79,23 @@ class ExamDAO {
 
         try {
             val questionRs = questionsStatement?.executeQuery()
-                    ?: throw DatabaseException("Error while interacting with the database")
+                ?: throw DatabaseException("Error while interacting with the database")
             val questions = ArrayList<Question>()
             while (questionRs.next()) {
                 questions.add(Question(
-                        // Todo: wait for columns to be added in the database. [BTGGOM-460]
-                        questionId = questionRs.getInt("QuestionID"),
-                        questionOrderInExam = 1,// questionRs.getInt("?"),
-                        questionOrderText = "Question 1",//questionRs.getString("?")
-                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
-                        questionText = questionRs.getString("QuestionText"),
-                        questionPoints = 5F, //questionRs.getFloat("?"),
-                        options = arrayOf("Ja", "Nee"),
-                        subQuestions = null // Todo: Add subQuestions from database
+                    // Todo: wait for columns to be added in the database. [BTGGOM-460]
+                    questionId = questionRs.getInt("QuestionID"),
+                    questionOrderInExam = 1, // questionRs.getInt("?"),
+                    questionOrderText = "Question 1", // questionRs.getString("?")
+                    questionType = QuestionType.from(questionRs.getString("QuestionType")),
+                    questionText = questionRs.getString("QuestionText"),
+                    questionPoints = 5F, // questionRs.getFloat("?"),
+                    options = arrayOf("Ja", "Nee"),
+                    subQuestions = null // Todo: Add subQuestions from database
                 ))
             }
             val examRs = examStatement?.executeQuery()
-                    ?: throw DatabaseException("Error while interacting with the database")
+                ?: throw DatabaseException("Error while interacting with the database")
 
             // Move to the last result, so we can use getRow on ResultSet
             examRs.last()
@@ -106,15 +104,15 @@ class ExamDAO {
             if (examRs.row < 1) throw ExamNotFoundException("Exam with ID $id was not found")
 
             result = Exam(examId = examRs.getInt("ExamID"),
-                    durationInMinutes = ((examRs.getTime("EndTime").time / 60000) - (examRs.getTime("StartTime").time / 60000)).toInt(),
-                    startTime = Date(examRs.getTimestamp("StartTime").time),
-                    endTime = Date(examRs.getTimestamp("EndTime").time),
-                    courseId = examRs.getInt("CourseID"),
-                    examType = ExamType.from(examRs.getInt("ExamTypeId")),
-                    name = examRs.getString("ExamName"),
-                    location = examRs.getString("Location"),
-                    instructions = examRs.getString("Instructions"),
-                    questions = questions
+                durationInMinutes = ((examRs.getTime("EndTime").time / 60000) - (examRs.getTime("StartTime").time / 60000)).toInt(),
+                startTime = Date(examRs.getTimestamp("StartTime").time),
+                endTime = Date(examRs.getTimestamp("EndTime").time),
+                courseId = examRs.getInt("CourseID"),
+                examType = ExamType.from(examRs.getInt("ExamTypeId")),
+                name = examRs.getString("ExamName"),
+                location = examRs.getString("Location"),
+                instructions = examRs.getString("Instructions"),
+                questions = questions
             )
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -196,9 +194,9 @@ class ExamDAO {
         for (question in exam.questions) {
             preparedStatement?.setInt(++index, exam.examId ?: throw DatabaseException("Please provide examID"))
             preparedStatement?.setInt(++index, question.questionId
-                    ?: throw DatabaseException("Can't insert question without ID"))
+                ?: throw DatabaseException("Can't insert question without ID"))
             preparedStatement?.setInt(++index, question.questionOrderInExam
-                    ?: throw DatabaseException("Can't insert question without sequence number"))
+                ?: throw DatabaseException("Can't insert question without sequence number"))
         }
 
         try {

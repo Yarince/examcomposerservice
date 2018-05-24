@@ -1,6 +1,10 @@
 package nl.han.ica.examplatform.controllers.question
 
-import io.swagger.annotations.*
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.question.Question
 import org.springframework.beans.factory.annotation.Autowired

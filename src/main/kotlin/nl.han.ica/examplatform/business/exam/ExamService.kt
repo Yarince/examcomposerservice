@@ -46,7 +46,8 @@ class ExamService {
      */
     fun addExam(exam: Exam): ResponseEntity<Exam> {
         checkExam(exam)
-        val insertedObject = examDAO.insertExam(exam) //Add to database
+        // Insert Exam into database
+        val insertedObject = examDAO.insertExam(exam)
         return ResponseEntity(insertedObject, HttpStatus.CREATED)
     }
 
@@ -64,10 +65,9 @@ class ExamService {
      *
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
-    fun generatePracticeExam(courseId: Int) : ResponseEntity<Exam?> {
+    fun generatePracticeExam(courseId: Int): ResponseEntity<Exam?> {
         val practiceExam: Exam? = examDAO.generatePracticeExam(courseId)
         checkExam(practiceExam)
         return ResponseEntity(practiceExam, HttpStatus.CREATED)
     }
 }
-
