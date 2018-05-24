@@ -24,9 +24,6 @@ internal class PracticeExamGeneratorTest {
         val categories = arrayOf("ATAM", "DCAR")
         val expectedQuestions = arrayOf(
                 Question(courseId = courseId, questionId = 1, categories = arrayOf("QA", "ATAM")),
-                Question(courseId = courseId, questionId = 2, categories = arrayOf("QA")),
-                Question(courseId = courseId, questionId = 3, categories = arrayOf("QA", "ASR")),
-                Question(courseId = courseId, questionId = 4, categories = arrayOf("ASR")),
                 Question(courseId = courseId, questionId = 5, categories = arrayOf("ASR", "DCAR", "QA")),
                 Question(courseId = courseId, questionId = 6, categories = arrayOf("DCAR")),
                 Question(courseId = courseId, questionId = 7, categories = arrayOf("DCAR")),

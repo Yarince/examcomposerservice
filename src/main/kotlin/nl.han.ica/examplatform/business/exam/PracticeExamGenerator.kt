@@ -9,21 +9,16 @@ import java.util.concurrent.ThreadLocalRandom
 fun generateExam(courseId: Int, categories: Array<String>, questionDAO: QuestionDAO): PracticeExam {
     val questions = questionDAO.getQuestions(courseId, categories)
 
-    val possibleSubjects: MutableMap<String, List<Question>> = mutableMapOf()
-    for (category in categories) {
-        possibleSubjects[category] = questions.filter { it.categories.contains(category) }
-    }
-
     // The list of which the questions should be added to
     val practiceExam = ArrayList<Question>()
 
     // Recursively add questions to exam
-    addQuestionsToExam(questions, practiceExam, possibleSubjects, categories.toList())
+    addQuestionsToExam(questions, practiceExam, questions, categories.toList())
 
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
 
-private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, questionsPerCategory: MutableMap<String, List<Question>>, categoriesAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
+private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, questionsPerCategory: Array<Question>, categoriesAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return
 
@@ -31,32 +26,28 @@ private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Quest
     val currentSubjectList: List<Question>?
     try {
         categoriesAvailable.elementAtOrElse(iterator, { return }) // todo: create exception for this
-        if (!questionsPerCategory.containsKey(categoriesAvailable[iterator])) return
-        currentSubjectList = questionsPerCategory[categoriesAvailable[iterator]]
+        // get questions grouped in current category
+
+        currentSubjectList = questionsPerCategory.filter { it.categories.contains(categoriesAvailable[iterator]) }
     } catch (e: IndexOutOfBoundsException) {
         println(e) // todo better error handling
         return
     }
 
+    var questionToAdd: Question? = null
+
     // If it's not null, add a random question to the exam
-    currentSubjectList?.let {
+    currentSubjectList.let {
         if (it.isEmpty()) return@let
         val randomNumber = ThreadLocalRandom.current().nextInt(0, it.size)
-        val questionToAdd = it[randomNumber]
-        exam.add(questionToAdd)
-
-        // Remove the question that was just added, so no duplicates are in the exam
-        val mutableQuestionList = it.toMutableList()
-        mutableQuestionList.remove(questionToAdd)
-
-        questionsPerCategory.replace(categoriesAvailable[iterator], mutableQuestionList.toList())
-        // Also remove from other categories if it exists
-        deleteQuestionsFromMap(questionsPerCategory, categoriesAvailable, questionToAdd)
+        questionToAdd = it[randomNumber]
+        questionToAdd?.let {
+            exam.add(it)
+        }
     }
 
     // This makes it so the questions are cycled between subjects
     val newIt = if (iteratorForward) iterator + 1 else iterator - 1
-
     var newItForward: Boolean = iteratorForward
     if (newIt >= categoriesAvailable.size - 1)
         newItForward = false
@@ -64,16 +55,11 @@ private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Quest
         newItForward = true
 
     // Recursively add more questions
-    addQuestionsToExam(questions, exam, questionsPerCategory, categoriesAvailable, newIt, newItForward)
-}
-
-private fun deleteQuestionsFromMap(map: MutableMap<String, List<Question>>, iteratorList: List<String>, questionToRemove: Question, iterator: Int = 0): Map<String, List<Question>> {
-    iteratorList.elementAtOrElse(iterator, { return map })
-    val currentList = map[iteratorList[iterator]] ?: return map
-    if (currentList.contains(questionToRemove)) {
-        val a = currentList.toMutableList()
-        a.remove(questionToRemove)
-        map.replace(iteratorList[iterator], a)
+    if (questionToAdd == null) {
+        addQuestionsToExam(questions, exam, questions, categoriesAvailable, newIt, newItForward)
+    } else {
+        val newQuestionsList = questions.toMutableList()
+        newQuestionsList.remove(questionToAdd!!)
+        addQuestionsToExam(questions, exam, newQuestionsList.toTypedArray(), categoriesAvailable, newIt, newItForward)
     }
-    return deleteQuestionsFromMap(map, iteratorList, questionToRemove, iterator + 1)
 }
