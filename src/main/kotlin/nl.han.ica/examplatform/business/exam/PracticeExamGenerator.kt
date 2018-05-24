@@ -3,37 +3,28 @@ package nl.han.ica.examplatform.business.exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
-import java.lang.IndexOutOfBoundsException
 import java.util.concurrent.ThreadLocalRandom
 
 fun generateExam(courseId: Int, categories: Array<String>, questionDAO: QuestionDAO): PracticeExam {
     val questions = questionDAO.getQuestions(courseId, categories)
 
-    // The list of which the questions should be added to
-    val practiceExam = ArrayList<Question>()
-
     // Recursively add questions to exam
-    addQuestionsToExam(questions, practiceExam, questions, categories.toList())
+    val practiceExam = addQuestionsToExam(questions, questions, categories.toList())
 
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
 
-@Synchronized
-private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, questionsPerCategory: Array<Question>, categoriesAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
+private fun addQuestionsToExam(questions: Array<Question>, questionsPerCategory: Array<Question>, categoriesAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
     // If the exam contains 50% of the questions, exit this function
-    if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return
+    if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return exam
 
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
-    try {
-        categoriesAvailable.elementAtOrElse(iterator, { return }) // todo: create exception for this
-        // get questions grouped in current category
 
-        currentSubjectList = questionsPerCategory.filter { it.categories.contains(categoriesAvailable[iterator]) }
-    } catch (e: IndexOutOfBoundsException) {
-        println(e) // todo better error handling
-        return
-    }
+    categoriesAvailable.elementAtOrElse(iterator, { return exam }) // todo: create exception for this
+    // get questions grouped in current category
+
+    currentSubjectList = questionsPerCategory.filter { it.categories.contains(categoriesAvailable[iterator]) }
 
     var questionToAdd: Question? = null
 
@@ -57,11 +48,12 @@ private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Quest
 
     // Recursively add more questions
     if (questionToAdd == null) {
-        addQuestionsToExam(questions, exam, questionsPerCategory, categoriesAvailable, newIt, newItForward)
+        addQuestionsToExam(questions, questionsPerCategory, categoriesAvailable, newIt, newItForward, exam)
     } else {
         val newQuestionsList = questionsPerCategory.toMutableList()
         newQuestionsList.removeAll { it.questionId == questionToAdd!!.questionId }
 
-        addQuestionsToExam(questions, exam, newQuestionsList.toTypedArray(), categoriesAvailable, newIt, newItForward)
+        addQuestionsToExam(questions, newQuestionsList.toTypedArray(), categoriesAvailable, newIt, newItForward, exam)
     }
+    return exam
 }
