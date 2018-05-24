@@ -28,7 +28,11 @@ internal class PracticeExamGeneratorTest {
                 Question(courseId = courseId, questionId = 6, categories = arrayOf("DCAR")),
                 Question(courseId = courseId, questionId = 7, categories = arrayOf("DCAR")),
                 Question(courseId = courseId, questionId = 8, categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionId = 9, categories = arrayOf("DCAR"))
+                Question(courseId = courseId, questionId = 9, categories = arrayOf("DCAR")),
+                Question(courseId = courseId, questionId = 10, categories = arrayOf("DCAR")),
+                Question(courseId = courseId, questionId = 2, categories = arrayOf("DCAR")),
+                Question(courseId = courseId, questionId = 3, categories = arrayOf("ATAM")),
+                Question(courseId = courseId, questionId = 4, categories = arrayOf("ATAM"))
         )
 
         doReturn(expectedQuestions).`when`(questionDAO).getQuestions(courseId, categories)

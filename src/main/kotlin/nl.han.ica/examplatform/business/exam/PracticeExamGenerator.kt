@@ -18,6 +18,7 @@ fun generateExam(courseId: Int, categories: Array<String>, questionDAO: Question
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
 
+@Synchronized
 private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Question>, questionsPerCategory: Array<Question>, categoriesAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true) {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return
@@ -56,10 +57,11 @@ private fun addQuestionsToExam(questions: Array<Question>, exam: ArrayList<Quest
 
     // Recursively add more questions
     if (questionToAdd == null) {
-        addQuestionsToExam(questions, exam, questions, categoriesAvailable, newIt, newItForward)
+        addQuestionsToExam(questions, exam, questionsPerCategory, categoriesAvailable, newIt, newItForward)
     } else {
-        val newQuestionsList = questions.toMutableList()
-        newQuestionsList.remove(questionToAdd!!)
+        val newQuestionsList = questionsPerCategory.toMutableList()
+        newQuestionsList.removeAll { it.questionId == questionToAdd!!.questionId }
+
         addQuestionsToExam(questions, exam, newQuestionsList.toTypedArray(), categoriesAvailable, newIt, newItForward)
     }
 }
