@@ -14,17 +14,18 @@ fun generateExam(courseId: Int, categories: Array<String>, questionDAO: Question
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
 
-private fun addQuestionsToExam(questions: Array<Question>, questionsPerCategory: Array<Question>, categoriesAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
+private fun addQuestionsToExam(questions: Array<Question>, questionsPerCategory: Array<Question>, questionsAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
     // If the exam contains 50% of the questions, exit this function
-    if (exam.size > 0) if (exam.size % (questions.size / 2) == 0) return exam
+    if (exam.size > 0) if (exam.size >= (questions.size / 2)) return exam
+    if (questionsAvailable.isEmpty()) return exam
 
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
 
-    categoriesAvailable.elementAtOrElse(iterator, { return exam }) // todo: create exception for this
+    questionsAvailable.elementAtOrElse(iterator, { return exam }) // todo: create exception for this
     // get questions grouped in current category
 
-    currentSubjectList = questionsPerCategory.filter { it.categories.contains(categoriesAvailable[iterator]) }
+    currentSubjectList = questionsPerCategory.filter { it.categories.contains(questionsAvailable[iterator]) }
 
     var questionToAdd: Question? = null
 
@@ -41,19 +42,19 @@ private fun addQuestionsToExam(questions: Array<Question>, questionsPerCategory:
     // This makes it so the questions are cycled between subjects
     val newIt = if (iteratorForward) iterator + 1 else iterator - 1
     var newItForward: Boolean = iteratorForward
-    if (newIt >= categoriesAvailable.size - 1)
+    if (newIt >= questionsAvailable.size - 1)
         newItForward = false
     else if (newIt < 1)
         newItForward = true
 
     // Recursively add more questions
     if (questionToAdd == null) {
-        addQuestionsToExam(questions, questionsPerCategory, categoriesAvailable, newIt, newItForward, exam)
+        addQuestionsToExam(questions, questionsPerCategory, questionsAvailable, newIt, newItForward, exam)
     } else {
         val newQuestionsList = questionsPerCategory.toMutableList()
         newQuestionsList.removeAll { it.questionId == questionToAdd!!.questionId }
 
-        addQuestionsToExam(questions, newQuestionsList.toTypedArray(), categoriesAvailable, newIt, newItForward, exam)
+        addQuestionsToExam(questions, newQuestionsList.toTypedArray(), questionsAvailable, newIt, newItForward, exam)
     }
     return exam
 }

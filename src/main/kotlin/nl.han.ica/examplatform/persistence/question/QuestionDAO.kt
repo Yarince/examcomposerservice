@@ -97,19 +97,40 @@ class QuestionDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
 
-        val sqlQueryStringInsertQuestionString = "SELECT * FROM QUESTION WHERE COURSEID = ?" //todo: update with categories once this is implemented in the db
+        var sqlQueryStringInsertQuestionString = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? " //todo: update with categories once this is implemented in the db
 
+        for ((index, _) in categories.withIndex()) {
+            sqlQueryStringInsertQuestionString += when(index) {
+                0 -> "AND CATEGORYNAME = ?"
+                else -> "OR CATEGORYNAME = ?"
+            }
+        }
         val questions = ArrayList<Question>()
         try {
             preparedStatement = conn?.prepareStatement(sqlQueryStringInsertQuestionString)
             preparedStatement?.setInt(1, courseId)
+
+            for ((index, category) in categories.withIndex()) {
+                preparedStatement?.setString(index + 2, category)
+            }
+
             val questionRs = preparedStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
 
             while (questionRs.next()) {
+                val questionId = questionRs.getInt("QuestionID")
+                val category = questionRs.getString("CategoryName")
+
+                if (questions.any { it.questionId == questionId }) {
+                    val question = questions.find { it.questionId ==  questionId }
+                    question?.categories = question?.categories?.clone()!!
+                    questions[questions.indexOf(question)] = question
+                }
+
                 questions.add(Question(questionId = questionRs.getInt("QuestionID"),
                         questionText = questionRs.getString("QuestionText"),
-                        questionType = QuestionType.from(questionRs.getString("QuestionType"))))
+                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
+                        categories = arrayOf(category)))
             }
         } catch (e: SQLException) {
             e.printStackTrace()

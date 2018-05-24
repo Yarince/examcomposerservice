@@ -19,7 +19,7 @@ data class Question(
         @ApiModelProperty(notes = "A question can contain subquestions when the type is noQuestion")
         val subQuestions: Array<Question>? = null,
         @ApiModelProperty(notes = "The categories that this question is about")
-        val categories: Array<String> = emptyArray()
+        var categories: Array<String> = arrayOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
