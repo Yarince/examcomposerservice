@@ -1,48 +1,23 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
-import nl.han.ica.examplatform.models.exam.ExamType
-import java.util.*
+import java.util.Arrays
 
 
 data class Question(
         @ApiModelProperty(notes = "The ID of the question")
         val questionId: Int? = null,
-
-        @ApiModelProperty(notes = "The parent id of the question")
-        val parentQuestionId: Int? = null,
-
-        @ApiModelProperty(notes = "The type of the exam. This could be an EXAM, or a PRACTICE_EXAM", required = true)
-        val examTypeId: ExamType = ExamType.PRACTICE_EXAM,
-
-        @ApiModelProperty(notes = "The course id that the question is for.", required = true)
-        val courseId: Int,
-
-        @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
-        val questionText: String? = null,
-
+        val questionOrderInExam: Int? = null,
+        @ApiModelProperty(notes = "Text of order in exam text. Example: \"Question 1\" or \"a\"", required = true)
+        val questionOrderText: String? = null,
         @ApiModelProperty(notes = "This could be open-, multiplechoice-, or noQuestion", required = true)
         val questionType: QuestionType = QuestionType.OPEN_QUESTION,
-
-        @ApiModelProperty(notes = "The answer of the question")
-        val answerText: String? = null,
-
-        @ApiModelProperty(notes = "The answer keywords of a question")
-        val answerKeywords: String? = null,
-
-        @ApiModelProperty(notes = "The assessment comments of a teacher for the question in an exam")
-        val assessmentComments: String? = null,
-
-        // Have to figure out how we deal with these 2 variables. If they get removed they will break a whole lot.
+        @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
+        val questionText: String? = null,
+        val questionPoints: Float? = null,
+        val options: Array<String>? = null,
         @ApiModelProperty(notes = "A question can contain subquestions when the type is noQuestion")
         val subQuestions: Array<Question>? = null,
-
-        @ApiModelProperty(notes = "Only applicable if the question is a multipleChoice question. Array with strings containing the options")
-        val options: Array<String>? = null,
-
-        @ApiModelProperty(notes = "Number of the sequence in an exam if the question is in it")
-        val sequenceNumber: Int? = 0,
-
         @ApiModelProperty(notes = "The categories that this question is about")
         val categories: Array<String> = emptyArray()
 ) {

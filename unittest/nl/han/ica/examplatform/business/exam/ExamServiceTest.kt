@@ -39,9 +39,9 @@ internal class ExamServiceTest {
 
     @Test
     fun testGetExams() {
-        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", "SWA"),
-                SimpleExam(2, "SWA Toets 2", "SWA"),
-                SimpleExam(3, "APP Toets algoritmen", "APP")
+        val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", 1),
+                SimpleExam(2, "SWA Toets 2", 1),
+                SimpleExam(3, "APP Toets algoritmen", 2)
         )
 
         doReturn(expected).`when`(examDAO).getExams()
@@ -54,7 +54,7 @@ internal class ExamServiceTest {
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
         val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM,
-                questions = arrayListOf(Question(courseId = 1))) // Faulty exam object
+                questions = arrayListOf(Question(questionPoints = 1F))) // Faulty exam object
         examService.checkExam(exam)
     }
 

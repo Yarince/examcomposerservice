@@ -23,32 +23,38 @@ class QuestionDAO {
      * @return [Question] the question that was inserted
      */
     fun insertQuestion(question: Question): Question {
+        var questionToReturn = question
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, PARENTQUESTIONID, EXAMTYPEID, COURSEID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER, ANSWERTEXT, ANSWERKEYWORDS, ASSESSMENTCOMMENTS) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        // Todo: change insert string. To match with questionModel and Database [BTGGOM-460]
+        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER) VALUES (?, ?, ?, ?)"
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
             preparedStatement?.setInt(1, question.questionId ?: 0)
-            if (question.parentQuestionId == null) preparedStatement?.setNull(2, java.sql.Types.INTEGER) else preparedStatement?.setInt(2, question.parentQuestionId)
-            preparedStatement?.setInt(3, question.examTypeId.examId)
-            preparedStatement?.setInt(4, question.courseId)
-            preparedStatement?.setString(5, question.questionText)
-            preparedStatement?.setString(6, question.questionType.toString())
-            if (question.sequenceNumber == null) preparedStatement?.setNull(7, java.sql.Types.INTEGER) else preparedStatement?.setInt(7, question.sequenceNumber)
-            preparedStatement?.setString(8, question.answerText)
-            preparedStatement?.setString(9, question.answerKeywords)
-            preparedStatement?.setString(10, question.assessmentComments)
-            preparedStatement?.executeUpdate()
+            preparedStatement?.setString(2, question.questionText)
+            preparedStatement?.setString(3, question.questionType.toString())
+            if (question.questionOrderInExam == null) preparedStatement?.setNull(4, java.sql.Types.INTEGER) else preparedStatement?.setInt(4, question.questionOrderInExam)
+
+            val insertedRows = preparedStatement?.executeUpdate()
+            if (insertedRows == 1) {
+                val idQuery = "SELECT LAST_INSERT_ID() AS ID"
+                val idPreparedStatement = dbConnection?.prepareStatement(idQuery)
+                val result = idPreparedStatement?.executeQuery()
+                result?.let {
+                    while (result.next()) {
+                        questionToReturn = question.copy(questionId = result.getInt("ID"))
+                    }
+                }
+            }
         } catch (e: SQLException) {
             e.printStackTrace()
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             MySQLConnection.closeStatement(preparedStatement)
         }
-        return question
+        return questionToReturn
     }
 
     /**
@@ -72,6 +78,7 @@ class QuestionDAO {
             }
         } catch (e: SQLException) {
             e.printStackTrace()
+            print(e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             preparedStatement?.close()
@@ -102,9 +109,7 @@ class QuestionDAO {
             while (questionRs.next()) {
                 questions.add(Question(questionId = questionRs.getInt("QuestionID"),
                         questionText = questionRs.getString("QuestionText"),
-                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
-                        courseId = questionRs.getInt("CourseID"),
-                        examTypeId = ExamType.from(questionRs.getInt("ExamTypeId"))))
+                        questionType = QuestionType.from(questionRs.getString("QuestionType"))))
             }
         } catch (e: SQLException) {
             e.printStackTrace()

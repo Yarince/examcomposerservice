@@ -23,16 +23,16 @@ internal class PracticeExamGeneratorTest {
         val courseId = 1
         val categories = arrayOf("ATAM", "DCAR")
         val expectedQuestions = arrayOf(
-                Question(courseId = courseId, questionId = 1, categories = arrayOf("QA", "ATAM")),
-                Question(courseId = courseId, questionId = 5, categories = arrayOf("ASR", "DCAR", "QA")),
-                Question(courseId = courseId, questionId = 6, categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionId = 7, categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionId = 8, categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionId = 9, categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionId = 10, categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionId = 2, categories = arrayOf("DCAR")),
-                Question(courseId = courseId, questionId = 3, categories = arrayOf("ATAM")),
-                Question(courseId = courseId, questionId = 4, categories = arrayOf("ATAM"))
+                Question(questionId = 1, categories = arrayOf("QA", "ATAM")),
+                Question(questionId = 5, categories = arrayOf("ASR", "DCAR", "QA")),
+                Question(questionId = 6, categories = arrayOf("DCAR")),
+                Question(questionId = 7, categories = arrayOf("DCAR")),
+                Question(questionId = 8, categories = arrayOf("DCAR")),
+                Question(questionId = 9, categories = arrayOf("DCAR")),
+                Question(questionId = 10, categories = arrayOf("DCAR")),
+                Question(questionId = 2, categories = arrayOf("DCAR")),
+                Question(questionId = 3, categories = arrayOf("ATAM")),
+                Question(questionId = 4, categories = arrayOf("ATAM"))
         )
 
         doReturn(expectedQuestions).`when`(questionDAO).getQuestions(courseId, categories)
@@ -52,7 +52,6 @@ internal class PracticeExamGeneratorTest {
         assertTrue(categories.contentEquals(allCategoriesInResult))
 
         // Check if there are duplicate questions
-        result.questions.forEach { println(it) }
         assertEquals(result.questions.size, result.questions.distinctBy { Pair(it.questionText, it.categories) }.size)
     }
 }
