@@ -26,7 +26,7 @@ class ExamController {
     lateinit var examQuestionService: ExamQuestionService
 
     @PostMapping("/practice-exam")
-    @ApiOperation(value = "Add an exam without questions", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
+    @ApiOperation(value = "Add a practice exam without questions", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
