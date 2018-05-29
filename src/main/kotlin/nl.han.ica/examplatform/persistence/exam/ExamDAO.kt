@@ -55,7 +55,6 @@ class ExamDAO {
                 result.add(SimpleExam(resultSet.getInt("ExamID"),
                     resultSet.getString("ExamName"),
                     resultSet.getInt("COURSEID")))
-
         } catch (e: SQLException) {
             e.printStackTrace()
             throw DatabaseException("Error while interacting with the database")

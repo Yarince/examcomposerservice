@@ -96,7 +96,7 @@ object MySQLConnection {
 
     private fun getDatabaseUsername(properties: Properties): String = properties.getProperty("jdbc.username")
 
-    private fun getDatabasePassword(properties: Properties): String =  properties.getProperty("jdbc.password")
+    private fun getDatabasePassword(properties: Properties): String = properties.getProperty("jdbc.password")
 
     private fun getDrivers(properties: Properties): String = properties.getProperty("jdbc.driverClassName")
 }
