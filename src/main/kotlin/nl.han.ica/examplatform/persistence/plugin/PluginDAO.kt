@@ -1,0 +1,43 @@
+package nl.han.ica.examplatform.persistence.question
+
+import nl.han.ica.examplatform.models.plugin.Plugin
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
+import org.springframework.stereotype.Repository
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.SQLException
+
+@Repository
+class PluginDAO {
+    /**
+     * This function gets a list of all plugins from the database.
+     *
+     * @return [ArrayList]<[Plugin]> List of [Plugin]s
+     */
+    fun getAllPlugins(): ArrayList<Plugin> {
+        val dbConnection: Connection? = MySQLConnection.getConnection()
+        val pluginNameQuery = "SELECT PluginId, PluginName, PluginVersion, PluginDescription FROM `PLUGIN`"
+        val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(pluginNameQuery)
+
+        val result = arrayListOf<Plugin>()
+        try {
+            val rs = preparedStatement?.executeQuery()
+            while (rs!!.next()) {
+                result.add(Plugin(
+                        rs.getInt("PluginId"),
+                        rs.getString("PluginName"),
+                        rs.getString("PluginVersion"),
+                        rs.getString("PluginDescription")
+                ))
+            }
+
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            print(e)
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(dbConnection)
+        }
+        return result
+    }
+}
