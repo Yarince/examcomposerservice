@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-class CourseService(private var courseDAO: CourseDAO) {
+class CourseService(private val courseDAO: CourseDAO) {
 
     /**
      * This function gets a list of all courses
