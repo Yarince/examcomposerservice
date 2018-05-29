@@ -17,5 +17,5 @@ class PluginController(private val pluginService: PluginService) {
             ApiResponse(code = 200, message = "Fetched"),
             ApiResponse(code = 500, message = "Internal server error")
     )
-    fun getPlugins(): ResponseEntity<Plugin> = pluginService.getAllPlugins()
+    fun getPlugins(): ResponseEntity<ArrayList<Plugin>> = pluginService.getAllPlugins()
 }
