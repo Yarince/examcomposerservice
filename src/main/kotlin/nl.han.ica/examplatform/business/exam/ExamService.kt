@@ -2,14 +2,13 @@ package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import nl.han.ica.examplatform.business.exam.generateExam
-import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 
 /**
@@ -73,7 +72,7 @@ class ExamService {
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
     fun generatePracticeExam(courseId: Int, categories: Array<String>) : ResponseEntity<PracticeExam> {
-        return ResponseEntity(generateExam(courseId, categories, questionDAO), HttpStatus.CREATED)
+        return ResponseEntity(generatePracticeExam(courseId, categories, questionDAO), HttpStatus.CREATED)
     }
 }
 

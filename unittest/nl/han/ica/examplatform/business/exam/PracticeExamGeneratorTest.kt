@@ -37,7 +37,7 @@ internal class PracticeExamGeneratorTest {
 
         doReturn(expectedQuestions).`when`(questionDAO).getQuestions(courseId, categories)
 
-        val result = generateExam(courseId, categories, questionDAO)
+        val result = generatePracticeExam(courseId, categories, questionDAO)
 
         assertNotNull(result)
         assertEquals(courseId, result.courseId)

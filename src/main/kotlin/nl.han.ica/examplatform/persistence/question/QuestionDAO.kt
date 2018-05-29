@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.persistence.question
 
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
-import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
