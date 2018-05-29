@@ -2,10 +2,7 @@ package nl.han.ica.examplatform.persistence.exam
 
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
-import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.models.exam.ExamType
-import nl.han.ica.examplatform.models.exam.PracticeExam
-import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
@@ -218,5 +215,9 @@ class ExamDAO {
         }
 
         return exam
+    }
+
+    fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam {
+        // Not implemented in this branch, see other PR
     }
 }
