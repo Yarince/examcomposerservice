@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -28,7 +27,7 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionSuccess() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = QuestionType.OPEN_QUESTION, questionPoints = 5F)
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "open", questionPoints = 5F)
         val expectedResult = ResponseEntity(questionInserted, HttpStatus.CREATED)
 
         doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)
@@ -40,7 +39,7 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionError() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = QuestionType.OPEN_QUESTION, questionPoints = 5F)
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "open", questionPoints = 5F)
         val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
 
         doThrow(RuntimeException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)
