@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 /**
- * Service class for handling the interoperability between the [Exam] model and the [Question] models within the exam.\
+ * Service class for handling the interoperability between the [Exam] model and the [Question] models within the exam.
  *
  * @param examDAO [ExamDAO] The ExamDAO
  * @param questionDAO [QuestionDAO] The QuestionDAO
