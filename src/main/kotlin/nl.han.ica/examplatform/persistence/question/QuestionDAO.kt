@@ -76,4 +76,8 @@ class QuestionDAO {
         }
         return false
     }
+
+    fun getQuestionsForCourse(courseId: Int): Array<Question> {
+        return emptyArray()
+    }
 }

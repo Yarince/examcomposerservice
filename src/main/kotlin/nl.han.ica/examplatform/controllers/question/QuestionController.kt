@@ -29,6 +29,6 @@ class QuestionController {
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
-    fun getExam(@ApiParam(value = "The name of the course you want to retrieve the questions of", required = true) @PathVariable("courseName") courseName: Int): ResponseEntity<Exam> =
-            questionService.getQuestionsForCourse(courseName)
+    fun getExam(@ApiParam(value = "The ID of the course you want to retrieve the questions of", required = true) @PathVariable("courseId") courseId: Int): ResponseEntity<Array<Question>> =
+            questionService.getQuestionsForCourse(courseId)
 }
