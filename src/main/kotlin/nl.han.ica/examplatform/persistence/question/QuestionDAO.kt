@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.question
 
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -16,20 +17,19 @@ class QuestionDAO {
     /**
      * Adds a question to the database
      */
-    fun insertQuestion(question: Question): Question {
+    fun insertQuestion(question: Question, parentQuestionId: Int? = null): Question {
         var questionToReturn = question
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        // Todo: change insert string. To match with questionModel and Database [BTGGOM-460]
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER) VALUES (?, ?, ?, ?)"
+        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONTEXT, QUESTIONTYPE, COURSEID, PARENTQUESTIONID, EXAMTYPEID) VALUES (?, ?, ?, ?, 1)"
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
-            preparedStatement?.setInt(1, question.questionId ?: 0)
-            preparedStatement?.setString(2, question.questionText)
-            preparedStatement?.setString(3, question.questionType.toString())
-            if (question.questionOrderInExam == null) preparedStatement?.setNull(4, java.sql.Types.INTEGER) else preparedStatement?.setInt(4, question.questionOrderInExam)
+            preparedStatement?.setString(1, question.questionText)
+            preparedStatement?.setString(2, question.questionType)
+            preparedStatement?.setInt(3, question.courseId ?: 0)
+            if (parentQuestionId != null) preparedStatement?.setInt(4, parentQuestionId) else preparedStatement?.setNull(4, java.sql.Types.INTEGER)
 
             val insertedRows = preparedStatement?.executeUpdate()
             if (insertedRows == 1) {
@@ -44,6 +44,7 @@ class QuestionDAO {
             }
         } catch (e: SQLException) {
             e.printStackTrace()
+            throw DatabaseException("Couldn't execute statement")
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             MySQLConnection.closeStatement(preparedStatement)

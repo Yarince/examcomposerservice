@@ -95,7 +95,7 @@ class ExamDAO {
                         questionId = questionRs.getInt("QuestionID"),
                         questionOrderInExam = 1,// questionRs.getInt("?"),
                         questionOrderText = "Question 1",//questionRs.getString("?")
-                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
+                        questionType = questionRs.getString("QuestionType"),
                         questionText = questionRs.getString("QuestionText"),
                         questionPoints = 5F, //questionRs.getFloat("?"),
                         options = arrayOf("Ja", "Nee"),
