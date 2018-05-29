@@ -19,6 +19,7 @@ class CourseController(private val courseService: CourseService) {
     @ApiResponses(
             ApiResponse(code = 200, message = "Fetched"),
             ApiResponse(code = 404, message = "No courses found"),
-            ApiResponse(code = 500, message = "Internal server error"))
-    fun getAllCourses(): ResponseEntity<Array<Course>> = courseService.getAllCourses()
+            ApiResponse(code = 500, message = "Internal server error")
+    )
+    fun getAllCourses(): ResponseEntity<ArrayList<Course>> = courseService.getAllCourses()
 }

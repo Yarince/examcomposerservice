@@ -8,15 +8,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-class CourseService {
-
-    @Autowired
-    private lateinit var courseDAO: CourseDAO
+class CourseService(private var courseDAO: CourseDAO) {
 
     /**
      * This function gets a list of all courses
      *
      * @return [Array] of [Course]s
      */
-    fun getAllCourses(): ResponseEntity<Array<Course>> = ResponseEntity(courseDAO.getAllCourses(), HttpStatus.OK)
+    fun getAllCourses(): ResponseEntity<ArrayList<Course>> = ResponseEntity(courseDAO.getAllCourses(), HttpStatus.OK)
 }
