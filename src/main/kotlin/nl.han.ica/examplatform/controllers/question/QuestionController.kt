@@ -23,11 +23,10 @@ class QuestionController(private val questionService: QuestionService, private v
     )
     fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
 
-    @GetMapping("types")
-    @ApiOperation(value = "Create a question", notes = "Create a question")
+    @GetMapping("/types")
+    @ApiOperation(value = "Get all questionTypes", notes = "Get questionTypes")
     @ApiResponses(
             ApiResponse(code = 200, message = "Got questions"),
-            ApiResponse(code = 404, message = "Not found"),
             ApiResponse(code = 500, message = "Internal server error")
     )
     fun getQuestionTypes(): ResponseEntity<ArrayList<String>> = questionTypeSerivce.getQuestionTypes()
