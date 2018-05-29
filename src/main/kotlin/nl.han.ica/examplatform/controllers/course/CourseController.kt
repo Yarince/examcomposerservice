@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 class CourseController(private val courseService: CourseService) {
 
     @GetMapping("")
-    @ApiOperation(value = "Get all courses", notes = "Returns all courses in database", response = Array<Course>::class)
+    @ApiOperation(value = "Get all courses", notes = "Returns all courses in the database", response = Array<Course>::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "Fetched"),
             ApiResponse(code = 404, message = "No courses found"),
