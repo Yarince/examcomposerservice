@@ -27,7 +27,7 @@ class ExamDAO {
      * @param courseId [Int] The course id
      * @return [PracticeExam] null
      */
-    fun generatePracticeExam(courseId: Int): Exam? = null
+    fun generatePracticeExam(courseId: Int): PracticeExam? = null
 
     /**
      * This function gets a list of minimized Exams.

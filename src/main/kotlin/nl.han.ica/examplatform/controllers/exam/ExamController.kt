@@ -34,7 +34,7 @@ class ExamController (
     /**
      * HTTP REST function to generate a practice exam.
      *
-     * @return [Exam]
+     * @return [PracticeExam]
      */
     @PostMapping("/practice-exam")
     @ApiOperation(

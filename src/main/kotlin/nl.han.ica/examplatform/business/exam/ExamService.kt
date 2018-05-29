@@ -56,9 +56,9 @@ class ExamService(private val examDAO: ExamDAO) {
     fun getExam(id: Int): ResponseEntity<Exam> = ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
 
     /**
-     * Generate a practice practice [Exam].
+     * Generates a [PracticeExam].
      *
-     * @return [ResponseEntity]<Exam> practice [Exam]
+     * @return [ResponseEntity]<Exam> practice [PracticeExam]
      */
     fun generatePracticeExam(courseId: Int): ResponseEntity<PracticeExam?> =
         ResponseEntity(examDAO.generatePracticeExam(courseId), HttpStatus.CREATED)
