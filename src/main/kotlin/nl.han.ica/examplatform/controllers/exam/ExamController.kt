@@ -8,6 +8,7 @@ import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
+import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -59,4 +60,11 @@ class ExamController {
             ApiResponse(code = 403, message = "Bad request"))
     fun addQuestionToExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
             examQuestionService.addQuestionToExam(exam)
+
+    @PostMapping()
+    @ApiOperation(value = "Add classes to an exam", notes = "This makes it so the students are able to perform the exam", response = PreparedExam::class)
+    @ApiResponses(
+            ApiResponse(code = 201, message = "Create"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun addClassesToExam(@RequestBody classes: Array<String>): ResponseEntity<PreparedExam> = examService.addClassesToExam(classes)
 }
