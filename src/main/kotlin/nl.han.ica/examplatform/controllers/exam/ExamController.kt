@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -37,14 +38,14 @@ class ExamController (
      */
     @PostMapping("/practice-exam")
     @ApiOperation(
-        value = "Add an exam without questions",
+        value = "Add a practice exam without questions",
         notes = "Cannot contain questions or an examId",
         response = ResponseEntity::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<Exam?> =
+    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<PracticeExam?> =
         examService.generatePracticeExam(courseId)
 
     /**

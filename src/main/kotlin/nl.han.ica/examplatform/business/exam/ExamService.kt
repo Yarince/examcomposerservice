@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import org.springframework.http.HttpStatus
@@ -59,9 +60,6 @@ class ExamService(private val examDAO: ExamDAO) {
      *
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
-    fun generatePracticeExam(courseId: Int): ResponseEntity<Exam?> {
-        val practiceExam: Exam? = examDAO.generatePracticeExam(courseId)
-        checkExam(practiceExam)
-        return ResponseEntity(practiceExam, HttpStatus.CREATED)
-    }
+    fun generatePracticeExam(courseId: Int): ResponseEntity<PracticeExam?> =
+        ResponseEntity(examDAO.generatePracticeExam(courseId), HttpStatus.CREATED)
 }

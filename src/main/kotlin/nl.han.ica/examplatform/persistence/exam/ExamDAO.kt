@@ -4,6 +4,7 @@ import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
+import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.question.QuestionType
@@ -21,10 +22,10 @@ import java.util.Date
 class ExamDAO {
 
     /**
-     * This function should return a generated practice exam.
+     * This function should return a generated [PracticeExam].
      *
      * @param courseId [Int] The course id
-     * @return null
+     * @return [PracticeExam] null
      */
     fun generatePracticeExam(courseId: Int): Exam? = null
 
