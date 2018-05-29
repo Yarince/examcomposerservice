@@ -25,14 +25,24 @@ class QuestionDAO {
         var preparedStatement: PreparedStatement? = null
 
         // Todo: change insert string. To match with questionModel and Database [BTGGOM-460]
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER) VALUES (?, ?, ?, ?)"
+        val sqlQueryStringInsertQuestionString = """
+            INSERT INTO QUESTION (
+                QUESTIONID,
+                QUESTIONTEXT,
+                QUESTIONTYPE,
+                SEQUENCENUMBER)
+            VALUES (?, ?, ?, ?)
+        """.trimIndent()
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
             preparedStatement?.setInt(1, question.questionId ?: 0)
             preparedStatement?.setString(2, question.questionText)
             preparedStatement?.setString(3, question.questionType.toString())
-            if (question.questionOrderInExam == null) preparedStatement?.setNull(4, java.sql.Types.INTEGER) else preparedStatement?.setInt(4, question.questionOrderInExam)
+            if (question.questionOrderInExam == null)
+                preparedStatement?.setNull(4, java.sql.Types.INTEGER)
+            else
+                preparedStatement?.setInt(4, question.questionOrderInExam)
 
             val insertedRows = preparedStatement?.executeUpdate()
             if (insertedRows == 1) {

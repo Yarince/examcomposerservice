@@ -21,20 +21,16 @@ class SwaggerConfig {
      * @return [Docket]
      */
     @Bean
-    fun api(): Docket {
-        return Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo())
-    }
+    fun api(): Docket = Docket(DocumentationType.SWAGGER_2)
+        .select()
+        .apis(RequestHandlerSelectors.any())
+        .paths(PathSelectors.any())
+        .build()
+        .apiInfo(apiInfo())
 
-    private fun apiInfo(): ApiInfo {
-        return ApiInfoBuilder()
-                .title("Exam Composer Service")
-                .description("API specification of the Exam Composer Service")
-                .version("0.1")
-                .build()
-    }
+    private fun apiInfo(): ApiInfo = ApiInfoBuilder()
+        .title("Exam Composer Service")
+        .description("API specification of the Exam Composer Service")
+        .version("0.1")
+        .build()
 }

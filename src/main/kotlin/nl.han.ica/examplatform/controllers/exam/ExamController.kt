@@ -8,7 +8,6 @@ import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -45,7 +44,8 @@ class ExamController (
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<Exam?> = examService.generatePracticeExam(courseId)
+    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<Exam?> =
+        examService.generatePracticeExam(courseId)
 
     /**
      * HTTP REST function to get a list of basic information from all exams.
@@ -92,8 +92,11 @@ class ExamController (
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
-    fun getExam(@ApiParam(value = "The ID of the exam you want to retrieve", required = true) @PathVariable("id") id: Int): ResponseEntity<Exam> =
-            examService.getExam(id)
+    fun getExam(
+        @ApiParam(value = "The ID of the exam you want to retrieve", required = true)
+        @PathVariable("id")
+        id: Int
+    ): ResponseEntity<Exam> = examService.getExam(id)
 
     /**
      * HTTP REST function to add one [Question] to a Exam.

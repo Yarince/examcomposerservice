@@ -18,11 +18,10 @@ class AnswerService(private val answerDAO: AnswerDAO) {
      *
      * @param answer The [Answer] you want to add
      */
-    fun addAnswerToQuestion(answer: Answer) {
+    fun addAnswerToQuestion(answer: Answer) =
         try {
             answerDAO.addAnswerToQuestion(answer)
         } catch (exception: RuntimeException) {
             throw CouldNotAddAnswerToQuestionException(exception.message, exception, true, true)
         }
-    }
 }

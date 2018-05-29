@@ -37,12 +37,11 @@ class AnswerController(private val answerService: AnswerService) {
             ApiResponse(code = 400, message = "Invalid Answer"),
             ApiResponse(code = 500, message = "Something went wrong")
     )
-    fun addAnswerToQuestion(@RequestBody answer: Answer): HttpStatus {
-        return try {
+    fun addAnswerToQuestion(@RequestBody answer: Answer): HttpStatus =
+        try {
             answerService.addAnswerToQuestion(answer)
             HttpStatus.OK
         } catch (exception: IllegalArgumentException) {
-            throw InvalidAnswerException("Answer contains invalid values", exception, false, false)
+            throw InvalidAnswerException("Answer contains invalid values", exception)
         }
-    }
 }

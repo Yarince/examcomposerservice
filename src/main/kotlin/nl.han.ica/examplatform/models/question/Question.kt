@@ -41,7 +41,5 @@ data class Question(
         return true
     }
 
-    override fun hashCode(): Int {
-        return subQuestions?.let { Arrays.hashCode(it) } ?: 0
-    }
+    override fun hashCode(): Int = subQuestions?.let { Arrays.hashCode(it) } ?: 0
 }

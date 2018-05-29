@@ -26,9 +26,7 @@ class ExamDAO {
      * @param courseId [Int] The course id
      * @return null
      */
-    fun generatePracticeExam(courseId: Int): Exam? {
-        return null
-    }
+    fun generatePracticeExam(courseId: Int): Exam? = null
 
     /**
      * This function gets a list of minimized Exams.
@@ -37,7 +35,14 @@ class ExamDAO {
      */
     fun getExams(): ArrayList<SimpleExam> {
         val conn: Connection? = MySQLConnection.getConnection()
-        val examQuery = "SELECT EXAMID, EXAMNAME, EXAM.COURSEID FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID"
+        val examQuery = """
+            SELECT
+                EXAMID,
+                EXAMNAME,
+                EXAM.COURSEID
+            FROM EXAM
+                INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID
+        """.trimIndent()
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(examQuery)
 
@@ -45,11 +50,11 @@ class ExamDAO {
         try {
             val resultSet = preparedStatement?.executeQuery()
 
-            while (resultSet!!.next()) {
+            while (resultSet!!.next())
                 result.add(SimpleExam(resultSet.getInt("ExamID"),
                     resultSet.getString("ExamName"),
                     resultSet.getInt("COURSEID")))
-            }
+
         } catch (e: SQLException) {
             e.printStackTrace()
             throw DatabaseException("Error while interacting with the database")
@@ -71,12 +76,32 @@ class ExamDAO {
         val conn: Connection? = MySQLConnection.getConnection()
 
         // Todo: select correct columns [BTGGOM-460]
-        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
+        val examQuery = """
+            SELECT
+                EXAMID,
+                STARTTIME,
+                ENDTIME,
+                EXAM.COURSEID,
+                EXAM.EXAMTYPEID,
+                EXAMNAME,
+                LOCATION,
+                INSTRUCTIONS
+            FROM EXAM
+                INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID
+                INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID
+            WHERE EXAMID = ?
+        """.trimIndent()
         val examStatement: PreparedStatement?
         examStatement = conn?.prepareStatement(examQuery)
         examStatement?.setInt(1, id)
 
-        val questionsQuery = "SELECT * FROM QUESTION INNER JOIN QUESTION_IN_EXAM ON QUESTION.QUESTIONID = QUESTION_IN_EXAM.QUESTIONID INNER JOIN COURSE ON QUESTION.COURSEID = COURSE.COURSEID WHERE QUESTION_IN_EXAM.EXAMID = ?"
+        val questionsQuery = """
+            SELECT *
+            FROM QUESTION
+                INNER JOIN QUESTION_IN_EXAM ON QUESTION.QUESTIONID = QUESTION_IN_EXAM.QUESTIONID
+                INNER JOIN COURSE ON QUESTION.COURSEID = COURSE.COURSEID
+            WHERE QUESTION_IN_EXAM.EXAMID = ?
+        """
         val questionsStatement: PreparedStatement?
         questionsStatement = conn?.prepareStatement(questionsQuery)
         questionsStatement?.setInt(1, id)
@@ -110,7 +135,8 @@ class ExamDAO {
             if (examRs.row < 1) throw ExamNotFoundException("Exam with ID $id was not found")
 
             result = Exam(examId = examRs.getInt("ExamID"),
-                durationInMinutes = ((examRs.getTime("EndTime").time / 60000) - (examRs.getTime("StartTime").time / 60000)).toInt(),
+                durationInMinutes = (examRs.getTime("EndTime").time / 60000 -
+                    examRs.getTime("StartTime").time / 60000).toInt(),
                 startTime = Date(examRs.getTimestamp("StartTime").time),
                 endTime = Date(examRs.getTimestamp("EndTime").time),
                 courseId = examRs.getInt("CourseID"),
@@ -141,7 +167,19 @@ class ExamDAO {
         var examToReturn = exam
 
         val conn: Connection? = MySQLConnection.getConnection()
-        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        val insertExamQuery = """
+            INSERT INTO EXAM (
+                COURSEID,
+                EXAMTYPEID,
+                EXAMCODE,
+                EXAMNAME,
+                STARTTIME,
+                ENDTIME,
+                INSTRUCTIONS,
+                VERSION,
+                LOCATION)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """.trimIndent()
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
         preparedStatement?.setInt(1, exam.courseId)
@@ -161,9 +199,8 @@ class ExamDAO {
                 val idPreparedStatement = conn?.prepareStatement(idQuery)
                 val result = idPreparedStatement?.executeQuery()
                 result?.let {
-                    while (result.next()) {
+                    while (result.next())
                         examToReturn = examToReturn.copy(examId = result.getInt("ID"))
-                    }
                 }
             }
         } catch (e: SQLException) {
@@ -184,7 +221,8 @@ class ExamDAO {
      * @return [Exam] The updated Exam that was given.
      */
     fun addQuestionsToExam(exam: Exam): Exam {
-        if (exam.questions == null || exam.questions.size < 1) throw DatabaseException("Please provide questions to add to exam")
+        if (exam.questions == null || exam.questions.size < 1)
+            throw DatabaseException("Please provide questions to add to exam")
 
         var query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER) VALUES"
         for (question in exam.questions) {

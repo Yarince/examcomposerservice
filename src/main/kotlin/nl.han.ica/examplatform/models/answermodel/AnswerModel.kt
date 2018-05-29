@@ -26,7 +26,5 @@ data class AnswerModel(
         return true
     }
 
-    override fun hashCode(): Int {
-        return answers?.let { Arrays.hashCode(it) } ?: 0
-    }
+    override fun hashCode(): Int = answers?.let { Arrays.hashCode(it) } ?: 0
 }

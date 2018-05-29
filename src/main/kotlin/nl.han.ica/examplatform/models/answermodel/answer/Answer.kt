@@ -24,7 +24,5 @@ data class Answer(
         return true
     }
 
-    override fun hashCode(): Int {
-        return answerKeywords?.let { Arrays.hashCode(it) } ?: 0
-    }
+    override fun hashCode(): Int = answerKeywords?.let { Arrays.hashCode(it) } ?: 0
 }

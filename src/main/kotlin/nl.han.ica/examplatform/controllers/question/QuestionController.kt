@@ -6,9 +6,7 @@ import io.swagger.annotations.ApiParam
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.question.QuestionService
-import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -35,5 +33,9 @@ class QuestionController (private val questionService: QuestionService){
             ApiResponse(code = 201, message = "Created"),
             ApiResponse(code = 500, message = "Internal server error")
     )
-    fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
+    fun createQuestion(
+        @ApiParam(value = "Question object", required = true)
+        @RequestBody
+        question: Question
+    ): ResponseEntity<Question> = questionService.addQuestion(question)
 }
