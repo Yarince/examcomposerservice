@@ -2,7 +2,10 @@ package nl.han.ica.examplatform.models.exam
 
 import java.util.*
 
-data class PracticeExamRequestBody(val courseId: Int, val categories: Array<String>) {
+data class PracticeExamRequestBody(
+        val courseId: Int,
+        val categories: Array<String>
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

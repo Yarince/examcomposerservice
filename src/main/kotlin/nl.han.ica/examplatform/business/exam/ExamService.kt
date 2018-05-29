@@ -15,13 +15,7 @@ import nl.han.ica.examplatform.persistence.question.QuestionDAO
  * Exam service for handling requests related to the Exam model.
  */
 @Service
-class ExamService {
-
-    @Autowired
-    lateinit var examDAO: ExamDAO
-
-    @Autowired
-    lateinit var questionDAO: QuestionDAO
+class ExamService(val examDAO: ExamDAO, val questionDAO: QuestionDAO) {
 
     /**
      * Check if an exam has questions and if the id is left empty
