@@ -20,17 +20,16 @@ import org.springframework.web.bind.annotation.RestController
 
 /**
  * REST controller for HTTP interaction with [Exam]s.
+ *
+ * @param examService [ExamService] The ExamService
+ * @param examQuestionService [examQuestionService] The ExamQuestionService
  */
 @RestController
 @RequestMapping("exams")
-class ExamController {
-
-    // Load examService as Spring Bean
-    @Autowired
-    lateinit var examService: ExamService
-
-    @Autowired
-    lateinit var examQuestionService: ExamQuestionService
+class ExamController (
+    private val examService: ExamService,
+    private val examQuestionService: ExamQuestionService
+) {
 
     /**
      * HTTP REST function to generate a practice exam.

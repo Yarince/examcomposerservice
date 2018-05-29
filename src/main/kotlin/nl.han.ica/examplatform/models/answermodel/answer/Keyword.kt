@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.models.answerModel.answer
+package nl.han.ica.examplatform.models.answermodel.answer
 
 /**
  * Represents a word that has to be in the given answer.

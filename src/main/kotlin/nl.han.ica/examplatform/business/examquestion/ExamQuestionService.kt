@@ -5,24 +5,21 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
-
 /**
- * Service class for handling the interoperability between the [Exam] model and the [Question] models within the exam.
+ * Service class for handling the interoperability between the [Exam] model and the [Question] models within the exam.\
+ *
+ * @param examDAO [ExamDAO] The ExamDAO
+ * @param questionDAO [QuestionDAO] The QuestionDAO
  */
 @Service
-class ExamQuestionService {
-
-    @Autowired
-    private lateinit var examDAO: ExamDAO
-
-    @Autowired
-    private lateinit var questionDAO: QuestionDAO
-
+class ExamQuestionService(
+    private val examDAO: ExamDAO,
+    private val questionDAO: QuestionDAO
+) {
     /**
      * Validate if all Questions exist.
      *

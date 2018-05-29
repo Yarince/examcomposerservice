@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service
 
 /**
  * Question service for handling requests related to the [Question] model.
+ *
+ * @param questionDAO [QuestionDAO] The QuestionDAO
  */
 @Service
-class QuestionService {
-
-    @Autowired
-    private lateinit var questionDAO: QuestionDAO
+class QuestionService(private val questionDAO: QuestionDAO) {
 
     /**
      * Add a new Question to the database.

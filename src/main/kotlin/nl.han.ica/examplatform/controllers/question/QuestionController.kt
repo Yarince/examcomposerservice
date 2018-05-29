@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.RestController
 
 /**
  * REST controller for HTTP interaction with [Question]s.
+ *
+ * @param questionService [QuestionService] The QuestionService
  */
 @RestController
 @Api("question", description = "Creating, updating and deleting questions")
-class QuestionController {
-
-    @Autowired
-    lateinit var questionService: QuestionService
+class QuestionController (private val questionService: QuestionService){
 
     /**
      * HTTP REST function to add a new Question to the system.
