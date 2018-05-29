@@ -27,4 +27,14 @@ class QuestionService {
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
+
+    /**
+     * Get all questions of a specific course
+     *
+     * @param courseName [String] Name of the course that the questions should be retrieved from
+     * @return [ResponseEntity]<[Array]<[Question]>> Contains the list with questions
+     */
+    fun getQuestionsForCourse(courseName: String): ResponseEntity<Array<Question>> {
+        return ResponseEntity(questionDAO.getQuestionsForCourse(courseName), HttpStatus.CREATED)
+    }
 }
