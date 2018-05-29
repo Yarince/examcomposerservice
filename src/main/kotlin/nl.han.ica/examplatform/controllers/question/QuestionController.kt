@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
-@RestController
+@RestController("/question")
 @Api("question", description = "Creating, updating and deleting questions")
 class QuestionController(private val questionService: QuestionService, private val questionTypeSerivce: QuestionTypeService) {
 
-    @PostMapping("/question")
+    @PostMapping()
     @ApiOperation(value = "Create a question", notes = "Create a question")
     @ApiResponses(
             ApiResponse(code = 201, message = "Created"),
