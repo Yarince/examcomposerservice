@@ -1,7 +1,11 @@
 package nl.han.ica.examplatform.persistence.course
 
 import nl.han.ica.examplatform.models.course.Course
+import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.SQLException
 
 @Repository
 class CourseDAO {
@@ -11,7 +15,28 @@ class CourseDAO {
      * @return [ArrayList] of [Course]s
      */
     fun getAllCourses(): ArrayList<Course> {
-        return arrayListOf(Course(1, "A course with a name", "acwan"),
-                Course(2, "Software Architecture", "swa"))
+        val dbConnection: Connection? = MySQLConnection.getConnection()
+        val pluginNameQuery = "SELECT COURSEID, COURSENAME, COURSECODE FROM COURSE"
+        val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(pluginNameQuery)
+
+        val result = arrayListOf<Course>()
+        try {
+            val rs = preparedStatement?.executeQuery()
+            while (rs!!.next()) {
+                result.add(Course(
+                        rs.getInt("COURSEID"),
+                        rs.getString("COURSENAME"),
+                        rs.getString("COURSECODE")
+                ))
+            }
+
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            print(e)
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(dbConnection)
+        }
+        return result
     }
 }
