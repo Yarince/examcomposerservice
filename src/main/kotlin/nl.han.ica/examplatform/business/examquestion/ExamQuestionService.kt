@@ -10,8 +10,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
+
 /**
- * Service class for handling the interoperability between exam and questions
+ * Service class for handling the interoperability between the [Exam] model and the [Question] models within the exam.
  */
 @Service
 class ExamQuestionService {
@@ -23,7 +24,7 @@ class ExamQuestionService {
     private lateinit var questionDAO: QuestionDAO
 
     /**
-     * Validate if all Questions exist
+     * Validate if all Questions exist.
      *
      * @param questions Array of [Question]s to be checked
      * @throws InvalidExamException If one of the questions does not exist or are empty
@@ -39,7 +40,7 @@ class ExamQuestionService {
     }
 
     /**
-     * Assign a Question to an existing Exam in the database
+     * Assign a Question to an existing Exam in the database.
      *
      * @param exam [Exam] to be updated in the database
      * @return ResponseEntity<[Question]> updated object from database

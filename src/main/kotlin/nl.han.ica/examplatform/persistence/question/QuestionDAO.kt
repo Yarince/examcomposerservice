@@ -8,13 +8,16 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 
 /**
- * Database access object that handles all database queries regarding [Question]
+ * Database access object that handles all database queries regarding [Question].
  */
 @Repository
 class QuestionDAO {
 
     /**
-     * Adds a question to the database
+     * Adds a question to the database.
+     *
+     * @param question [Question] The question that needs to be added to the database
+     * @return [Question] The question that is added to the database
      */
     fun insertQuestion(question: Question): Question {
         var questionToReturn = question
@@ -52,7 +55,10 @@ class QuestionDAO {
     }
 
     /**
-     * Checks if a question already exists in the database
+     * Checks if a question already exists in the database.
+     *
+     * @param question [Question] The question that needs to be checked for existence in de database
+     * @return [Boolean] True if exist, false otherwise
      */
     fun exists(question: Question?): Boolean {
         var dbConnection: Connection? = null

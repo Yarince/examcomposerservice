@@ -15,19 +15,25 @@ import java.sql.SQLException
 import java.util.Date
 
 /**
- * This class handles all the Database operations for [Exam]
+ * This class handles all the Database operations for [Exam].
  */
 @Repository
 class ExamDAO {
 
+    /**
+     * This function should return a generated practice exam.
+     *
+     * @param courseId [Int] The course id
+     * @return null
+     */
     fun generatePracticeExam(courseId: Int): Exam? {
         return null
     }
 
     /**
-     * This function gets a list of minimized exams
+     * This function gets a list of minimized Exams.
      *
-     * @return [ArrayList] a list of [SimpleExam]
+     * @return [ArrayList]<[SimpleExam]> a list of SimpleExams retrieved from the database.
      */
     fun getExams(): ArrayList<SimpleExam> {
         val conn: Connection? = MySQLConnection.getConnection()
@@ -56,10 +62,10 @@ class ExamDAO {
     }
 
     /**
-     * Gets all information about an exam
+     * Gets all information about an Exam.
      *
      * @param id [Int] The ID of which all information should be queried
-     * @return returns the [Exam]
+     * @return [Exam] The Exam added to the database.
      */
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
@@ -126,10 +132,10 @@ class ExamDAO {
     }
 
     /**
-     * Inserts an exam into the database
+     * Inserts an Exam into the database.
      *
-     * @param exam the [Exam] that should be inserted
-     * @return the inserted [Exam]
+     * @param exam [Exam] The Exam that should be inserted
+     * @return [Exam] The Exam added to the database
      */
     fun insertExam(exam: Exam): Exam {
         var examToReturn = exam
@@ -172,10 +178,10 @@ class ExamDAO {
     }
 
     /**
-     * Adds single or multiple questions to an exam
+     * Adds single or multiple questions to an exam.
      *
-     * @param exam the [Exam] containing all [Question]s
-     * @return the updated [Exam]
+     * @param exam [Exam] The containing all [Question]s
+     * @return [Exam] The updated Exam that was given.
      */
     fun addQuestionsToExam(exam: Exam): Exam {
         if (exam.questions == null || exam.questions.size < 1) throw DatabaseException("Please provide questions to add to exam")

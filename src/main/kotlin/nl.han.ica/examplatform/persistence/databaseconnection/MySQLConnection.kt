@@ -8,7 +8,7 @@ import java.sql.Statement
 import java.util.Properties
 
 /**
- * A singleton object that handles the connection with the MySQL database
+ * A singleton object that handles the connection with the MySQL database.
  */
 object MySQLConnection {
 
@@ -22,7 +22,7 @@ object MySQLConnection {
     }
 
     /**
-     * Retrieves a connection and returns it
+     * Retrieves a connection and returns it.
      *
      * @return a database [Connection] on which queries can be executed
      */
@@ -36,7 +36,7 @@ object MySQLConnection {
     }
 
     /**
-     * Reads the database properties, loads them into a [Properties] object and returns them
+     * Reads the database properties, loads them into a [Properties] object and returns them.
      *
      * @return loaded database properties
      */
@@ -48,7 +48,7 @@ object MySQLConnection {
     }
 
     /**
-     * Handles the database connection using the MySQL driver
+     * Handles the database connection using the MySQL driver.
      *
      * @param connectionURL the URL of the DB that should be connected with
      * @param username the username that will be used to connect
@@ -62,7 +62,7 @@ object MySQLConnection {
     }
 
     /**
-     * Closes a database connection
+     * Closes a database connection.
      *
      * @param connectionToClose [Connection] that should be closed
      */
@@ -75,7 +75,7 @@ object MySQLConnection {
     }
 
     /**
-     * Closes a prepared statement
+     * Closes a prepared statement.
      *
      * @param stmt [Statement] that should be closed
      */

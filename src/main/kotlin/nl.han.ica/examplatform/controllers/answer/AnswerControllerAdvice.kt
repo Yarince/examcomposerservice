@@ -16,6 +16,9 @@ import java.util.EnumSet
 import java.util.Locale
 import java.util.logging.Logger
 
+/**
+ * Answer Controller.
+ */
 @ControllerAdvice(assignableTypes = [AnswerController::class])
 class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
 
@@ -23,6 +26,13 @@ class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
         val LOG: Logger = Logger.getLogger(this::class.java.name)
     }
 
+    /**
+     * Handles Exeptions thrown by the [AnswerController].
+     * Creates custom [ErrorInfo] class to be return to the API user.
+     * Adds mandatory error headers to the error response.
+     *
+     * @return [ErrorInfo]
+     */
     @ExceptionHandler(RuntimeException::class)
     @ResponseBody
     fun handleInvalidAnswerException(exception: Throwable): ResponseEntity<ErrorInfo> {

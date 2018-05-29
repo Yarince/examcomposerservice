@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answerModel.answer.Answer
+import nl.han.ica.examplatform.models.exam.Exam
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -13,12 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * REST controller for interaction with answers
+ * REST controller for HTTP interaction with [Answer]s.
  */
 @RestController
 @RequestMapping("answers")
 class AnswerController(private val answerService: AnswerService) {
 
+    /**
+     * HTTP REST function to add a [Answer] to a [Question]
+     * If a Question already has an Answer connected to it,
+     * the current Answer will be overwritten with the new Answer.
+     *
+     * @return [HttpStatus]
+     */
     @PutMapping
     @ApiOperation(
             value = "Creates Answer and adds it to the question",

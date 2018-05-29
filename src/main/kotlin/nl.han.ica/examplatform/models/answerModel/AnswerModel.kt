@@ -3,6 +3,13 @@ package nl.han.ica.examplatform.models.answerModel
 import nl.han.ica.examplatform.models.answerModel.answer.Answer
 import java.util.Arrays
 
+/**
+ * Represents the answer model that contains the answers for the [Question]s in a [Exam].
+ *
+ * @param answerModelId [Int] The id of the answer model
+ * @param examId [Int] The id of the [Exam] this answer model represents
+ * @param answers [Array]<[Answer]> List of correct answers
+ */
 data class AnswerModel(
     val answerModelId: Int? = null,
     val examId: Int,

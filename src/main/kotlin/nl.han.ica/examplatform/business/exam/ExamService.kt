@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 /**
- * Exam service for handling requests related to the Exam model.
+ * Exam service for handling requests related to the [Exam] model.
  */
 @Service
 class ExamService {
@@ -19,7 +19,7 @@ class ExamService {
     lateinit var examDAO: ExamDAO
 
     /**
-     * Check if an exam has questions and if the id is left empty
+     * Check if an exam has questions and if the id is left empty.
      *
      * @param exam [Exam] that needs to be validated
      * @throws InvalidExamException If properties of the exam are not correct
@@ -30,7 +30,7 @@ class ExamService {
     }
 
     /**
-     * Get all Exams from the database
+     * Get all Exams from the database.
      *
      * @return [ResponseEntity]<Array<[SimpleExam]>> All exams currently in the database in a simplified view
      */
@@ -39,7 +39,7 @@ class ExamService {
     }
 
     /**
-     * Add an new Exam to the database
+     * Add an new Exam to the database.
      *
      * @param exam [Exam] to be added in the database
      * @return ResponseEntity<[Exam]> with new exam inserted and an assigned id
@@ -52,7 +52,7 @@ class ExamService {
     }
 
     /**
-     * Get a specific Exam from the database
+     * Get a specific Exam from the database.
      *
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
@@ -61,7 +61,7 @@ class ExamService {
     }
 
     /**
-     * Generate a practice practice [Exam]
+     * Generate a practice practice [Exam].
      *
      * @return [ResponseEntity]<Exam> practice [Exam]
      */

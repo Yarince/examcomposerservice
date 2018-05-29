@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
+/**
+ * Question service for handling requests related to the [Question] model.
+ */
 @Service
 class QuestionService {
 
@@ -14,7 +17,7 @@ class QuestionService {
     private lateinit var questionDAO: QuestionDAO
 
     /**
-     * Add a new Question to the database
+     * Add a new Question to the database.
      *
      * @param question [Question] to be added in the database
      * @return ResponseEntity<[Question]> with new question inserted and an assigned id

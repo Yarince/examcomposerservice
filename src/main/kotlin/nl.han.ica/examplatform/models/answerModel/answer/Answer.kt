@@ -3,8 +3,11 @@ package nl.han.ica.examplatform.models.answerModel.answer
 import java.util.Arrays
 
 /**
- * Interface for all classes that represent a correct correctAnswer given by a teacher.
- * This is not the correctAnswer that is given by a student.
+ * Represents a correct answer given by a teacher.
+ * This is <b>not</b> a answer that is given by a student.
+ *
+ * @param questionId [Int] The id of the [Question] this answer is for.
+ * @param answerKeywords [Array]<[Keyword]> List of keywords that need to be in the answer.
  */
 data class Answer(
     val questionId: Int,

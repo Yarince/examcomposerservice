@@ -9,13 +9,13 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 
 /**
- * The DAO class for [Answer]
+ * The DAO class for [Answer].
  */
 @Repository
 class AnswerDAO : IAnswerDAO {
 
     /**
-     * Add an Answer to a Question in the database
+     * Add an Answer to a Question in the database.
      *
      * @param answer The [Answer] you want to add to a [Question]
      */
