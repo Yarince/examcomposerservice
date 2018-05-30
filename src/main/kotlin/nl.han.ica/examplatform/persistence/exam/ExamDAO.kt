@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.exam
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.Exam
@@ -20,6 +21,7 @@ import kotlin.collections.ArrayList
  */
 @Repository
 class ExamDAO {
+    private val logger = loggerFor(javaClass)
 
     /**
      * This function gets a list of minimized exams
@@ -43,7 +45,7 @@ class ExamDAO {
             }
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error when retrieving exams", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
@@ -113,7 +115,7 @@ class ExamDAO {
                     questions = questions
             )
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error while getting exam $id", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(examStatement)
@@ -159,7 +161,7 @@ class ExamDAO {
                 }
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error while inserting exam in database", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
@@ -200,7 +202,7 @@ class ExamDAO {
         try {
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error when adding questions to exam", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)

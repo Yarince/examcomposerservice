@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.business.exam
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
@@ -16,19 +17,27 @@ import nl.han.ica.examplatform.persistence.question.QuestionDAO
 @Service
 class ExamService(private val examDAO: ExamDAO, private val questionDAO: QuestionDAO) {
 
+    private val logger = loggerFor(javaClass)
+
     /**
-     * Check if an exam has questions and if the id is left empty
+     * Check if an exam has questions and if the id is left empty.
      *
      * @param exam [Exam] that needs to be validated
      * @throws InvalidExamException If properties of the exam are not correct
      */
     fun checkExam(exam: Exam?) {
-        if (exam?.questions != null) throw InvalidExamException("questions must be empty")
-        if (exam?.examId != null) throw InvalidExamException("examId must be left empty")
+        if (exam?.questions != null) {
+            logger.error("Tried to insert an exam with questions when questions should've been")
+            throw InvalidExamException("questions must be empty")
+        }
+        if (exam?.examId != null) {
+            logger.error("Tried to insert an exam with an examId predefined")
+            throw InvalidExamException("examId must be left empty")
+        }
     }
 
     /**
-     * Get all Exams from the database
+     * Get all Exams from the database.
      *
      * @return [ResponseEntity]<Array<[SimpleExam]>> All exams currently in the database in a simplified view
      */
@@ -37,7 +46,7 @@ class ExamService(private val examDAO: ExamDAO, private val questionDAO: Questio
     }
 
     /**
-     * Add an new Exam to the database
+     * Add an new Exam to the database.
      *
      * @param exam [Exam] to be added in the database
      * @return [ResponseEntity]<[Exam]> with new exam inserted and an assigned id
@@ -49,7 +58,7 @@ class ExamService(private val examDAO: ExamDAO, private val questionDAO: Questio
     }
 
     /**
-     * Get a specific Exam from the database
+     * Get a specific Exam from the database.
      *
      * @param id [Int] The ID of the exam that should be retrieved
      * @return [ResponseEntity]<[Exam]> Fetched from the database
@@ -59,7 +68,7 @@ class ExamService(private val examDAO: ExamDAO, private val questionDAO: Questio
     }
 
     /**
-     * Generate a [PracticeExam]
+     * Generate a [PracticeExam].
      *
      * @param courseId [Int] The ID of the course of which the exam should be generated
      * @return [ResponseEntity]<Exam> practice [Exam]
