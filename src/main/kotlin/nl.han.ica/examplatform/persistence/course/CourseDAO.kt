@@ -7,6 +7,9 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+/**
+ * This class handles all the Database operations for [Course]s
+ */
 @Repository
 class CourseDAO {
     /**
@@ -16,19 +19,19 @@ class CourseDAO {
      */
     fun getAllCourses(): ArrayList<Course> {
         val dbConnection: Connection? = MySQLConnection.getConnection()
-        val pluginNameQuery = "SELECT COURSEID, COURSENAME, COURSECODE FROM COURSE"
-        val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(pluginNameQuery)
+        val dbQuery = "SELECT COURSEID, COURSENAME, COURSECODE FROM COURSE"
+        val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(dbQuery)
 
         val result = arrayListOf<Course>()
         try {
             val rs = preparedStatement?.executeQuery()
-            while (rs!!.next()) {
+            while (rs!!.next())
                 result.add(Course(
                         rs.getInt("COURSEID"),
                         rs.getString("COURSENAME"),
                         rs.getString("COURSECODE")
                 ))
-            }
+
 
         } catch (e: SQLException) {
             e.printStackTrace()
