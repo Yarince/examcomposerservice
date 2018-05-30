@@ -10,10 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/**
+ * REST controller for HTTP interaction with [Course]s.
+ */
 @RestController
 @RequestMapping("courses")
 class CourseController(private val courseService: CourseService) {
 
+    /**
+     * HTTP REST function to get all [Course]s from the system.
+     *
+     * @return [ResponseEntity]<[ArrayList]<[Course]>>
+     */
     @GetMapping()
     @ApiOperation(value = "Get all courses", notes = "Returns all courses in the database", response = Array<Course>::class)
     @ApiResponses(

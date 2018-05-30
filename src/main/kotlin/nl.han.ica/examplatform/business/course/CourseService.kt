@@ -7,11 +7,16 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
+/**
+ * Question service for handling requests related to the [Course] model.
+ *
+ * @param courseDAO [CourseDAO] The CourseDAO
+ */
 @Service
 class CourseService(private val courseDAO: CourseDAO) {
 
     /**
-     * This function gets a list of all courses
+     * This function gets a list of all courses.
      *
      * @return [Array] of [Course]s
      */
