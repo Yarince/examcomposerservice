@@ -26,7 +26,7 @@ class QuestionService {
             val insertedQuestion = questionDAO.insertQuestion(question)
             ResponseEntity(insertedQuestion, HttpStatus.CREATED)
         } catch (exception: Exception) {
-            logger.error("Couldn't insert question: $question")
+            logger.error("Couldn't insert question: ${question.questionText}")
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
