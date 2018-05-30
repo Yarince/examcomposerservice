@@ -5,7 +5,6 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -15,7 +14,7 @@ import nl.han.ica.examplatform.persistence.question.QuestionDAO
  * Exam service for handling requests related to the Exam model.
  */
 @Service
-class ExamService(val examDAO: ExamDAO, val questionDAO: QuestionDAO) {
+class ExamService(private val examDAO: ExamDAO, private val questionDAO: QuestionDAO) {
 
     /**
      * Check if an exam has questions and if the id is left empty
