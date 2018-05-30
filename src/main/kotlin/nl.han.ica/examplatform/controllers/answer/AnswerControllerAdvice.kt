@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.controllers.answer
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.models.ErrorInfo
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -15,7 +16,7 @@ import java.util.logging.Logger
 class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
 
     companion object {
-        val LOG: Logger = Logger.getLogger(this::class.java.name)
+        val logger = loggerFor(AnswerControllerAdvice::class.java)
     }
 
     @ExceptionHandler(RuntimeException::class)
@@ -37,7 +38,7 @@ class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
         headers.contentLanguage = Locale.ENGLISH
         headers.contentType = MediaType.APPLICATION_JSON
 
-        LOG.info("Request failed 'handleInvalidAnswerException'")
+        logger.error("Request failed 'handleInvalidAnswerException'")
 
         return ResponseEntity(errorInfo, headers, status)
     }

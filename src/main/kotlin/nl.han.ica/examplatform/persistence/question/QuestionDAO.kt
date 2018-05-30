@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.question
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -12,6 +13,7 @@ import java.sql.SQLException
  */
 @Repository
 class QuestionDAO {
+    private val logger = loggerFor(javaClass)
 
     /**
      * Adds a question to the database
@@ -43,7 +45,7 @@ class QuestionDAO {
                 }
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Something went wrong while inserting a question in the database", e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             MySQLConnection.closeStatement(preparedStatement)
@@ -68,8 +70,7 @@ class QuestionDAO {
                 return true
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
-            print(e)
+            logger.error("Something went wrong while checking if question ${question?.questionId} exists", e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             preparedStatement?.close()
