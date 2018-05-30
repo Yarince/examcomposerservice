@@ -19,14 +19,6 @@ import kotlin.collections.ArrayList
 class ExamDAO {
 
     /**
-     * This function should return a generated [PracticeExam].
-     *
-     * @param courseId [Int] The course id
-     * @return [PracticeExam] null
-     */
-    fun generatePracticeExam(courseId: Int): PracticeExam? = null
-
-    /**
      * This function gets a list of minimized Exams.
      *
      * @return [ArrayList]<[SimpleExam]> a list of SimpleExams retrieved from the database.
