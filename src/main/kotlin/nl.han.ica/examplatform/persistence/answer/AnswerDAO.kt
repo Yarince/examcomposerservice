@@ -14,6 +14,7 @@ import java.sql.SQLException
  */
 @Repository
 class AnswerDAO : IAnswerDAO {
+
     private val logger = loggerFor(javaClass)
 
     /**
