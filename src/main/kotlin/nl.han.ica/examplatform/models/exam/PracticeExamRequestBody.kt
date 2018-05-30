@@ -2,6 +2,12 @@ package nl.han.ica.examplatform.models.exam
 
 import java.util.Arrays
 
+/**
+ * Request body for generating practice exam.
+ *
+ * @param courseId [Int] the courseId of the practice exam.
+ * @param categories [Array]<[String]> the categories.
+ */
 data class PracticeExamRequestBody(
         val courseId: Int,
         val categories: Array<String>
