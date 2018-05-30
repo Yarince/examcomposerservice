@@ -2,7 +2,6 @@ package nl.han.ica.examplatform.controllers.question
 
 import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,7 +26,7 @@ class QuestionControllerTest {
 
     @Test
     fun testCreateQuestion() {
-        val expectedResultBody = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = QuestionType.OPEN_QUESTION, questionPoints = 5F)
+        val expectedResultBody = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "OpenQuestion", questionPoints = 5F)
         val expectedStatusCode = HttpStatus.CREATED
 
         doReturn(ResponseEntity(expectedResultBody, expectedStatusCode)).`when`(questionService).addQuestion(expectedResultBody)

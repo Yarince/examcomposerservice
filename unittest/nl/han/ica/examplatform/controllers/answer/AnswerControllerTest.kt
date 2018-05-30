@@ -3,8 +3,8 @@ package nl.han.ica.examplatform.controllers.answer
 import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
-import nl.han.ica.examplatform.models.answerModel.answer.Keyword
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.Keyword
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,7 +44,7 @@ internal class AnswerControllerTest {
 
     @Test(expected = CouldNotAddAnswerToQuestionException::class)
     fun testAddAnswerToQuestionCouldNotAddAnswerToQuestionException() {
-        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null, false, false)).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null)).`when`(answerService).addAnswerToQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 
