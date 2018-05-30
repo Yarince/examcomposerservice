@@ -27,10 +27,10 @@ class QuestionDAO {
         var preparedStatement: PreparedStatement? = null
 
         // Todo: change insert string. To match with questionModel and Database [BTGGOM-460]
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER) VALUES (?, ?, ?, ?)"
+        val queryInsertQuestion = "INSERT INTO QUESTION (QUESTIONID, QUESTIONTEXT, QUESTIONTYPE, SEQUENCENUMBER) VALUES (?, ?, ?, ?)"
         try {
             dbConnection = MySQLConnection.getConnection()
-            preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
+            preparedStatement = dbConnection?.prepareStatement(queryInsertQuestion)
             preparedStatement?.setInt(1, question.questionId ?: 0)
             preparedStatement?.setString(2, question.questionText)
             preparedStatement?.setString(3, question.questionType.toString())
@@ -66,10 +66,10 @@ class QuestionDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val sqlQueryStringSelectIfQuestionExistsString = "SELECT QUESTIONTEXT FROM QUESTION WHERE QUESTIONID = ?"
+        val queryCheckExists = "SELECT QUESTIONTEXT FROM QUESTION WHERE QUESTIONID = ?"
         try {
             dbConnection = MySQLConnection.getConnection()
-            preparedStatement = dbConnection?.prepareStatement(sqlQueryStringSelectIfQuestionExistsString)
+            preparedStatement = dbConnection?.prepareStatement(queryCheckExists)
             preparedStatement?.setInt(1, question?.questionId ?: 0)
             val rs = preparedStatement?.executeQuery()
             if (rs?.next() == true) {
@@ -96,17 +96,17 @@ class QuestionDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
 
-        var sqlQueryStringInsertQuestionString = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? "
+        var queryGetQuestions = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? "
 
         for ((index, _) in categories.withIndex()) {
-            sqlQueryStringInsertQuestionString += when(index) {
+            queryGetQuestions += when(index) {
                 0 -> "AND CATEGORYNAME = ?"
                 else -> "OR CATEGORYNAME = ?"
             }
         }
         val questions = ArrayList<Question>()
         try {
-            preparedStatement = conn?.prepareStatement(sqlQueryStringInsertQuestionString)
+            preparedStatement = conn?.prepareStatement(queryGetQuestions)
             preparedStatement?.setInt(1, courseId)
 
             for ((index, category) in categories.withIndex()) {
