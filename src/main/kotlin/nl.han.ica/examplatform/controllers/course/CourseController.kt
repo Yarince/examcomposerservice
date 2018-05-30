@@ -22,7 +22,7 @@ class CourseController(private val courseService: CourseService) {
      *
      * @return [ResponseEntity]<[ArrayList]<[Course]>>
      */
-    @GetMapping("")
+    @GetMapping()
     @ApiOperation(value = "Get all courses", notes = "Returns all courses in the database", response = Array<Course>::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "Fetched"),
