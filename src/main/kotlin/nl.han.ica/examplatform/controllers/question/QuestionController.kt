@@ -15,10 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.GetMapping
 
+/**
+ * REST controller for HTTP interaction with [Question]s.
+ *
+ * @param questionService [QuestionService] The QuestionService
+ */
 @RestController
-@Api("questions", description = "Creating, updating and deleting questions")
-@RequestMapping("questions")
-class QuestionController(val questionService: QuestionService) {
+@RequestMapping("question")
+@Api("question", description = "Creating, updating and deleting questions")
+class QuestionController (private val questionService: QuestionService) {
 
     /**
      * Endpoint for creating a question
@@ -35,7 +40,7 @@ class QuestionController(val questionService: QuestionService) {
     fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
 
     /**
-     * Endpoint for getting questions for a course
+     * Endpoint for getting questions for a course.
      *
      * @param courseId [Int] The ID of the course of which the questions should be retrieved
      * @return [ResponseEntity]<[Array]<[Question]> The list of questions that corresponds to the course
