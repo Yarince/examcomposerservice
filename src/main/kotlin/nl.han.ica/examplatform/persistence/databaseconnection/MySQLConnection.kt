@@ -1,6 +1,9 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
+import java.io.File
+import java.io.FileInputStream
 import java.io.FileReader
+import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -18,7 +21,7 @@ object MySQLConnection {
     private val databaseProperties: Properties
 
     init {
-        databaseProperties = initializeProperties()
+        databaseProperties = initializePropertiesOutsideJar()
     }
 
     /**
@@ -42,8 +45,31 @@ object MySQLConnection {
      */
     private fun initializeProperties(): Properties {
         val databaseProperties = Properties()
-        val reader = FileReader(System.getProperty("user.dir") + "/src/main/kotlin/nl.han.ica/examplatform/config/databaseconfig/application.properties")
+        val reader = FileReader(System.getProperty("user.dir") + "/src/main/resources/application.properties")
         databaseProperties.load(reader)
+        return databaseProperties
+
+    return databaseProperties
+    }
+
+    /**
+     * Reads the database properties, loads them into a [Properties] object and returns them
+     *
+     * @return loaded database properties
+     */
+    private fun initializePropertiesOutsideJar() : Properties {
+        val databaseProperties = Properties()
+
+        try {
+            val jarPath = File(this::class.java!!.protectionDomain.codeSource.location.path)
+            val propertiesPath = jarPath.parentFile.absolutePath
+            println(jarPath)
+            println(propertiesPath)
+            databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
         return databaseProperties
     }
 
@@ -87,7 +113,7 @@ object MySQLConnection {
         }
     }
 
-    private fun getDatabaseConnectionUrl(properties: Properties): String {
+    fun getDatabaseConnectionUrl(properties: Properties): String {
         return properties.getProperty("jdbc.url")
     }
 
