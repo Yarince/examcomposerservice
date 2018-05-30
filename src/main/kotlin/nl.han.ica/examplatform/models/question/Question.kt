@@ -11,7 +11,7 @@ data class Question(
         @ApiModelProperty(notes = "Text of order in exam text. Example: \"Question 1\" or \"a\"", required = true)
         val questionOrderText: String? = null,
         @ApiModelProperty(notes = "This could be open-, multiplechoice-, or noQuestion", required = true)
-        val questionType: QuestionType = QuestionType.OPEN_QUESTION,
+        val questionType: String,
         @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
         val questionText: String? = null,
         val questionPoints: Float? = null,
