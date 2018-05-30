@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class QuestionService {
-
     @Autowired
     private lateinit var questionDAO: QuestionDAO
 

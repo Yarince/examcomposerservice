@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.business.exam
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
@@ -10,11 +11,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
+
 /**
  * Exam service for handling requests related to the Exam model.
  */
 @Service
 class ExamService {
+    private val logger = loggerFor(javaClass)
 
     @Autowired
     lateinit var examDAO: ExamDAO
@@ -26,8 +29,14 @@ class ExamService {
      * @throws InvalidExamException If properties of the exam are not correct
      */
     fun checkExam(exam: Exam?) {
-        if (exam?.questions != null) throw InvalidExamException("questions must be empty")
-        if (exam?.examId != null) throw InvalidExamException("examId must be left empty")
+        if (exam?.questions != null) {
+            logger.error("Tried to insert an exam with questions when questions should've been")
+            throw InvalidExamException("questions must be empty")
+        }
+        if (exam?.examId != null) {
+            logger.error("Tried to insert an exam with an examId predefined")
+            throw InvalidExamException("examId must be left empty")
+        }
     }
 
     /**
@@ -65,7 +74,7 @@ class ExamService {
      *
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
-    fun generatePracticeExam(courseId: Int) : ResponseEntity<PracticeExam?> {
+    fun generatePracticeExam(courseId: Int): ResponseEntity<PracticeExam?> {
         val practiceExam: PracticeExam? = examDAO.generatePracticeExam(courseId)
         return ResponseEntity(practiceExam, HttpStatus.CREATED)
     }
