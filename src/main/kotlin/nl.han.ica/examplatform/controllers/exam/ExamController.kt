@@ -9,6 +9,7 @@ import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.PreparedExam
+import nl.han.ica.examplatform.models.exam.PracticeExamRequestBody
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -26,19 +27,19 @@ class ExamController {
     @Autowired
     lateinit var examQuestionService: ExamQuestionService
 
-    @PostMapping("/practice-exam")
-    @ApiOperation(value = "Add a practice exam without questions", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
+    @PostMapping("/practice")
+    @ApiOperation(value = "Generate a practice exam", notes = "This will return a random practice exam based on the course and the categories", response = PracticeExam::class)
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<PracticeExam?> = examService.generatePracticeExam(courseId)
+    fun generatePracticeExam(@RequestBody courseAndCategories: PracticeExamRequestBody): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseAndCategories.courseId, courseAndCategories.categories)
 
     @GetMapping
-    @ApiOperation(value = "Get a list of minified exams", notes = "This returns a list of exams containing ID, name, ", response = Array<SimpleExam>::class)
+    @ApiOperation(value = "Get a list of minified exams", notes = "This returns a list of exams", response = Array<SimpleExam>::class)
     fun getExams() = examService.getExams()
 
     @PostMapping()
-    @ApiOperation(value = "Add an exam without questions", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
+    @ApiOperation(value = "Add an exam without questions", notes = "Cannot contain questions or an examId", response = Exam::class)
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))

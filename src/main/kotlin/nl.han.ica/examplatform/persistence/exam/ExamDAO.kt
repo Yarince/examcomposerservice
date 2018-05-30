@@ -1,10 +1,10 @@
 package nl.han.ica.examplatform.persistence.exam
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection
@@ -18,15 +18,7 @@ import kotlin.collections.ArrayList
  */
 @Repository
 class ExamDAO {
-
-    /**
-     * This function generates and returns [PracticeExam]
-     *
-     * @param courseId [Int] The course id where questions have to be fetched from.
-     */
-    fun generatePracticeExam(courseId: Int): PracticeExam? {
-        return null
-    }
+    private val logger = loggerFor(javaClass)
 
     /**
      * This function gets a list of minimized exams
@@ -50,7 +42,7 @@ class ExamDAO {
             }
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error when retrieving exams", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
@@ -92,7 +84,7 @@ class ExamDAO {
                         questionId = questionRs.getInt("QuestionID"),
                         questionOrderInExam = 1,// questionRs.getInt("?"),
                         questionOrderText = "Question 1",//questionRs.getString("?")
-                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
+                        questionType = questionRs.getString("QuestionType"),
                         questionText = questionRs.getString("QuestionText"),
                         questionPoints = 5F, //questionRs.getFloat("?"),
                         options = arrayOf("Ja", "Nee"),
@@ -120,7 +112,7 @@ class ExamDAO {
                     questions = questions
             )
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error while getting exam $id", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(examStatement)
@@ -166,7 +158,7 @@ class ExamDAO {
                 }
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error while inserting exam in database", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
@@ -207,7 +199,7 @@ class ExamDAO {
         try {
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error when adding questions to exam", e)
             throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)

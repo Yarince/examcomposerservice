@@ -4,7 +4,6 @@ import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamExcepti
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.assertEquals
@@ -33,7 +32,7 @@ class ExamQuestionServiceTest {
 
     @Test
     fun testCheckQuestion() {
-        val question = Question(questionId = 1, questionPoints = 4f)
+        val question = Question(questionId = 1, questionPoints = 4f, questionType = "OpenQuestion")
         doReturn(true).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayListOf(question))
         verify(questionDAO, times(1)).exists(question)
@@ -47,14 +46,14 @@ class ExamQuestionServiceTest {
 
     @Test(expected = InvalidExamException::class)
     fun testCheckQuestionNotExisting() {
-        val question = Question(questionId = 1, questionPoints = 4f)
+        val question = Question(questionId = 1, questionPoints = 4f, questionType = "OpenQuestion")
         doReturn(false).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayListOf(question))
     }
 
     @Test
     fun testAddQuestionToExam() {
-        val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = QuestionType.OPEN_QUESTION, questionPoints = 5F)
+        val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "OpenQuestion", questionPoints = 5F)
         val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).addQuestionsToExam(expectedExam)
