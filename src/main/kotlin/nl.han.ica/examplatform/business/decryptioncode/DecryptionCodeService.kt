@@ -16,8 +16,6 @@ class DecryptionCodeService(private val decryptionCodeDAO: DecryptionCodeDAO) {
      *
      * @return [ResponseEntity]<String> decryption code [String]
      */
-    fun getDecryptionCode(examId: Int): ResponseEntity<String> {
-        val decryptionCode: String = decryptionCodeDAO.getDecryptionCode(examId)
-        return ResponseEntity(decryptionCode, HttpStatus.OK)
-    }
+    fun getDecryptionCode(examId: Int): ResponseEntity<String> =
+        ResponseEntity(decryptionCodeDAO.getDecryptionCode(examId), HttpStatus.OK)
 }
