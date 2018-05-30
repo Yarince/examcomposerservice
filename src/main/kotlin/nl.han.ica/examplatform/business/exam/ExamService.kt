@@ -36,9 +36,8 @@ class ExamService {
      *
      * @return [ResponseEntity]<Array<[SimpleExam]>> All exams currently in the database in a simplified view
      */
-    fun getExams(): ResponseEntity<ArrayList<SimpleExam>> {
-        return ResponseEntity(examDAO.getExams(), HttpStatus.OK)
-    }
+    fun getExams(): ResponseEntity<ArrayList<SimpleExam>> =
+            ResponseEntity(examDAO.getExams(), HttpStatus.OK)
 
     /**
      * Add an new Exam to the database
@@ -57,22 +56,24 @@ class ExamService {
      *
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
-    fun getExam(id: Int): ResponseEntity<Exam> {
-        return ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
-    }
+    fun getExam(id: Int): ResponseEntity<Exam> =
+            ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
 
     /**
      * Generate a practice practice [Exam]
      *
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
-    fun generatePracticeExam(courseId: Int) : ResponseEntity<PracticeExam?> {
-        val practiceExam: PracticeExam? = examDAO.generatePracticeExam(courseId)
-        return ResponseEntity(practiceExam, HttpStatus.CREATED)
-    }
+    fun generatePracticeExam(courseId: Int): ResponseEntity<PracticeExam?> =
+            ResponseEntity(examDAO.generatePracticeExam(courseId), HttpStatus.CREATED)
 
-    fun addClassesToExam(examId: Int, classes: Array<String>): ResponseEntity<PreparedExam> {
-        return ResponseEntity(examDAO.addClassesToExam(examId, classes), HttpStatus.ACCEPTED)
-    }
+    /**
+     * Ads a class to an exam
+     *
+     * @param examId [Int] the ID of the exam
+     * @param classes [Array]<[String]> an array containing classes
+     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
+     */
+    fun addClassesToExam(examId: Int, classes: Array<String>): ResponseEntity<PreparedExam> =
+            ResponseEntity(examDAO.addClassesToExam(examId, classes), HttpStatus.ACCEPTED)
 }
-

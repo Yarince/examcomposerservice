@@ -5,7 +5,24 @@ import nl.han.ica.examplatform.models.question.Question
 import java.util.Date
 import java.util.Arrays
 
-
+/**
+ * A prepared exam is an exam that is ready for a student to do.
+ *
+ * @param examId [Int] The ID of the exam.
+ * @param name [String] The name of the exam.
+ * @param durationInMinutes [Int] The duration in minutes of the exam.
+ * @param startTime [Date] The start time of the exam.
+ * @param endTime [Date] The end time of the exam.
+ * @param courseName [String] The name of the course that the question is for.
+ * @param version [Int] The version number of the exam.
+ * @param examType [String] The name of the plugin.
+ * @param instructions [String] Instructions for the exam.
+ * @param location [String] The location of which the exam is assessed.
+ * @param classes [Array]<[String]> The classes the exam is for.
+ * @param creator [String] The creator of the exam.
+ * @param tools [String] The tools that can be used for the exam.
+ * @param questions [Array]<[Question]> The questions in the exam.
+ */
 data class PreparedExam(
         @ApiModelProperty(notes = "The ID of the exam")
         val examId: Int,

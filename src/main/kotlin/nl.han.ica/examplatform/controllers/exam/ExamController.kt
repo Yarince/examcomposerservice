@@ -61,11 +61,22 @@ class ExamController {
     fun addQuestionToExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
             examQuestionService.addQuestionToExam(exam)
 
+    /**
+     * Ads a class to an exam
+     *
+     * @param examId [Int] the ID of the exam of which the classes should be added to
+     * @param classes [Array]<[String]> An array containing the classes
+     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
+     */
     @PostMapping("/addClasses")
     @ApiOperation(value = "Add classes to an exam", notes = "This makes it so the students are able to perform the exam", response = PreparedExam::class)
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun addClassesToExam(@ApiParam(value = "An array of classes, e.g. ASD-A ASD-B ASD-C", required = true) @RequestParam classes: Array<String>, @ApiParam(value = "The ID of the exam you want to add the classes to", required = true) @RequestParam examId: Int) =
+    fun addClassesToExam(
+            @ApiParam(value = "An array of classes, e.g. ASD-A ASD-B ASD-C", required = true)
+            @RequestParam classes: Array<String>,
+            @ApiParam(value = "The ID of the exam you want to add the classes to", required = true)
+            @RequestParam examId: Int) =
             examService.addClassesToExam(examId, classes)
 }
