@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.question.Question
 import java.util.Date
 
+/**
+ * Represents a official exam.
+ */
 data class Exam(
         @ApiModelProperty(notes = "The ID of the exam")
         val examId: Int? = null,

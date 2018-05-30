@@ -1,7 +1,8 @@
 package nl.han.ica.examplatform.persistence.answer
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
+import nl.han.ica.examplatform.controllers.answer.AnswerControllerAdvice.Companion.logger
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -10,7 +11,7 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 
 /**
- * The DAO class for [Answer]
+ * The DAO class for [Answer].
  */
 @Repository
 class AnswerDAO : IAnswerDAO {
@@ -18,7 +19,7 @@ class AnswerDAO : IAnswerDAO {
     private val logger = loggerFor(javaClass)
 
     /**
-     * Add an Answer to a Question in the database
+     * Add an Answer to a Question in the database.
      *
      * @param answer The [Answer] you want to add to a [Question]
      */
