@@ -30,6 +30,7 @@ class CourseDAO {
         val result = arrayListOf<Course>()
         try {
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Prepared statement couldn't be made")
+
             while (rs.next())
                 result.add(Course(
                         rs.getInt("COURSEID"),
