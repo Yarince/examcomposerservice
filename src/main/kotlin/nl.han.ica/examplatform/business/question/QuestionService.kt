@@ -14,7 +14,7 @@ class QuestionService {
     private lateinit var questionDAO: QuestionDAO
 
     /**
-     * Add a new Question to the database.
+     * Add a new Question to the database, possibly with subquestions.
      *
      * @param question [Question] to be added in the database.
      * @return ResponseEntity<[Question]> with new question inserted and an assigned id.
@@ -22,9 +22,27 @@ class QuestionService {
     fun addQuestion(question: Question): ResponseEntity<Question> {
         return try {
             val insertedQuestion = questionDAO.insertQuestion(question)
+            question.subQuestions?.let {
+                if (insertedQuestion.questionId == null) return@let
+                it.forEach {
+                    addSubQuestions(it, insertedQuestion.questionId)
+                }
+            }
             ResponseEntity(insertedQuestion, HttpStatus.CREATED)
         } catch (exception: Exception) {
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    private fun addSubQuestions(question: Question, parentQuestionId: Int) {
+        val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)
+
+        if (insertedQuestion.questionId == null) return
+        if (question.subQuestions == null) return
+        if (question.subQuestions.isEmpty()) return
+
+        question.subQuestions.forEach {
+            addSubQuestions(it, insertedQuestion.questionId)
         }
     }
 

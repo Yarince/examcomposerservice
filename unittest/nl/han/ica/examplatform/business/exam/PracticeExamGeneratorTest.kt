@@ -23,16 +23,16 @@ internal class PracticeExamGeneratorTest {
         val courseId = 1
         val categories = arrayOf("ATAM", "DCAR")
         val expectedQuestions = arrayOf(
-                Question(questionId = 1, categories = arrayOf("QA", "ATAM")),
-                Question(questionId = 5, categories = arrayOf("ASR", "DCAR", "QA")),
-                Question(questionId = 6, categories = arrayOf("DCAR")),
-                Question(questionId = 7, categories = arrayOf("DCAR")),
-                Question(questionId = 8, categories = arrayOf("DCAR")),
-                Question(questionId = 9, categories = arrayOf("DCAR")),
-                Question(questionId = 10, categories = arrayOf("DCAR")),
-                Question(questionId = 2, categories = arrayOf("DCAR")),
-                Question(questionId = 3, categories = arrayOf("ATAM")),
-                Question(questionId = 4, categories = arrayOf("ATAM"))
+                Question(questionId = 1, categories = arrayOf("QA", "ATAM"), questionType = "OpenQuestion"),
+                Question(questionId = 5, categories = arrayOf("ASR", "DCAR", "QA"), questionType = "OpenQuestion"),
+                Question(questionId = 6, categories = arrayOf("DCAR"), questionType = "OpenQuestion"),
+                Question(questionId = 7, categories = arrayOf("DCAR"), questionType = "OpenQuestion"),
+                Question(questionId = 8, categories = arrayOf("DCAR"), questionType = "OpenQuestion"),
+                Question(questionId = 9, categories = arrayOf("DCAR"), questionType = "OpenQuestion"),
+                Question(questionId = 10, categories = arrayOf("DCAR"), questionType = "OpenQuestion"),
+                Question(questionId = 2, categories = arrayOf("DCAR"), questionType = "OpenQuestion"),
+                Question(questionId = 3, categories = arrayOf("ATAM"), questionType = "OpenQuestion"),
+                Question(questionId = 4, categories = arrayOf("ATAM"), questionType = "OpenQuestion")
         )
 
         doReturn(expectedQuestions).`when`(questionDAO).getQuestions(courseId, categories)
