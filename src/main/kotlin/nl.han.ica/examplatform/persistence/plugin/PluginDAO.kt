@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.persistence.question
+package nl.han.ica.examplatform.persistence.plugin
 
 import nl.han.ica.examplatform.models.plugin.Plugin
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
@@ -16,8 +16,8 @@ class PluginDAO {
      */
     fun getAllPlugins(): ArrayList<Plugin> {
         val dbConnection: Connection? = MySQLConnection.getConnection()
-        val pluginNameQuery = "SELECT PluginId, PluginName, PluginVersion, PluginDescription FROM `PLUGIN`"
-        val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(pluginNameQuery)
+        val dbQuery = "SELECT PluginId, PluginName, PluginVersion, PluginDescription FROM PLUGIN"
+        val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(dbQuery)
 
         val result = arrayListOf<Plugin>()
         try {

@@ -5,9 +5,11 @@ import nl.han.ica.examplatform.business.plugin.PluginService
 import nl.han.ica.examplatform.models.plugin.Plugin
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-@RestController("plugin")
+@RestController()
+@RequestMapping("/plugins")
 @Api("question", description = "Creating, updating and deleting plugins")
 class PluginController(private val pluginService: PluginService) {
 
