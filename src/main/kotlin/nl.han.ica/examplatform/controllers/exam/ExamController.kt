@@ -62,11 +62,11 @@ class ExamController {
             examQuestionService.addQuestionToExam(exam)
 
     /**
-     * Ads a class to an exam
+     * Ads a class to an exam.
      *
-     * @param examId [Int] the ID of the exam of which the classes should be added to
-     * @param classes [Array]<[String]> An array containing the classes
-     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
+     * @param examId [Int] the ID of the exam of which the classes should be added to.
+     * @param classes [Array]<[String]> An array containing the classes.
+     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes.
      */
     @PostMapping("/addClasses")
     @ApiOperation(value = "Add classes to an exam", notes = "This makes it so the students are able to perform the exam", response = PreparedExam::class)

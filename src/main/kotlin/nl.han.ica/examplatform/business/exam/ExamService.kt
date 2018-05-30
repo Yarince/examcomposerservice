@@ -21,7 +21,7 @@ class ExamService {
     lateinit var examDAO: ExamDAO
 
     /**
-     * Check if an exam has questions and if the id is left empty
+     * Check if an exam has questions and if the id is left empty.
      *
      * @param exam [Exam] that needs to be validated
      * @throws InvalidExamException If properties of the exam are not correct
@@ -32,7 +32,7 @@ class ExamService {
     }
 
     /**
-     * Get all Exams from the database
+     * Get all Exams from the database.
      *
      * @return [ResponseEntity]<Array<[SimpleExam]>> All exams currently in the database in a simplified view
      */
@@ -40,7 +40,7 @@ class ExamService {
             ResponseEntity(examDAO.getExams(), HttpStatus.OK)
 
     /**
-     * Add an new Exam to the database
+     * Add an new Exam to the database.
      *
      * @param exam [Exam] to be added in the database
      * @return ResponseEntity<[Exam]> with new exam inserted and an assigned id
@@ -52,7 +52,7 @@ class ExamService {
     }
 
     /**
-     * Get a specific Exam from the database
+     * Get a specific Exam from the database.
      *
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
@@ -60,7 +60,7 @@ class ExamService {
             ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
 
     /**
-     * Generate a practice practice [Exam]
+     * Generate a practice practice [Exam].
      *
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
@@ -68,7 +68,7 @@ class ExamService {
             ResponseEntity(examDAO.generatePracticeExam(courseId), HttpStatus.CREATED)
 
     /**
-     * Ads a class to an exam
+     * Ads a class to an exam.
      *
      * @param examId [Int] the ID of the exam
      * @param classes [Array]<[String]> an array containing classes
