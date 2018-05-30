@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiParam
 import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.business.question.QuestionTypeService
 import nl.han.ica.examplatform.models.question.Question
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,16 +17,21 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.GetMapping
 
-@RestController()
+/**
+ * REST controller for HTTP interaction with [Question]s.
+ *
+ * @param questionService [QuestionService] The QuestionService
+ */
+@RestController
 @RequestMapping("/question")
 @Api("question", description = "Creating, updating and deleting questions")
-class QuestionController(private val questionService: QuestionService, private val questionTypeSerivce: QuestionTypeService) {
+class QuestionController (private val questionService: QuestionService) {
 
     /**
-     * Endpoint for creating a question.
+     * HTTP REST function to add a new Question to the system.
+     * Returns the newly added Question.
      *
-     * @param question [Question] The question that should be inserted
-     * @return [ResponseEntity]<[Question]> The inserted question
+     * @return [Question]
      */
     @PostMapping()
     @ApiOperation(value = "Create a question", notes = "Create a question")
