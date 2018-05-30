@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
 class CourseService(private val courseDAO: CourseDAO) {
 
     /**
-     * This function gets a list of all courses
+     * This function gets a list of all courses.
      *
      * @return [Array] of [Course]s
      */
