@@ -1,5 +1,7 @@
 package nl.han.ica.examplatform.persistence.course
 
+import nl.han.ica.examplatform.config.logger.loggerFor
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.course.Course
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -12,6 +14,9 @@ import java.sql.SQLException
  */
 @Repository
 class CourseDAO {
+
+    val logger = loggerFor(javaClass)
+
     /**
      * This function gets a list of all courses from the database.
      *
@@ -24,18 +29,15 @@ class CourseDAO {
 
         val result = arrayListOf<Course>()
         try {
-            val rs = preparedStatement?.executeQuery()
-            while (rs!!.next())
+            val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Prepared statement couldn't be made")
+            while (rs.next())
                 result.add(Course(
                         rs.getInt("COURSEID"),
                         rs.getString("COURSENAME"),
                         rs.getString("COURSECODE")
                 ))
-
-
         } catch (e: SQLException) {
-            e.printStackTrace()
-            print(e)
+            logger.error("Something went wrong while getting all courses", e)
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(dbConnection)
