@@ -28,7 +28,7 @@ class QuestionDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONTEXT, QUESTIONTYPE, COURSEID, PARENTQUESTIONID, EXAMTYPEID) VALUES (?, ?, ?, ?, 1)"
+        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONTEXT, QUESTIONTYPE, COURSEID, PARENTQUESTIONID, EXAMTYPENAME) VALUES (?, ?, ?, ?, 'Tentamen')"
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
@@ -96,32 +96,21 @@ class QuestionDAO {
      * @param courseId [Int] The ID of course of which the questions should be retrieved.
      * @return [Array]<[Question]> An array of all questions corresponding to the course.
      */
-    fun getQuestions(courseId: Int): Array<Question> {
+    fun getQuestionsByCourse(courseId: Int): Array<Question> {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null
 
-        val sqlQuestionQuery = "SELECT distinct Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE COURSEID = ? and PARENTQUESTIONID is null"
+        val sqlQuestionQuery = "SELECT distinct Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE COURSEID = ? and PARENTQUESTIONID is null"
 
-        val questions = ArrayList<Question>()
+        val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
+
+        var questions = ArrayList<Question>()
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
             preparedQuestionStatement?.setInt(1, courseId)
 
 
-            val questionRs = preparedQuestionStatement?.executeQuery()
-                    ?: throw DatabaseException("Error while interacting with the database")
-
-            while (questionRs.next())
-                questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
-                        questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                        questionOrderText = questionRs.getString("SEQUENCENUMBER"),
-                        questionType = questionRs.getString("QUESTIONTYPE"),
-                        questionText = questionRs.getString("QUESTIONTEXT"),
-                        questionPoints = questionRs.getFloat("QUESTIONPOINTS"),
-                        courseId = questionRs.getInt("COURSEID"),
-                        subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                        categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn)
-                ))
+            questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -129,44 +118,132 @@ class QuestionDAO {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
+
         return questions.toTypedArray()
     }
 
-    private fun getSubQuestionsOfQuestion(questionId: Int, conn: Connection?): Array<Question>? {
-        var preparedQuestionStatement: PreparedStatement? = null
+    /**
+     * Gets all questions of a course, within specific categories
+     *
+     * @param courseId [Int] The ID of course of which the questions should be retrieved
+     * @param categories [Array] An array containing all the categories of which the questions should be retrieved
+     * @return [Array]<[Question]> An array of all questions corresponding to the course and categories
+     */
+    fun getQuestionsByCourseAndCategory(courseId: Int, categories: Array<String>): Array<Question> {
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedStatement: PreparedStatement? = null
 
-        val sqlQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
+        var queryGetQuestions = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? "
+        val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
 
+        for ((index, _) in categories.withIndex()) {
+            queryGetQuestions += when (index) {
+                0 -> "AND CATEGORYNAME = ?"
+                else -> "OR CATEGORYNAME = ?"
+            }
+        }
         val questions = ArrayList<Question>()
         try {
-            preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
-            preparedQuestionStatement?.setInt(1, questionId)
+            preparedStatement = conn?.prepareStatement(queryGetQuestions)
+            preparedStatement?.setInt(1, courseId)
 
+            for ((index, category) in categories.withIndex()) {
+                preparedStatement?.setString(index + 2, category)
+            }
 
-            val questionRs = preparedQuestionStatement?.executeQuery()
+            val questionRs = preparedStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
 
-            while (questionRs.next())
-                questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
-                        questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                        questionOrderText = questionRs.getString("SEQUENCENUMBER"),
-                        questionType = questionRs.getString("QUESTIONTYPE"),
-                        questionText = questionRs.getString("QUESTIONTEXT"),
-                        questionPoints = questionRs.getFloat("QUESTIONPOINTS"),
-                        courseId = questionRs.getInt("COURSEID"),
-                        subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                        categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn)
-                ))
+            while (questionRs.next()) {
+
+                questions.add(Question(questionId = questionRs.getInt("QuestionID"),
+                        questionType = questionRs.getString("QuestionType"),
+                        questionText = questionRs.getString("QuestionText"),
+                        examType = questionRs.getString("EXAMTYPENAME"),
+                        categories = getCategoriesOfQuestion(questionRs.getInt("QuestionID"), conn),
+                        subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery)))
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedStatement)
+        }
+        return questions.toTypedArray()
+    }
+
+    /**
+     * Gets all questions of a course, within specific categories
+     *
+     * @param examId [Int] The ID of exam of which the questions should be retrieved
+     * @return [Array]<[Question]> An array of all questions corresponding to the course and categories
+     */
+    fun getQuestionsByExam(examId: Int): ArrayList<Question> {
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedQuestionStatement: PreparedStatement? = null
+
+        val sqlQuestionQuery = "SELECT distinct Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE EXAMID = ? and PARENTQUESTIONID is null"
+
+        val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
+
+        var questions = ArrayList<Question>()
+        try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
+            preparedQuestionStatement?.setInt(1, examId)
+
+            questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
+
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedQuestionStatement)
+        }
+
+        return questions
+    }
+
+    private fun initQuestionsByResultSet(preparedQuestionStatement: PreparedStatement?, sqlSubQuestionQuery: String, conn: Connection?): ArrayList<Question> {
+        val questions = ArrayList<Question>()
+
+        val questionRs = preparedQuestionStatement?.executeQuery()
+                ?: throw DatabaseException("Error while interacting with the database")
+
+        while (questionRs.next())
+            questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
+                    questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
+                    questionOrderText = questionRs.getString("SEQUENCENUMBER"),
+                    questionType = questionRs.getString("QUESTIONTYPE"),
+                    questionText = questionRs.getString("QUESTIONTEXT"),
+                    questionPoints = questionRs.getFloat("QUESTIONPOINTS"),
+                    courseId = questionRs.getInt("COURSEID"),
+                    examType = questionRs.getString("EXAMTYPENAME"),
+                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
+                    subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery)
+            ))
+        return questions
+    }
+
+    private fun getSubQuestionsOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String): ArrayList<Question>? {
+        var preparedQuestionStatement: PreparedStatement? = null
+
+        var questions = ArrayList<Question>()
+        try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlSubQuestionQuery)
+            preparedQuestionStatement?.setInt(1, questionId)
+
+            questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
             e.printStackTrace()
         } finally {
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
-        return questions.toTypedArray()
+
+        return questions
     }
 
-    private fun getCategoriesOfQuestion(questionId: Int, conn: Connection?): Array<String> {
+    private fun getCategoriesOfQuestion(questionId: Int, conn: Connection?): ArrayList<String> {
         var preparedQuestionCategoryStatement: PreparedStatement? = null
 
         val sqlQuestionCategoryQuery = "SELECT CATEGORYNAME FROM CATEGORIES_OF_QUESTION as CQ INNER JOIN CATEGORY as C ON CQ.CATEGORYID = C.CATEGORYID WHERE QUESTIONID = ?"
@@ -188,61 +265,6 @@ class QuestionDAO {
         } finally {
             MySQLConnection.closeStatement(preparedQuestionCategoryStatement)
         }
-        return questions.toTypedArray()
-    }
-
-    /**
-     * Gets all questions of a course, within specific categories
-     *
-     * @param courseId [Int] The ID of course of which the questions should be retrieved
-     * @param categories [Array] An array containing all the categories of which the questions should be retrieved
-     * @return [Array]<[Question]> An array of all questions corresponding to the course and categories
-     */
-    fun getQuestions(courseId: Int, categories: Array<String>): Array<Question> {
-        val conn: Connection? = MySQLConnection.getConnection()
-        var preparedStatement: PreparedStatement? = null
-
-        var queryGetQuestions = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? "
-
-        for ((index, _) in categories.withIndex()) {
-            queryGetQuestions += when (index) {
-                0 -> "AND CATEGORYNAME = ?"
-                else -> "OR CATEGORYNAME = ?"
-            }
-        }
-        val questions = ArrayList<Question>()
-        try {
-            preparedStatement = conn?.prepareStatement(queryGetQuestions)
-            preparedStatement?.setInt(1, courseId)
-
-            for ((index, category) in categories.withIndex()) {
-                preparedStatement?.setString(index + 2, category)
-            }
-
-            val questionRs = preparedStatement?.executeQuery()
-                    ?: throw DatabaseException("Error while interacting with the database")
-
-            while (questionRs.next()) {
-                val questionId = questionRs.getInt("QuestionID")
-                val category = questionRs.getString("CategoryName")
-
-                if (questions.any { it.questionId == questionId }) {
-                    val question = questions.find { it.questionId == questionId }
-                    question?.categories = question?.categories?.clone()!!
-                    questions[questions.indexOf(question)] = question
-                }
-
-                questions.add(Question(questionId = questionRs.getInt("QuestionID"),
-                        questionText = questionRs.getString("QuestionText"),
-                        questionType = questionRs.getString("QuestionType"),
-                        categories = arrayOf(category)))
-            }
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        } finally {
-            MySQLConnection.closeConnection(conn)
-            MySQLConnection.closeStatement(preparedStatement)
-        }
-        return questions.toTypedArray()
+        return questions
     }
 }

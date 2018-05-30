@@ -20,7 +20,7 @@ data class Exam(
         @ApiModelProperty(notes = "The version of the exam")
         val version: Int = 1,
         @ApiModelProperty(notes = "The type of the exam can be practice test or exam")
-        val examType: ExamType,
+        val examType: String,
         @ApiModelProperty(notes = "The instructions for the exam")
         val instructions: String? = null,
         @ApiModelProperty(notes = "The location of the exam")

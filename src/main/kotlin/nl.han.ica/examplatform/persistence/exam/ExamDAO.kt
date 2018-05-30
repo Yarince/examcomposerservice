@@ -61,36 +61,14 @@ class ExamDAO {
     fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
 
-        // Todo: select correct columns [BTGGOM-460]
-        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPEID, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID INNER JOIN EXAMTYPE ON EXAM.EXAMTYPEID = EXAMTYPE.EXAMTYPEID WHERE EXAMID = ?"
+        val examQuery = "SELECT EXAMID, STARTTIME, ENDTIME, EXAM.COURSEID, EXAM.EXAMTYPENAME, EXAMNAME, LOCATION, INSTRUCTIONS FROM EXAM INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID WHERE EXAMID = ?"
         val examStatement: PreparedStatement?
         examStatement = conn?.prepareStatement(examQuery)
         examStatement?.setInt(1, id)
 
-        val questionsQuery = "SELECT * FROM QUESTION INNER JOIN QUESTION_IN_EXAM ON QUESTION.QUESTIONID = QUESTION_IN_EXAM.QUESTIONID INNER JOIN COURSE ON QUESTION.COURSEID = COURSE.COURSEID WHERE QUESTION_IN_EXAM.EXAMID = ?"
-        val questionsStatement: PreparedStatement?
-        questionsStatement = conn?.prepareStatement(questionsQuery)
-        questionsStatement?.setInt(1, id)
-
         val result: Exam
 
         try {
-            val questionRs = questionsStatement?.executeQuery()
-                    ?: throw DatabaseException("Error while interacting with the database")
-            val questions = ArrayList<Question>()
-            while (questionRs.next()) {
-                questions.add(Question(
-                        // Todo: wait for columns to be added in the database. [BTGGOM-460]
-                        questionId = questionRs.getInt("QuestionID"),
-                        questionOrderInExam = 1,// questionRs.getInt("?"),
-                        questionOrderText = "Question 1",//questionRs.getString("?")
-                        questionType = questionRs.getString("QuestionType"),
-                        questionText = questionRs.getString("QuestionText"),
-                        questionPoints = 5F, //questionRs.getFloat("?"),
-                        options = arrayOf("Ja", "Nee"),
-                        subQuestions = null // Todo: Add subQuestions from database
-                ))
-            }
             val examRs = examStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
 
@@ -105,11 +83,11 @@ class ExamDAO {
                     startTime = Date(examRs.getTimestamp("StartTime").time),
                     endTime = Date(examRs.getTimestamp("EndTime").time),
                     courseId = examRs.getInt("CourseID"),
-                    examType = ExamType.from(examRs.getInt("ExamTypeId")),
+                    examType = examRs.getString("EXAMTYPENAME"),
                     name = examRs.getString("ExamName"),
                     location = examRs.getString("Location"),
                     instructions = examRs.getString("Instructions"),
-                    questions = questions
+                    questions = null
             )
         } catch (e: SQLException) {
             logger.error("Error while getting exam $id", e)
@@ -132,11 +110,11 @@ class ExamDAO {
         var examToReturn = exam
 
         val conn: Connection? = MySQLConnection.getConnection()
-        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPEID, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, VERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        val insertExamQuery = "INSERT INTO EXAM (COURSEID, EXAMTYPENAME, EXAMCODE, EXAMNAME, STARTTIME, ENDTIME, INSTRUCTIONS, EXAMVERSION, LOCATION) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
         preparedStatement?.setInt(1, exam.courseId)
-        preparedStatement?.setInt(2, exam.examType.examId)
+        preparedStatement?.setString(2, exam.examType)
         preparedStatement?.setString(3, exam.name)
         preparedStatement?.setString(4, exam.name)
         preparedStatement?.setDate(5, java.sql.Date(exam.startTime.time))

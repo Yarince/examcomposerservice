@@ -64,7 +64,7 @@ class ExamService(private val examDAO: ExamDAO, private val questionDAO: Questio
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
     fun getExam(id: Int): ResponseEntity<Exam> =
-            ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
+            ResponseEntity(examDAO.getExam(id).copy(questions = questionDAO.getQuestionsByExam(id)), HttpStatus.OK)
 
     /**
      * Generate a [PracticeExam].
