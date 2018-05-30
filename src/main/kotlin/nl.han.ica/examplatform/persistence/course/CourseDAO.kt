@@ -13,7 +13,7 @@ import java.sql.SQLException
 @Repository
 class CourseDAO {
     /**
-     * This function gets a list of all courses from the database
+     * This function gets a list of all courses from the database.
      *
      * @return [ArrayList] of [Course]s
      */
