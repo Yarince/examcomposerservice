@@ -8,7 +8,6 @@ import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection
@@ -23,15 +22,6 @@ import kotlin.collections.ArrayList
 @Repository
 class ExamDAO {
     private val logger = loggerFor(javaClass)
-
-    /**
-     * This function generates and returns [PracticeExam]
-     *
-     * @param courseId [Int] The course id where questions have to be fetched from.
-     */
-    fun generatePracticeExam(courseId: Int): PracticeExam? {
-        return null
-    }
 
     /**
      * This function gets a list of minimized exams
@@ -97,7 +87,7 @@ class ExamDAO {
                         questionId = questionRs.getInt("QuestionID"),
                         questionOrderInExam = 1,// questionRs.getInt("?"),
                         questionOrderText = "Question 1",//questionRs.getString("?")
-                        questionType = QuestionType.from(questionRs.getString("QuestionType")),
+                        questionType = questionRs.getString("QuestionType"),
                         questionText = questionRs.getString("QuestionText"),
                         questionPoints = 5F, //questionRs.getFloat("?"),
                         options = arrayOf("Ja", "Nee"),
