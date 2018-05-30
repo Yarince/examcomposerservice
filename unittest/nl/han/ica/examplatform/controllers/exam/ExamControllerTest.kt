@@ -5,6 +5,7 @@ import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -35,6 +36,14 @@ class ExamControllerTest {
     lateinit var examQuestionService: ExamQuestionService
 
     @Test
+    fun testGeneratePracticeExam() {
+        val expected = PracticeExam(name = "Practice exam", courseId = 1, questions = arrayListOf())
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1, arrayOf("QA", "ASR"))
+        val result = examController.generatePracticeExam(PracticeExamRequestBody(1, arrayOf("QA", "ASR")))
+        assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
+    }
+
+    @Test
     fun testGetExams() {
         val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", 1),
                 SimpleExam(2, "SWA Toets 2", 1),
@@ -59,7 +68,7 @@ class ExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = ExamType.EXAM, questions = arrayListOf(
-                Question(questionId = 1, questionPoints = 5F)))
+                Question(questionId = 1, questionPoints = 5F, questionType = "open")))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = examController.addQuestionToExam(expected)
