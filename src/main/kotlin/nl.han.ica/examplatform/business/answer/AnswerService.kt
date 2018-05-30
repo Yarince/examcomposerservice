@@ -22,6 +22,6 @@ class AnswerService(private val answerDAO: AnswerDAO) {
         try {
             answerDAO.addAnswerToQuestion(answer)
         } catch (exception: RuntimeException) {
-            throw CouldNotAddAnswerToQuestionException(exception.message, exception, true, true)
+            throw CouldNotAddAnswerToQuestionException(exception.message, exception)
         }
 }

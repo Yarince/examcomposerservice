@@ -44,7 +44,7 @@ internal class AnswerControllerTest {
 
     @Test(expected = CouldNotAddAnswerToQuestionException::class)
     fun testAddAnswerToQuestionCouldNotAddAnswerToQuestionException() {
-        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null, false, false)).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null)).`when`(answerService).addAnswerToQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 
