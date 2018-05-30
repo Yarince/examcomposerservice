@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.decryptioncode.DecryptionCodeService
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,6 +18,11 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("decryptioncode")
 class DecryptionCodeController(private val decryptionCodeService: DecryptionCodeService) {
 
+    /**
+     * Returns the decryption code to unlock the exam
+     *
+     * @return [String]
+     */
     @GetMapping
     @ApiOperation(
         value = "Returns the decryption code to unlock the exam",
@@ -29,7 +33,6 @@ class DecryptionCodeController(private val decryptionCodeService: DecryptionCode
         ApiResponse(code = 400, message = "Invalid Answer"),
         ApiResponse(code = 500, message = "Something went wrong")
     )
-    fun getDecryptionCode(@RequestBody examId: Int): ResponseEntity<String> {
-        return decryptionCodeService.getDecryptionCode(examId)
-    }
+    fun getDecryptionCode(@RequestBody examId: Int): ResponseEntity<String> =
+        decryptionCodeService.getDecryptionCode(examId)
 }

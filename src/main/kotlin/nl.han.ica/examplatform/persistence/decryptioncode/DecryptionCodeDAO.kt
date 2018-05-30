@@ -13,7 +13,5 @@ class DecryptionCodeDAO {
      *
      * @return [String] decryption code
      */
-    fun getDecryptionCode(examId: Int): String {
-        return "Nice Code"
-    }
+    fun getDecryptionCode(examId: Int): String = "Nice Code | ExamId: $examId"
 }
