@@ -6,56 +6,102 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
-import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.models.exam.PracticeExam
-import nl.han.ica.examplatform.models.exam.PreparedExam
-import nl.han.ica.examplatform.models.exam.PracticeExamRequestBody
-import nl.han.ica.examplatform.models.exam.SimpleExam
-import org.springframework.beans.factory.annotation.Autowired
+import nl.han.ica.examplatform.models.exam.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-
+/**
+ * REST controller for HTTP interaction with [Exam]s.
+ *
+ * @param examService [ExamService] The ExamService
+ * @param examQuestionService [examQuestionService] The ExamQuestionService
+ */
 @RestController
 @RequestMapping("exams")
-class ExamController {
+class ExamController (
+    private val examService: ExamService,
+    private val examQuestionService: ExamQuestionService
+) {
 
-    //Load examService as Spring Bean
-    @Autowired
-    lateinit var examService: ExamService
-
-    @Autowired
-    lateinit var examQuestionService: ExamQuestionService
-
-    @PostMapping("/practice")
-    @ApiOperation(value = "Generate a practice exam", notes = "This will return a random practice exam based on the course and the categories", response = PracticeExam::class)
+    /**
+     * HTTP REST function to generate a practice exam.
+     *
+     * @return [PracticeExam]
+     */
+    @PostMapping("/practice-exam")
+    @ApiOperation(
+        value = "Add a practice exam without questions",
+        notes = "Cannot contain questions or an examId",
+        response = PracticeExam::class
+    )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
     fun generatePracticeExam(@RequestBody courseAndCategories: PracticeExamRequestBody): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseAndCategories.courseId, courseAndCategories.categories)
 
+
+    /**
+     * HTTP REST function to get a list of basic information from all exams.
+     *
+     * @return [Array]<[SimpleExam]>
+     */
     @GetMapping
-    @ApiOperation(value = "Get a list of minified exams", notes = "This returns a list of exams", response = Array<SimpleExam>::class)
+    @ApiOperation(
+        value = "Get a list of minified exams",
+        notes = "This returns a list of exams containing ID, name, ",
+        response = Array<SimpleExam>::class
+    )
     fun getExams() = examService.getExams()
 
+    /**
+     * HTTP REST function add a new Exam to the system.
+     * Returns the newly added Exam.
+     *
+     * @return [Exam]
+     */
     @PostMapping()
-    @ApiOperation(value = "Add an exam without questions", notes = "Cannot contain questions or an examId", response = Exam::class)
+    @ApiOperation(
+        value = "Add an exam without questions",
+        notes = "Cannot contain questions or an examId",
+        response = Exam::class
+    )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
     fun addExam(@RequestBody exam: Exam): ResponseEntity<Exam> = examService.addExam(exam)
 
+    /**
+     * HTTP REST function to get one exam with all details.
+     *
+     * @return [Exam]
+     */
     @GetMapping("/{id}")
-    @ApiOperation(value = "Retrieve a specific exam", notes = "Retrieve a specific exam, containing all information, questions and answers", response = Exam::class)
+    @ApiOperation(
+        value = "Retrieve a specific exam",
+        notes = "Retrieve a specific exam, containing all information, questions and answers",
+        response = Exam::class
+    )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
-    fun getExam(@ApiParam(value = "The ID of the exam you want to retrieve", required = true) @PathVariable("id") id: Int): ResponseEntity<Exam> =
-            examService.getExam(id)
+    fun getExam(
+        @ApiParam(value = "The ID of the exam you want to retrieve", required = true)
+        @PathVariable("id")
+        id: Int
+    ): ResponseEntity<Exam> = examService.getExam(id)
 
+    /**
+     * HTTP REST function to add one [Question] to a Exam.
+     * Returns the given Exam with the newly added Question.
+     *
+     * @return [Exam]
+     */
     @PutMapping()
-    @ApiOperation(value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId", response = ResponseEntity::class)
+    @ApiOperation(
+        value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId",
+        response = Exam::class
+    )
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))

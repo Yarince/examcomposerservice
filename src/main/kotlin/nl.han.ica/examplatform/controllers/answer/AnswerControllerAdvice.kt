@@ -2,16 +2,24 @@ package nl.han.ica.examplatform.controllers.answer
 
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.models.ErrorInfo
-import org.springframework.http.*
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.EnumSet
+import java.util.Locale
 import java.util.logging.Logger
 
+/**
+ * Answer Controller.
+ */
 @ControllerAdvice(assignableTypes = [AnswerController::class])
 class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
 
@@ -19,6 +27,13 @@ class AnswerControllerAdvice : ResponseEntityExceptionHandler() {
         val logger = loggerFor(AnswerControllerAdvice::class.java)
     }
 
+    /**
+     * Handles Exeptions thrown by the [AnswerController].
+     * Creates custom [ErrorInfo] class to be return to the API user.
+     * Adds mandatory error headers to the error response.
+     *
+     * @return [ErrorInfo]
+     */
     @ExceptionHandler(RuntimeException::class)
     @ResponseBody
     fun handleInvalidAnswerException(exception: Throwable): ResponseEntity<ErrorInfo> {

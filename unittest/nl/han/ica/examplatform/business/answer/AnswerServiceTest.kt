@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.answer
 
 import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.persistence.answer.AnswerDAO
 import org.junit.Test
 import org.junit.runner.RunWith
