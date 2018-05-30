@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.plugin
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.plugin.Plugin
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
@@ -13,6 +14,9 @@ import java.sql.SQLException
  */
 @Repository
 class PluginDAO {
+
+    val logger = loggerFor(javaClass)
+
     /**
      * This function gets a list of all plugins from the database.
      *
@@ -27,6 +31,7 @@ class PluginDAO {
         try {
             val rs = preparedStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
+
             while (rs.next())
                 result.add(Plugin(
                         rs.getInt("PluginId"),
@@ -34,10 +39,8 @@ class PluginDAO {
                         rs.getString("PluginVersion"),
                         rs.getString("PluginDescription")
                 ))
-
-
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Something went wrong while getting plugin list", e)
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(dbConnection)

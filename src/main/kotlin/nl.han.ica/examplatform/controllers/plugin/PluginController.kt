@@ -20,6 +20,8 @@ class PluginController(private val pluginService: PluginService) {
 
     /**
      * HTTP REST function to get a list of all [Plugin]s from the database.
+     *
+     * @return [ResponseEntity]<[ArrayList]<[Plugin]>>
      */
     @GetMapping()
     @ApiOperation(value = "Get all plugins", notes = "Fetches all plugins from database")
