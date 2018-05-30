@@ -63,8 +63,6 @@ object MySQLConnection {
         try {
             val jarPath = File(this::class.java!!.protectionDomain.codeSource.location.path)
             val propertiesPath = jarPath.parentFile.absolutePath
-            println(jarPath)
-            println(propertiesPath)
             databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
         } catch (e: IOException) {
             e.printStackTrace()
