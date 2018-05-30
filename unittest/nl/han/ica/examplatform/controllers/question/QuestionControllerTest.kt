@@ -2,7 +2,6 @@ package nl.han.ica.examplatform.controllers.question
 
 import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith

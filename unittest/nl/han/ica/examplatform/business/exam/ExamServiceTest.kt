@@ -8,6 +8,7 @@ import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
+import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -27,6 +28,10 @@ internal class ExamServiceTest {
 
     @Mock
     private lateinit var examDAO: ExamDAO
+
+    // This is unused, but without it the tests fail because of injection of this.
+    @Mock
+    private lateinit var questionDAO: QuestionDAO
 
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyId() {

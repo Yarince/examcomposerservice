@@ -4,7 +4,6 @@ import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamExcepti
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.assertEquals

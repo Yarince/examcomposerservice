@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.models.question.QuestionType
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.assertNotNull
 import org.junit.Test
