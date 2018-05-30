@@ -98,11 +98,11 @@ class QuestionDAO {
             val questionRs = preparedStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
 
-            while (questionRs.next()) {
+            while (questionRs.next())
                 questions.add(Question(questionId = questionRs.getInt("QuestionID"),
                         questionText = questionRs.getString("QuestionText"),
                         questionType = questionRs.getString("QuestionType")))
-            }
+
         } catch (e: SQLException) {
             e.printStackTrace()
         } finally {
