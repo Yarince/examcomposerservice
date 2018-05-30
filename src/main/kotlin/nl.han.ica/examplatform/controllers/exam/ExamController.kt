@@ -32,7 +32,7 @@ class ExamController (
     @ApiOperation(
         value = "Add a practice exam without questions",
         notes = "Cannot contain questions or an examId",
-        response = ResponseEntity::class
+        response = PracticeExam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
@@ -63,7 +63,7 @@ class ExamController (
     @ApiOperation(
         value = "Add an exam without questions",
         notes = "Cannot contain questions or an examId",
-        response = ResponseEntity::class
+        response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
@@ -100,7 +100,7 @@ class ExamController (
     @PutMapping()
     @ApiOperation(
         value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId",
-        response = ResponseEntity::class
+        response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
