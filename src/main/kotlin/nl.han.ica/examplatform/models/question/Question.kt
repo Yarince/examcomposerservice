@@ -7,6 +7,7 @@ import java.util.Arrays
 data class Question(
         @ApiModelProperty(notes = "The ID of the question")
         val questionId: Int? = null,
+        @ApiModelProperty(notes = "Order of question in an Exam")
         val questionOrderInExam: Int? = null,
         @ApiModelProperty(notes = "Text of order in exam text. Example: \"Question 1\" or \"a\"", required = true)
         val questionOrderText: String? = null,
@@ -14,10 +15,10 @@ data class Question(
         val questionType: String,
         @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
         val questionText: String? = null,
+        @ApiModelProperty(notes = "Points assigned to a question in an Exam")
         val questionPoints: Float? = null,
         @ApiModelProperty(notes = "ID of the course")
         val courseId: Int? = null,
-        val options: Array<String>? = null,
         @ApiModelProperty(notes = "A question can contain subquestions when the type is noQuestion")
         val subQuestions: Array<Question>? = null,
         @ApiModelProperty(notes = "The categories that this question is about")
