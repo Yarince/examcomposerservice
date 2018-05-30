@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.answer.AnswerService
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import org.springframework.http.HttpStatus
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("answers")
 class AnswerController(private val answerService: AnswerService) {
+    private val logger = loggerFor(javaClass)
 
     /**
      * HTTP REST function to add a [Answer] to a [Question]
@@ -42,6 +44,9 @@ class AnswerController(private val answerService: AnswerService) {
             answerService.addAnswerToQuestion(answer)
             HttpStatus.OK
         } catch (exception: IllegalArgumentException) {
+            logger.error("Tried to insert an answer with invalid values: $answer")
             throw InvalidAnswerException("Answer contains invalid values", exception)
         }
+    }
+
 }

@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import java.io.FileReader
 import java.sql.Connection
 import java.sql.DriverManager
@@ -11,6 +12,7 @@ import java.util.Properties
  * A singleton object that handles the connection with the MySQL database.
  */
 object MySQLConnection {
+    private val logger = loggerFor(javaClass)
 
     /**
      * Holds the database properties, such as the connection URL, username and password.
@@ -30,7 +32,7 @@ object MySQLConnection {
                 getDatabasePassword(databaseProperties),
                 getDrivers(databaseProperties))
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error when getting connection", e)
             null
         }
 
@@ -75,7 +77,7 @@ object MySQLConnection {
         try {
             connectionToClose?.close()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error when closing connection", e)
         }
     }
 
@@ -88,7 +90,7 @@ object MySQLConnection {
         try {
             stmt?.close()
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Couldn't close statement", e)
         }
     }
 

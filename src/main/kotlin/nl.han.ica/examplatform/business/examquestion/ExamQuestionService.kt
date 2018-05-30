@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.business.examquestion
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
@@ -20,6 +21,7 @@ class ExamQuestionService(
     private val examDAO: ExamDAO,
     private val questionDAO: QuestionDAO
 ) {
+    private val logger = loggerFor(javaClass)
 
     /**
      * Validate if all Questions exist.
@@ -30,10 +32,13 @@ class ExamQuestionService(
     fun checkQuestion(questions: ArrayList<Question>?) {
         questions?.let {
             for (question in it)
-                if (!questionDAO.exists(question))
+                if (!questionDAO.exists(question)) {
+                    logger.error("Tried to add a question without questionId to an exam")
                     throw InvalidExamException("Question ${question.questionId} does not exist.")
+                }
             return
         }
+        logger.error("No questions given to add to exam")
         throw InvalidExamException("Questions in exam are empty.")
     }
 
