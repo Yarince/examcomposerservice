@@ -23,20 +23,20 @@ class QuestionService(private val questionDAO: QuestionDAO) {
      * @return ResponseEntity<[Question]> with new question inserted and an assigned id.
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
-        try {
-            val insertedQuestion = questionDAO.insertQuestion(question)
-            question.subQuestions?.let {
-                if (insertedQuestion.questionId == null) return@let
-                it.forEach {
-                    addSubQuestions(it, insertedQuestion.questionId)
+            try {
+                val insertedQuestion = questionDAO.insertQuestion(question)
+                question.subQuestions?.let {
+                    if (insertedQuestion.questionId == null) return@let
+                    it.forEach {
+                        addSubQuestions(it, insertedQuestion.questionId)
+                    }
                 }
+                ResponseEntity(insertedQuestion, HttpStatus.CREATED)
+            } catch (exception: Exception) {
+                logger.error("Couldn't insert question: ${question.questionText}")
+                ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
             }
-            ResponseEntity(insertedQuestion, HttpStatus.CREATED)
-        } catch (exception: Exception) {
-            logger.error("Couldn't insert question: ${question.questionText}")
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
+
 
     private fun addSubQuestions(question: Question, parentQuestionId: Int) {
         val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)
