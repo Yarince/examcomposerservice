@@ -60,7 +60,7 @@ class ExamService(val examDAO: ExamDAO, val questionDAO: QuestionDAO) {
     }
 
     /**
-     * Generate a practice practice [Exam]
+     * Generate a [PracticeExam]
      *
      * @param courseId [Int] The ID of the course of which the exam should be generated
      * @return [ResponseEntity]<Exam> practice [Exam]

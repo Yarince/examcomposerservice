@@ -96,7 +96,7 @@ class QuestionDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
 
-        var sqlQueryStringInsertQuestionString = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? " //todo: update with categories once this is implemented in the db
+        var sqlQueryStringInsertQuestionString = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? "
 
         for ((index, _) in categories.withIndex()) {
             sqlQueryStringInsertQuestionString += when(index) {
