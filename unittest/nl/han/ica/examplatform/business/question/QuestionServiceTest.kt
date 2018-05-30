@@ -28,7 +28,7 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionSuccess() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "open", questionPoints = 5F)
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "OpenQuestion", questionPoints = 5F)
         val expectedResult = ResponseEntity(questionInserted, HttpStatus.CREATED)
 
         doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)
@@ -40,7 +40,7 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionError() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "open", questionPoints = 5F)
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionText = "name", questionType = "OpenQuestion", questionPoints = 5F)
         val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
 
         doThrow(RuntimeException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)

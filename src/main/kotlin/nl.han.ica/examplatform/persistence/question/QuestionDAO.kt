@@ -29,7 +29,10 @@ class QuestionDAO {
             preparedStatement?.setString(1, question.questionText)
             preparedStatement?.setString(2, question.questionType)
             preparedStatement?.setInt(3, question.courseId ?: 1)
-            if (parentQuestionId != null) preparedStatement?.setInt(4, parentQuestionId) else preparedStatement?.setNull(4, java.sql.Types.INTEGER)
+            if (parentQuestionId != null)
+                preparedStatement?.setInt(4, parentQuestionId)
+            else
+                preparedStatement?.setNull(4, java.sql.Types.INTEGER)
 
             val insertedRows = preparedStatement?.executeUpdate()
             if (insertedRows == 1) {

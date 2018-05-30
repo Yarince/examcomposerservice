@@ -10,8 +10,8 @@ data class Question(
         val questionOrderInExam: Int? = null,
         @ApiModelProperty(notes = "Text of order in exam text. Example: \"Question 1\" or \"a\"", required = true)
         val questionOrderText: String? = null,
-        @ApiModelProperty(notes = "This could be open-, multiplechoice-, or noQuestion", required = true)
-        val questionType: String? = "open",
+        @ApiModelProperty(notes = "This is the name of the plugin used, e.g. OpenQuestion", required = true)
+        val questionType: String,
         @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
         val questionText: String? = null,
         @ApiModelProperty(notes = "ID of the course")
