@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
-import java.util.*
+import java.util.Arrays
 
 
 data class Question(
@@ -14,10 +14,12 @@ data class Question(
         val questionType: QuestionType = QuestionType.OPEN_QUESTION,
         @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
         val questionText: String? = null,
-        val questionPoints: Float,
+        val questionPoints: Float? = null,
         val options: Array<String>? = null,
         @ApiModelProperty(notes = "A question can contain subquestions when the type is noQuestion")
-        val subQuestions: Array<Question>? = null
+        val subQuestions: Array<Question>? = null,
+        @ApiModelProperty(notes = "The categories that this question is about")
+        var categories: Array<String> = arrayOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

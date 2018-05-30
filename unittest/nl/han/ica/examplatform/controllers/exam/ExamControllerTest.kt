@@ -5,6 +5,7 @@ import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.ExamType
 import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -33,6 +34,14 @@ class ExamControllerTest {
     @Mock
     private
     lateinit var examQuestionService: ExamQuestionService
+
+    @Test
+    fun testGeneratePracticeExam() {
+        val expected = PracticeExam(name = "Practice exam", courseId = 1, questions = arrayListOf())
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1, arrayOf("QA", "ASR"))
+        val result = examController.generatePracticeExam(PracticeExamRequestBody(1, arrayOf("QA", "ASR")))
+        assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
+    }
 
     @Test
     fun testGetExams() {
