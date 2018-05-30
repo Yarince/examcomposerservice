@@ -9,12 +9,16 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Api("questions", description = "Creating, updating and deleting questions")
 @RequestMapping("questions")
-class QuestionController {
+class QuestionController(val questionService: QuestionService) {
 
-    @Autowired
-    lateinit var questionService: QuestionService
-
+    /**
+     * Endpoint for creating a question
+     *
+     * @param question [Question] The question that should be inserted
+     * @return [ResponseEntity]<[Question]> The inserted question
+     */
     @PostMapping("/")
     @ApiOperation(value = "Create a question", notes = "Create a question")
     @ApiResponses(
@@ -23,6 +27,12 @@ class QuestionController {
     )
     fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
 
+    /**
+     * Endpoint for getting questions for a course
+     *
+     * @param courseId [Int] The ID of the course of which the questions should be retrieved
+     * @return [ResponseEntity]<[Array]<[Question]> The list of questions that corresponds to the course
+     */
     @GetMapping("/{courseId}")
     @ApiOperation(value = "Retrieve questions of a course", notes = "Retrieve questions that are within a specific course", response = Array<Question>::class)
     @ApiResponses(
