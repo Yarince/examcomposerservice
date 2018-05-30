@@ -3,7 +3,9 @@ package nl.han.ica.examplatform.persistence.exam
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
-import nl.han.ica.examplatform.models.exam.*
+import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.exam.PreparedExam
+import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
