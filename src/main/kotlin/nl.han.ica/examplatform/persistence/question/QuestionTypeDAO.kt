@@ -24,9 +24,9 @@ class QuestionTypeDAO {
         try {
             val rs = preparedStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
-            while (rs.next()) {
+
+            while (rs.next())
                 result.add(rs.getString("PluginName"))
-            }
 
         } catch (e: SQLException) {
             e.printStackTrace()
