@@ -21,11 +21,15 @@ import org.springframework.web.bind.annotation.GetMapping
  * REST controller for HTTP interaction with [Question]s.
  *
  * @param questionService [QuestionService] The QuestionService
+ * @param questionTypeService [QuestionTypeService] The QuestionTypeService
  */
 @RestController
 @RequestMapping("/question")
 @Api("question", description = "Creating, updating and deleting questions")
-class QuestionController (private val questionService: QuestionService) {
+class QuestionController(
+        private val questionService: QuestionService,
+        private val questionTypeService: QuestionTypeService
+) {
 
     /**
      * HTTP REST function to add a new Question to the system.
@@ -66,5 +70,5 @@ class QuestionController (private val questionService: QuestionService) {
             ApiResponse(code = 200, message = "Got questions"),
             ApiResponse(code = 500, message = "Internal server error")
     )
-    fun getQuestionTypes(): ResponseEntity<ArrayList<String>> = questionTypeSerivce.getQuestionTypes()
+    fun getQuestionTypes(): ResponseEntity<ArrayList<String>> = questionTypeService.getQuestionTypes()
 }
