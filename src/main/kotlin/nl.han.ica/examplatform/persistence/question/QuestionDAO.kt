@@ -29,7 +29,7 @@ class QuestionDAO {
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
             preparedStatement?.setInt(1, question.questionId ?: 0)
             preparedStatement?.setString(2, question.questionText)
-            preparedStatement?.setString(3, question.questionType.toString())
+            preparedStatement?.setString(3, question.questionType)
             if (question.questionOrderInExam == null) preparedStatement?.setNull(4, java.sql.Types.INTEGER) else preparedStatement?.setInt(4, question.questionOrderInExam)
 
             val insertedRows = preparedStatement?.executeUpdate()
@@ -110,5 +110,17 @@ class QuestionDAO {
             MySQLConnection.closeStatement(preparedStatement)
         }
         return questions.toTypedArray()
+    }
+
+    /**
+     * Get a question from the database by question ID.
+     *
+     * @param questionId [Int] The ID of Question wich should be retrieved.
+     * @return [Array]<[Question]> A question corresponding to the id.
+     */
+    fun getQuestion(questionId: Int): Question {
+        return Question(questionId = 1,
+                questionText = "Stub",
+                questionType = "Stub")
     }
 }
