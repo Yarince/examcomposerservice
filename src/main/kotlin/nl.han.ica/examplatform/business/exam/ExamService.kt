@@ -6,7 +6,9 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
+import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -17,7 +19,8 @@ import org.springframework.stereotype.Service
  * @param examDAO [ExamDAO] The ExamDAO
  */
 @Service
-class ExamService(private val examDAO: ExamDAO) {
+class ExamService(private val examDAO: ExamDAO,
+                  private val questionDAO: QuestionDAO) {
 
     private val logger = loggerFor(javaClass)
 

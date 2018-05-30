@@ -45,8 +45,8 @@ class ExamController (
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<PracticeExam?> =
-        examService.generatePracticeExam(courseId)
+    fun generatePracticeExam(@RequestBody courseId: Int): ResponseEntity<PracticeExam> =
+        examService.generatePracticeExam(courseId, )
 
     /**
      * HTTP REST function to get a list of basic information from all exams.
