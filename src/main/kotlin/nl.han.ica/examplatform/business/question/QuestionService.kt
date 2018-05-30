@@ -14,10 +14,10 @@ class QuestionService {
     private lateinit var questionDAO: QuestionDAO
 
     /**
-     * Add a new Question to the database
+     * Add a new Question to the database.
      *
-     * @param question [Question] to be added in the database
-     * @return ResponseEntity<[Question]> with new question inserted and an assigned id
+     * @param question [Question] to be added in the database.
+     * @return ResponseEntity<[Question]> with new question inserted and an assigned id.
      */
     fun addQuestion(question: Question): ResponseEntity<Question> {
         return try {
@@ -29,12 +29,12 @@ class QuestionService {
     }
 
     /**
-     * Get all questions of a specific course
+     * Get all questions of a specific course.
      *
-     * @param courseId [Int] ID of the course that the questions should be retrieved from
-     * @return [ResponseEntity]<[Array]<[Question]>> Contains the list with questions
+     * @param courseId [Int] ID of the course that the questions should be retrieved from.
+     * @return [ResponseEntity]<[Array]<[Question]>> Contains the list with questions.
      */
     fun getQuestionsForCourse(courseId: Int): ResponseEntity<Array<Question>> {
-        return ResponseEntity(questionDAO.getQuestions(courseId), HttpStatus.CREATED)
+        return ResponseEntity(questionDAO.getQuestions(courseId), HttpStatus.OK)
     }
 }

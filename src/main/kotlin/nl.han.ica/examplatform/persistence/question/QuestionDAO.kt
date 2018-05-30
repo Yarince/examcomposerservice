@@ -9,13 +9,16 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 
 /**
- * Database access object that handles all database queries regarding [Question]
+ * Database access object that handles all database queries regarding [Question].
  */
 @Repository
 class QuestionDAO {
 
     /**
-     * Adds a question to the database
+     * Adds a question to the database.
+     *
+     * @param question [Question] The question to be added.
+     * @return [Question] the inserted question
      */
     fun insertQuestion(question: Question): Question {
         var questionToReturn = question
@@ -53,8 +56,11 @@ class QuestionDAO {
     }
 
     /**
-     * Checks if a question already exists in the database
-     */
+     * Checks if a question already exists in the database.
+     *
+     * @param question [Question] the question which should be checked on existing.
+     * @return [Boolean] true if it exists, false if not.
+     **/
     fun exists(question: Question?): Boolean {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
@@ -79,10 +85,10 @@ class QuestionDAO {
     }
 
     /**
-     * Gets all questions of a course
+     * Gets all questions of a course.
      *
-     * @param courseId [Int] The ID of course of which the questions should be retrieved
-     * @return [Array]<[Question]> An array of all questions corresponding to the course
+     * @param courseId [Int] The ID of course of which the questions should be retrieved.
+     * @return [Array]<[Question]> An array of all questions corresponding to the course.
      */
     fun getQuestions(courseId: Int): Array<Question> {
         val conn: Connection? = MySQLConnection.getConnection()

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping
 class QuestionController(val questionService: QuestionService) {
 
     /**
-     * Endpoint for creating a question
+     * Endpoint for creating a question.
      *
      * @param question [Question] The question that should be inserted
      * @return [ResponseEntity]<[Question]> The inserted question
@@ -35,7 +35,7 @@ class QuestionController(val questionService: QuestionService) {
     fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
 
     /**
-     * Endpoint for getting questions for a course
+     * Endpoint for getting questions for a course.
      *
      * @param courseId [Int] The ID of the course of which the questions should be retrieved
      * @return [ResponseEntity]<[Array]<[Question]> The list of questions that corresponds to the course
