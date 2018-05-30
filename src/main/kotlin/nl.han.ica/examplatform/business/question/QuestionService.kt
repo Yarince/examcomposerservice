@@ -14,10 +14,10 @@ class QuestionService {
     private lateinit var questionDAO: QuestionDAO
 
     /**
-     * Add a new Question to the database, possibly with subquestions
+     * Add a new Question to the database, possibly with subquestions.
      *
-     * @param question [Question] to be added in the database
-     * @return ResponseEntity<[Question]> with new question inserted and an assigned id
+     * @param question [Question] to be added in the database.
+     * @return ResponseEntity<[Question]> with new question inserted and an assigned id.
      */
     fun addQuestion(question: Question): ResponseEntity<Question> {
         return try {
