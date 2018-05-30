@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.models.exam
 
-import java.util.*
+import java.util.Arrays
 
 data class PracticeExamRequestBody(
         val courseId: Int,
