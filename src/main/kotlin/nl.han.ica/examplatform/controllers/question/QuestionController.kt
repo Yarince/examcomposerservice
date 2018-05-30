@@ -20,6 +20,10 @@ class QuestionController(private val questionService: QuestionService, private v
     )
     fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
 
+    /**
+     * HTTP REST function to add get questionTypes from the system.
+     * @return All questionTypes in database
+     */
     @GetMapping("/types")
     @ApiOperation(value = "Get all questionTypes", notes = "Get questionTypes")
     @ApiResponses(

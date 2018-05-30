@@ -9,6 +9,7 @@ import java.sql.SQLException
 
 @Repository
 class QuestionTypeDAO {
+
     /**
      * This function gets a list of all questionTypes from the database.
      *
