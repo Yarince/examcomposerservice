@@ -219,5 +219,6 @@ class ExamDAO {
 
     fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam {
         // Not implemented in this branch, see other PR
+        return PreparedExam(examId = 0, endTime = Date(), startTime = Date(), durationInMinutes = 10, name = "name", classes = arrayOf(), courseName = "APP", creator = "Uwe van Heesch", version = 1, examType = "OpenQuestion", questions = arrayListOf())
     }
 }
