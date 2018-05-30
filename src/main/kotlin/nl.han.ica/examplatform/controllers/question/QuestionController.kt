@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api("question", description = "Creating, updating and deleting questions")
+@RequestMapping("questions")
 class QuestionController {
 
     @Autowired
     lateinit var questionService: QuestionService
 
-    @PostMapping("/question")
+    @PostMapping("/")
     @ApiOperation(value = "Create a question", notes = "Create a question")
     @ApiResponses(
             ApiResponse(code = 201, message = "Created"),
@@ -23,12 +23,12 @@ class QuestionController {
     )
     fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
 
-    @GetMapping("/{courseName}")
-    @ApiOperation(value = "Retrieve questions of a course", notes = "Retrieve questions that are within a specific course", response = Exam::class)
+    @GetMapping("/{courseId}")
+    @ApiOperation(value = "Retrieve questions of a course", notes = "Retrieve questions that are within a specific course", response = Array<Question>::class)
     @ApiResponses(
-            ApiResponse(code = 201, message = "Create"),
+            ApiResponse(code = 200, message = "OK"),
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
-    fun getExam(@ApiParam(value = "The ID of the course you want to retrieve the questions of", required = true) @PathVariable("courseId") courseId: Int): ResponseEntity<Array<Question>> =
+    fun getQuestionsForCourse(@ApiParam(value = "The ID of the course you want to retrieve the questions of", required = true) @PathVariable("courseId") courseId: Int): ResponseEntity<Array<Question>> =
             questionService.getQuestionsForCourse(courseId)
 }

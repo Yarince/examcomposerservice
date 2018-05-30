@@ -35,6 +35,6 @@ class QuestionService {
      * @return [ResponseEntity]<[Array]<[Question]>> Contains the list with questions
      */
     fun getQuestionsForCourse(courseId: Int): ResponseEntity<Array<Question>> {
-        return ResponseEntity(questionDAO.getQuestionsForCourse(courseId), HttpStatus.CREATED)
+        return ResponseEntity(questionDAO.getQuestions(courseId), HttpStatus.CREATED)
     }
 }
