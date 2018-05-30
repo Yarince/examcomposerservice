@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service
  * Exam service for handling requests related to the Exam model.
  */
 @Service
-class ExamService {
-
-    @Autowired
-    lateinit var examDAO: ExamDAO
+class ExamService(private val examDAO: ExamDAO) {
 
     /**
      * Check if an exam has questions and if the id is left empty
