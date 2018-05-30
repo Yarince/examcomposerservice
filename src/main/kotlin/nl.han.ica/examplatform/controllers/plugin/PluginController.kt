@@ -8,11 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/**
+ * REST controller for HTTP interaction with [Plugin]s.
+ *
+ * @param pluginService [PluginService] The PluginService
+ */
 @RestController()
 @RequestMapping("/plugins")
 @Api("question", description = "Creating, updating and deleting plugins")
 class PluginController(private val pluginService: PluginService) {
 
+    /**
+     * HTTP REST function to get a list of all [Plugin]s from the database.
+     */
     @GetMapping()
     @ApiOperation(value = "Get all plugins", notes = "Fetches all plugins from database")
     @ApiResponses(

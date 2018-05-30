@@ -2,6 +2,9 @@ package nl.han.ica.examplatform.models.plugin
 
 import io.swagger.annotations.ApiModelProperty
 
+/**
+ * Represents a plugin from the database.
+ */
 data class Plugin(
         @ApiModelProperty(notes = "The id of the plugin")
         val pluginId: Int,
