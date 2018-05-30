@@ -4,6 +4,7 @@ import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
+import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import org.springframework.http.HttpStatus
@@ -41,9 +42,8 @@ class ExamService(private val examDAO: ExamDAO, private val questionDAO: Questio
      *
      * @return [ResponseEntity]<Array<[SimpleExam]>> All exams currently in the database in a simplified view
      */
-    fun getExams(): ResponseEntity<ArrayList<SimpleExam>> {
-        return ResponseEntity(examDAO.getExams(), HttpStatus.OK)
-    }
+    fun getExams(): ResponseEntity<ArrayList<SimpleExam>> =
+            ResponseEntity(examDAO.getExams(), HttpStatus.OK)
 
     /**
      * Add an new Exam to the database.
@@ -63,9 +63,8 @@ class ExamService(private val examDAO: ExamDAO, private val questionDAO: Questio
      * @param id [Int] The ID of the exam that should be retrieved
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
-    fun getExam(id: Int): ResponseEntity<Exam> {
-        return ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
-    }
+    fun getExam(id: Int): ResponseEntity<Exam> =
+            ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
 
     /**
      * Generate a [PracticeExam].
@@ -73,8 +72,17 @@ class ExamService(private val examDAO: ExamDAO, private val questionDAO: Questio
      * @param courseId [Int] The ID of the course of which the exam should be generated
      * @return [ResponseEntity]<Exam> practice [Exam]
      */
-    fun generatePracticeExam(courseId: Int, categories: Array<String>) : ResponseEntity<PracticeExam> {
-        return ResponseEntity(generatePracticeExam(courseId, categories, questionDAO), HttpStatus.CREATED)
-    }
-}
+    fun generatePracticeExam(courseId: Int, categories: Array<String>): ResponseEntity<PracticeExam> =
+            ResponseEntity(generatePracticeExam(courseId, categories, questionDAO), HttpStatus.CREATED)
 
+    /**
+     * Ads a class to an exam.
+     *
+     * @param examId [Int] the ID of the exam
+     * @param classes [Array]<[String]> an array containing classes
+     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
+     */
+    fun addClassesToExam(examId: Int, classes: Array<String>): ResponseEntity<PreparedExam> =
+            ResponseEntity(examDAO.addClassesToExam(examId, classes), HttpStatus.ACCEPTED)
+
+}
