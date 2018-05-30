@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.question
 
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection
@@ -21,13 +22,13 @@ class QuestionTypeDAO {
         val result = arrayListOf<String>()
         try {
             val rs = preparedStatement?.executeQuery()
-            while (rs!!.next()) {
+                    ?: throw DatabaseException("Error while interacting with the database")
+            while (rs.next()) {
                 result.add(rs.getString("PluginName"))
             }
 
         } catch (e: SQLException) {
             e.printStackTrace()
-            print(e)
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(dbConnection)
