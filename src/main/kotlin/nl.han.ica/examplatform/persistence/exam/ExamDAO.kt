@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
  * This class handles all the Database operations for [Exam].
  */
 @Repository
-class ExamDAO {
+class ExamDAO : IExamDAO {
     private val logger = loggerFor(javaClass)
 
     /**
@@ -27,7 +27,7 @@ class ExamDAO {
      *
      * @return [ArrayList]<[SimpleExam]> a list of SimpleExams retrieved from the database.
      */
-    fun getExams(): ArrayList<SimpleExam> {
+    override fun getExams(): ArrayList<SimpleExam> {
         val conn: Connection? = MySQLConnection.getConnection()
         val examQuery = """
             SELECT
@@ -66,7 +66,7 @@ class ExamDAO {
      * @param id [Int] The ID of which all information should be queried
      * @return [Exam] The Exam added to the database.
      */
-    fun getExam(id: Int): Exam {
+    override fun getExam(id: Int): Exam {
         val conn: Connection? = MySQLConnection.getConnection()
 
         val examQuery = """
@@ -128,7 +128,7 @@ class ExamDAO {
      * @param exam [Exam] The Exam that should be inserted
      * @return [Exam] The Exam added to the database
      */
-    fun insertExam(exam: Exam): Exam {
+    override fun insertExam(exam: Exam): Exam {
         var examToReturn = exam
 
         val conn: Connection? = MySQLConnection.getConnection()
@@ -185,7 +185,7 @@ class ExamDAO {
      * @param exam [Exam] The containing all [Question]s
      * @return [Exam] The updated Exam that was given.
      */
-    fun addQuestionsToExam(exam: Exam): Exam {
+    override fun addQuestionsToExam(exam: Exam): Exam {
         if (exam.questions == null || exam.questions.size < 1)
             throw DatabaseException("Please provide questions to add to exam")
 
@@ -221,7 +221,7 @@ class ExamDAO {
         return exam
     }
 
-    fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam {
+    override fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam {
         // Not implemented in this branch, see other PR
         return PreparedExam(examId = 0, endTime = Date(), startTime = Date(), durationInMinutes = 10, name = "name", classes = arrayOf(), courseName = "APP", creator = "Uwe van Heesch", version = 1, examType = "OpenQuestion", questions = arrayListOf())
     }

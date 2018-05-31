@@ -82,7 +82,7 @@ class ExamService(private val examDAO: ExamDAO,
             ResponseEntity(generatePracticeExam(courseId, categories, questionDAO), HttpStatus.CREATED)
 
     /**
-     * Ads a class to an exam.
+     * Adds a class to an exam.
      *
      * @param examId [Int] the ID of the exam
      * @param classes [Array]<[String]> an array containing classes

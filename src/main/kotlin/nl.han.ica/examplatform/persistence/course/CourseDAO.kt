@@ -13,7 +13,7 @@ import java.sql.SQLException
  * This class handles all the Database operations for [Course]s
  */
 @Repository
-class CourseDAO {
+class CourseDAO : ICourseDAO {
 
     val logger = loggerFor(javaClass)
 
@@ -22,7 +22,7 @@ class CourseDAO {
      *
      * @return [ArrayList] of [Course]s
      */
-    fun getAllCourses(): ArrayList<Course> {
+    override fun getAllCourses(): ArrayList<Course> {
         val dbConnection: Connection? = MySQLConnection.getConnection()
         val dbQuery = "SELECT COURSEID, COURSENAME, COURSECODE FROM COURSE"
         val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(dbQuery)

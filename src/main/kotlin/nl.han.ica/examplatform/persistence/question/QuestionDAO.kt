@@ -14,7 +14,7 @@ import java.sql.SQLException
  * Database access object that handles all database queries regarding [Question].
  */
 @Repository
-class QuestionDAO {
+class QuestionDAO : IQuestionDAO {
 
     private val logger = loggerFor(javaClass)
 
@@ -24,7 +24,7 @@ class QuestionDAO {
      * @param question [Question] The question to be added.
      * @return [Question] the inserted question
      */
-    fun insertQuestion(question: Question, parentQuestionId: Int? = null): Question {
+    override fun insertQuestion(question: Question, parentQuestionId: Int?): Question {
         var questionToReturn = question
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
@@ -72,7 +72,7 @@ class QuestionDAO {
      * @param question [Question] the question which should be checked on existing.
      * @return [Boolean] true if it exists, false if not.
      **/
-    fun exists(question: Question?): Boolean {
+    override fun exists(question: Question?): Boolean {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
@@ -100,7 +100,7 @@ class QuestionDAO {
      * @param courseId [Int] The ID of course of which the questions should be retrieved.
      * @return [Array]<[Question]> An array of all questions corresponding to the course.
      */
-    fun getQuestionsByCourse(courseId: Int): Array<Question> {
+    override fun getQuestionsByCourse(courseId: Int): Array<Question> {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null
 
@@ -133,7 +133,7 @@ class QuestionDAO {
      * @param categories [Array] An array containing all the categories of which the questions should be retrieved
      * @return [Array]<[Question]> An array of all questions corresponding to the course and categories
      */
-    fun getQuestionsByCourseAndCategory(courseId: Int, categories: Array<String>): Array<Question> {
+    override fun getQuestionsByCourseAndCategory(courseId: Int, categories: Array<String>): Array<Question> {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
 
@@ -183,7 +183,7 @@ class QuestionDAO {
      * @param examId [Int] The ID of exam of which the questions should be retrieved
      * @return [Array]<[Question]> An array of all questions corresponding to the course and categories
      */
-    fun getQuestionsByExam(examId: Int): ArrayList<Question> {
+    override fun getQuestionsByExam(examId: Int): ArrayList<Question> {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null
 
@@ -281,7 +281,7 @@ class QuestionDAO {
      * @param questionId [Int] The ID of the question which should be retrieved.
      * @return [Question] Question corresponding to the ID.
      */
-    fun getQuestionById(questionId: Int): Question {
+    override fun getQuestionById(questionId: Int): Question {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null
 
