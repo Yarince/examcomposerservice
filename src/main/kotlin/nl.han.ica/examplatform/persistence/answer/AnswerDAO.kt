@@ -156,6 +156,8 @@ class AnswerDAO : IAnswerDAO {
      * Get answerModel from database by [Exam]
      *
      * @param examId [Int] The ID of the exam
+     *
+     * @return [AnswerModel]
      */
     override fun getAnswersForExam(examId: Int): AnswerModel {
         val conn: Connection? = MySQLConnection.getConnection()
@@ -211,7 +213,7 @@ class AnswerDAO : IAnswerDAO {
             )
         } catch (e: SQLException) {
             logger.error("SQLException thrown when adding answer to question", e)
-            throw DatabaseException("")
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedAnswerStatement)

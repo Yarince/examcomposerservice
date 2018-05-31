@@ -5,7 +5,7 @@ import nl.han.ica.examplatform.models.question.Question
 import java.util.Date
 
 /**
- * Represents a official exam.
+ * Represents an official exam.
  *
  * @param examId [Int] The ID of the exam
  * @param name [String] The name of the exam
