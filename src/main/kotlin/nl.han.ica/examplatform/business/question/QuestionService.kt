@@ -57,8 +57,8 @@ class QuestionService(private val questionDAO: QuestionDAO) {
      * @param courseId [Int] ID of the course that the questions should be retrieved from.
      * @return [ResponseEntity]<[Array]<[Question]>> Contains the list with questions.
      */
-    fun getQuestionsForCourse(courseId: Int): ResponseEntity<Array<Question>> = ResponseEntity(questionDAO.getQuestions(courseId), HttpStatus.OK)
-
+    fun getQuestionsForCourse(courseId: Int): ResponseEntity<Array<Question>> =
+            ResponseEntity(questionDAO.getQuestionsByCourse(courseId), HttpStatus.OK)
 
     /**
      * Get question by question Id.
