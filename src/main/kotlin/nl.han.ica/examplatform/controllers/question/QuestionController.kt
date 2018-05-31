@@ -9,11 +9,11 @@ import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.models.question.Question
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 
 /**
  * REST controller for HTTP interaction with [Question]s.
@@ -26,7 +26,8 @@ import org.springframework.web.bind.annotation.GetMapping
 class QuestionController (private val questionService: QuestionService) {
 
     /**
-     * Endpoint for creating a question
+     * HTTP REST function to add a new Question to the system.
+     * Returns the newly added Question.
      *
      * @param question [Question] The question that should be inserted
      * @return [ResponseEntity]<[Question]> The inserted question
