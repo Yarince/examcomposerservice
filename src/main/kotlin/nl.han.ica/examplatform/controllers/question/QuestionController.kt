@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import io.swagger.annotations.ApiParam
 import nl.han.ica.examplatform.business.question.QuestionService
+import nl.han.ica.examplatform.business.question.QuestionTypeService
 import nl.han.ica.examplatform.models.question.Question
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -19,11 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping
  * REST controller for HTTP interaction with [Question]s.
  *
  * @param questionService [QuestionService] The QuestionService
+ * @param questionTypeService [QuestionTypeService] The QuestionTypeService
  */
 @RestController
-@RequestMapping("question")
+@RequestMapping("/question")
 @Api("question", description = "Creating, updating and deleting questions")
-class QuestionController (private val questionService: QuestionService) {
+class QuestionController(
+        private val questionService: QuestionService,
+        private val questionTypeService: QuestionTypeService
+) {
 
     /**
      * HTTP REST function to add a new Question to the system.
@@ -72,4 +77,16 @@ class QuestionController (private val questionService: QuestionService) {
             @PathVariable("questionId") questionId: Int
     ): ResponseEntity<Question> =
             questionService.getQuestionForId(questionId)
+
+    /**
+     * HTTP REST function to get questionTypes from the system.
+     * @return [String] of all questionTypes in database
+     */
+    @GetMapping("/types")
+    @ApiOperation(value = "Get all questionTypes", notes = "Get questionTypes")
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Got questions"),
+            ApiResponse(code = 500, message = "Internal server error")
+    )
+    fun getQuestionTypes(): ResponseEntity<ArrayList<String>> = questionTypeService.getQuestionTypes()
 }
