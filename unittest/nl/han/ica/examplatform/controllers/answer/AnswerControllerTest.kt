@@ -38,19 +38,19 @@ internal class AnswerControllerTest {
 
     @Test(expected = InvalidAnswerException::class)
     fun testAddAnswerToQuestionInvalidAnswerException() {
-        Mockito.doThrow(IllegalArgumentException("DAO Exception")).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(IllegalArgumentException("DAO Exception")).`when`(answerService).addOrUpdateAnswerInQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 
     @Test(expected = CouldNotAddAnswerToQuestionException::class)
     fun testAddAnswerToQuestionCouldNotAddAnswerToQuestionException() {
-        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null)).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null)).`when`(answerService).addOrUpdateAnswerInQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 
     @Test(expected = RuntimeException::class)
     fun testAddAnswerToQuestionRuntimeException() {
-        Mockito.doThrow(RuntimeException("DAO Exception")).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(RuntimeException("DAO Exception")).`when`(answerService).addOrUpdateAnswerInQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 }
