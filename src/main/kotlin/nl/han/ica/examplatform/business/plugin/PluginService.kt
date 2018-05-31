@@ -17,7 +17,7 @@ class PluginService(private val pluginDAO: PluginDAO) {
     /**
      * Get all Plugins from the database.
      *
-     * @return [ResponseEntity]<ArrayList<[Plugin]>> All plugins currently in the database.
+     * @return [ResponseEntity]<[ArrayList]<[Plugin]>> All plugins currently in the database.
      */
     fun getAllPlugins(): ResponseEntity<ArrayList<Plugin>> = ResponseEntity(pluginDAO.getAllPlugins(), HttpStatus.OK)
 
