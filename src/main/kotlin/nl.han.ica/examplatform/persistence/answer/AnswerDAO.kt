@@ -1,13 +1,12 @@
 package nl.han.ica.examplatform.persistence.answer
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.answer.AnswerControllerAdvice.Companion.logger
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection
-import java.sql.PreparedStatement
 import java.sql.SQLException
 
 /**
@@ -24,21 +23,32 @@ class AnswerDAO : IAnswerDAO {
      * @param answer The [Answer] you want to add to a [Question]
      */
     override fun addAnswerToQuestion(answer: Answer) {
-        val insertAnswerQuery = "UPDATE QUESTION SET ANSWERTEXT = ?, ANSWERKEYWORDS = ? WHERE QUESTIONID = ?"
-        var dbConnection: Connection? = null
-        var preparedStatement: PreparedStatement? = null
+        if (answer.partialAnswers == null || answer.partialAnswers.size < 1)
+            throw DatabaseException("Please provide partialAnswers to for question")
 
-        try {
-            dbConnection = MySQLConnection.getConnection()
-            preparedStatement = dbConnection?.prepareStatement(insertAnswerQuery)
-            preparedStatement?.setString(2, answer.answerKeywords.toString())
-            preparedStatement?.setInt(3, answer.questionId)
-            preparedStatement?.executeUpdate()
-        } catch (e: SQLException) {
-            logger.error("SQLException thrown when adding answer to question", e)
-        } finally {
-            MySQLConnection.closeConnection(dbConnection)
-            preparedStatement?.close()
+        val query = "INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT) value (?,?,?) on DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement = conn?.prepareStatement(query)
+
+        for (partialAnswer in answer.partialAnswers) {
+
+            partialAnswer.partialAnswerId?.let { preparedStatement?.setInt(1, it) }
+                    ?: preparedStatement?.setNull(1, java.sql.Types.INTEGER)
+
+            preparedStatement?.setInt(2, answer.questionId)
+
+            preparedStatement?.setString(3, partialAnswer.partialAnswerText)
+            preparedStatement?.setString(4, partialAnswer.partialAnswerText)
+            try {
+                preparedStatement?.executeUpdate()
+                        ?: throw DatabaseException("Error while interacting with the database")
+            } catch (e: SQLException) {
+                logger.error("SQLException thrown when adding answer to question", e)
+            }
         }
+
+        MySQLConnection.closeConnection(conn)
+        preparedStatement?.close()
     }
 }

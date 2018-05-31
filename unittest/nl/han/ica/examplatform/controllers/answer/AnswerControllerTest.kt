@@ -4,7 +4,7 @@ import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
-import nl.han.ica.examplatform.models.answermodel.answer.Keyword
+import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,8 +25,8 @@ internal class AnswerControllerTest {
     private lateinit var answerService: AnswerService
 
     private val answer: Answer = Answer(
-            5,
-            arrayOf(Keyword("sad", 7.7F))
+            questionId = 5,
+            partialAnswers = arrayListOf(PartialAnswer(partialAnswerId = 1, partialAnswerText = "sad", points = 7))
     )
 
     @Test

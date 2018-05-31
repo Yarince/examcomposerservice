@@ -1,6 +1,8 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
+import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
 
 /**
  * Represents a question that can be asked in a [Exam].
@@ -9,9 +11,13 @@ import io.swagger.annotations.ApiModelProperty
  * @param questionId [Int] The id that the Question has in the database
  * @param questionOrderInExam [Int] The index number that represents the position of the question in the exam
  * @param questionOrderText [String] Text that go's along with the [questionOrderInExam]
- * @param questionType [QuestionType] The type of question this question is
+ * @param questionType [String] The type of question this question is
  * @param questionText [String] The sentence that makes a request for information
  * @param questionPoints [Int] The amount of point the question is worth
+ * @param courseId [Int] The ID of the course the question is for
+ * @param examType [String] The type of exam the question is for
+ * @param pluginVersion [String] The version of the plugin used as question type
+ * @param categories [ArrayList]<[String]> The list of categories of this question
  * @param subQuestions [Array]<[Question]> List of questions that represent one larger question
  */
 data class Question(
@@ -31,8 +37,10 @@ data class Question(
         val courseId: Int? = null,
         @ApiModelProperty(notes = "Type of exam the question is for.")
         val examType: String,
+        @ApiModelProperty(notes = "The version of the plugin used as questionType. References plugin version in database.", required = true)
+        val pluginVersion: String,
         @ApiModelProperty(notes = "The categories that this question is about")
         val categories: ArrayList<String> = arrayListOf(),
-        @ApiModelProperty(notes = "A question can contain subquestions when the type is noQuestion")
+        @ApiModelProperty(notes = "A question can contain subQuestions when the type is noQuestion")
         val subQuestions: ArrayList<Question>? = null
 )

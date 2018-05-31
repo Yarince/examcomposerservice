@@ -65,7 +65,7 @@ class ExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", questions = arrayListOf(
-                Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 5F, examType = "Tentamen")))
+                Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 5F, examType = "Tentamen" , pluginVersion = "1.0")))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = examController.addQuestionToExam(expected)

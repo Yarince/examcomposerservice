@@ -29,7 +29,7 @@ class QuestionDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONTEXT, QUESTIONTYPE, COURSEID, PARENTQUESTIONID, EXAMTYPENAME) VALUES (?, ?, ?, ?, 'Tentamen')"
+        val sqlQueryStringInsertQuestionString = "INSERT INTO QUESTION (QUESTIONTEXT, QUESTIONTYPE, COURSEID, PARENTQUESTIONID, EXAMTYPENAME, PLUGINVERSION) VALUES (?, ?, ?, ?, ?,?)"
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
@@ -40,6 +40,9 @@ class QuestionDAO {
                 preparedStatement?.setInt(4, parentQuestionId)
             else
                 preparedStatement?.setNull(4, java.sql.Types.INTEGER)
+
+            preparedStatement?.setString(5, question.examType)
+            preparedStatement?.setString(6, question.pluginVersion)
 
             val insertedRows = preparedStatement?.executeUpdate()
             if (insertedRows == 1) {
@@ -162,7 +165,8 @@ class QuestionDAO {
                         questionText = questionRs.getString("QuestionText"),
                         examType = questionRs.getString("EXAMTYPENAME"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QuestionID"), conn),
-                        subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery)))
+                        subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery),
+                        pluginVersion = questionRs.getString("PLUGINVERSION")))
             }
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -220,7 +224,8 @@ class QuestionDAO {
                     courseId = questionRs.getInt("COURSEID"),
                     examType = questionRs.getString("EXAMTYPENAME"),
                     categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                    subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery)
+                    subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
+                    pluginVersion = questionRs.getString("PLUGINVERSION")
             ))
         return questions
     }
