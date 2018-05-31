@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.business.exam
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,9 +19,13 @@ internal class PracticeExamGeneratorTest {
     @Mock
     private lateinit var questionDAO: QuestionDAO
 
+    @Mock
+    private lateinit var categoryDAO: CategoryDAO
+
     @Test
     fun testGenerateExamSuccess() {
         val courseId = 1
+        val studentNr = 1
         val categories = arrayOf("ATAM", "DCAR")
         val expectedQuestions = arrayOf(
                 Question(questionId = 1, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("QA", "ATAM")),
@@ -35,9 +40,10 @@ internal class PracticeExamGeneratorTest {
                 Question(questionId = 10, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("DCAR"))
         )
 
-        doReturn(expectedQuestions).`when`(questionDAO).getQuestionsByCourseAndCategory(courseId, categories)
+        doReturn(expectedQuestions).`when`(questionDAO).getQuestionsByCourse(courseId)
+        doReturn(categories).`when`(categoryDAO).getCategoriesByCourse(courseId)
 
-        val result = generatePracticeExam(courseId, categories, questionDAO)
+        val result = generatePracticeExam(courseId, studentNr, questionDAO, categoryDAO)
 
         assertNotNull(result)
         assertEquals(courseId, result.courseId)
