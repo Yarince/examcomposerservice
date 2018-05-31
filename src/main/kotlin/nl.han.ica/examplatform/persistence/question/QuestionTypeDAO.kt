@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.question
 
+import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -7,8 +8,12 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+/**
+ * This class handles all the Database operations for question types.
+ */
 @Repository
 class QuestionTypeDAO {
+    private val logger = loggerFor(javaClass)
 
     /**
      * This function gets a list of all questionTypes from the database.
@@ -29,7 +34,8 @@ class QuestionTypeDAO {
                 result.add(rs.getString("PluginName"))
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Error when retrieving questionTypes", e)
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(dbConnection)
