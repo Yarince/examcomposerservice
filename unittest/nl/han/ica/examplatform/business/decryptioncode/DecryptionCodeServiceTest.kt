@@ -9,6 +9,8 @@ import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 @RunWith(MockitoJUnitRunner::class)
 class DecryptionCodeServiceTest {
@@ -24,6 +26,6 @@ class DecryptionCodeServiceTest {
         val examId = 1
         val expected = "Code"
         doReturn(expected).`when`(decryptionCodeDAO).getDecryptionCode(examId)
-        assertEquals(expected, decryptionCodeService.getDecryptionCode(examId))
+        assertEquals(ResponseEntity(expected, HttpStatus.OK), decryptionCodeService.getDecryptionCode(examId))
     }
 }

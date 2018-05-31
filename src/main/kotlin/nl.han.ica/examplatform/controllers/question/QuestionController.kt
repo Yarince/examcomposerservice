@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiParam
 import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.business.question.QuestionTypeService
 import nl.han.ica.examplatform.models.question.Question
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestMapping
@@ -35,7 +34,8 @@ class QuestionController(
      * HTTP REST function to add a new Question to the system.
      * Returns the newly added Question.
      *
-     * @return [Question]
+     * @param question [Question] The question that should be inserted
+     * @return [ResponseEntity]<[Question]> The inserted question
      */
     @PostMapping()
     @ApiOperation(value = "Create a question", notes = "Create a question")
@@ -51,7 +51,7 @@ class QuestionController(
      * @param courseId [Int] The ID of the course of which the questions should be retrieved
      * @return [ResponseEntity]<[Array]<[Question]> The list of questions that corresponds to the course
      */
-    @GetMapping("/{courseId}")
+    @GetMapping("/course/{courseId}")
     @ApiOperation(value = "Retrieve questions of a course", notes = "Retrieve questions that are within a specific course", response = Array<Question>::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "OK"),
@@ -59,6 +59,24 @@ class QuestionController(
             ApiResponse(code = 404, message = "Not found"))
     fun getQuestionsForCourse(@ApiParam(value = "The ID of the course you want to retrieve the questions of", required = true) @PathVariable("courseId") courseId: Int): ResponseEntity<Array<Question>> =
             questionService.getQuestionsForCourse(courseId)
+
+    /**
+     * Endpoint for getting a question by Id.
+     *
+     * @param questionId [Int] The ID of the question you want to retrieve.
+     * @return [ResponseEntity]<[Question]> The question retrieved.
+     */
+    @GetMapping("/{questionId}")
+    @ApiOperation(value = "Retrieve a Question by Id", notes = "Retrieve a question by id", response = Array<Question>::class)
+    @ApiResponses(
+            ApiResponse(code = 200, message = "OK"),
+            ApiResponse(code = 403, message = "Bad request"),
+            ApiResponse(code = 404, message = "Not found"))
+    fun getQuestionForId(
+            @ApiParam(value = "The ID of the question you want to retrieve", required = true)
+            @PathVariable("questionId") questionId: Int
+    ): ResponseEntity<Question> =
+            questionService.getQuestionForId(questionId)
 
     /**
      * HTTP REST function to get questionTypes from the system.

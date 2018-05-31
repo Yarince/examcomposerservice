@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service
  * Exam service for handling requests related to the [Exam] model.
  *
  * @param examDAO [ExamDAO] The ExamDAO
+ * @param questionDAO [QuestionDAO] The QuestionDAO
  */
 @Service
 class ExamService(private val examDAO: ExamDAO,
@@ -68,8 +69,8 @@ class ExamService(private val examDAO: ExamDAO,
      * @param id [Int] The ID of the exam that should be retrieved
      * @return [ResponseEntity]<[Exam]> Fetched from the database
      */
-    fun getExam(id: Int): ResponseEntity<Exam> = ResponseEntity(examDAO.getExam(id), HttpStatus.OK)
-
+    fun getExam(id: Int): ResponseEntity<Exam> =
+            ResponseEntity(examDAO.getExam(id).copy(questions = questionDAO.getQuestionsByExam(id)), HttpStatus.OK)
 
     /**
      * Generates a [PracticeExam].
