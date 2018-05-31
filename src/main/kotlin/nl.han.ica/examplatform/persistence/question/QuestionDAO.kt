@@ -5,6 +5,7 @@ import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
+import org.springframework.util.MultiValueMap
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
@@ -266,5 +267,39 @@ class QuestionDAO {
             MySQLConnection.closeStatement(preparedQuestionCategoryStatement)
         }
         return questions
+    }
+
+
+    /**
+     * Get a question by questionId.
+     *
+     * @param questionId [Int] The ID of the question which should be retrieved.
+     * @return [Question] Question corresponding to the ID.
+     */
+    fun getQuestionById(questionId: Int): Question {
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedQuestionStatement: PreparedStatement? = null
+
+        val sqlQuestionQuery = "SELECT distinct Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE Q.QUESTIONID = ?"
+
+        val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
+
+        var questions = ArrayList<Question>()
+        try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
+            preparedQuestionStatement?.setInt(1, questionId)
+
+
+            questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
+
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedQuestionStatement)
+        }
+
+        return questions.first()
+
     }
 }

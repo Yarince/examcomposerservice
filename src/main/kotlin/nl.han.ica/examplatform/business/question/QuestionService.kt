@@ -66,5 +66,5 @@ class QuestionService(private val questionDAO: QuestionDAO) {
      * @param questionId [Int] ID of the question that you want retrieved.
      * @return [ResponseEntity]<[Question]> The question.
      */
-    fun getQuestionForId(questionId: Int): ResponseEntity<Question> = ResponseEntity(questionDAO.getQuestion(questionId), HttpStatus.OK)
+    fun getQuestionForId(questionId: Int): ResponseEntity<Question> = ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
 }
