@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service
  */
 @Service
 class QuestionService(private val questionDAO: QuestionDAO) {
+
     private val logger = loggerFor(javaClass)
 
     /**
@@ -56,7 +57,14 @@ class QuestionService(private val questionDAO: QuestionDAO) {
      * @param courseId [Int] ID of the course that the questions should be retrieved from.
      * @return [ResponseEntity]<[Array]<[Question]>> Contains the list with questions.
      */
-    fun getQuestionsForCourse(courseId: Int): ResponseEntity<Array<Question>> {
-        return ResponseEntity(questionDAO.getQuestions(courseId), HttpStatus.OK)
-    }
+    fun getQuestionsForCourse(courseId: Int): ResponseEntity<Array<Question>> =
+            ResponseEntity(questionDAO.getQuestionsByCourse(courseId), HttpStatus.OK)
+
+    /**
+     * Get question by question Id.
+     *
+     * @param questionId [Int] ID of the question that you want retrieved.
+     * @return [ResponseEntity]<[Question]> The question.
+     */
+    fun getQuestionForId(questionId: Int): ResponseEntity<Question> = ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
 }
