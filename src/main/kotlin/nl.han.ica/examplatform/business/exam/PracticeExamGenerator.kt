@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom
  * Generates a practice exam based on course and categories
  *
  * @param courseId [Int] the ID of the course for which the exam should be generated
- * @param categories [Array]<[String]> the subjects of which the exam should be about
+ * @param studentNr [Int] the student number for which the exam should be generated
  * @param questionDAO the DAO that is needed to retrieve the questions, because it can't be injected
  *
  * @return [PracticeExam] returns a practiceExam
@@ -18,8 +18,6 @@ import java.util.concurrent.ThreadLocalRandom
 fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: QuestionDAO, categoryDAO: CategoryDAO): PracticeExam {
     val questions = questionDAO.getQuestionsByCourse(courseId)
     val categories = categoryDAO.getCategoriesByCourse(courseId)
-    questions.forEach { println(it) }
-    categories.forEach { println(it) }
 
     // Recursively add questions to exam
     val practiceExam = addQuestionsToPracticeExam(questions, questions, categories.toList())

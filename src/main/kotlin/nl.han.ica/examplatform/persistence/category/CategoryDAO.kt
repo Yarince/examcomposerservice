@@ -8,6 +8,9 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+/**
+ * Database Access Object for categories
+ */
 @Repository
 class CategoryDAO {
     val logger = loggerFor(javaClass)
