@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.models.answermodel.answer
 
+import nl.han.ica.examplatform.models.question.Question
 import java.util.Arrays
 
 /**

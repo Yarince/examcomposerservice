@@ -182,8 +182,8 @@ class QuestionDAO {
     /**
      * Get a question from the database by question ID.
      *
-     * @param questionId [Int] The ID of Question wich should be retrieved.
-     * @return [Array]<[Question]> A question corresponding to the id.
+     * @param questionId [Int] The ID of Question which should be retrieved.
+     * @return [Question] A question corresponding to the id.
      */
     fun getQuestion(questionId: Int): Question {
         return Question(questionId = 1,
