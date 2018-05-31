@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.persistence.answer
 
+import nl.han.ica.examplatform.models.answermodel.AnswerModel
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.exam.Exam
@@ -24,7 +25,17 @@ interface IAnswerDAO {
      */
     fun addOrUpdateAnswerInQuestionInExam(answer: Answer, examId: Int)
 
-    fun getAnswerForQuestion(questionId: Int): ArrayList<Answer>
+    /**
+     * Retrieve an Answer for a question from the database
+     *
+     * @param questionId [Int] The id of the question
+     */
+    fun getAnswerForQuestion(questionId: Int): Answer
 
-    fun getAnswersForExam(questionId: Int): ArrayList<Answer>
+    /**
+     * Get answerModel from database by [Exam]
+     *
+     * @param examId [Int] The ID of the exam
+     */
+    fun getAnswersForExam(examId: Int): AnswerModel
 }

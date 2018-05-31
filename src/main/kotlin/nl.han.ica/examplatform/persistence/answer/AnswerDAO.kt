@@ -3,12 +3,16 @@ package nl.han.ica.examplatform.persistence.answer
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
+import nl.han.ica.examplatform.controllers.responseexceptions.QuestionNotFoundException
+import nl.han.ica.examplatform.models.answermodel.AnswerModel
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.SQLException
 
 /**
@@ -78,8 +82,10 @@ class AnswerDAO : IAnswerDAO {
 
             preparedStatement?.setInt(3, examId)
 
-            preparedStatement?.setInt(4, partialAnswer.points)
-            preparedStatement?.setInt(5, partialAnswer.points)
+            partialAnswer.points?.let { preparedStatement?.setInt(4, it) }
+                    ?: preparedStatement?.setNull(4, java.sql.Types.INTEGER)
+            partialAnswer.points?.let { preparedStatement?.setInt(5, it) }
+                    ?: preparedStatement?.setNull(5, java.sql.Types.INTEGER)
             try {
                 preparedStatement?.executeUpdate()
                         ?: throw DatabaseException("Error while interacting with the database")
@@ -92,11 +98,124 @@ class AnswerDAO : IAnswerDAO {
         preparedStatement?.close()
     }
 
-    override fun getAnswerForQuestion(questionId: Int): ArrayList<Answer> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    /**
+     * Retrieve an Answer for a question from the database
+     *
+     * @param questionId [Int] The id of the question
+     */
+    override fun getAnswerForQuestion(questionId: Int): Answer {
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedQuestionStatement: PreparedStatement? = null
+        val preparedQuestionStatement2: PreparedStatement?
+
+        val sqlQuestionQuery = "SELECT ANSWERTEXT FROM QUESTION WHERE QUESTIONID = ?"
+
+        val sqlPartialQuery = "SELECT PARTIALANSWERTEXT, PARTIALANSWERID  FROM PARTIAL_ANSWER WHERE QUESTIONID = ?"
+
+        return try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlPartialQuery)
+            preparedQuestionStatement2 = conn?.prepareStatement(sqlQuestionQuery)
+            preparedQuestionStatement2?.setInt(1, questionId)
+            preparedQuestionStatement?.setInt(1, questionId)
+
+            val questionRs = preparedQuestionStatement2?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
+
+            val answerRs = preparedQuestionStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
+
+            val partialAnswers = ArrayList<PartialAnswer>()
+
+            while (answerRs.next())
+                partialAnswers.add(
+                        PartialAnswer(
+                                partialAnswerId = answerRs.getInt("PARTIALANSWERID"),
+                                partialAnswerText = answerRs.getString("PARTIALANSWERTEXT")
+                        )
+                )
+
+            questionRs.last()
+
+            // This is the row of of the last result, so if this is smaller than 0
+            if (questionRs.row < 1) throw QuestionNotFoundException("Question with ID $questionId was not found")
+
+            Answer(
+                    questionId = questionId,
+                    partialAnswers = partialAnswers
+            )
+        } catch (e: SQLException) {
+            logger.error("SQLException thrown when adding answer to question", e)
+            throw DatabaseException("")
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedQuestionStatement)
+        }
     }
 
-    override fun getAnswersForExam(questionId: Int): ArrayList<Answer> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    /**
+     * Get answerModel from database by [Exam]
+     *
+     * @param examId [Int] The ID of the exam
+     */
+    override fun getAnswersForExam(examId: Int): AnswerModel {
+        val conn: Connection? = MySQLConnection.getConnection()
+
+
+        val sqlAnswerQuery = "SELECT PARTIALANSWERTEXT, PA.PARTIALANSWERID, POINTS, ANSWERTEXT, Q.QUESTIONID FROM PARTIAL_ANSWER PA JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE ON PA.PARTIALANSWERID = PAIQIE.PARTIALANSWERID JOIN QUESTION Q on PA.QUESTIONID = Q.QUESTIONID where PAIQIE.EXAMID = ?"
+        val sqlQuestionQuery = "SELECT ANSWERTEXT, Q.QUESTIONID FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q on QE.QUESTIONID = Q.QUESTIONID where QE.EXAMID = ?"
+
+        val preparedAnswerStatement = conn?.prepareStatement(sqlAnswerQuery)
+        val preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
+
+        preparedAnswerStatement?.setInt(1, examId)
+        preparedQuestionStatement?.setInt(1, examId)
+
+        return try {
+
+            val answerRs = preparedAnswerStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
+            val questionRs = preparedQuestionStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
+
+            val answers = ArrayList<Answer>()
+            var partialAnswers = ArrayList<PartialAnswer>()
+
+            while (questionRs.next()) {
+                val questionId = questionRs.getInt("QUESTIONID")
+                while (answerRs.next()) {
+                    val newQuestionId = answerRs.getInt("QUESTIONID")
+                    if (questionId != newQuestionId) {
+                        answerRs.previous()
+                        break
+                    }
+
+                    partialAnswers.add(PartialAnswer(
+                            partialAnswerId = answerRs.getInt("PARTIALANSWERID"),
+                            partialAnswerText = answerRs.getString("PARTIALANSWERTEXT")
+                    ))
+                }
+
+                answers.add(Answer(
+                        questionId = questionId,
+                        example_answer = questionRs.getString("ANSWERTEXT"),
+                        partialAnswers = partialAnswers
+                ))
+
+                partialAnswers = ArrayList()
+            }
+
+            AnswerModel(
+                    examId = examId,
+                    answerModelId = null,
+                    answers = answers
+            )
+        } catch (e: SQLException) {
+            logger.error("SQLException thrown when adding answer to question", e)
+            throw DatabaseException("")
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedAnswerStatement)
+            MySQLConnection.closeStatement(preparedQuestionStatement)
+        }
     }
 }

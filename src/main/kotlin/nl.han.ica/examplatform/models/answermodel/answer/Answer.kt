@@ -23,5 +23,5 @@ data class Answer(
         @ApiModelProperty(notes = "The id of the Question this answer is for")
         val partialAnswers: ArrayList<PartialAnswer>? = null,
         @ApiModelProperty(notes = "The total amount of point for a question")
-        val points: Int? = partialAnswers?.map { i -> i.points }?.sum()
+        val points: Int? = partialAnswers?.map { i -> i.points ?: 0 }?.sum()
 )

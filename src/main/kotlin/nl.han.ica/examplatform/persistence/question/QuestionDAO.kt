@@ -169,7 +169,8 @@ class QuestionDAO : IQuestionDAO {
                         pluginVersion = questionRs.getString("PLUGINVERSION")))
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Something went wrong while getting all courses", e)
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedStatement)
@@ -191,7 +192,7 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
 
-        var questions = ArrayList<Question>()
+        val questions: ArrayList<Question>
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
             preparedQuestionStatement?.setInt(1, examId)
@@ -199,7 +200,8 @@ class QuestionDAO : IQuestionDAO {
             questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Something went wrong while getting all courses", e)
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedQuestionStatement)
@@ -233,7 +235,7 @@ class QuestionDAO : IQuestionDAO {
     private fun getSubQuestionsOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String): ArrayList<Question>? {
         var preparedQuestionStatement: PreparedStatement? = null
 
-        var questions = ArrayList<Question>()
+        val questions: ArrayList<Question>
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlSubQuestionQuery)
             preparedQuestionStatement?.setInt(1, questionId)
@@ -241,7 +243,8 @@ class QuestionDAO : IQuestionDAO {
             questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Something went wrong while getting all courses", e)
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
@@ -253,7 +256,6 @@ class QuestionDAO : IQuestionDAO {
         var preparedQuestionCategoryStatement: PreparedStatement? = null
 
         val sqlQuestionCategoryQuery = "SELECT CATEGORYNAME FROM CATEGORIES_OF_QUESTION as CQ INNER JOIN CATEGORY as C ON CQ.CATEGORYID = C.CATEGORYID WHERE QUESTIONID = ?"
-
 
         val questions = ArrayList<String>()
         try {
@@ -267,7 +269,8 @@ class QuestionDAO : IQuestionDAO {
                 questions.add(questionCategoryRs.getString("CATEGORYNAME"))
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Something went wrong while getting all courses", e)
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedQuestionCategoryStatement)
         }
@@ -289,16 +292,16 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
 
-        var questions = ArrayList<Question>()
+        val questions: ArrayList<Question>
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
             preparedQuestionStatement?.setInt(1, questionId)
 
-
             questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            logger.error("Something went wrong while getting all courses", e)
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedQuestionStatement)

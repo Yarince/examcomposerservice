@@ -13,5 +13,5 @@ import nl.han.ica.examplatform.models.question.Question
 data class PartialAnswer(
         val partialAnswerId: Int? = null,
         val partialAnswerText: String,
-        val points: Int
+        val points: Int? = null
 )

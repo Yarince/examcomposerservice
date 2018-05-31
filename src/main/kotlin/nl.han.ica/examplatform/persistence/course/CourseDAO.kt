@@ -39,6 +39,7 @@ class CourseDAO : ICourseDAO {
                 ))
         } catch (e: SQLException) {
             logger.error("Something went wrong while getting all courses", e)
+            throw DatabaseException("Error while interacting with the database")
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(dbConnection)

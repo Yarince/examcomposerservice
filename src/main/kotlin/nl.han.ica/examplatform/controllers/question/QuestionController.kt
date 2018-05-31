@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping
 @RestController
 @RequestMapping("question")
 @Api("question", description = "Creating, updating and deleting questions")
-class QuestionController (private val questionService: QuestionService) {
+class QuestionController(private val questionService: QuestionService) {
 
     /**
      * Endpoint for creating a question
@@ -37,7 +37,10 @@ class QuestionController (private val questionService: QuestionService) {
             ApiResponse(code = 201, message = "Created"),
             ApiResponse(code = 500, message = "Internal server error")
     )
-    fun createQuestion(@ApiParam(value = "Question object", required = true) @RequestBody question: Question): ResponseEntity<Question> = questionService.addQuestion(question)
+    fun createQuestion(
+            @ApiParam(value = "Question object", required = true)
+            @RequestBody question: Question): ResponseEntity<Question> =
+            questionService.addQuestion(question)
 
     /**
      * Endpoint for getting questions for a course.
@@ -46,12 +49,17 @@ class QuestionController (private val questionService: QuestionService) {
      * @return [ResponseEntity]<[Array]<[Question]> The list of questions that corresponds to the course
      */
     @GetMapping("/course/{courseId}")
-    @ApiOperation(value = "Retrieve questions of a course", notes = "Retrieve questions that are within a specific course", response = Array<Question>::class)
+    @ApiOperation(
+            value = "Retrieve questions of a course",
+            notes = "Retrieve questions that are within a specific course",
+            response = Array<Question>::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "OK"),
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
-    fun getQuestionsForCourse(@ApiParam(value = "The ID of the course you want to retrieve the questions of", required = true) @PathVariable("courseId") courseId: Int): ResponseEntity<Array<Question>> =
+    fun getQuestionsForCourse(
+            @ApiParam(value = "The ID of the course you want to retrieve the questions of", required = true)
+            @PathVariable("courseId") courseId: Int): ResponseEntity<Array<Question>> =
             questionService.getQuestionsForCourse(courseId)
 
     /**
@@ -61,7 +69,10 @@ class QuestionController (private val questionService: QuestionService) {
      * @return [ResponseEntity]<[Question]> The question retrieved.
      */
     @GetMapping("/{questionId}")
-    @ApiOperation(value = "Retrieve a Question by Id", notes = "Retrieve a question by id", response = Array<Question>::class)
+    @ApiOperation(
+            value = "Retrieve a Question by Id",
+            notes = "Retrieve a question by id",
+            response = Array<Question>::class)
     @ApiResponses(
             ApiResponse(code = 200, message = "OK"),
             ApiResponse(code = 403, message = "Bad request"),
