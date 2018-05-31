@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom
  * @return [PracticeExam] returns a practiceExam
  */
 fun generatePracticeExam(courseId: Int, categories: Array<String>, questionDAO: QuestionDAO): PracticeExam {
-    val questions = questionDAO.getQuestions(courseId, categories)
+    val questions = questionDAO.getQuestionsByCourseAndCategory(courseId, categories)
 
     // Recursively add questions to exam
     val practiceExam = addQuestionsToPracticeExam(questions, questions, categories.toList())
