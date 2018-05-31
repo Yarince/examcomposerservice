@@ -189,9 +189,9 @@ class ExamDAO : IExamDAO {
         if (exam.questions == null || exam.questions.size < 1)
             throw DatabaseException("Please provide questions to add to exam")
 
-        var query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER) VALUES"
+        var query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER, QUESTIONPOINTS) VALUES"
         for (question in exam.questions) {
-            query = query.plus("(?, ?, ?)")
+            query = query.plus("(?, ?, ?, ?)")
             if (question != exam.questions.last()) query = query.plus(", ")
         }
 
@@ -206,6 +206,8 @@ class ExamDAO : IExamDAO {
                     ?: throw DatabaseException("Can't insert question without ID"))
             preparedStatement?.setInt(++index, question.questionOrderInExam
                     ?: throw DatabaseException("Can't insert question without sequence number"))
+            preparedStatement?.setInt(++index, question.questionPoints
+                    ?: throw DatabaseException("Can't insert question without question points"))
         }
 
         try {

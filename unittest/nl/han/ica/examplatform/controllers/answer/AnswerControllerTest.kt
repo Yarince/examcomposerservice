@@ -33,7 +33,7 @@ internal class AnswerControllerTest {
     fun testAddAnswerToQuestion() {
         val result = answerController.addAnswerToQuestion(answer)
         Assert.assertNotNull(result)
-        assertEquals(HttpStatus.OK, result)
+        assertEquals(HttpStatus.CREATED, result)
     }
 
     @Test(expected = InvalidAnswerException::class)

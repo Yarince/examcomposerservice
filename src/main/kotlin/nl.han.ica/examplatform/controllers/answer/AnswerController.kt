@@ -102,14 +102,14 @@ class AnswerController(private val answerService: AnswerService) {
             answerService.getAnswerForQuestion(questionId)
 
     /**
-     * HTTP REST function to get a [Answer] to a [Question]
+     * HTTP REST function to get a [Answer] to a [Exam]
      *
-     * @return [Answer] The answer of a question
+     * @return [AnswerModel] The answerModel of a Exam
      */
     @GetMapping("/exam")
     @ApiOperation(
-            value = "Gets an Answer for a question",
-            response = Answer::class
+            value = "Gets an Answer for a Exam",
+            response = AnswerModel::class
     )
     @ApiResponses(
             ApiResponse(code = 200, message = "Answer fetched"),
