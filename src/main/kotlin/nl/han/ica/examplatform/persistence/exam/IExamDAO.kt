@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.persistence.exam
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.question.Question
 import org.springframework.http.ResponseEntity
 
 /**
