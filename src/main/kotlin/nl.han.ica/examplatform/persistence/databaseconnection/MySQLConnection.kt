@@ -1,12 +1,16 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import nl.han.ica.examplatform.config.logger.loggerFor
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
+import java.io.File
+import java.io.FileInputStream
 import java.io.FileReader
+import java.io.IOException
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
 import java.sql.Statement
-import java.util.Properties
+import java.util.*
 
 /**
  * A singleton object that handles the connection with the MySQL database.
@@ -17,7 +21,7 @@ object MySQLConnection {
     /**
      * Holds the database properties, such as the connection URL, username and password.
      */
-    private val databaseProperties: Properties = initializeProperties()
+    private val databaseProperties: Properties = initializePropertiesOutsideJar()
 
     /**
      * Retrieves a connection and returns it.
@@ -44,9 +48,31 @@ object MySQLConnection {
     private fun initializeProperties(): Properties {
         val databaseProperties = Properties()
         val reader = FileReader(System.getProperty("user.dir") +
-            "/src/main/kotlin/nl.han.ica/examplatform/config/databaseconfig/application.properties")
+            "/src/main/resources/application.properties")
         databaseProperties.load(reader)
         return databaseProperties
+
+    return databaseProperties
+    }
+
+    /**
+     * Reads the database properties, loads them into a [Properties] object and returns them
+     *
+     * @return loaded database properties
+     */
+    private fun initializePropertiesOutsideJar() : Properties {
+        val databaseProperties = Properties()
+
+        return try {
+            val jarPath = File(this::class.java!!.protectionDomain.codeSource.location.path)
+            val propertiesPath = jarPath.parentFile.absolutePath
+            databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
+
+            databaseProperties
+        } catch (e: IOException) {
+            logger.error("Error when getting connection", e)
+            throw DatabaseException("")
+        }
     }
 
     /**
