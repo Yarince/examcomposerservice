@@ -7,7 +7,9 @@ import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
+import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
+import nl.han.ica.examplatform.persistence.exam.IExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,9 +22,10 @@ import org.springframework.stereotype.Service
  * @param questionDAO [QuestionDAO] The QuestionDAO
  */
 @Service
-class ExamService(private val examDAO: ExamDAO,
-                  private val questionDAO: QuestionDAO,
+class ExamService(private val examDAO: IExamDAO,
+                  private val questionDAO: IQuestionDAO,
                   private val categoryDAO: ICategoryDAO) {
+
 
     private val logger = loggerFor(javaClass)
 
@@ -83,7 +86,7 @@ class ExamService(private val examDAO: ExamDAO,
             ResponseEntity(generatePracticeExam(courseId, studentNr, questionDAO, categoryDAO), HttpStatus.CREATED)
 
     /**
-     * Ads a class to an exam.
+     * Adds a class to an exam.
      *
      * @param examId [Int] the ID of the exam
      * @param classes [Array]<[String]> an array containing classes

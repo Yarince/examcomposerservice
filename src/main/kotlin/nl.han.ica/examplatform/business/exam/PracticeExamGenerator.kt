@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.business.exam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
+import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import java.util.concurrent.ThreadLocalRandom
 
@@ -15,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom
  *
  * @return [PracticeExam] returns a practiceExam
  */
-fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: QuestionDAO, categoryDAO: ICategoryDAO): PracticeExam {
+fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDAO, categoryDAO: ICategoryDAO): PracticeExam {
     val questions = questionDAO.getQuestionsByCourse(courseId)
     val categories = categoryDAO.getCategoriesByCourse(courseId)
 
