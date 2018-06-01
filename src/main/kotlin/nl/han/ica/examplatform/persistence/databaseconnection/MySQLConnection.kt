@@ -11,12 +11,13 @@ import java.sql.DriverManager
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.*
-    object MySQLConnection {
 
-        /**
-         * A singleton object that handles the connection with the MySQL database.
-         */
-        private val logger = loggerFor(javaClass)
+object MySQLConnection {
+
+    /**
+     * A singleton object that handles the connection with the MySQL database.
+     */
+    private val logger = loggerFor(javaClass)
 
     /**
      * Holds the database properties, such as the connection URL, username and password.
