@@ -12,16 +12,16 @@ import java.sql.SQLException
  * Database Access Object for categories
  */
 @Repository
-class CategoryDAO {
-    val logger = loggerFor(javaClass)
+class CategoryDAO : ICategoryDAO {
+    override val logger = loggerFor(javaClass)
 
     /**
      * Gets all categories within questions of a course.
      *
      * @param courseId [Int] The ID of course of which the questions should be retrieved.
-     * @return [Array]<[String]> An array of all categories corresponding to the course.
+     * @return [ArrayList]<[String]> An array of all categories corresponding to the course.
      */
-    fun getCategoriesByCourse(courseId: Int): Array<String> {
+    override fun getCategoriesByCourse(courseId: Int): ArrayList<String> {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null
 
@@ -42,6 +42,6 @@ class CategoryDAO {
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
 
-        return categories.toTypedArray()
+        return categories
     }
 }
