@@ -13,7 +13,7 @@ import java.sql.SQLException
  * This class handles all the Database operations for [Plugin].
  */
 @Repository
-class PluginDAO {
+class PluginDAO : IPluginDAO {
 
     val logger = loggerFor(javaClass)
 
@@ -22,7 +22,7 @@ class PluginDAO {
      *
      * @return [ArrayList]<[Plugin]> List of [Plugin]s
      */
-    fun getAllPlugins(): ArrayList<Plugin> {
+    override fun getAllPlugins(): ArrayList<Plugin> {
         val dbConnection: Connection? = MySQLConnection.getConnection()
         val dbQuery = "SELECT PluginId, PluginName, PluginVersion, PluginDescription FROM PLUGIN"
         val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(dbQuery)

@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service
  * @param questionDAO [QuestionDAO] The QuestionDAO
  */
 @Service
-class QuestionService(private val questionDAO: QuestionDAO) {
+class QuestionService(private val questionDAO: IQuestionDAO) {
 
     private val logger = loggerFor(javaClass)
 

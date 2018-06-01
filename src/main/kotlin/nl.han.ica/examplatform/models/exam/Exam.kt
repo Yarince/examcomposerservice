@@ -5,7 +5,19 @@ import nl.han.ica.examplatform.models.question.Question
 import java.util.Date
 
 /**
- * Represents a official exam.
+ * Represents an official exam.
+ *
+ * @param examId [Int] The ID of the exam
+ * @param name [String] The name of the exam
+ * @param durationInMinutes [Int] The duration in minutes of the exam
+ * @param startTime [Date] The start time of the exam
+ * @param endTime [Date] The end time of the exam
+ * @param courseId [Int] The ID of the course that the exam is for
+ * @param version [Int] The version of the exam
+ * @param examType [String] The type of the exam can be practice test or exam
+ * @param instructions [String] The instructions for the exam
+ * @param location [String] The location of the exam
+ * @param questions [ArrayList]<[Question]> The questions in the exam
  */
 data class Exam(
         @ApiModelProperty(notes = "The ID of the exam")

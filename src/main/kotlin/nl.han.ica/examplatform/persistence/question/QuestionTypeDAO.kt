@@ -12,7 +12,7 @@ import java.sql.SQLException
  * This class handles all the Database operations for question types.
  */
 @Repository
-class QuestionTypeDAO {
+class QuestionTypeDAO : IQuestionTypeDAO {
     private val logger = loggerFor(javaClass)
 
     /**
@@ -20,7 +20,7 @@ class QuestionTypeDAO {
      *
      * @return [ArrayList]<[String]> List of questionTypes
      */
-    fun getAllQuestionTypes(): ArrayList<String> {
+    override fun getAllQuestionTypes(): ArrayList<String> {
         val dbConnection: Connection? = MySQLConnection.getConnection()
         val pluginNameQuery = "SELECT PluginName FROM `PLUGIN`"
         val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(pluginNameQuery)
