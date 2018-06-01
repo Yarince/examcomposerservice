@@ -12,6 +12,9 @@ import java.sql.SQLException
 import java.sql.Statement
 import java.util.*
 
+/**
+ * A singleton object that handles the connection with the MySQL database.
+ */
 object MySQLConnection {
 
     /**
