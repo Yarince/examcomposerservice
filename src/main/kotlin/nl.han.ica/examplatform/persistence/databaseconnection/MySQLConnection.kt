@@ -10,7 +10,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
 import java.sql.Statement
-import java.util.Properties
+import java.util.*
 
 /**
  * A singleton object that handles the connection with the MySQL database.
@@ -67,7 +67,8 @@ object MySQLConnection {
             val jarPath = File(this::class.java!!.protectionDomain.codeSource.location.path)
             val propertiesPath = jarPath.parentFile.absolutePath
             databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
-            return databaseProperties
+
+            databaseProperties
         } catch (e: IOException) {
             logger.error("Error when getting connection", e)
             throw DatabaseException("")
