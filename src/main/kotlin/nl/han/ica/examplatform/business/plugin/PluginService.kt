@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.plugin
 
 import nl.han.ica.examplatform.models.plugin.Plugin
+import nl.han.ica.examplatform.persistence.plugin.IPluginDAO
 import nl.han.ica.examplatform.persistence.plugin.PluginDAO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service
  * @param pluginDAO [PluginDAO] The PluginDAO
  */
 @Service
-class PluginService(private val pluginDAO: PluginDAO) {
+class PluginService(private val pluginDAO: IPluginDAO) {
 
     /**
      * Get all Plugins from the database.
