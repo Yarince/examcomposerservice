@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
@@ -34,7 +35,7 @@ class QuestionService(private val questionDAO: IQuestionDAO) {
                     }
                 }
                 ResponseEntity(insertedQuestion, HttpStatus.CREATED)
-            } catch (exception: Exception) {
+            } catch (exception: DatabaseException) {
                 logger.error("Couldn't insert question: ${question.questionText}")
                 ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
             }
