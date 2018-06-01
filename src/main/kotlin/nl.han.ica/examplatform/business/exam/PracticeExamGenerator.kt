@@ -2,6 +2,8 @@ package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.category.ICategoryDAO
+import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import java.util.concurrent.ThreadLocalRandom
 
@@ -9,13 +11,14 @@ import java.util.concurrent.ThreadLocalRandom
  * Generates a practice exam based on course and categories
  *
  * @param courseId [Int] the ID of the course for which the exam should be generated
- * @param categories [Array]<[String]> the subjects of which the exam should be about
+ * @param studentNr [Int] the student number for which the exam should be generated
  * @param questionDAO the DAO that is needed to retrieve the questions, because it can't be injected
  *
  * @return [PracticeExam] returns a practiceExam
  */
-fun generatePracticeExam(courseId: Int, categories: Array<String>, questionDAO: QuestionDAO): PracticeExam {
-    val questions = questionDAO.getQuestionsByCourseAndCategory(courseId, categories)
+fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDAO, categoryDAO: ICategoryDAO): PracticeExam {
+    val questions = questionDAO.getQuestionsByCourse(courseId)
+    val categories = categoryDAO.getCategoriesByCourse(courseId)
 
     // Recursively add questions to exam
     val practiceExam = addQuestionsToPracticeExam(questions, questions, categories.toList())

@@ -37,7 +37,7 @@ class ExamController (
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestBody courseAndCategories: PracticeExamRequestBody): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseAndCategories.courseId, courseAndCategories.categories)
+    fun generatePracticeExam(@RequestParam courseId: Int, @RequestParam studentNr: Int): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseId, studentNr)
 
 
     /**
