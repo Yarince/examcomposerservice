@@ -11,12 +11,12 @@ import java.sql.DriverManager
 import java.sql.SQLException
 import java.sql.Statement
 import java.util.*
+    object MySQLConnection {
 
-/**
- * A singleton object that handles the connection with the MySQL database.
- */
-object MySQLConnection {
-    private val logger = loggerFor(javaClass)
+        /**
+         * A singleton object that handles the connection with the MySQL database.
+         */
+        private val logger = loggerFor(javaClass)
 
     /**
      * Holds the database properties, such as the connection URL, username and password.
@@ -63,8 +63,7 @@ object MySQLConnection {
 
         return try {
             val jarPath = File(this::class.java.protectionDomain.codeSource.location.path)
-            val propertiesPath = jarPath.parentFile.absolutePath
-            databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
+            databaseProperties.load(FileInputStream("$jarPath/application.properties"))
 
             databaseProperties
         } catch (e: IOException) {
