@@ -40,6 +40,8 @@ data class Exam(
         val instructions: String? = null,
         @ApiModelProperty(notes = "The location of the exam")
         val location: String? = null,
+        @ApiModelProperty(notes = "Boolean that states if students can download the exam")
+        val readyForDownload: Boolean = false,
         @ApiModelProperty(notes = "The questions in the exam")
         val questions: ArrayList<Question>? = null
 )
