@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.models.course
 
 import io.swagger.annotations.ApiModelProperty
+import nl.han.ica.examplatform.models.exam.Exam
 
 /**
  * Represents a course that is that can used to group and filter the [Exam]s.

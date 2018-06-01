@@ -1,5 +1,7 @@
 package nl.han.ica.examplatform.models.exam
 
+import nl.han.ica.examplatform.models.course.Course
+
 // This DTO is needed for returning a list of all exams without details.
 /**
  * Represents a simple form of a [Exam].

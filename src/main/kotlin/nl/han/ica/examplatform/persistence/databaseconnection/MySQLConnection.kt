@@ -29,16 +29,16 @@ object MySQLConnection {
      * @return a database [Connection] on which queries can be executed
      */
     fun getConnection(): Connection? =
-        try {
-            connectDatabase(getDatabaseConnectionUrl(
-                databaseProperties),
-                getDatabaseUsername(databaseProperties),
-                getDatabasePassword(databaseProperties),
-                getDrivers(databaseProperties))
-        } catch (e: SQLException) {
-            logger.error("Error when getting connection", e)
-            null
-        }
+            try {
+                connectDatabase(getDatabaseConnectionUrl(
+                        databaseProperties),
+                        getDatabaseUsername(databaseProperties),
+                        getDatabasePassword(databaseProperties),
+                        getDrivers(databaseProperties))
+            } catch (e: SQLException) {
+                logger.error("Error when getting connection", e)
+                null
+            }
 
     /**
      * Reads the database properties, loads them into a [Properties] object and returns them.
@@ -48,11 +48,9 @@ object MySQLConnection {
     private fun initializeProperties(): Properties {
         val databaseProperties = Properties()
         val reader = FileReader(System.getProperty("user.dir") +
-            "/src/main/resources/application.properties")
+                "/src/main/resources/application.properties")
         databaseProperties.load(reader)
         return databaseProperties
-
-    return databaseProperties
     }
 
     /**
@@ -60,11 +58,11 @@ object MySQLConnection {
      *
      * @return loaded database properties
      */
-    private fun initializePropertiesOutsideJar() : Properties {
+    private fun initializePropertiesOutsideJar(): Properties {
         val databaseProperties = Properties()
 
         return try {
-            val jarPath = File(this::class.java!!.protectionDomain.codeSource.location.path)
+            val jarPath = File(this::class.java.protectionDomain.codeSource.location.path)
             val propertiesPath = jarPath.parentFile.absolutePath
             databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
 
@@ -85,10 +83,10 @@ object MySQLConnection {
      * @return [Connection] A MySQL database
      */
     private fun connectDatabase(
-        connectionURL: String,
-        username: String,
-        password: String,
-        drivers: String
+            connectionURL: String,
+            username: String,
+            password: String,
+            drivers: String
     ): Connection {
         Class.forName(drivers)
         return DriverManager.getConnection(connectionURL, username, password)
