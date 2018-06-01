@@ -17,6 +17,7 @@ import java.util.Date
  * @param examType [String] The type of the exam can be practice test or exam
  * @param instructions [String] The instructions for the exam
  * @param location [String] The location of the exam
+ * @param readyForDownload [Boolean] Boolean that states if students can download the exam
  * @param questions [ArrayList]<[Question]> The questions in the exam
  */
 data class Exam(
@@ -41,7 +42,7 @@ data class Exam(
         @ApiModelProperty(notes = "The location of the exam")
         val location: String? = null,
         @ApiModelProperty(notes = "Boolean that states if students can download the exam")
-        val readyForDownload: Boolean = false,
+        val readyForDownload: Boolean? = false,
         @ApiModelProperty(notes = "The questions in the exam")
         val questions: ArrayList<Question>? = null
 )
