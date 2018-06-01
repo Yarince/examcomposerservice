@@ -35,7 +35,7 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
             preparedStatement?.setString(1, question.questionText)
             preparedStatement?.setString(2, question.questionType)
-            preparedStatement?.setInt(3, question.courseId ?: 1)
+            preparedStatement?.setInt(3, question.courseId)
             if (parentQuestionId != null)
                 preparedStatement?.setInt(4, parentQuestionId)
             else
@@ -136,7 +136,7 @@ class QuestionDAO : IQuestionDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
 
-        var queryGetQuestions = "SELECT * FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? "
+        var queryGetQuestions = "SELECT Q.QUESTIONID, Q.EXAMTYPENAME, COURSEID, QUESTIONTEXT, QUESTIONTYPE, ANSWERTYPE, ANSWERTYPEPLUGINVERSION, SEQUENCENUMBER, QUESTIONSUFFIX, PLUGINVERSION, ANSWERTEXT, ASSESSMENTCOMMENTS FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON Q.QUESTIONID = COQ.QUESTIONID INNER JOIN CATEGORY C ON C.CATEGORYID = COQ.CATEGORYID WHERE COURSEID = ? "
         val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
 
         for ((index, _) in categories.withIndex()) {
@@ -165,7 +165,11 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QuestionID"), conn),
                         subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery),
-                        pluginVersion = questionRs.getString("PLUGINVERSION")))
+                        pluginVersion = questionRs.getString("PLUGINVERSION"),
+                        courseId = questionRs.getInt("COURSEID"),
+                        answerType = questionRs.getString("ANSWERTYPE"),
+                        answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION")
+                        ))
             }
         } catch (e: SQLException) {
             logger.error("Something went wrong while getting all courses", e)
@@ -226,7 +230,9 @@ class QuestionDAO : IQuestionDAO {
                     examType = questionRs.getString("EXAMTYPENAME"),
                     categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
                     subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
-                    pluginVersion = questionRs.getString("PLUGINVERSION")
+                    pluginVersion = questionRs.getString("PLUGINVERSION"),
+                    answerType = questionRs.getString("ANSWERTYPE"),
+                    answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION")
             ))
         return questions
     }
