@@ -3,44 +3,43 @@ package poc
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import java.io.FileReader
+import java.util.concurrent.ThreadLocalRandom
 
 data class Question(val questionId: Int, val questionText: String, val categories: Array<String>, val type: String)
 
 fun main(args: Array<String>) {
-    generateExam()
+    generateExam(1, 1)
 }
 
-fun generateExam() {
-    val questions = loadQuestions()
+fun generateExam(courseId: Int, studentNr: Int) {
+    val questions = loadQuestions(courseId, studentNr)
     val ratedCategories = questionsToCategoryRating(questions)
 
-    val sortedCategories = ratedCategories.sortByValue()
-    sortedCategories.forEach { println(it) }
+    ratedCategories.forEach { println(it) }
 }
 
-private fun loadQuestions(): Array<Question> {
+private fun loadQuestions(courseId: Int, studentNr: Int): Array<Question> {
+    // Here the DB should get questions for courseId and studentNr
     val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/questionBankNotAnswered.json"))
     return Gson().fromJson(reader, Array<Question>::class.java)
 }
 
-private fun questionsToCategoryRating(questions: Array<Question>): HashMap<String, Double> {
-    // This will be implemented by another team member, so this is a stub that returns the categories and ratings
-    val categories = ArrayList<String>()
-    for (question in questions) {
-        for (category in question.categories) {
-            if (!categories.contains(category))
-                categories.add(category)
-        }
-    }
+private fun addQuestionToExam(studentNr: Int, allQuestions: Array<Question>, ratedCategories: HashMap<String, Double>, currentCategory: String) {
+    if (!ratedCategories.containsKey(currentCategory)) return
 
-    val ratedCategories = HashMap<String, Double>()
-    categories.forEachIndexed { index, category ->
-        ratedCategories[category] = (index + 1) * 25.0
-    }
+    if (determineIfQuestionOfCategoryWillBeAdded(ratedCategories[currentCategory]!!)) {
 
-    return ratedCategories
+        val questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory)
+                ?: getFirstAskedQuestion(currentCategory, studentNr)
+
+        //todo: add question to exam
+    } else {
+        val nextCategory = "Todo" // todo: determine next category
+        addQuestionToExam(studentNr, allQuestions, ratedCategories, nextCategory)
+    }
 }
 
-fun HashMap<String, Double>.sortByValue(): HashMap<String, Double> {
-    return this.toList().sortedBy { (_, value) -> value }.toMap() as HashMap<String, Double>
+private fun determineIfQuestionOfCategoryWillBeAdded(chanceToGetAdded: Double): Boolean {
+    val randomNumber = ThreadLocalRandom.current().nextDouble(0.0, 99.99)
+    return randomNumber < chanceToGetAdded
 }
