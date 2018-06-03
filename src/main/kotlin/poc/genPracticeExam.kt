@@ -4,16 +4,18 @@ import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import java.io.FileReader
 
+data class Question(val questionId: Int, val questionText: String, val categories: Array<String>, val type: String)
+
 fun main(args: Array<String>) {
     generateExam()
 }
 
-data class Question(val questionId: Int, val questionText: String, val categories: Array<String>, val type: String)
-
 fun generateExam() {
     val questions = loadQuestions()
     val ratedCategories = questionsToCategoryRating(questions)
-    ratedCategories.forEach { println(it) }
+
+    val sortedCategories = ratedCategories.sortByValue()
+    sortedCategories.forEach { println(it) }
 }
 
 private fun loadQuestions(): Array<Question> {
@@ -37,4 +39,8 @@ private fun questionsToCategoryRating(questions: Array<Question>): HashMap<Strin
     }
 
     return ratedCategories
+}
+
+fun HashMap<String, Double>.sortByValue(): HashMap<String, Double> {
+    return this.toList().sortedBy { (_, value) -> value }.toMap() as HashMap<String, Double>
 }
