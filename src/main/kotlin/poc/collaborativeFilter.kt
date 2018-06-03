@@ -17,6 +17,6 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String): Que
  * @param category the category of which the question should be about
  * @return [Question] the first made question of the student
  */
-internal fun getFirstAskedQuestion(category: String, studentNr: Int): Question? {
-    return null
+internal fun getFirstAskedQuestion(category: String, studentNr: Int): Question {
+    return Question(1, "Temp", arrayOf(), "OpenQuestion")
 }

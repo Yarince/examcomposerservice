@@ -1,7 +1,7 @@
 package poc
 
 
-internal fun questionsToCategoryRating(questions: Array<Question>): HashMap<String, Double> {
+internal fun questionsToSortedCategoryRating(questions: Array<Question>): List<Pair<String, Double>> {
     // This will be implemented by another team member, so this is a stub that returns the categories and ratings
     val categories = ArrayList<String>()
     for (question in questions) {
@@ -19,6 +19,6 @@ internal fun questionsToCategoryRating(questions: Array<Question>): HashMap<Stri
     return ratedCategories.sortByValue()
 }
 
-fun HashMap<String, Double>.sortByValue(): HashMap<String, Double> {
-    return this.toList().sortedBy { (_, value) -> value }.toMap() as HashMap<String, Double>
+fun HashMap<String, Double>.sortByValue(): List<Pair<String, Double>> {
+    return this.toList().sortedBy { (_, value) -> value }
 }

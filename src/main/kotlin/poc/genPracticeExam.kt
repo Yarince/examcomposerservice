@@ -8,24 +8,29 @@ fun main(args: Array<String>) {
 
 fun generateExam(courseId: Int, studentNr: Int) {
     val questions = loadQuestions(courseId, studentNr)
-    val ratedCategories = questionsToCategoryRating(questions)
+    val ratedCategories = questionsToSortedCategoryRating(questions)
 
     ratedCategories.forEach { println(it) }
 }
 
-private fun addQuestionToExam(studentNr: Int, allQuestions: Array<Question>, ratedCategories: HashMap<String, Double>, currentCategory: String) {
-    if (!ratedCategories.containsKey(currentCategory)) return
+private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()) {
+    // Return if the category is not in the list with categories
+    if (!ratedCategories.contains(currentCategory)) return
 
-    if (questionOfCategoryWillBeAdded(ratedCategories[currentCategory]!!)) {
+    if (questionOfCategoryWillBeAdded(currentCategory.second)) {
 
-        val questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory)
-                ?: getFirstAskedQuestion(currentCategory, studentNr)
+        val questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory.first)
+                ?: getFirstAskedQuestion(currentCategory.first, studentNr)
 
+        questionsInExam.add(questionToAdd)
+        allQuestions.remove(questionToAdd)
         //todo: add question to exam
     } else {
-        val nextCategory = "Todo" // todo: determine next category
-        addQuestionToExam(studentNr, allQuestions, ratedCategories, nextCategory)
+        val nextCategory = Pair("Todo", 0.0) // todo: determine next category
+        addQuestionToExam(studentNr, allQuestions, ratedCategories, nextCategory, questionsInExam)
     }
+
+    // Determine next category
 }
 
 /**
