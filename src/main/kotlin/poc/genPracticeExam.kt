@@ -13,9 +13,11 @@ fun generateExam(courseId: Int, studentNr: Int) {
     ratedCategories.forEach { println(it) }
 }
 
-private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()) {
+private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
     // Return if the category is not in the list with categories
-    if (!ratedCategories.contains(currentCategory)) return
+    if (!ratedCategories.contains(currentCategory)) return questionsInExam
+    // Return if the prerequisites are met
+    if (checkIfExamCompliesToPrerequisites(questionsInExam, allQuestions)) return questionsInExam
 
     if (questionOfCategoryWillBeAdded(currentCategory.second)) {
 
@@ -24,13 +26,18 @@ private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>,
 
         questionsInExam.add(questionToAdd)
         allQuestions.remove(questionToAdd)
-        //todo: add question to exam
-    } else {
-        val nextCategory = Pair("Todo", 0.0) // todo: determine next category
-        addQuestionToExam(studentNr, allQuestions, ratedCategories, nextCategory, questionsInExam)
     }
 
-    // Determine next category
+    val indexOfCurrentCategory = ratedCategories.indexOf(currentCategory)
+    val nextCategory = if (indexOfCurrentCategory == 0) {
+        // go back to most relevant category
+        ratedCategories.last()
+    } else {
+        ratedCategories[indexOfCurrentCategory - 1]
+    }
+
+    // Recursively add more questions
+    return addQuestionToExam(studentNr, allQuestions, ratedCategories, nextCategory, questionsInExam)
 }
 
 /**
@@ -39,4 +46,15 @@ private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>,
 private fun questionOfCategoryWillBeAdded(chanceToGetAdded: Double): Boolean {
     val randomNumber = ThreadLocalRandom.current().nextDouble(0.0, 99.99)
     return randomNumber < chanceToGetAdded
+}
+
+/**
+ * Checks if the exam has enough questions or meets other demands
+ */
+private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQuestions: ArrayList<Question>): Boolean {
+    val thresholdForPercentage = 30
+    val percentageOfQuestionsInExam = 0.33
+    val maxAmountOfQuestionsInExam = if (allQuestions.size < thresholdForPercentage) (allQuestions.size * percentageOfQuestionsInExam).toInt() else 10
+
+    return exam.size > maxAmountOfQuestionsInExam
 }
