@@ -11,6 +11,9 @@ fun generateExam(courseId: Int, studentNr: Int) {
     val ratedCategories = questionsToSortedCategoryRating(questions)
 
     ratedCategories.forEach { println(it) }
+
+    val exam = addQuestionToExam(studentNr, questions.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
+    exam.forEach { println(it) }
 }
 
 private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
