@@ -7,7 +7,7 @@ package poc
  * @param category the category of which the question should be about
  * @return [Question] the first made question of the student
  */
-fun getMostRelevantNotAssessedQuestionOfCategory(category: String): Question? {
+internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String): Question? {
     return null
 }
 
@@ -17,6 +17,6 @@ fun getMostRelevantNotAssessedQuestionOfCategory(category: String): Question? {
  * @param category the category of which the question should be about
  * @return [Question] the first made question of the student
  */
-fun getFirstAskedQuestion(category: String, studentNr: Int): Question? {
+internal fun getFirstAskedQuestion(category: String, studentNr: Int): Question? {
     return null
 }

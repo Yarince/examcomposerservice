@@ -1,7 +1,7 @@
 package poc
 
 
-fun questionsToCategoryRating(questions: Array<Question>): HashMap<String, Double> {
+internal fun questionsToCategoryRating(questions: Array<Question>): HashMap<String, Double> {
     // This will be implemented by another team member, so this is a stub that returns the categories and ratings
     val categories = ArrayList<String>()
     for (question in questions) {
