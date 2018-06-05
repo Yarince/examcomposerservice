@@ -4,7 +4,6 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
-import org.springframework.http.ResponseEntity
 
 /**
  * This class handles all the Database operations for [Exam].
@@ -47,7 +46,7 @@ interface IExamDAO {
      *
      * @param examId [Int] the ID of the exam
      * @param classes [Array]<[String]> an array containing classes
-     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
+     * @return [PreparedExam] the exam containing the added classes
      */
     fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam
 
@@ -58,4 +57,12 @@ interface IExamDAO {
      * @param questionsAndSequenceNumbers [Array]<[Pair]<[Int], [Int]>> An array containing the questionIds and the new sequence number
      */
     fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>)
+
+    /**
+     * Publishes an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param shouldBePublished [Boolean] Indicates whether the exam should be published or un-published
+     */
+    fun publishExam(examId: Int, shouldBePublished: Boolean)
 }

@@ -259,4 +259,30 @@ class ExamDAO : IExamDAO {
             MySQLConnection.closeConnection(conn)
         }
     }
+
+    /**
+     * Publishes an exam.
+     *
+     * @param examId [Int] The ID of the exam that should be published
+     */
+    override fun publishExam(examId: Int, shouldBePublished: Boolean) {
+        val query = "UPDATE EXAM SET READYFORDOWNLOAD = ? WHERE EXAMID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+        preparedStatement = conn?.prepareStatement(query)
+
+        preparedStatement?.setBoolean(1, shouldBePublished)
+        preparedStatement?.setInt(2, examId)
+
+        try {
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam $examId", e)
+            throw DatabaseException("Error while publishing exam $examId")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+    }
 }
