@@ -243,7 +243,6 @@ class ExamDAO : IExamDAO {
         preparedStatement?.setBoolean(1, shouldBePublished)
         preparedStatement?.setInt(2, examId)
 
-
         try {
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
