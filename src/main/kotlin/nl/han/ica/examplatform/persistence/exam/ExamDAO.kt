@@ -227,4 +227,31 @@ class ExamDAO : IExamDAO {
         // Not implemented in this branch, see other PR
         return PreparedExam(examId = 0, endTime = Date(), startTime = Date(), durationInMinutes = 10, name = "name", classes = arrayOf(), courseName = "APP", creator = "Uwe van Heesch", version = 1, examType = "OpenQuestion", questions = arrayListOf())
     }
+
+    /**
+     * Updates the meta data of an exam.
+     *
+     * @param exam [Exam] The Exam to update
+     * @return [Exam] The updated exam
+     */
+    override fun updateExam(exam: Exam): Exam {
+        val query = "UPDATE EXAM SET  = ? WHERE EXAMID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+        preparedStatement = conn?.prepareStatement(query)
+
+        preparedStatement?.set(1, shouldBePublished)
+
+
+        try {
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam", e)
+            throw DatabaseException("Error while updating exam")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+    }
 }

@@ -95,4 +95,11 @@ class ExamService(private val examDAO: IExamDAO,
     fun addClassesToExam(examId: Int, classes: Array<String>): ResponseEntity<PreparedExam> =
             ResponseEntity(examDAO.addClassesToExam(examId, classes), HttpStatus.ACCEPTED)
 
+    /**
+     * Updates the meta data of an exam.
+     *
+     * @param exam [Exam] The Exam to update
+     * @return [Exam] The updated exam
+     */
+    fun updateExam(exam: Exam) = ResponseEntity(examDAO.updateExam(exam), HttpStatus.ACCEPTED)
 }
