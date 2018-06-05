@@ -136,7 +136,7 @@ class ExamController(
      *
      * @param examId [Int] the ID of the exam of which the order of questions should be changed
      */
-    @PutMapping()
+    @PutMapping("/changeOrder")
     @ApiOperation(
             value = "Changes the order of questions in an exam"
     )
@@ -147,6 +147,6 @@ class ExamController(
                                   @RequestParam examId: Int,
                                   @ApiParam(value = "This is an array of pairs. The pairs first value is the question ID, " +
                                           "the second value is the new sequence number", required = true)
-                                  @RequestParam questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
+                                  @RequestBody questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
             examQuestionService.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
 }
