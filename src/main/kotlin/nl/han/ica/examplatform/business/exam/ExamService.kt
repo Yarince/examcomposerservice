@@ -102,4 +102,11 @@ class ExamService(private val examDAO: IExamDAO,
      * @return [Exam] The updated exam
      */
     fun updateExam(exam: Exam) = ResponseEntity(examDAO.updateExam(exam), HttpStatus.ACCEPTED)
+    /**
+     * Publishes an exam.
+     *
+     * @param examId [Int] The ID of the exam that should be published
+     * @param shouldBePublished [Boolean] Indicates whether the exam should be published or un-published
+     */
+    fun publishExam(examId: Int, shouldBePublished: Boolean) = examDAO.publishExam(examId, shouldBePublished)
 }

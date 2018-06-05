@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping("exams")
-class ExamController (
-    private val examService: ExamService,
-    private val examQuestionService: ExamQuestionService
+class ExamController(
+        private val examService: ExamService,
+        private val examQuestionService: ExamQuestionService
 ) {
 
     /**
@@ -34,14 +34,16 @@ class ExamController (
      */
     @PostMapping("/practice-exam")
     @ApiOperation(
-        value = "Add a practice exam without questions",
-        notes = "Cannot contain questions or an examId",
-        response = PracticeExam::class
+            value = "Add a practice exam without questions",
+            notes = "Cannot contain questions or an examId",
+            response = PracticeExam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestParam courseId: Int, @RequestParam studentNr: Int): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseId, studentNr)
+    fun generatePracticeExam(
+            @RequestParam courseId: Int,
+            @RequestParam studentNr: Int): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseId, studentNr)
 
 
     /**
@@ -51,9 +53,9 @@ class ExamController (
      */
     @GetMapping
     @ApiOperation(
-        value = "Get a list of minified exams",
-        notes = "This returns a list of exams containing ID, name, ",
-        response = Array<SimpleExam>::class
+            value = "Get a list of minified exams",
+            notes = "This returns a list of exams containing ID, name, ",
+            response = Array<SimpleExam>::class
     )
     fun getExams() = examService.getExams()
 
@@ -65,9 +67,9 @@ class ExamController (
      */
     @PostMapping()
     @ApiOperation(
-        value = "Add an exam without questions",
-        notes = "Cannot contain questions or an examId",
-        response = Exam::class
+            value = "Add an exam without questions",
+            notes = "Cannot contain questions or an examId",
+            response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
@@ -81,18 +83,18 @@ class ExamController (
      */
     @GetMapping("/{id}")
     @ApiOperation(
-        value = "Retrieve a specific exam",
-        notes = "Retrieve a specific exam, containing all information, questions and answers",
-        response = Exam::class
+            value = "Retrieve a specific exam",
+            notes = "Retrieve a specific exam, containing all information, questions and answers",
+            response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
     fun getExam(
-        @ApiParam(value = "The ID of the exam you want to retrieve", required = true)
-        @PathVariable("id")
-        id: Int
+            @ApiParam(value = "The ID of the exam you want to retrieve", required = true)
+            @PathVariable("id")
+            id: Int
     ): ResponseEntity<Exam> = examService.getExam(id)
 
     /**
@@ -103,8 +105,8 @@ class ExamController (
      */
     @PutMapping("/addQuestions")
     @ApiOperation(
-        value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId",
-        response = Exam::class
+            value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId",
+            response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
@@ -130,6 +132,46 @@ class ExamController (
             @ApiParam(value = "The ID of the exam you want to add the classes to", required = true)
             @RequestParam examId: Int) =
             examService.addClassesToExam(examId, classes)
+
+    /**
+     * HTTP REST function publish an Exam.
+     * This makes the exam ready for download.
+     *
+     * @param examId [Int] the ID of the exam that should be published
+     */
+    @PutMapping("/publish")
+    @ApiOperation(
+            value = "Publish an exam", notes = "This makes the exam ready for download for the students",
+            response = PreparedExam::class
+    )
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun publishExam(
+            @ApiParam(value = "The ID of the exam", required = true)
+            @RequestParam examId: Int,
+            @ApiParam(value = "If the exam should be published, or un-published. Defaults to published (true)", required = false)
+            @RequestParam shouldBePublished: Boolean = true) = examService.publishExam(examId, shouldBePublished)
+
+    /**
+     * HTTP REST function to change the order of questions in an exam.
+     *
+     * @param examId [Int] the ID of the exam of which the order of questions should be changed
+     */
+    @PutMapping("/changeOrder")
+    @ApiOperation(
+            value = "Changes the order of questions in an exam"
+    )
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun changeQuestionOrderInExam(
+            @ApiParam(value = "The ID of the exam", required = true)
+            @RequestParam examId: Int,
+            @ApiParam(value = "This is an array of pairs. The pairs first value is the question ID, " +
+                    "the second value is the new sequence number", required = true)
+            @RequestBody questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
+            examQuestionService.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
 
     /**
      * HTTP REST function to update an [Exam].
