@@ -96,6 +96,13 @@ class ExamService(private val examDAO: IExamDAO,
             ResponseEntity(examDAO.addClassesToExam(examId, classes), HttpStatus.ACCEPTED)
 
     /**
+     * Updates the meta data of an exam.
+     *
+     * @param exam [Exam] The Exam to update
+     * @return [Exam] The updated exam
+     */
+    fun updateExam(exam: Exam) = ResponseEntity(examDAO.updateExam(exam), HttpStatus.ACCEPTED)
+    /**
      * Publishes an exam.
      *
      * @param examId [Int] The ID of the exam that should be published

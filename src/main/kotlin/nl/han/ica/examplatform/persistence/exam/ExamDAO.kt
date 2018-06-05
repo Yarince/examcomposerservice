@@ -229,6 +229,43 @@ class ExamDAO : IExamDAO {
     }
 
     /**
+     * Updates the meta data of an exam.
+     *
+     * @param exam [Exam] The Exam to update
+     * @return [Exam] The updated exam
+     */
+    override fun updateExam(exam: Exam): Exam {
+        if (exam.examId == null) throw DatabaseException("Can't update exam when examId is not set")
+
+        val query = "UPDATE EXAM SET COURSEID = ?, EXAMTYPENAME = ?, EXAMNAME = ?, STARTTIME = ?, ENDTIME = ?, INSTRUCTIONS = ?, EXAMVERSION = ?, LOCATION = ? WHERE EXAMID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+        preparedStatement = conn?.prepareStatement(query)
+
+        preparedStatement?.setInt(1, exam.courseId)
+        preparedStatement?.setString(2, exam.examType)
+        preparedStatement?.setString(3, exam.name)
+        preparedStatement?.setDate(4, java.sql.Date(exam.startTime.time))
+        preparedStatement?.setDate(5, java.sql.Date(exam.endTime.time))
+        preparedStatement?.setString(6, exam.instructions)
+        preparedStatement?.setInt(7, exam.version)
+        preparedStatement?.setString(8, exam.location)
+        preparedStatement?.setInt(9, exam.examId)
+
+        try {
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam", e)
+            throw DatabaseException("Error while updating exam")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+        return exam
+    }
+
+    /**
      * Changes the order of questions in an exam
      *
      * @param examId [Int] The ID of the exam

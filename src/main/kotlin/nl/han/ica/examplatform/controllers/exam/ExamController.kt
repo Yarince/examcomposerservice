@@ -103,7 +103,7 @@ class ExamController(
      *
      * @return [Exam]
      */
-    @PutMapping()
+    @PutMapping("/addQuestions")
     @ApiOperation(
             value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId",
             response = Exam::class
@@ -172,4 +172,22 @@ class ExamController(
                     "the second value is the new sequence number", required = true)
             @RequestBody questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
             examQuestionService.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
+
+    /**
+     * HTTP REST function to update an [Exam].
+     * This does not include the questions in an exam.
+     *
+     * @param exam [Exam] The updated exam
+     * @return [Exam] The result of the update
+     */
+    @PutMapping()
+    @ApiOperation(
+            value = "Update meta data in an exam", notes = "This does not include updating of questions in this exam",
+            response = Exam::class
+    )
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun updateExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
+            examService.updateExam(exam)
 }
