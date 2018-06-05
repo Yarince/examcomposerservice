@@ -19,15 +19,14 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
     var mostRelevantQuestion: Pair<Int, Double>? = null
 
     filteredQuestions.forEach {
+        // The lower the rating, the more relevant the question is because of the low score on the question
         val rating = it.nGood.toDouble() / it.nResults
 
-        if (mostRelevantQuestion == null) {
+        if (mostRelevantQuestion == null)
             mostRelevantQuestion = Pair(it.questionId, rating)
-        } else {
-            if (rating < mostRelevantQuestion!!.second) {
+        else
+            if (rating < mostRelevantQuestion!!.second)
                 mostRelevantQuestion = Pair(it.questionId, rating)
-            }
-        }
     }
 
     return questions.find { it.questionId == mostRelevantQuestion?.first }
