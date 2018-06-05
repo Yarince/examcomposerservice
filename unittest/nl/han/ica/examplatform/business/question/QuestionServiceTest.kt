@@ -1,6 +1,8 @@
 package nl.han.ica.examplatform.business.question
 
+import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -25,6 +27,10 @@ class QuestionServiceTest {
     private
     lateinit var questionDAO: QuestionDAO
 
+    @Mock
+    private
+    lateinit var categoryDAO: CategoryDAO
+
     @Test
     fun testAddQuestionSuccess() {
         val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)
@@ -42,7 +48,7 @@ class QuestionServiceTest {
         val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)
         val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
 
-        doThrow(RuntimeException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)
+        doThrow(DatabaseException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)
 
         val result = questionService.addQuestion(questionInserted)
         assertEquals(expectedResult, result)

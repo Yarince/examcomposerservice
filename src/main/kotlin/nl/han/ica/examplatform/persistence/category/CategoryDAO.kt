@@ -2,11 +2,10 @@ package nl.han.ica.examplatform.persistence.category
 
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
+import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.SQLException
+import java.sql.*
 
 /**
  * Database Access Object for categories
@@ -25,11 +24,26 @@ class CategoryDAO : ICategoryDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null
 
-        val sqlQuestionQuery = "select C.CATEGORYNAME FROM CATEGORY C WHERE EXISTS( SELECT 1 FROM CATEGORIES_OF_QUESTION COQ WHERE COQ.CATEGORYID = C.CATEGORYID AND EXISTS( SELECT 1 FROM QUESTION Q WHERE Q.QUESTIONID = COQ.QUESTIONID))"
+        val sqlCategoryQuery = """
+            SELECT
+                C.CATEGORYNAME
+            FROM CATEGORY C
+            WHERE
+            EXISTS(
+                SELECT 1
+                FROM CATEGORIES_OF_QUESTION COQ
+                WHERE COQ.CATEGORYID = C.CATEGORYID
+                AND EXISTS(
+                    SELECT 1
+                    FROM QUESTION Q
+                    WHERE Q.QUESTIONID = COQ.QUESTIONID
+                    AND COURSEID = ?
+                )
+            )"""
 
         val categories = ArrayList<String>()
         try {
-            preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
+            preparedQuestionStatement = conn?.prepareStatement(sqlCategoryQuery)
             preparedQuestionStatement?.setInt(1, courseId)
 
             val rs = preparedQuestionStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute query")
@@ -43,5 +57,80 @@ class CategoryDAO : ICategoryDAO {
         }
 
         return categories
+    }
+
+    override fun addCategoriesToQuestion(categories: ArrayList<String>, questionId: Int) {
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedQuestionStatement: PreparedStatement? = null
+        var insertStatement: PreparedStatement? = null
+
+        var sqlCategoryQuery = """
+            SELECT
+                C.CATEGORYID
+            FROM CATEGORY C
+            WHERE CATEGORYNAME in ("""
+
+        // Add prepared statement parameters dynamically for all categories
+        sqlCategoryQuery = addDynamicParameters(sqlCategoryQuery, categories)
+
+        val insertQuery = "INSERT INTO CATEGORIES_OF_QUESTION (QUESTIONID, CATEGORYID) VALUES (?, ?)"
+
+        val categoryIds = ArrayList<Int>()
+        try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlCategoryQuery)
+
+            // Set parameters in prepared statement
+            addParameters(preparedQuestionStatement, categories)
+
+            val rs = preparedQuestionStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute query")
+
+            rs.last()
+            if (rs.row < 1) throw DatabaseException("No categories found with names: $categories")
+
+            while (rs.next())
+                categoryIds.add(rs.getInt(1))
+
+            conn?.autoCommit = false
+            insertStatement = conn?.prepareStatement(insertQuery)
+
+            for (id: Int in categoryIds) {
+                insertStatement?.setInt(1, questionId)
+                insertStatement?.setInt(2, id)
+                insertStatement?.addBatch()
+            }
+
+            insertStatement?.executeBatch()
+                    ?: throw DatabaseException("Couldn't insert category batch")
+
+            conn?.commit()
+
+        } catch (e: BatchUpdateException) {
+            logger.error("Something went wrong while getting categories by course.", e)
+        } catch (e: SQLException) {
+            logger.error("Something went wrong while getting categories by course.", e)
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedQuestionStatement)
+            MySQLConnection.closeStatement(insertStatement)
+        }
+    }
+
+    private fun addDynamicParameters(query: String, parameters: ArrayList<String>): String {
+        val queryBuilder = StringBuilder(query)
+
+        queryBuilder.append("?")
+        for (i in 1 until parameters.size) {
+            queryBuilder.append(", ?")
+        }
+        queryBuilder.append(") ")
+        return queryBuilder.toString()
+    }
+
+
+    private fun addParameters(statement: PreparedStatement?, parameters: ArrayList<String>) {
+        var i = 1
+        for (param in parameters) {
+            statement?.setString(i++, param)
+        }
     }
 }

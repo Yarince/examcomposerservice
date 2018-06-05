@@ -1,6 +1,5 @@
 package nl.han.ica.examplatform.models.question
 
-import io.swagger.annotations.Api
 import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.answermodel.answer.Answer

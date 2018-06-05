@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.business.question
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Service
  * Question service for handling requests related to the [Question] model.
  *
  * @param questionDAO [QuestionDAO] The QuestionDAO
+ * @param categoryDAO [CategoryDAO] The CategoryDAO
  */
 @Service
-class QuestionService(private val questionDAO: IQuestionDAO) {
+class QuestionService(
+        private val questionDAO: IQuestionDAO,
+        private val categoryDAO: CategoryDAO) {
 
     private val logger = loggerFor(javaClass)
 
@@ -32,8 +36,16 @@ class QuestionService(private val questionDAO: IQuestionDAO) {
                     if (insertedQuestion.questionId == null) return@let
                     it.forEach {
                         addSubQuestions(it, insertedQuestion.questionId)
+                        insertedQuestion.questionId.let {
+                            categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
+                        }
                     }
                 }
+
+                question.questionId?.let {
+                    categoryDAO.addCategoriesToQuestion(question.categories, it)
+                }
+
                 ResponseEntity(insertedQuestion, HttpStatus.CREATED)
             } catch (exception: DatabaseException) {
                 logger.error("Couldn't insert question: ${question.questionText}")

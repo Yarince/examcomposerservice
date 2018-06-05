@@ -14,4 +14,6 @@ interface ICategoryDAO {
      * @return [ArrayList]<[String]> An array of all categories corresponding to the course.
      */
     fun getCategoriesByCourse(courseId: Int): ArrayList<String>
+
+    fun addCategoriesToQuestion(categories: ArrayList<String>, questionId: Int)
 }
