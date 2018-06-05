@@ -227,4 +227,36 @@ class ExamDAO : IExamDAO {
         // Not implemented in this branch, see other PR
         return PreparedExam(examId = 0, endTime = Date(), startTime = Date(), durationInMinutes = 10, name = "name", classes = arrayOf(), courseName = "APP", creator = "Uwe van Heesch", version = 1, examType = "OpenQuestion", questions = arrayListOf())
     }
+
+    /**
+     * Changes the order of questions in an exam
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionsAndSequenceNumbers [Array]<[Pair]<[Int], [Int]>> An array containing the questionIds and the new sequence number
+     */
+    override fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>) {
+        if (questionsAndSequenceNumbers.size < 2)
+            throw DatabaseException("Can't change order if no or only 1 questions and sequencenumbers are provided")
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedStatement: PreparedStatement? = null
+
+        try {
+            val query = "UPDATE QUESTION_IN_EXAM SET SEQUENCENUMBER = ? WHERE QUESTIONID = ? AND EXAMID = ?"
+
+            for (pair in questionsAndSequenceNumbers) {
+                preparedStatement = conn?.prepareStatement(query)
+                preparedStatement?.setInt(1, pair.second)
+                preparedStatement?.setInt(2, pair.first)
+                preparedStatement?.setInt(3, examId)
+                preparedStatement?.executeUpdate()
+            }
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam", e)
+            throw DatabaseException("Error while updating exam")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+    }
 }

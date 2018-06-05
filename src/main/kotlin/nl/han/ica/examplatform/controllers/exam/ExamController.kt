@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.*
  */
 @RestController
 @RequestMapping("exams")
-class ExamController (
-    private val examService: ExamService,
-    private val examQuestionService: ExamQuestionService
+class ExamController(
+        private val examService: ExamService,
+        private val examQuestionService: ExamQuestionService
 ) {
 
     /**
@@ -34,9 +34,9 @@ class ExamController (
      */
     @PostMapping("/practice-exam")
     @ApiOperation(
-        value = "Add a practice exam without questions",
-        notes = "Cannot contain questions or an examId",
-        response = PracticeExam::class
+            value = "Add a practice exam without questions",
+            notes = "Cannot contain questions or an examId",
+            response = PracticeExam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
@@ -51,9 +51,9 @@ class ExamController (
      */
     @GetMapping
     @ApiOperation(
-        value = "Get a list of minified exams",
-        notes = "This returns a list of exams containing ID, name, ",
-        response = Array<SimpleExam>::class
+            value = "Get a list of minified exams",
+            notes = "This returns a list of exams containing ID, name, ",
+            response = Array<SimpleExam>::class
     )
     fun getExams() = examService.getExams()
 
@@ -65,9 +65,9 @@ class ExamController (
      */
     @PostMapping()
     @ApiOperation(
-        value = "Add an exam without questions",
-        notes = "Cannot contain questions or an examId",
-        response = Exam::class
+            value = "Add an exam without questions",
+            notes = "Cannot contain questions or an examId",
+            response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
@@ -81,18 +81,18 @@ class ExamController (
      */
     @GetMapping("/{id}")
     @ApiOperation(
-        value = "Retrieve a specific exam",
-        notes = "Retrieve a specific exam, containing all information, questions and answers",
-        response = Exam::class
+            value = "Retrieve a specific exam",
+            notes = "Retrieve a specific exam, containing all information, questions and answers",
+            response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
     fun getExam(
-        @ApiParam(value = "The ID of the exam you want to retrieve", required = true)
-        @PathVariable("id")
-        id: Int
+            @ApiParam(value = "The ID of the exam you want to retrieve", required = true)
+            @PathVariable("id")
+            id: Int
     ): ResponseEntity<Exam> = examService.getExam(id)
 
     /**
@@ -103,8 +103,8 @@ class ExamController (
      */
     @PutMapping()
     @ApiOperation(
-        value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId",
-        response = Exam::class
+            value = "Add questions to a existing exam", notes = "Cannot contain questions or an examId",
+            response = Exam::class
     )
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
@@ -143,7 +143,10 @@ class ExamController (
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun changeQuestionOrderInExam(@RequestParam examId: Int,
+    fun changeQuestionOrderInExam(@ApiParam(value = "The ID of the exam", required = true)
+                                  @RequestParam examId: Int,
+                                  @ApiParam(value = "This is an array of pairs. The pairs first value is the question ID, " +
+                                          "the second value is the new sequence number", required = true)
                                   @RequestParam questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
             examQuestionService.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
 }
