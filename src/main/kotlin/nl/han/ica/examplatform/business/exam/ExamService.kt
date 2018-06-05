@@ -95,4 +95,11 @@ class ExamService(private val examDAO: IExamDAO,
     fun addClassesToExam(examId: Int, classes: Array<String>): ResponseEntity<PreparedExam> =
             ResponseEntity(examDAO.addClassesToExam(examId, classes), HttpStatus.ACCEPTED)
 
+    /**
+     * Publishes an exam.
+     *
+     * @param examId [Int] The ID of the exam that should be published
+     * @return [PreparedExam] The updated exam
+     */
+    fun publishExam(examId: Int): PreparedExam = ResponseEntity(examDAO.publishExam(examId), HttpStatus.ACCEPTED)
 }
