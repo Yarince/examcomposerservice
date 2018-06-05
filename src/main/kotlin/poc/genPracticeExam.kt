@@ -8,39 +8,54 @@ fun main(args: Array<String>) {
 
 fun generateExam(courseId: Int, studentNr: Int) {
     val questions = loadQuestions(courseId, studentNr)
+    val alreadyAskedQuestions = loadQuestions(1, studentNr, true)
     val ratedCategories = questionsToSortedCategoryRating(questions)
 
     ratedCategories.forEach { println(it) }
 
-    val exam = addQuestionToExam(studentNr, questions.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
+    val exam = addQuestionToExam(studentNr, questions.toCollection(arrayListOf()), alreadyAskedQuestions.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
     exam.forEach { println(it) }
 }
 
-private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
+private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>, alreadyAskedQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
     // Return if the category is not in the list with categories
     if (!ratedCategories.contains(currentCategory)) return questionsInExam
     // Return if the prerequisites are met
     if (checkIfExamCompliesToPrerequisites(questionsInExam, allQuestions)) return questionsInExam
 
+    // If there are no questions available, it should be returned
+    if (allQuestions.isEmpty()) return questionsInExam
+    if (ratedCategories.isEmpty()) return questionsInExam
+
+    val ratedCategoriesWithoutEmptyQuestions = ratedCategories.toMutableList()
     if (questionOfCategoryWillBeAdded(currentCategory.second)) {
 
-        val questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory.first)
-                ?: getFirstAskedQuestion(currentCategory.first, studentNr)
+        var questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory.first)
+        if (questionToAdd == null) {
+            val alreadyAskedQuestionsInCurrentCategory = alreadyAskedQuestions.filter { it.categories.contains(currentCategory.first) }
+            if (alreadyAskedQuestionsInCurrentCategory.isNotEmpty())
+                questionToAdd = getFirstAskedQuestion(alreadyAskedQuestionsInCurrentCategory, studentNr)
+            else
+                // No assessed questions are available, and no already asked questions are available
+                // Thus, the category should be removed
+                ratedCategoriesWithoutEmptyQuestions.remove(currentCategory)
+        }
 
-        questionsInExam.add(questionToAdd)
+        questionToAdd?.let { questionsInExam.add(it) }
+        alreadyAskedQuestions.remove(questionToAdd)
         allQuestions.remove(questionToAdd)
     }
 
     val indexOfCurrentCategory = ratedCategories.indexOf(currentCategory)
-    val nextCategory = if (indexOfCurrentCategory == 0) {
+    val nextCategory = if (indexOfCurrentCategory == 0)
         // go back to most relevant category
         ratedCategories.last()
-    } else {
+    else
         ratedCategories[indexOfCurrentCategory - 1]
-    }
+
 
     // Recursively add more questions
-    return addQuestionToExam(studentNr, allQuestions, ratedCategories, nextCategory, questionsInExam)
+    return addQuestionToExam(studentNr, allQuestions, alreadyAskedQuestions, ratedCategoriesWithoutEmptyQuestions, nextCategory, questionsInExam)
 }
 
 /**

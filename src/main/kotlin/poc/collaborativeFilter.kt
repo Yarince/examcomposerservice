@@ -15,19 +15,9 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String): Que
  * Here a request should be made to get the question of the category that is the furthest into the past.
  * Probably best to let the db do this
  *
- * @param category the category of which the question should be about
+ * @param questionsInCategory the questions in the category
  * @return [Question] the first made question of the student
  */
-internal fun getFirstAskedQuestion(category: String, studentNr: Int): Question {
-    val questions = loadQuestions(1, studentNr, true)
-
-    val questionsInCategory = ArrayList<Question>()
-    for (question in questions) {
-        if (question.categories.contains(category)) {
-            questionsInCategory.add(question)
-        }
-    }
-
-    questionsInCategory.sortBy { it.answeredOn }
-    return questionsInCategory.first()
+internal fun getFirstAskedQuestion(questionsInCategory: List<Question>, studentNr: Int): Question {
+    return questionsInCategory.sortedBy { it.answeredOn }.first()
 }
