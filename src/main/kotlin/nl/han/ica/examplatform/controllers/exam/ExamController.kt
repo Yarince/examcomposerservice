@@ -148,5 +148,5 @@ class ExamController(
     fun publishExam(@ApiParam(value = "The ID of the exam", required = true)
                     @RequestParam examId: Int,
                     @ApiParam(value = "If the exam should be published, or un-published. Defaults to published (true)", required = false)
-                    @RequestParam shouldBePublished: Boolean) = examService.publishExam(examId)
+                    @RequestParam shouldBePublished: Boolean = true) = examService.publishExam(examId, shouldBePublished)
 }
