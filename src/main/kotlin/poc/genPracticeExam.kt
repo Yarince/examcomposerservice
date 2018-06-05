@@ -1,15 +1,15 @@
 package poc
 
+import poc.models.Question
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-//    generateExam(1, 1)
-    genTestData()
+    generateExam(1, 1)
 }
 
 fun generateExam(courseId: Int, studentNr: Int) {
-    val questions = loadQuestions(courseId, studentNr)
-    val alreadyAskedQuestions = loadQuestions(1, studentNr, true)
+    val questions = loadQuestions(courseId, studentNr, "questionBankNotAnswered")
+    val alreadyAskedQuestions = loadQuestions(1, studentNr, "questionsAnswered")
     val ratedCategories = questionsToSortedCategoryRating(questions)
 
     ratedCategories.forEach { println(it) }
@@ -31,7 +31,7 @@ private fun addQuestionToExam(studentNr: Int, allQuestions: ArrayList<Question>,
     val ratedCategoriesWithoutEmptyQuestions = ratedCategories.toMutableList()
     if (questionOfCategoryWillBeAdded(currentCategory.second)) {
 
-        var questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory.first)
+        var questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory.first, allQuestions)
         if (questionToAdd == null) {
             val alreadyAskedQuestionsInCurrentCategory = alreadyAskedQuestions.filter { it.categories.contains(currentCategory.first) }
             if (alreadyAskedQuestionsInCurrentCategory.isNotEmpty())
@@ -75,7 +75,7 @@ private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQue
     val percentageOfQuestionsInExam = 0.33
     val maxAmountOfQuestionsInExam = if (allQuestions.size < thresholdForPercentage) (allQuestions.size * percentageOfQuestionsInExam).toInt() else 10
 
-    return exam.size > maxAmountOfQuestionsInExam
+    return exam.size >= maxAmountOfQuestionsInExam
 }
 
 

@@ -1,5 +1,7 @@
 package poc
 
+import poc.models.Question
+
 /**
  * Here the results of other students on this subject should be analysed.
  * After this the worst performed question should be returned.
@@ -7,8 +9,28 @@ package poc
  * @param category the category of which the question should be about
  * @return [Question] the first made question of the student
  */
-internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String): Question? {
-    return null
+internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>): Question? {
+    val assessedQuestionsOfOthers = loadResultsOfOthers(category)
+
+    // Filter questions to only contain current category
+    val questionIdsOfCategory = questions.filter { it.categories.contains(category) }.map { it.questionId }
+    val filteredQuestions = assessedQuestionsOfOthers.filter { questionIdsOfCategory.contains(it.questionId) }
+
+    var mostRelevantQuestion: Pair<Int, Double>? = null
+
+    filteredQuestions.forEach {
+        val rating = it.nGood.toDouble() / it.nResults
+
+        if (mostRelevantQuestion == null) {
+            mostRelevantQuestion = Pair(it.questionId, rating)
+        } else {
+            if (rating < mostRelevantQuestion!!.second) {
+                mostRelevantQuestion = Pair(it.questionId, rating)
+            }
+        }
+    }
+
+    return questions.find { it.questionId == mostRelevantQuestion?.first }
 }
 
 /**

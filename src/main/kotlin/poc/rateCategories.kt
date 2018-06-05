@@ -1,5 +1,7 @@
 package poc
 
+import poc.models.Question
+
 
 internal fun questionsToSortedCategoryRating(questions: Array<Question>): List<Pair<String, Double>> {
     // This will be implemented by another team member, so this is a stub that returns the categories and ratings

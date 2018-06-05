@@ -1,4 +1,4 @@
-package poc
+package poc.models
 
 import java.util.*
 
