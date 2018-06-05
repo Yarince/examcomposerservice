@@ -136,7 +136,6 @@ class ExamController(
      * This makes the exam ready for download.
      *
      * @param examId [Int] the ID of the exam that should be published
-     * @return [Exam] the updated exam
      */
     @PutMapping("/publish")
     @ApiOperation(
@@ -147,6 +146,7 @@ class ExamController(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))
     fun publishExam(@ApiParam(value = "The ID of the exam", required = true)
-                    @RequestBody examId: Int): ResponseEntity<PreparedExam> =
-            examService.publishExam(examId)
+                    @RequestParam examId: Int,
+                    @ApiParam(value = "If the exam should be published, or un-published. Defaults to published (true)", required = false)
+                    @RequestParam shouldBePublished: Boolean) = examService.publishExam(examId)
 }

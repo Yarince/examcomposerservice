@@ -47,7 +47,15 @@ interface IExamDAO {
      *
      * @param examId [Int] the ID of the exam
      * @param classes [Array]<[String]> an array containing classes
-     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
+     * @return [PreparedExam] the exam containing the added classes
      */
     fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam
+
+    /**
+     * Publishes an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param shouldBePublished [Boolean] Indicates whether the exam should be published or un-published
+     */
+    fun publishExam(examId: Int, shouldBePublished: Boolean)
 }
