@@ -3,7 +3,8 @@ package poc
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-    generateExam(1, 1)
+//    generateExam(1, 1)
+    genTestData()
 }
 
 fun generateExam(courseId: Int, studentNr: Int) {
@@ -75,4 +76,22 @@ private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQue
     val maxAmountOfQuestionsInExam = if (allQuestions.size < thresholdForPercentage) (allQuestions.size * percentageOfQuestionsInExam).toInt() else 10
 
     return exam.size > maxAmountOfQuestionsInExam
+}
+
+
+private fun genTestData() {
+    val nRes = arrayOf(4, 2, 10, 20, 16)
+    val nGood = arrayOf(4, 1, 2, 4, 14)
+    val nWrong = arrayOf(0, 1, 8, 16, 2)
+    val answers = arrayOf(true, false, true, true, false, false, false, true)
+
+    for (i in 1..5) {
+        println("{\"examId\": $i,")
+        println("\"questions\": [")
+        for (x in i..i+10) {
+            println("{\"questionId\": $x,")
+            println("\"resultWasGood\": ${answers[x%8]}},")
+        }
+        println("],")
+    }
 }
