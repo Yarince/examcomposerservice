@@ -235,14 +235,23 @@ class ExamDAO : IExamDAO {
      * @return [Exam] The updated exam
      */
     override fun updateExam(exam: Exam): Exam {
-        val query = "UPDATE EXAM SET  = ? WHERE EXAMID = ?"
+        if (exam.examId == null) throw DatabaseException("Can't update exam when examId is not set")
+
+        val query = "UPDATE EXAM SET COURSEID = ?, EXAMTYPENAME = ?, EXAMNAME = ?, STARTTIME = ?, ENDTIME = ?, INSTRUCTIONS = ?, EXAMVERSION = ?, LOCATION = ? WHERE EXAMID = ?"
 
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(query)
 
-        preparedStatement?.set(1, shouldBePublished)
-
+        preparedStatement?.setInt(1, exam.courseId)
+        preparedStatement?.setString(2, exam.examType)
+        preparedStatement?.setString(3, exam.name)
+        preparedStatement?.setDate(4, exam.startTime as java.sql.Date?)
+        preparedStatement?.setDate(5, exam.endTime as java.sql.Date?)
+        preparedStatement?.setString(6, exam.instructions)
+        preparedStatement?.setInt(7, exam.version)
+        preparedStatement?.setString(8, exam.location)
+        preparedStatement?.setInt(9, exam.examId)
 
         try {
             preparedStatement?.executeUpdate()
@@ -253,5 +262,6 @@ class ExamDAO : IExamDAO {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(conn)
         }
+        return exam
     }
 }
