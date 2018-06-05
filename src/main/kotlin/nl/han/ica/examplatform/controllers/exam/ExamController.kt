@@ -130,4 +130,20 @@ class ExamController (
             @ApiParam(value = "The ID of the exam you want to add the classes to", required = true)
             @RequestParam examId: Int) =
             examService.addClassesToExam(examId, classes)
+
+    /**
+     * HTTP REST function to change the order of questions in an exam.
+     *
+     * @param examId [Int] the ID of the exam of which the order of questions should be changed
+     */
+    @PutMapping()
+    @ApiOperation(
+            value = "Changes the order of questions in an exam"
+    )
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun changeQuestionOrderInExam(@RequestParam examId: Int,
+                                  @RequestParam questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
+            examQuestionService.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
 }

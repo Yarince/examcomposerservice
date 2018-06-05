@@ -50,4 +50,12 @@ interface IExamDAO {
      * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
      */
     fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam
+
+    /**
+     * Changes the order of questions in an exam
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionsAndSequenceNumbers [Array]<[Pair]<[Int], [Int]>> An array containing the questionIds and the new sequence number
+     */
+    fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>)
 }
