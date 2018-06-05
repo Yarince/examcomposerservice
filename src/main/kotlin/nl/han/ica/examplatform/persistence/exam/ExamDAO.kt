@@ -323,7 +323,33 @@ class ExamDAO : IExamDAO {
         }
     }
 
+    /**
+     * Deletes an exam.
+     * This doesn't delete any questions.
+     *
+     * @param examId [Int] The ID of the exam that should be deleted
+     */
     override fun deleteExam(examId: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val questionInExamDeleteQuery = "DELETE FROM QUESTIONS_IN_EXAM WHERE EXAMID = ?"
+        val examDeleteQuery = "DELETE FROM EXAM WHERE EXAMID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatementQuestions = conn?.prepareStatement(questionInExamDeleteQuery)
+        val preparedStatementExam = conn?.prepareStatement(examDeleteQuery)
+
+        preparedStatementQuestions?.setInt(1, examId)
+        preparedStatementExam?.setInt(1, examId)
+
+        try {
+            preparedStatementQuestions?.executeUpdate()
+            preparedStatementExam?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error deleting exam $examId", e)
+            throw DatabaseException("Error while deleting exam $examId")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatementExam)
+            MySQLConnection.closeStatement(preparedStatementQuestions)
+            MySQLConnection.closeConnection(conn)
+        }
     }
 }
