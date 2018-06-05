@@ -57,4 +57,13 @@ class ExamQuestionService(
 
         return ResponseEntity(updatedObject, HttpStatus.ACCEPTED)
     }
+
+    /**
+     * Changes the order of questions in an exam
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionsAndSequenceNumbers [Array]<[Pair]<[Int], [Int]>> An array containing the questionIds and the new sequence number
+     */
+    fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
+            examDAO.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
 }

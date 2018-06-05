@@ -41,7 +41,9 @@ class ExamController(
     @ApiResponses(
             ApiResponse(code = 201, message = "Create"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun generatePracticeExam(@RequestParam courseId: Int, @RequestParam studentNr: Int): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseId, studentNr)
+    fun generatePracticeExam(
+            @RequestParam courseId: Int,
+            @RequestParam studentNr: Int): ResponseEntity<PracticeExam> = examService.generatePracticeExam(courseId, studentNr)
 
 
     /**
@@ -145,8 +147,29 @@ class ExamController(
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))
-    fun publishExam(@ApiParam(value = "The ID of the exam", required = true)
-                    @RequestParam examId: Int,
-                    @ApiParam(value = "If the exam should be published, or un-published. Defaults to published (true)", required = false)
-                    @RequestParam shouldBePublished: Boolean = true) = examService.publishExam(examId, shouldBePublished)
+    fun publishExam(
+            @ApiParam(value = "The ID of the exam", required = true)
+            @RequestParam examId: Int,
+            @ApiParam(value = "If the exam should be published, or un-published. Defaults to published (true)", required = false)
+            @RequestParam shouldBePublished: Boolean = true) = examService.publishExam(examId, shouldBePublished)
+
+    /**
+     * HTTP REST function to change the order of questions in an exam.
+     *
+     * @param examId [Int] the ID of the exam of which the order of questions should be changed
+     */
+    @PutMapping("/changeOrder")
+    @ApiOperation(
+            value = "Changes the order of questions in an exam"
+    )
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun changeQuestionOrderInExam(
+            @ApiParam(value = "The ID of the exam", required = true)
+            @RequestParam examId: Int,
+            @ApiParam(value = "This is an array of pairs. The pairs first value is the question ID, " +
+                    "the second value is the new sequence number", required = true)
+            @RequestBody questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
+            examQuestionService.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
 }
