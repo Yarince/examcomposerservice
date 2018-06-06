@@ -59,6 +59,12 @@ class CategoryDAO : ICategoryDAO {
         return categories
     }
 
+    /**
+     * Adds categories to a question.
+     *
+     * @param categories [ArrayList]<[String]> The categories to add
+     * @param questionId [Int] The ID of the question of which the categories should be added to
+     */
     override fun addCategoriesToQuestion(categories: ArrayList<String>, questionId: Int) {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null
@@ -128,9 +134,8 @@ class CategoryDAO : ICategoryDAO {
 
 
     private fun addParameters(statement: PreparedStatement?, parameters: ArrayList<String>) {
-        var i = 1
-        for (param in parameters) {
-            statement?.setString(i++, param)
+        for ((i, param) in parameters.withIndex()) {
+            statement?.setString(i + 1, param)
         }
     }
 }

@@ -15,5 +15,11 @@ interface ICategoryDAO {
      */
     fun getCategoriesByCourse(courseId: Int): ArrayList<String>
 
+    /**
+     * Adds categories to a question.
+     *
+     * @param categories [ArrayList]<[String]> The categories to add
+     * @param questionId [Int] The ID of the question of which the categories should be added to
+     */
     fun addCategoriesToQuestion(categories: ArrayList<String>, questionId: Int)
 }
