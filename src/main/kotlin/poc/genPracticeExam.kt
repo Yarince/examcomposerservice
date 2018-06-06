@@ -3,14 +3,14 @@ package poc
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import java.io.FileReader
-import java.lang.Double.sum
 import java.util.*
 import kotlin.collections.ArrayList
 import java.util.Random
 import kotlin.math.pow
 
+const val MAGIC_NUMBER = 10.0
 
-const val EXAM_SIZE: Int = 10
+const val EXAM_SIZE = 10
 
 fun main(args: Array<String>) {
 //        testData()
@@ -21,45 +21,72 @@ fun generatePracticeExam(courseId: Int, studentNumber: Int): ArrayList<Question>
     val arrayOfExamResults = loadAssessedQuestions(courseId, studentNumber)
             ?: return randomizeQuestions(courseId)
 
-    val groupedByQuestionType = groupByQuestionType(arrayOfExamResults)
+    val questionTypePercentageList = calculateQuestionTypeRelevance(courseId, arrayOfExamResults)
 
-    setExamWeight(groupedByQuestionType)
-
-
-    groupedByQuestionType.forEach {
-
-    }
-
-
-    var totalWeight = 0.0
-    for (examResult in groupedByQuestionType) {
-        totalWeight += sum(examResult.weight ?: continue, totalWeight)
-    }
-
-//    println(totalWeight)
-    println(Gson().toJson(groupedByQuestionType))
+    println(Gson().toJson(questionTypePercentageList))
 
     return ArrayList()
 }
 
-private fun setExamWeight(groupedByQuestionType: ArrayList<ExamResult>) {
-    var current = 0
-    groupedByQuestionType.forEach {
-        it.weight = 2.0.pow(current)
-        current++
+
+private fun calculateQuestionTypeRelevance(courseId: Int, examResults: ArrayList<ExamResult>): ArrayList<QuestionTypePercentage> {
+
+    val weightedExams = getWeightedExams(examResults)
+    val questionTypePercentageList = getQuestionTypePercentageList(courseId)
+
+    // Loop through all available questionTypes for this course
+    questionTypePercentageList.forEach questionTypes@{ questionTypePercentage: QuestionTypePercentage ->
+        var perfectScore = true
+
+        weightedExams.forEach examResult@{ exam: WeightedExam ->
+            // If the questionType is already imperfect skip it
+            if (!perfectScore) return@examResult
+
+            // Get all questions for the current selected questionType
+            val reviewedQuestions = exam.groupedQuestions[questionTypePercentage.questionType]
+                    ?: return@examResult
+
+            // If there is a result with more than 0 ```resultWasGood == false``` set perfectScore to false
+            perfectScore = reviewedQuestions.filter { !it.resultWasGood }.count() == 0
+        }
+
+        if (perfectScore)
+            questionTypePercentage.percentage = MAGIC_NUMBER
+        else {
+
+            // TODO: Assign score with Content-based filtering
+            // TODO: Combine both percentages
+            questionTypePercentage.percentage = 0.0
+        }
     }
+
+    return questionTypePercentageList
 }
 
-private fun groupByQuestionType(arrayOfExamResults: ArrayList<ExamResult>): ArrayList<ExamResult> {
+private fun getQuestionTypePercentageList(courseId: Int): ArrayList<QuestionTypePercentage> {
+    // Fill questionTypePercentageList with all available questionTypes
+    val questionTypePercentageList = ArrayList<QuestionTypePercentage>()
+    loadQuestionTypes(courseId).forEach { questionTypePercentageList.add(QuestionTypePercentage(it.questionType)) }
+    return questionTypePercentageList
+}
+
+private fun getWeightedExams(arrayOfExamResults: ArrayList<ExamResult>): ArrayList<WeightedExam> {
+    val weightedExams = ArrayList<WeightedExam>()
+    var current = 0
 
     arrayOfExamResults.forEach {
-        it.groupedQuestions = (it.questions ?: return@forEach).groupBy({ it.questionType }, { it })
-        it.questions = null
+        weightedExams.add(WeightedExam(
+                it.examId,
+                2.0.pow(current),
+                (it.questions ?: return@forEach).groupBy({ it.questionType }, { it })
+        ))
+        current++
     }
 
-    arrayOfExamResults.sortBy { it.examId }
+    weightedExams.sortBy { it.examId }
 
-    return arrayOfExamResults
+    return weightedExams
+
 }
 
 fun randomizeQuestions(courseId: Int): ArrayList<Question> {
@@ -78,6 +105,16 @@ fun randomizeQuestions(courseId: Int): ArrayList<Question> {
 
     return exam
 }
+
+internal fun loadQuestionTypes(courseId: Int): ArrayList<QuestionTypePercentage> =
+        arrayListOf(
+                QuestionTypePercentage("OpenQuestion"),
+                QuestionTypePercentage("MultipleChoiceQuestion"),
+                QuestionTypePercentage("TreeQuestion"),
+                QuestionTypePercentage("GraphQuestion"),
+                QuestionTypePercentage("DrawQuestion"),
+                QuestionTypePercentage("BigOhQuestion")
+        )
 
 
 internal fun loadQuestionPool(courseId: Int): Array<Question>? {
@@ -111,11 +148,11 @@ fun testData() {
         val questions = ArrayList<ReviewedQuestion>()
         for (j in 1..8) {
             questions.add(ReviewedQuestion(
-                    questionId,
-                    rnd.nextBoolean(),
-                    text.shuffled().take(1)[0],
-                    arrayListOf(category.shuffled().take(1)[0], category.shuffled().take(1)[0]),
-                    questionType.shuffled().take(1)[0]
+                    questionId = questionId,
+                    resultWasGood = rnd.nextBoolean(),
+                    questionText = text.shuffled().take(1)[0],
+                    categories = arrayListOf(category.shuffled().take(1)[0], category.shuffled().take(1)[0]),
+                    questionType = questionType.shuffled().take(1)[0]
             ))
             questionId++
         }

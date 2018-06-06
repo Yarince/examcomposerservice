@@ -5,7 +5,7 @@
     "questions": [
       {
         "questionId": 1,
-        "resultWasGood": false,
+        "resultWasGood": true,
         "questionText": "Vraag over DCAR",
         "categories": [
           "ASD",
@@ -35,7 +35,7 @@
       },
       {
         "questionId": 4,
-        "resultWasGood": false,
+        "resultWasGood": true,
         "questionText": "Vraag over DCAR",
         "categories": [
           "Trees",
@@ -131,7 +131,7 @@
       },
       {
         "questionId": 13,
-        "resultWasGood": false,
+        "resultWasGood": true,
         "questionText": "Vraag over ATAM",
         "categories": [
           "Algorithms",
@@ -333,7 +333,7 @@
       },
       {
         "questionId": 32,
-        "resultWasGood": false,
+        "resultWasGood": true,
         "questionText": "Vraag over ATAM",
         "categories": [
           "Trees",
