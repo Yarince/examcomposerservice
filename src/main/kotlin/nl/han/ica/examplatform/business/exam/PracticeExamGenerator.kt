@@ -4,7 +4,6 @@ import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
-import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import java.util.concurrent.ThreadLocalRandom
 
 /**

@@ -1,6 +1,9 @@
 package nl.han.ica.examplatform.controllers.plugin
 
-import io.swagger.annotations.*
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.plugin.PluginService
 import nl.han.ica.examplatform.models.plugin.Plugin
 import org.springframework.http.ResponseEntity

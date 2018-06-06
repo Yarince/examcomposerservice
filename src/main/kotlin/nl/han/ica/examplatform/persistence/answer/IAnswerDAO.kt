@@ -2,8 +2,8 @@ package nl.han.ica.examplatform.persistence.answer
 
 import nl.han.ica.examplatform.models.answermodel.AnswerModel
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
-import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.question.Question
 
 /**
  * Interface that has to be implemented by all Answers.

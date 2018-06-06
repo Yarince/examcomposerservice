@@ -8,8 +8,8 @@ import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.models.answermodel.AnswerModel
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
-import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.models.exam.Exam
+import nl.han.ica.examplatform.models.question.Question
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

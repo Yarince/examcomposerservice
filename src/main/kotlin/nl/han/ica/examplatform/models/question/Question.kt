@@ -1,8 +1,8 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
-import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
+import nl.han.ica.examplatform.models.exam.Exam
 
 /**
  * Represents a question that can be asked in a [Exam].
