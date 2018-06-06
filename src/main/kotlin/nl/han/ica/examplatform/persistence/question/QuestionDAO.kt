@@ -462,8 +462,10 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setString(3, question.questionText)
             preparedStatement?.setString(4, question.questionType)
             preparedStatement?.setString(5, question.answerType)
-            preparedStatement?.setString(1, question.answerTypePluginVersion)
-            preparedStatement?.setString(1, question.pluginVersion)
+            preparedStatement?.setString(6, question.answerTypePluginVersion)
+            preparedStatement?.setString(7, question.pluginVersion)
+            preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
+
 
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
