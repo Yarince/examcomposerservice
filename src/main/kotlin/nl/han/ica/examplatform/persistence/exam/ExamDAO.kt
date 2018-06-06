@@ -344,7 +344,6 @@ class ExamDAO : IExamDAO {
         preparedStatement = conn?.prepareStatement(query)
 
         try {
-
             preparedStatement?.setInt(1, examId)
             for ((i, questionId) in questionIds.withIndex()) {
                 preparedStatement?.setInt(i + 2, questionId)
