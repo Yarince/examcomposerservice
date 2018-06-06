@@ -7,6 +7,6 @@ package nl.han.ica.examplatform.business.answer
  * @param cause [Throwable] Previous exception
  */
 class CouldNotAddAnswerToQuestionException(
-    message: String?,
-    cause: Throwable?
+        message: String?,
+        cause: Throwable?
 ) : RuntimeException(message, cause)

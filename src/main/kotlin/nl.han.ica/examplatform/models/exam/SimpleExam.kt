@@ -10,7 +10,7 @@ package nl.han.ica.examplatform.models.exam
  * @param courseId [Int] The is of the [Course] the [Exam] is in.
  */
 data class SimpleExam(
-    val examId: Int,
-    val name: String,
-    val courseId: Int
+        val examId: Int,
+        val name: String,
+        val courseId: Int
 )

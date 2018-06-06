@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.models.answermodel.answer
 
 import nl.han.ica.examplatform.models.question.Question
-import java.util.Arrays
+import java.util.*
 
 /**
  * Represents a correct answer given by a teacher.
@@ -11,8 +11,8 @@ import java.util.Arrays
  * @param answerKeywords [Array]<[Keyword]> List of keywords that need to be in the answer.
  */
 data class Answer(
-    val questionId: Int,
-    val answerKeywords: Array<Keyword>? = null
+        val questionId: Int,
+        val answerKeywords: Array<Keyword>? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

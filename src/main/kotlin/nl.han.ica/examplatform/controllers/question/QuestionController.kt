@@ -1,21 +1,10 @@
 package nl.han.ica.examplatform.controllers.question
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
-import io.swagger.annotations.ApiParam
+import io.swagger.annotations.*
 import nl.han.ica.examplatform.business.question.QuestionService
-import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.models.question.Question
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * REST controller for HTTP interaction with [Question]s.
@@ -25,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping
 @RestController
 @RequestMapping("question")
 @Api("question", description = "Creating, updating and deleting questions")
-class QuestionController (private val questionService: QuestionService) {
+class QuestionController(private val questionService: QuestionService) {
 
     /**
      * Endpoint for creating a question

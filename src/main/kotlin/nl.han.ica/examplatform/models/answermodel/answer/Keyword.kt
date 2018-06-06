@@ -8,6 +8,6 @@ package nl.han.ica.examplatform.models.answermodel.answer
  * @param points [Int] The amount of points this keyword is worth in a [Answer] of a [Question]
  */
 data class Keyword(
-    val keyword: String,
-    val points: Float
+        val keyword: String,
+        val points: Float
 )

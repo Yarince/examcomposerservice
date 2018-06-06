@@ -7,6 +7,6 @@ package nl.han.ica.examplatform.controllers.answer
  * @property cause [Throwable] Previous exception
  */
 class InvalidAnswerException(
-    message: String?,
-    cause: Throwable? = null
+        message: String?,
+        cause: Throwable? = null
 ) : RuntimeException(message, cause)

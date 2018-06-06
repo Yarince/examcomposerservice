@@ -9,10 +9,10 @@ import io.swagger.annotations.ApiModelProperty
  * @param name [String] The name of the course
  */
 data class Course(
-    @ApiModelProperty(notes = "The id of the course")
-    val courseId: Int,
-    @ApiModelProperty(notes = "The name of the course")
-    val name: String,
-    @ApiModelProperty(notes = "The abbreviation of the course name")
-    val courseCode: String
+        @ApiModelProperty(notes = "The id of the course")
+        val courseId: Int,
+        @ApiModelProperty(notes = "The name of the course")
+        val name: String,
+        @ApiModelProperty(notes = "The abbreviation of the course name")
+        val courseCode: String
 )

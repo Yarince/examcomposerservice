@@ -2,8 +2,7 @@ package nl.han.ica.examplatform.models.exam
 
 import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.question.Question
-import java.util.Date
-import java.util.Arrays
+import java.util.*
 
 /**
  * A prepared exam is an exam that is ready for a student to do.

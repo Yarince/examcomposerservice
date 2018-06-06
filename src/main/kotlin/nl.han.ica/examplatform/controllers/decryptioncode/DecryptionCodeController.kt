@@ -25,14 +25,14 @@ class DecryptionCodeController(private val decryptionCodeService: DecryptionCode
      */
     @GetMapping
     @ApiOperation(
-        value = "Returns the decryption code to unlock the exam",
-        response = HttpStatus::class
+            value = "Returns the decryption code to unlock the exam",
+            response = HttpStatus::class
     )
     @ApiResponses(
-        ApiResponse(code = 200, message = "Decryption code received"),
-        ApiResponse(code = 400, message = "Invalid Answer"),
-        ApiResponse(code = 500, message = "Something went wrong")
+            ApiResponse(code = 200, message = "Decryption code received"),
+            ApiResponse(code = 400, message = "Invalid Answer"),
+            ApiResponse(code = 500, message = "Something went wrong")
     )
     fun getDecryptionCode(@RequestBody examId: Int): ResponseEntity<String> =
-        decryptionCodeService.getDecryptionCode(examId)
+            decryptionCodeService.getDecryptionCode(examId)
 }

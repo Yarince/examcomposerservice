@@ -2,7 +2,7 @@ package nl.han.ica.examplatform.models.exam
 
 import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.question.Question
-import java.util.Date
+import java.util.*
 
 /**
  * Represents a official exam.

@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service
  */
 @Service
 class ExamQuestionService(
-    private val examDAO: ExamDAO,
-    private val questionDAO: QuestionDAO
+        private val examDAO: ExamDAO,
+        private val questionDAO: QuestionDAO
 ) {
     private val logger = loggerFor(javaClass)
 
