@@ -33,10 +33,12 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionSuccess() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)
+        val categories = arrayListOf("ASD", "QA")
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, categories = categories)
         val expectedResult = ResponseEntity(questionInserted, HttpStatus.CREATED)
 
         doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)
+        doReturn(true).`when`(categoryDAO).checkIfCategoriesExist(categories)
 
         val result = questionService.addQuestion(questionInserted)
         assertNotNull(result)
@@ -45,10 +47,12 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionError() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)
+        val categories = arrayListOf("ASD", "QA")
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, categories = categories)
         val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
 
         doThrow(DatabaseException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)
+        doReturn(true).`when`(categoryDAO).checkIfCategoriesExist(categories)
 
         val result = questionService.addQuestion(questionInserted)
         assertEquals(expectedResult, result)
