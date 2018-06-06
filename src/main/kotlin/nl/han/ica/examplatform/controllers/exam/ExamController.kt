@@ -190,4 +190,17 @@ class ExamController(
             ApiResponse(code = 403, message = "Bad request"))
     fun updateExam(@RequestBody exam: Exam): ResponseEntity<Exam> =
             examService.updateExam(exam)
+
+    /**
+     * HTTP REST function to delete an [Exam].
+     * This does not delete the questions in an exam.
+     *
+     * @param examId [Int] The ID of the exam to delete
+     */
+    @DeleteMapping()
+    @ApiOperation(
+            value = "Delete an exam",
+            notes = "This only deletes the exam information, not the questions"
+    )
+    fun deleteExam(@RequestParam examId: Int) = examService.deleteExam(examId)
 }

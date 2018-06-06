@@ -73,4 +73,12 @@ interface IExamDAO {
      * @return [Exam] The updated exam
      */
     fun updateExam(exam: Exam): Exam
+
+    /**
+     * Deletes an exam.
+     * This doesn't delete any questions.
+     *
+     * @param examId [Int] The ID of the exam that should be deleted
+     */
+    fun deleteExam(examId: Int)
 }
