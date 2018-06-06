@@ -450,6 +450,39 @@ class QuestionDAO : IQuestionDAO {
      * @return [Boolean] true if any of them have been answered, otherwise false
      */
     override fun answersGivenOnQuestions(questionIds: Array<Int>): Boolean {
-        return false
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedStatement: PreparedStatement? = null
+
+        var query = "SELECT COUNT(*) AS N FROM GIVEN_ANSWER WHERE QUESTIONINEXAMID = ?"
+
+        for (questionId in questionIds.copyOfRange(0, questionIds.size - 1))
+            query += " OR QUESTIONINEXAMID = ?"
+
+
+        var thereAreAnswersGivenToQuestions = false
+
+        try {
+            preparedStatement = conn?.prepareStatement(query)
+            for ((i, questionId) in questionIds.withIndex())
+                preparedStatement?.setInt(i + 1, questionId)
+
+
+            val rs = preparedStatement?.executeQuery()
+                    ?: throw DatabaseException("Couldn't execute statement")
+
+            rs.next()
+            val n = rs.getInt("N")
+            if (n > 0)
+                thereAreAnswersGivenToQuestions = true
+
+        } catch (e: SQLException) {
+            logger.error("Something went wrong while getting all courses", e)
+            throw DatabaseException("Error while interacting with the database")
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedStatement)
+        }
+
+        return thereAreAnswersGivenToQuestions
     }
 }

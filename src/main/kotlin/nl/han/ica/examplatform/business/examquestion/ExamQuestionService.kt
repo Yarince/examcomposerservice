@@ -74,13 +74,11 @@ class ExamQuestionService(
      * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
      */
     fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>) {
-        if (questionIds.isEmpty()) {
-            // Throw something? @robin
-        }
+        if (questionIds.isEmpty())
+            throw InvalidExamException("Can't remove any questions if no ID's are provided")
 
-        if (!questionDAO.answersGivenOnQuestions(questionIds)) {
-            // throw that there questions cant be removed from an exam that already has answers by students
-        }
+        if (questionDAO.answersGivenOnQuestions(questionIds))
+            throw InvalidExamException("Can't remove questions if students gave answers to any of these.")
 
         return examDAO.removeQuestionsFromExam(examId, questionIds)
     }
