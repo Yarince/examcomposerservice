@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.persistence.answer
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.answer.AnswerControllerAdvice.Companion.logger
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
@@ -35,7 +35,9 @@ class AnswerDAO : IAnswerDAO {
             preparedStatement?.setInt(3, answer.questionId)
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
-            logger.error("SQLException thrown when adding answer to question", e)
+            val message = "SQLException thrown when adding answer to question"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             preparedStatement?.close()

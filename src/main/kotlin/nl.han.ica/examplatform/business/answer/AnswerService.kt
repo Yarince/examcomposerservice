@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.answer
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.persistence.answer.AnswerDAO
 import org.springframework.stereotype.Service
@@ -20,11 +20,11 @@ class AnswerService(private val answerDAO: AnswerDAO) {
      *
      * @param answer The [Answer] you want to add
      */
-    fun addAnswerToQuestion(answer: Answer) =
-        try {
-            answerDAO.addAnswerToQuestion(answer)
-        } catch (exception: RuntimeException) {
-            logger.error("Could not add answer to question")
-            throw CouldNotAddAnswerToQuestionException(exception.message, exception)
-        }
+    fun addAnswerToQuestion(answer: Answer): Unit =
+            try {
+                answerDAO.addAnswerToQuestion(answer)
+            } catch (exception: DatabaseException) {
+                logger.error("Could not add answer to question", exception)
+                throw CouldNotAddAnswerToQuestionException(exception.message, exception)
+            }
 }

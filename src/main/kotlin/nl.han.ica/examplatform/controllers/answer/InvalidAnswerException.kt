@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.controllers.responseexceptions
+package nl.han.ica.examplatform.controllers.answer
 
 /**
  * Exception thrown when there is an invalid [Answer] submitted.
@@ -8,5 +8,5 @@ package nl.han.ica.examplatform.controllers.responseexceptions
  */
 class InvalidAnswerException(
     message: String?,
-    cause: Throwable?
+    cause: Throwable? = null
 ) : RuntimeException(message, cause)

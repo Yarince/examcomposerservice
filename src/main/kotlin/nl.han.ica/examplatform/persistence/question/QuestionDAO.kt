@@ -1,11 +1,10 @@
 package nl.han.ica.examplatform.persistence.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
-import org.springframework.util.MultiValueMap
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
@@ -53,9 +52,9 @@ class QuestionDAO {
                 }
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
-            logger.error("Something went wrong while inserting a question in the database", e)
-            throw DatabaseException("Couldn't execute statement")
+            val message = "Something went wrong while inserting a question in the database"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             MySQLConnection.closeStatement(preparedStatement)
@@ -83,7 +82,9 @@ class QuestionDAO {
                 return true
             }
         } catch (e: SQLException) {
-            logger.error("Something went wrong while checking if question ${question?.questionId} exists", e)
+            val message = "Something went wrong while checking if question ${question?.questionId} exists"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(dbConnection)
             preparedStatement?.close()
@@ -114,11 +115,15 @@ class QuestionDAO {
             questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            val message = "Question could not be retrieved from the database."
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
+
+        if (questions.isEmpty()) throw DatabaseException("No questions found for course with ID: $courseId")
 
         return questions.toTypedArray()
     }
@@ -165,11 +170,16 @@ class QuestionDAO {
                         subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery)))
             }
         } catch (e: SQLException) {
-            e.printStackTrace()
+            val message = "Question could not be retrieved from the database."
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedStatement)
         }
+
+        if (questions.isEmpty()) throw DatabaseException("No questions found for course with ID: $courseId and categories: $categories")
+
         return questions.toTypedArray()
     }
 
@@ -184,10 +194,9 @@ class QuestionDAO {
         var preparedQuestionStatement: PreparedStatement? = null
 
         val sqlQuestionQuery = "SELECT distinct Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE EXAMID = ? and PARENTQUESTIONID is null"
-
         val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
 
-        var questions = ArrayList<Question>()
+        var questions: ArrayList<Question>
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
             preparedQuestionStatement?.setInt(1, examId)
@@ -195,18 +204,21 @@ class QuestionDAO {
             questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            val message = "Question could not be retrieved from the database."
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
+
+        if (questions.isEmpty()) throw DatabaseException("No questions found for exam with ID: $examId.")
 
         return questions
     }
 
     private fun initQuestionsByResultSet(preparedQuestionStatement: PreparedStatement?, sqlSubQuestionQuery: String, conn: Connection?): ArrayList<Question> {
         val questions = ArrayList<Question>()
-
         val questionRs = preparedQuestionStatement?.executeQuery()
                 ?: throw DatabaseException("Error while interacting with the database")
 
@@ -227,8 +239,8 @@ class QuestionDAO {
 
     private fun getSubQuestionsOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String): ArrayList<Question>? {
         var preparedQuestionStatement: PreparedStatement? = null
+        val questions: ArrayList<Question>
 
-        var questions = ArrayList<Question>()
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlSubQuestionQuery)
             preparedQuestionStatement?.setInt(1, questionId)
@@ -236,21 +248,23 @@ class QuestionDAO {
             questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            val message = "Subquestions"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
+
+        if (questions.isEmpty()) throw DatabaseException("No questions found for $questionId")
 
         return questions
     }
 
     private fun getCategoriesOfQuestion(questionId: Int, conn: Connection?): ArrayList<String> {
         var preparedQuestionCategoryStatement: PreparedStatement? = null
-
         val sqlQuestionCategoryQuery = "SELECT CATEGORYNAME FROM CATEGORIES_OF_QUESTION as CQ INNER JOIN CATEGORY as C ON CQ.CATEGORYID = C.CATEGORYID WHERE QUESTIONID = ?"
-
-
         val questions = ArrayList<String>()
+
         try {
             preparedQuestionCategoryStatement = conn?.prepareStatement(sqlQuestionCategoryQuery)
             preparedQuestionCategoryStatement?.setInt(1, questionId)
@@ -262,10 +276,15 @@ class QuestionDAO {
                 questions.add(questionCategoryRs.getString("CATEGORYNAME"))
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            val message = "Questions could not be retrieved form database. Course: $questionId"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeStatement(preparedQuestionCategoryStatement)
         }
+
+        if (questions.isEmpty()) throw DatabaseException("No questions found for $questionId")
+
         return questions
     }
 
@@ -281,25 +300,26 @@ class QuestionDAO {
         var preparedQuestionStatement: PreparedStatement? = null
 
         val sqlQuestionQuery = "SELECT distinct Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE Q.QUESTIONID = ?"
-
         val sqlSubQuestionQuery = "SELECT Q.QUESTIONID, QE.SEQUENCENUMBER, QE.QUESTIONID, QUESTIONTYPE, QUESTIONTEXT, QUESTIONPOINTS, COURSEID, EXAMTYPENAME  FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID WHERE PARENTQUESTIONID = ?"
 
-        var questions = ArrayList<Question>()
+        val questions: ArrayList<Question>
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
             preparedQuestionStatement?.setInt(1, questionId)
 
-
             questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
-            e.printStackTrace()
+            val message = "Question could not be retrieved from the database. ID: $questionId"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
 
-        return questions.first()
+        if (questions.isEmpty()) throw DatabaseException("No questions found for $questionId")
 
+        return questions.first()
     }
 }

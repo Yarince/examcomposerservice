@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.controllers.responseexceptions
+package nl.han.ica.examplatform.business.answer
 
 /**
  * Exception thrown when a [Answer] could not be added to a [Questtion].

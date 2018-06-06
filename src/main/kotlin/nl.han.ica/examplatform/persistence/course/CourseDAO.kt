@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.persistence.course
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.course.Course
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -38,7 +38,9 @@ class CourseDAO {
                         rs.getString("COURSECODE")
                 ))
         } catch (e: SQLException) {
-            logger.error("Something went wrong while getting all courses", e)
+            val message = "Something went wrong while getting all courses"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(dbConnection)

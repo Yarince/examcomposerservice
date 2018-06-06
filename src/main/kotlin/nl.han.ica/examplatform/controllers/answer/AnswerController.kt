@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PutMapping

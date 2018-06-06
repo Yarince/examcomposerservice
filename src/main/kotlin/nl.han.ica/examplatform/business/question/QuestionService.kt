@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
@@ -33,11 +34,11 @@ class QuestionService(private val questionDAO: QuestionDAO) {
                     }
                 }
                 ResponseEntity(insertedQuestion, HttpStatus.CREATED)
-            } catch (exception: Exception) {
-                logger.error("Couldn't insert question: ${question.questionText}")
-                ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+            } catch (e: DatabaseException) {
+                val message = "Couldn't insert question: ${question.questionText}"
+                logger.error(message, e)
+                throw QuestionNotInsertedException(message, e)
             }
-
 
     private fun addSubQuestions(question: Question, parentQuestionId: Int) {
         val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)

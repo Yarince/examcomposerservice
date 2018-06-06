@@ -5,6 +5,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -12,7 +13,7 @@ import kotlin.test.assertNotNull
 class AnswerControllerAdviceTest {
 
     private val answerControllerAdvice: AnswerControllerAdvice = AnswerControllerAdvice()
-    private val throwable: Throwable = Throwable("Answer contains invalid values")
+    private val invalidAnswerException: InvalidAnswerException = InvalidAnswerException("Answer contains invalid values")
 
     @Test
     fun testHandleInvalidAnswerException() {
@@ -21,8 +22,8 @@ class AnswerControllerAdviceTest {
                 userMessage = "Answer could not be added to the Question"
         )
 
-        val response = answerControllerAdvice
-                .handleInvalidAnswerException(throwable)
+        val response: ResponseEntity<ErrorInfo> = answerControllerAdvice
+                .handleInvalidAnswerException(invalidAnswerException)
         assertNotNull(response)
         assertNotNull(response.body)
         assertNotNull(response.statusCode)
