@@ -73,6 +73,11 @@ class ExamQuestionService(
      * @param examId [Int] The ID of the exam
      * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
      */
-    fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>) =
-            examDAO.removeQuestionsFromExam(examId, questionIds)
+    fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>) {
+        if (questionIds.isEmpty()) {
+            // Throw something? @robin
+        }
+
+        return examDAO.removeQuestionsFromExam(examId, questionIds)
+    }
 }
