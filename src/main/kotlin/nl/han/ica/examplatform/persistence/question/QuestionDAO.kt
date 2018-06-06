@@ -442,4 +442,14 @@ class QuestionDAO : IQuestionDAO {
 
         return questions.first()
     }
+
+    /**
+     * Check if question is answered by students.
+     *
+     * @param questionIds [Array]<[Int]> The IDs of the questions
+     * @return [Boolean] true if any of them have been answered, otherwise false
+     */
+    override fun answersGivenOnQuestions(questionIds: Array<Int>): Boolean {
+        return false
+    }
 }

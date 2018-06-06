@@ -78,6 +78,10 @@ class ExamQuestionService(
             // Throw something? @robin
         }
 
+        if (!questionDAO.answersGivenOnQuestions(questionIds)) {
+            // throw that there questions cant be removed from an exam that already has answers by students
+        }
+
         return examDAO.removeQuestionsFromExam(examId, questionIds)
     }
 }

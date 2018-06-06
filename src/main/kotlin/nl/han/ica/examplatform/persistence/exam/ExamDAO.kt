@@ -337,7 +337,7 @@ class ExamDAO : IExamDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement: PreparedStatement?
 
-        for (questionId in questionIds.copyOfRange(0, questionIds.size - 2)) {
+        for (questionId in questionIds.copyOfRange(0, questionIds.size - 1)) {
             query += " OR QUESTIONID = ?"
         }
 
