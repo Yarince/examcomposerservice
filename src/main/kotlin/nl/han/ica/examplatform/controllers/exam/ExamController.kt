@@ -32,7 +32,7 @@ class ExamController(
      *
      * @return [PracticeExam]
      */
-    @PostMapping("/practice-exam")
+    @GetMapping("/practice-exam")
     @ApiOperation(
             value = "Add a practice exam without questions",
             notes = "Cannot contain questions or an examId",
