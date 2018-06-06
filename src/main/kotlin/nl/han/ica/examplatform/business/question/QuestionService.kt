@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.DatabaseException
+import nl.han.ica.examplatform.controllers.question.CategoriesDontExistException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
@@ -32,7 +33,8 @@ class QuestionService(
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
             try {
-                if(!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question))) throw CategoriesDontExistException("Categories dont exist")
+                if(!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question)))
+                    throw CategoriesDontExistException("Categories don't exist")
 
                 val insertedQuestion = questionDAO.insertQuestion(question)
                 question.subQuestions?.let {
@@ -67,7 +69,10 @@ class QuestionService(
         }
     }
 
-    private fun getAllCategoriesInQuestionAndSubQuestions(question: Question, allCategories: ArrayList<String> = ArrayList()): ArrayList<String> {
+    private fun getAllCategoriesInQuestionAndSubQuestions(
+            question: Question,
+            allCategories: ArrayList<String> = ArrayList()
+    ): ArrayList<String> {
         for (category in question.categories)
             if (!allCategories.contains(category))
                 allCategories.add(category)
@@ -99,5 +104,6 @@ class QuestionService(
      * @param questionId [Int] ID of the question that you want retrieved.
      * @return [ResponseEntity]<[Question]> The question.
      */
-    fun getQuestionForId(questionId: Int): ResponseEntity<Question> = ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
+    fun getQuestionForId(questionId: Int): ResponseEntity<Question> =
+            ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
 }
