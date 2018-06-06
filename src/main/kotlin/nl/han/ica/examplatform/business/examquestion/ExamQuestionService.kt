@@ -66,4 +66,13 @@ class ExamQuestionService(
      */
     fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
             examDAO.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
+
+    /**
+     * De-couples questions from an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
+     */
+    fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>) =
+            examDAO.removeQuestionsFromExam(examId, questionIds)
 }

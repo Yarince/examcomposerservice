@@ -73,4 +73,12 @@ interface IExamDAO {
      * @return [Exam] The updated exam
      */
     fun updateExam(exam: Exam): Exam
+
+    /**
+     * De-couples questions from an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
+     */
+    fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>)
 }
