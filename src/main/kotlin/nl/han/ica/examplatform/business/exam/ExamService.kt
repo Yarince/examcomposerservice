@@ -109,4 +109,12 @@ class ExamService(private val examDAO: IExamDAO,
      * @param shouldBePublished [Boolean] Indicates whether the exam should be published or un-published
      */
     fun publishExam(examId: Int, shouldBePublished: Boolean) = examDAO.publishExam(examId, shouldBePublished)
+
+    /**
+     * Deletes an exam.
+     * This doesn't delete any questions.
+     *
+     * @param examId [Int] The ID of the exam that should be deleted
+     */
+    fun deleteExam(examId: Int) = examDAO.deleteExam(examId)
 }

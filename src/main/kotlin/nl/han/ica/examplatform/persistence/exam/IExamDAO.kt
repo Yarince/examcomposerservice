@@ -81,4 +81,12 @@ interface IExamDAO {
      * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
      */
     fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>)
+
+    /**
+     * Deletes an exam.
+     * This doesn't delete any questions.
+     *
+     * @param examId [Int] The ID of the exam that should be deleted
+     */
+    fun deleteExam(examId: Int)
 }
