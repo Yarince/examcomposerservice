@@ -23,5 +23,11 @@ interface ICategoryDAO {
      */
     fun addCategoriesToQuestion(categories: ArrayList<String>, questionId: Int)
 
+    /**
+     * Checks if a list with categories exists in the database.
+     *
+     * @param categories [ArrayList]<[String]> The categories to check
+     * @return [Boolean] Returns true if they all exist, false if they don't
+     */
     fun checkIfCategoriesExist(categories: ArrayList<String>): Boolean
 }

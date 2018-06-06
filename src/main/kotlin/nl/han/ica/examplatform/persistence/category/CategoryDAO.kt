@@ -119,6 +119,12 @@ class CategoryDAO : ICategoryDAO {
         }
     }
 
+    /**
+     * Checks if a list with categories exists in the database.
+     *
+     * @param categories [ArrayList]<[String]> The categories to check
+     * @return [Boolean] Returns true if they all exist, false if they don't
+     */
     override fun checkIfCategoriesExist(categories: ArrayList<String>): Boolean {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedQuestionStatement: PreparedStatement? = null

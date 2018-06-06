@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.CategoriesDontExist
+import nl.han.ica.examplatform.controllers.responseexceptions.CategoriesDontExistException
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.CategoryDAO
@@ -33,7 +33,7 @@ class QuestionService(
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
             try {
-                if(!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question))) throw CategoriesDontExist("Categories dont exist")
+                if(!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question))) throw CategoriesDontExistException("Categories dont exist")
 
                 val insertedQuestion = questionDAO.insertQuestion(question)
                 question.subQuestions?.let {
@@ -52,7 +52,6 @@ class QuestionService(
                 logger.error("Couldn't insert question: ${question.questionText}")
                 ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
             }
-
 
     private fun addSubQuestions(question: Question, parentQuestionId: Int) {
         val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)
