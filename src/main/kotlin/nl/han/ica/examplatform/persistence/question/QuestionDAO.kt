@@ -442,4 +442,36 @@ class QuestionDAO : IQuestionDAO {
 
         return questions.first()
     }
+
+    /**
+     * Updates a question.
+     *
+     * @param question [Question] Question that should be updated.
+     * @return [Question] The updated question
+     */
+    override fun updateQuestion(question: Question): Question {
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedStatement: PreparedStatement? = null
+
+        val query = "UPDATE QUESTION SET EXAMTYPENAME = ?, COURSEID = ?, QUESTIONTEXT = ?, QUESTIONTYPE = ?, ANSWERTYPE = ?, ANSWERTYPEPLUGINVERSION = ?, PLUGINVERSION = ? WHERE QUESTIONID = ?"
+
+        try {
+            preparedStatement = conn?.prepareStatement(query)
+            preparedStatement?.setString(1, question.examType)
+            preparedStatement?.setInt(2, question.courseId)
+            preparedStatement?.setString(3, question.questionText)
+            preparedStatement?.setString(4, question.questionType)
+            preparedStatement?.setString(5, question.answerType)
+            preparedStatement?.setString(1, question.answerTypePluginVersion)
+            preparedStatement?.setString(1, question.pluginVersion)
+
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Something went wrong while updating questions", e)
+            throw DatabaseException("Error while interacting with the database")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+        }
+        return question
+    }
 }

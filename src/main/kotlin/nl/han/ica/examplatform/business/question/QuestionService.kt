@@ -100,4 +100,12 @@ class QuestionService(
      * @return [ResponseEntity]<[Question]> The question.
      */
     fun getQuestionForId(questionId: Int): ResponseEntity<Question> = ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
+
+    /**
+     * Updates a question.
+     *
+     * @param question [Question] Question that should be updated.
+     * @return [Question] The updated question
+     */
+    fun updateQuestion(question: Question) = ResponseEntity(questionDAO.updateQuestion(question), HttpStatus.ACCEPTED)
 }

@@ -9,12 +9,7 @@ import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.business.question.QuestionTypeService
 import nl.han.ica.examplatform.models.question.Question
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 /**
  * REST controller for HTTP interaction with [Question]s.
@@ -101,4 +96,23 @@ class QuestionController(
     )
     fun getQuestionTypes(): ResponseEntity<ArrayList<String>> =
             questionTypeService.getQuestionTypes()
+
+    /**
+     * HTTP REST function to update a Question.
+     * Returns the updated Question.
+     *
+     * @param question [Question] The question that should be updated
+     * @return [ResponseEntity]<[Question]> The updated question
+     */
+    @PutMapping()
+    @ApiOperation(value = "Update a question", notes = "Update a question")
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 404, message= "Not found"),
+            ApiResponse(code = 500, message = "Internal server error")
+    )
+    fun updateQuestion(
+            @ApiParam(value = "Question object", required = true)
+            @RequestBody question: Question): ResponseEntity<Question> =
+            questionService.updateQuestion(question)
 }
