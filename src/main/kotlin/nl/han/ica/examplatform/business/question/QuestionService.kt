@@ -32,22 +32,26 @@ class QuestionService(
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
             try {
-                val insertedQuestion = questionDAO.insertQuestion(question)
-                question.subQuestions?.let {
-                    if (insertedQuestion.questionId == null) return@let
-                    it.forEach {
-                        addSubQuestions(it, insertedQuestion.questionId)
-                        insertedQuestion.questionId.let {
-                            categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
-                        }
-                    }
-                }
-
-                question.questionId?.let {
-                    categoryDAO.addCategoriesToQuestion(question.categories, it)
-                }
-
-                ResponseEntity(insertedQuestion, HttpStatus.CREATED)
+                val allCategories = getAllCategoriesInQuestionAndSubQuestions(question)
+                allCategories.forEach { println(it) }
+                ResponseEntity(HttpStatus.OK)
+//
+//                val insertedQuestion = questionDAO.insertQuestion(question)
+//                question.subQuestions?.let {
+//                    if (insertedQuestion.questionId == null) return@let
+//                    it.forEach {
+//                        addSubQuestions(it, insertedQuestion.questionId)
+//                        insertedQuestion.questionId.let {
+//                            categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
+//                        }
+//                    }
+//                }
+//
+//                question.questionId?.let {
+//                    categoryDAO.addCategoriesToQuestion(question.categories, it)
+//                }
+//
+//                ResponseEntity(insertedQuestion, HttpStatus.CREATED)
             } catch (exception: DatabaseException) {
                 logger.error("Couldn't insert question: ${question.questionText}")
                 ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -64,6 +68,23 @@ class QuestionService(
         question.subQuestions.forEach {
             addSubQuestions(it, insertedQuestion.questionId)
         }
+    }
+
+    private fun getAllCategoriesInQuestionAndSubQuestions(question: Question, allCategories: ArrayList<String> = ArrayList()): ArrayList<String> {
+        for (category in question.categories)
+            if (!allCategories.contains(category))
+                allCategories.add(category)
+
+        if (question.subQuestions == null)
+            return allCategories
+
+        if (question.subQuestions.isEmpty())
+            return allCategories
+
+
+        question.subQuestions.forEach { return getAllCategoriesInQuestionAndSubQuestions(it, allCategories) }
+
+        return allCategories
     }
 
     /**
