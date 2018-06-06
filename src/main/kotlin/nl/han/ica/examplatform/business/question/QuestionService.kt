@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
+import nl.han.ica.examplatform.controllers.responseexceptions.CategoriesDontExist
 import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.CategoryDAO
@@ -32,26 +33,21 @@ class QuestionService(
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
             try {
-                val allCategories = getAllCategoriesInQuestionAndSubQuestions(question)
-                allCategories.forEach { println(it) }
-                ResponseEntity(HttpStatus.OK)
-//
-//                val insertedQuestion = questionDAO.insertQuestion(question)
-//                question.subQuestions?.let {
-//                    if (insertedQuestion.questionId == null) return@let
-//                    it.forEach {
-//                        addSubQuestions(it, insertedQuestion.questionId)
-//                        insertedQuestion.questionId.let {
-//                            categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
-//                        }
-//                    }
-//                }
-//
-//                question.questionId?.let {
-//                    categoryDAO.addCategoriesToQuestion(question.categories, it)
-//                }
-//
-//                ResponseEntity(insertedQuestion, HttpStatus.CREATED)
+                if(!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question))) throw CategoriesDontExist("Categories dont exist")
+
+                val insertedQuestion = questionDAO.insertQuestion(question)
+                question.subQuestions?.let {
+                    if (insertedQuestion.questionId == null) return@let
+                    it.forEach {
+                        addSubQuestions(it, insertedQuestion.questionId)
+                    }
+                }
+
+                insertedQuestion.questionId?.let {
+                    categoryDAO.addCategoriesToQuestion(question.categories, it)
+                }
+
+                ResponseEntity(insertedQuestion, HttpStatus.CREATED)
             } catch (exception: DatabaseException) {
                 logger.error("Couldn't insert question: ${question.questionText}")
                 ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -60,7 +56,9 @@ class QuestionService(
 
     private fun addSubQuestions(question: Question, parentQuestionId: Int) {
         val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)
-
+        insertedQuestion.questionId?.let {
+            categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
+        }
         if (insertedQuestion.questionId == null) return
         if (question.subQuestions == null) return
         if (question.subQuestions.isEmpty()) return

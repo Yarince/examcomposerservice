@@ -12,3 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class ExamNotFoundException(message: String) : RuntimeException(message)
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+class CategoriesDontExist(message: String?) : RuntimeException(message)

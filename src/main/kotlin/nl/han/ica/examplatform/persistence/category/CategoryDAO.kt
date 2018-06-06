@@ -89,11 +89,10 @@ class CategoryDAO : ICategoryDAO {
 
             val rs = preparedQuestionStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute query")
 
-            rs.last()
-            if (rs.row < 1) throw DatabaseException("No categories found with names: $categories")
-
             while (rs.next())
                 categoryIds.add(rs.getInt(1))
+
+            if (categoryIds.size != categories.size) throw DatabaseException("No categories found with names: $categories")
 
             conn?.autoCommit = false
             insertStatement = conn?.prepareStatement(insertQuery)
@@ -117,6 +116,38 @@ class CategoryDAO : ICategoryDAO {
             MySQLConnection.closeConnection(conn)
             MySQLConnection.closeStatement(preparedQuestionStatement)
             MySQLConnection.closeStatement(insertStatement)
+        }
+    }
+
+    override fun checkIfCategoriesExist(categories: ArrayList<String>): Boolean {
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedQuestionStatement: PreparedStatement? = null
+
+        var sqlCategoryQuery = """
+            SELECT
+                C.CATEGORYID
+            FROM CATEGORY C
+            WHERE CATEGORYNAME in ("""
+
+        // Add prepared statement parameters dynamically for all categories
+        sqlCategoryQuery = addDynamicParameters(sqlCategoryQuery, categories)
+
+        return try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlCategoryQuery)
+
+            // Set parameters in prepared statement
+            addParameters(preparedQuestionStatement, categories)
+
+            val rs = preparedQuestionStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute query")
+
+            rs.last()
+            rs.row == (categories.size)
+        } catch (e: SQLException) {
+            logger.error("Something went wrong while getting categories by course.", e)
+            false
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedQuestionStatement)
         }
     }
 

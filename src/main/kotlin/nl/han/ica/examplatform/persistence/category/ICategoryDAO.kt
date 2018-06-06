@@ -22,4 +22,6 @@ interface ICategoryDAO {
      * @param questionId [Int] The ID of the question of which the categories should be added to
      */
     fun addCategoriesToQuestion(categories: ArrayList<String>, questionId: Int)
+
+    fun checkIfCategoriesExist(categories: ArrayList<String>): Boolean
 }
