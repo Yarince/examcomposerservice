@@ -19,18 +19,11 @@ internal class AnswerServiceTest {
     @InjectMocks
     private lateinit var answerService: AnswerService
 
-    @Test(expected = CouldNotAddAnswerToQuestionException::class)
-    fun testAddAnswerToQuestionError() {
-        val answer = Answer(questionId = 1)
-        doThrow(RuntimeException("DAO Exception")).`when`(answerDAO).addAnswerToQuestion(answer)
-        answerService.addAnswerToQuestion(answer)
-    }
-
     @Test
     fun testAddAnswerToQuestion() {
         val answer = Answer(questionId = 1)
 
-        answerService.addAnswerToQuestion(answer)
-        verify(answerDAO, times(1)).addAnswerToQuestion(answer)
+        answerService.addOrUpdateAnswerInQuestion(answer)
+        verify(answerDAO, times(1)).addOrUpdateAnswerInQuestion(answer)
     }
 }

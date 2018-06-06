@@ -1,8 +1,10 @@
 package nl.han.ica.examplatform.controllers.question
 
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import nl.han.ica.examplatform.business.question.QuestionService
+import nl.han.ica.examplatform.business.question.QuestionTypeService
 import nl.han.ica.examplatform.models.question.Question
-import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -11,7 +13,7 @@ import org.mockito.Mockito.doReturn
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import kotlin.test.assertEquals
+
 
 @RunWith(MockitoJUnitRunner::class)
 class QuestionControllerTest {
@@ -24,6 +26,10 @@ class QuestionControllerTest {
     private
     lateinit var questionService: QuestionService
 
+    @Mock
+    private
+    lateinit var questionTypeService: QuestionTypeService
+
     @Test
     fun testCreateQuestion() {
         val expectedResultBody = Question(
@@ -31,9 +37,9 @@ class QuestionControllerTest {
                 questionOrderInExam = 1,
                 questionType = "OpenQuestion",
                 questionText = "name",
-                questionPoints = 5F,
-                examType = "Tentamen"
-        )
+                questionPoints = 5,
+                examType = "Tentamen",
+                pluginVersion = "1.0")
         val expectedStatusCode = HttpStatus.CREATED
 
         doReturn(ResponseEntity(expectedResultBody, expectedStatusCode)).`when`(questionService).addQuestion(expectedResultBody)

@@ -31,7 +31,7 @@ class ExamQuestionServiceTest {
 
     @Test
     fun testCheckQuestion() {
-        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4f, examType = "Tentamen")
+        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4, examType = "Tentamen", pluginVersion = "1.0")
         doReturn(true).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayListOf(question))
         verify(questionDAO, times(1)).exists(question)
@@ -45,14 +45,14 @@ class ExamQuestionServiceTest {
 
     @Test(expected = InvalidExamException::class)
     fun testCheckQuestionNotExisting() {
-        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4f, examType = "Tentamen")
+        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4, examType = "Tentamen", pluginVersion = "1.0")
         doReturn(false).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayListOf(question))
     }
 
     @Test
     fun testAddQuestionToExam() {
-        val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5F, examType = "Tentamen")
+        val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen", pluginVersion = "1.0")
         val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", questions = arrayListOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).addQuestionsToExam(expectedExam)

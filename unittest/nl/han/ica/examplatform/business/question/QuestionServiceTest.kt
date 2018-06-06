@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.business.question
 
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Assert.assertNotNull
@@ -22,12 +23,11 @@ class QuestionServiceTest {
     lateinit var questionService: QuestionService
 
     @Mock
-    private
-    lateinit var questionDAO: QuestionDAO
+    private lateinit var questionDAO: QuestionDAO
 
     @Test
     fun testAddQuestionSuccess() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5F, examType = "Tentamen")
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0")
         val expectedResult = ResponseEntity(questionInserted, HttpStatus.CREATED)
 
         doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)
@@ -37,14 +37,12 @@ class QuestionServiceTest {
         assertEquals(expectedResult, result)
     }
 
-    @Test
+    @Test(expected = QuestionNotInsertedException::class)
     fun testAddQuestionError() {
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5F, examType = "Tentamen")
-        val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
+        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0")
 
-        doThrow(RuntimeException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)
+        doThrow(DatabaseException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)
 
-        val result = questionService.addQuestion(questionInserted)
-        assertEquals(expectedResult, result)
+        questionService.addQuestion(questionInserted)
     }
 }

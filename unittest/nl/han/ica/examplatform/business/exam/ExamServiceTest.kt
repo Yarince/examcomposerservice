@@ -6,6 +6,7 @@ import nl.han.ica.examplatform.controllers.exam.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Test
@@ -31,6 +32,9 @@ internal class ExamServiceTest {
     // This is unused, but without it the tests fail because of injection of this.
     @Mock
     private lateinit var questionDAO: QuestionDAO
+
+    @Mock
+    private lateinit var categoryDAO: CategoryDAO
 
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyId() {
@@ -58,7 +62,7 @@ internal class ExamServiceTest {
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
         val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = "Tentamen",
-                questions = arrayListOf(Question(questionType = "OpenQuestion", questionPoints = 1F, examType = "Tentamen"))) // Faulty exam object
+                questions = arrayListOf(Question(questionType = "OpenQuestion", questionPoints = 1, examType = "Tentamen", pluginVersion = "1.0"))) // Faulty exam object
         examService.checkExam(exam)
     }
 

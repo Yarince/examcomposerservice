@@ -35,8 +35,8 @@ class ExamControllerTest {
     @Test
     fun testGeneratePracticeExam() {
         val expected = PracticeExam(name = "Practice exam", courseId = 1, questions = arrayListOf())
-        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1, arrayOf("QA", "ASR"))
-        val result = examController.generatePracticeExam(PracticeExamRequestBody(1, arrayOf("QA", "ASR")))
+        doReturn(ResponseEntity<Any>(expected, HttpStatus.CREATED)).`when`(examService).generatePracticeExam(1, 1)
+        val result = examController.generatePracticeExam(1, 1)
         assertEquals(ResponseEntity(expected, HttpStatus.CREATED), result)
     }
 
@@ -65,7 +65,7 @@ class ExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", questions = arrayListOf(
-                Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 5F, examType = "Tentamen")))
+                Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0")))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = examController.addQuestionToExam(expected)
