@@ -1,0 +1,74 @@
+[
+  {
+    "questionId": 43,
+    "questionText": "Beantwoorde vraag over ASR",
+    "categories": [
+      "ASR"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-01-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 44,
+    "questionText": "Beantwoorde vraag over ASR",
+    "categories": [
+      "ASR"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-05-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 45,
+    "questionText": "Beantwoorde vraag over DCAR",
+    "categories": [
+      "DCAR"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-06-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 46,
+    "questionText": "Beantwoorde vraag over DCAR",
+    "categories": [
+      "DCAR"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-02-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 47,
+    "questionText": "Beantwoorde vraag over ATAM",
+    "categories": [
+      "ATAM"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-07-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 48,
+    "questionText": "Beantwoorde vraag over ATAM",
+    "categories": [
+      "ATAM"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-06-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 49,
+    "questionText": "Beantwoorde vraag over QA",
+    "categories": [
+      "QA"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-06-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 50,
+    "questionText": "Beantwoorde vraag over QA",
+    "categories": [
+      "QA"
+    ],
+    "questionType": "OpenQuestion",
+    "answeredOn": "2018-03-03T14:39:14.534Z"
+  }
+]
