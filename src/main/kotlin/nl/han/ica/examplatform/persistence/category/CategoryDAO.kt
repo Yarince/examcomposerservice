@@ -4,7 +4,10 @@ import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
-import java.sql.*
+import java.sql.BatchUpdateException
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.SQLException
 
 /**
  * Database Access Object for categories

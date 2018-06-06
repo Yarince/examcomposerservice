@@ -33,7 +33,7 @@ class QuestionService(
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
             try {
-                if(!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question)))
+                if (!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question)))
                     throw CategoriesDontExistException("Categories don't exist")
 
                 val insertedQuestion = questionDAO.insertQuestion(question)

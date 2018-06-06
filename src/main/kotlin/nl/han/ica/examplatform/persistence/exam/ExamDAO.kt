@@ -157,7 +157,7 @@ class ExamDAO : IExamDAO {
         preparedStatement?.setString(7, exam.instructions)
         preparedStatement?.setInt(8, exam.version)
         preparedStatement?.setString(9, exam.location)
-        preparedStatement?.setBoolean(10, exam.readyForDownload?: false)
+        preparedStatement?.setBoolean(10, exam.readyForDownload ?: false)
 
         try {
             val insertedRows = preparedStatement?.executeUpdate()
