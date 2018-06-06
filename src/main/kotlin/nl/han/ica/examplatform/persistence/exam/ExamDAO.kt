@@ -330,25 +330,26 @@ class ExamDAO : IExamDAO {
      * @param examId [Int] The ID of the exam that should be deleted
      */
     override fun deleteExam(examId: Int) {
-        val questionInExamDeleteQuery = "DELETE FROM QUESTIONS_IN_EXAM WHERE EXAMID = ?"
-        val examDeleteQuery = "DELETE FROM EXAM WHERE EXAMID = ?"
+        val queries = arrayOf("DELETE FROM COMMENT_ON_QUESTION WHERE EXAMID = ?",
+                "DELETE FROM PARTIAL_ANSWER_IN_QUESTION_IN_EXAM WHERE EXAMID = ?",
+                "DELETE FROM GIVEN_ANSWER WHERE EXAMID = ?",
+                "DELETE FROM QUESTION_IN_EXAM WHERE EXAMID = ?",
+                "DELETE FROM EXAM WHERE EXAMID = ?"
+        )
 
         val conn: Connection? = MySQLConnection.getConnection()
-        val preparedStatementQuestions = conn?.prepareStatement(questionInExamDeleteQuery)
-        val preparedStatementExam = conn?.prepareStatement(examDeleteQuery)
-
-        preparedStatementQuestions?.setInt(1, examId)
-        preparedStatementExam?.setInt(1, examId)
 
         try {
-            preparedStatementQuestions?.executeUpdate()
-            preparedStatementExam?.executeUpdate()
+            for (query in queries) {
+                val preparedStatementExam = conn?.prepareStatement(query)
+                preparedStatementExam?.setInt(1, examId)
+                preparedStatementExam?.executeUpdate()
+                MySQLConnection.closeStatement(preparedStatementExam)
+            }
         } catch (e: SQLException) {
             logger.error("Error deleting exam $examId", e)
             throw DatabaseException("Error while deleting exam $examId")
         } finally {
-            MySQLConnection.closeStatement(preparedStatementExam)
-            MySQLConnection.closeStatement(preparedStatementQuestions)
             MySQLConnection.closeConnection(conn)
         }
     }
