@@ -2,10 +2,7 @@ package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.exam.InvalidExamException
-import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.models.exam.PracticeExam
-import nl.han.ica.examplatform.models.exam.PreparedExam
-import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.exam.IExamDAO

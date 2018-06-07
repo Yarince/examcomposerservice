@@ -13,4 +13,4 @@ data class ErrorInfo(
         val userMessage: String,
         val errorCode: String? = null,
         val moreInfo: String? = null
-): Any()
+) : Any()

@@ -1,20 +1,17 @@
 package nl.han.ica.examplatform.controllers
 
 import nl.han.ica.examplatform.models.ErrorInfo
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.sql.SQLException
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import org.springframework.http.converter.HttpMessageNotReadableException
-import org.springframework.web.context.request.WebRequest
 
 
 /**

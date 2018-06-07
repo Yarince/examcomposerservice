@@ -1,9 +1,6 @@
 package nl.han.ica.examplatform.controllers.answer
 
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.*
 import nl.han.ica.examplatform.business.answer.AnswerService
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.models.answermodel.AnswerModel

@@ -1,15 +1,9 @@
 package nl.han.ica.examplatform.controllers.exam
 
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.*
 import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
-import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.models.exam.PracticeExam
-import nl.han.ica.examplatform.models.exam.PreparedExam
-import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
