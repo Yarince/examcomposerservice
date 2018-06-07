@@ -375,7 +375,7 @@ class QuestionDAO : IQuestionDAO {
     private fun getCategoriesOfQuestion(questionId: Int, conn: Connection?): ArrayList<String> {
         var preparedQuestionCategoryStatement: PreparedStatement? = null
         val sqlQuestionCategoryQuery = "SELECT CATEGORYNAME FROM CATEGORIES_OF_QUESTION as CQ INNER JOIN CATEGORY as C ON CQ.CATEGORYID = C.CATEGORYID WHERE QUESTIONID = ?"
-        val questions = ArrayList<String>()
+        val categories = ArrayList<String>()
 
         try {
             preparedQuestionCategoryStatement = conn?.prepareStatement(sqlQuestionCategoryQuery)
@@ -385,19 +385,19 @@ class QuestionDAO : IQuestionDAO {
                     ?: throw DatabaseException("Error while interacting with the database")
 
             while (questionCategoryRs.next())
-                questions.add(questionCategoryRs.getString("CATEGORYNAME"))
+                categories.add(questionCategoryRs.getString("CATEGORYNAME"))
 
         } catch (e: SQLException) {
-            val message = "Questions could not be retrieved form database. Course: $questionId"
+            val message = "Categories could not be retrieved form database for Question with ID: $questionId"
             logger.error(message, e)
             throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeStatement(preparedQuestionCategoryStatement)
         }
 
-        if (questions.isEmpty()) throw DatabaseException("No questions found for $questionId")
+        if (categories.isEmpty()) throw DatabaseException("No categories found for $questionId")
 
-        return questions
+        return categories
     }
 
 

@@ -26,7 +26,7 @@ import org.springframework.web.context.request.WebRequest
 abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
 
     /**
-     * Crates a ResponseEntity for the given Exception.
+     * Creates a ResponseEntity for the given Exception.
      *
      * @param httpStatus [HttpStatus]
      * @param userMessage [String]
