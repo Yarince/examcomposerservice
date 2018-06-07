@@ -23,7 +23,7 @@ class ExamControllerAdviceTest {
                 userMessage = "Requested Exam has not been found."
         )
 
-        val response: ResponseEntity<ErrorInfo> = examControllerAdvice
+        val response: ResponseEntity<Any> = examControllerAdvice
                 .handleExamNotFoundException(examNotFoundException)
 
         assertResponse(response, expectedErrorInfo, HttpStatus.NOT_FOUND)
@@ -36,23 +36,21 @@ class ExamControllerAdviceTest {
                 userMessage = "Given Exam is not correct."
         )
 
-        val response: ResponseEntity<ErrorInfo> = examControllerAdvice
+        val response: ResponseEntity<Any> = examControllerAdvice
                 .handleInvalidAnswerException(invalidExamException)
 
         assertResponse(response, expectedErrorInfo, HttpStatus.BAD_REQUEST)
     }
 
     private fun assertResponse(
-            response: ResponseEntity<ErrorInfo>,
+            response: ResponseEntity<Any>,
             expectedErrorInfo: ErrorInfo,
             expectedHttpStatus: HttpStatus
     ) {
         assertNotNull(response)
         assertNotNull(response.body)
         assertNotNull(response.statusCode)
-        assertEquals(expectedErrorInfo.developerMessage, response.body?.developerMessage)
-        assertEquals(expectedErrorInfo.userMessage, response.body?.userMessage)
-        assertEquals(expectedErrorInfo.errorCode, response.body?.errorCode)
+        assertEquals(expectedErrorInfo.toString(), response.body?.toString())
         assertEquals(expectedHttpStatus, response.statusCode)
     }
 

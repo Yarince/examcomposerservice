@@ -25,7 +25,7 @@ class BaseControllerAdviceTest {
                 userMessage = "Something went wrong."
         )
 
-        val response: ResponseEntity<ErrorInfo> = baseControllerAdvice
+        val response: ResponseEntity<Any> = baseControllerAdvice
                 .handleDatabaseException(databaseException)
         assertResponse(response, expectedErrorInfo, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -39,7 +39,7 @@ class BaseControllerAdviceTest {
                 errorCode = "SQL state error code: state"
         )
 
-        val response: ResponseEntity<ErrorInfo> = baseControllerAdvice
+        val response: ResponseEntity<Any> = baseControllerAdvice
                 .handleDatabaseException(databaseException)
         assertResponse(response, expectedErrorInfo, HttpStatus.INTERNAL_SERVER_ERROR)
     }
@@ -53,23 +53,21 @@ class BaseControllerAdviceTest {
                 errorCode = "SQL state error code: state"
         )
 
-        val response: ResponseEntity<ErrorInfo> = baseControllerAdvice
+        val response: ResponseEntity<Any> = baseControllerAdvice
                 .handleSQLException(sqlException)
 
         assertResponse(response, expectedErrorInfo, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     private fun assertResponse(
-            response: ResponseEntity<ErrorInfo>,
+            response: ResponseEntity<Any>,
             expectedErrorInfo: ErrorInfo,
             expectedHttpStatus: HttpStatus
     ) {
         assertNotNull(response)
         assertNotNull(response.body)
         assertNotNull(response.statusCode)
-        assertEquals(expectedErrorInfo.developerMessage, response.body?.developerMessage)
-        assertEquals(expectedErrorInfo.userMessage, response.body?.userMessage)
-        assertEquals(expectedErrorInfo.errorCode, response.body?.errorCode)
+        assertEquals(expectedErrorInfo.toString(), response.body?.toString())
         assertEquals(expectedHttpStatus, response.statusCode)
     }
 }

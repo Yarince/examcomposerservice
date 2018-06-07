@@ -22,14 +22,21 @@ class AnswerControllerAdviceTest {
                 userMessage = "Answer could not be added to the Question"
         )
 
-        val response: ResponseEntity<ErrorInfo> = answerControllerAdvice
+        val response: ResponseEntity<Any> = answerControllerAdvice
                 .handleInvalidAnswerException(invalidAnswerException)
+
+        assertResponse(response, expectedErrorInfo, HttpStatus.BAD_REQUEST)
+    }
+
+    private fun assertResponse(
+            response: ResponseEntity<Any>,
+            expectedErrorInfo: ErrorInfo,
+            expectedHttpStatus: HttpStatus
+    ) {
         assertNotNull(response)
         assertNotNull(response.body)
         assertNotNull(response.statusCode)
-        assertEquals(expectedErrorInfo.developerMessage, response.body?.developerMessage)
-        assertEquals(expectedErrorInfo.userMessage, response.body?.userMessage)
-        assertEquals(expectedErrorInfo.errorCode, response.body?.errorCode)
-        assertEquals(HttpStatus.BAD_REQUEST, response.statusCode)
+        assertEquals(expectedErrorInfo.toString(), response.body?.toString())
+        assertEquals(expectedHttpStatus, response.statusCode)
     }
 }

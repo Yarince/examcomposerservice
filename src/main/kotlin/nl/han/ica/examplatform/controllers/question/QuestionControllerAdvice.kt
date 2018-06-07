@@ -20,7 +20,7 @@ class QuestionControllerAdvice : BaseControllerAdvice() {
      */
     @ResponseBody
     @ExceptionHandler(QuestionNotFoundException::class)
-    fun handleQuestionNotFoundException(e: QuestionNotFoundException): ResponseEntity<ErrorInfo> =
+    fun handleQuestionNotFoundException(e: QuestionNotFoundException): ResponseEntity<Any> =
             createResponseEntity(HttpStatus.NOT_FOUND, "Requested Question is not available.", e)
 
     /**
@@ -31,7 +31,7 @@ class QuestionControllerAdvice : BaseControllerAdvice() {
      */
     @ResponseBody
     @ExceptionHandler(QuestionNotInsertedException::class)
-    fun handleQuestionNotInsertedException(e: QuestionNotInsertedException): ResponseEntity<ErrorInfo> =
+    fun handleQuestionNotInsertedException(e: QuestionNotInsertedException): ResponseEntity<Any> =
             createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, "Question has not been created.", e)
 
 }

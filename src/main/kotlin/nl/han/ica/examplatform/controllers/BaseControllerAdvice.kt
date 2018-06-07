@@ -13,11 +13,15 @@ import java.sql.SQLException
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.web.context.request.WebRequest
+
 
 /**
  * Creates custom [ErrorInfo] class to be return to the API user.
  * Adds mandatory error headers to the error response.
  */
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 @ControllerAdvice(value = ["nl.han.ica.examenplatform.business"])
 abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
 
@@ -33,7 +37,7 @@ abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
             httpStatus: HttpStatus,
             userMessage: String,
             exception: Throwable
-    ): ResponseEntity<ErrorInfo> = createResponseEntity(
+    ): ResponseEntity<Any> = createResponseEntity(
             httpStatus,
             userMessage,
             exception.message.orEmpty(),
@@ -46,7 +50,7 @@ abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
             devMessage: String,
             errorCode: String?,
             moreInfo: String?
-    ): ResponseEntity<ErrorInfo> = ResponseEntity(
+    ): ResponseEntity<Any> = ResponseEntity(
             ErrorInfo(
                     developerMessage = devMessage,
                     userMessage = userMessage,
@@ -80,7 +84,7 @@ abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
     fun handleSQLException(
             e: SQLException,
             devMessage: String? = null
-    ): ResponseEntity<ErrorInfo> = createResponseEntity(
+    ): ResponseEntity<Any> = createResponseEntity(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "Something went wrong.",
             devMessage ?: "Something went wrong with the database.",
@@ -96,7 +100,7 @@ abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
      */
     @ResponseBody
     @ExceptionHandler(DatabaseException::class)
-    fun handleDatabaseException(e: DatabaseException): ResponseEntity<ErrorInfo> {
+    fun handleDatabaseException(e: DatabaseException): ResponseEntity<Any> {
         return if (e.cause != null) {
             handleSQLException(e.cause, e.message)
         } else {
@@ -108,5 +112,15 @@ abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
                     null
             )
         }
+    }
+
+    override fun handleHttpMessageNotReadable(
+            ex: HttpMessageNotReadableException,
+            headers: HttpHeaders?,
+            status: HttpStatus?,
+            request: WebRequest?
+    ): ResponseEntity<Any> {
+        super.handleHttpMessageNotReadable(ex, headers, status, request)
+        return createResponseEntity(HttpStatus.BAD_REQUEST, "Something went wrong.", ex)
     }
 }

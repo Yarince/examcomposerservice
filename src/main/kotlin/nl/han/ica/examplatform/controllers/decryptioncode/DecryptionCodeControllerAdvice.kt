@@ -21,6 +21,6 @@ class DecryptionCodeControllerAdvice : BaseControllerAdvice() {
      */
     @ResponseBody
     @ExceptionHandler(DecryptionCodeNotFoundException::class)
-    fun handleDecryptionCodeNotFoundException(e: DecryptionCodeNotFoundException): ResponseEntity<ErrorInfo> =
+    fun handleDecryptionCodeNotFoundException(e: DecryptionCodeNotFoundException): ResponseEntity<Any> =
             createResponseEntity(HttpStatus.NOT_FOUND, "No Decryption Code found for the given exam.", e)
 }

@@ -21,6 +21,6 @@ class AnswerControllerAdvice : BaseControllerAdvice() {
      */
     @ResponseBody
     @ExceptionHandler(InvalidAnswerException::class)
-    fun handleInvalidAnswerException(e: InvalidAnswerException): ResponseEntity<ErrorInfo> =
+    fun handleInvalidAnswerException(e: InvalidAnswerException): ResponseEntity<Any> =
             createResponseEntity(HttpStatus.BAD_REQUEST, "Answer could not be added to the Question", e)
 }

@@ -1,6 +1,8 @@
 package nl.han.ica.examplatform.controllers.question
 
 import junit.framework.Assert
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import nl.han.ica.examplatform.business.question.QuestionNotInsertedException
 import nl.han.ica.examplatform.models.ErrorInfo
 import org.junit.Test
@@ -25,7 +27,7 @@ class QuestionControllerAdviceTest {
                 userMessage = "Requested Question is not available."
         )
 
-        val response: ResponseEntity<ErrorInfo> = questionControllerAdvice
+        val response: ResponseEntity<Any> = questionControllerAdvice
                 .handleQuestionNotFoundException(questionNotFoundException)
 
         assertResponse(response, expectedErrorInfo, HttpStatus.NOT_FOUND)
@@ -38,7 +40,7 @@ class QuestionControllerAdviceTest {
                 userMessage = "Question has not been created."
         )
 
-        val response: ResponseEntity<ErrorInfo> = questionControllerAdvice
+        val response: ResponseEntity<Any> = questionControllerAdvice
                 .handleQuestionNotInsertedException(questionNotInsertedException)
 
         assertResponse(response, expectedErrorInfo, HttpStatus.INTERNAL_SERVER_ERROR)
@@ -46,17 +48,15 @@ class QuestionControllerAdviceTest {
     }
 
     private fun assertResponse(
-            response: ResponseEntity<ErrorInfo>,
+            response: ResponseEntity<Any>,
             expectedErrorInfo: ErrorInfo,
             expectedHttpStatus: HttpStatus
     ) {
-        Assert.assertNotNull(response)
-        Assert.assertNotNull(response.body)
-        Assert.assertNotNull(response.statusCode)
-        Assert.assertEquals(expectedErrorInfo.developerMessage, response.body?.developerMessage)
-        Assert.assertEquals(expectedErrorInfo.userMessage, response.body?.userMessage)
-        Assert.assertEquals(expectedErrorInfo.errorCode, response.body?.errorCode)
-        Assert.assertEquals(expectedHttpStatus, response.statusCode)
+        assertNotNull(response)
+        assertNotNull(response.body)
+        assertNotNull(response.statusCode)
+        assertEquals(expectedErrorInfo.toString(), response.body?.toString())
+        assertEquals(expectedHttpStatus, response.statusCode)
     }
 
 }

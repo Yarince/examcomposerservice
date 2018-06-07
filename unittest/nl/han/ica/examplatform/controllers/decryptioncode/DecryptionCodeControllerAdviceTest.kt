@@ -25,14 +25,21 @@ class DecryptionCodeControllerAdviceTest {
                 userMessage = "No Decryption Code found for the given exam."
         )
 
-        val response: ResponseEntity<ErrorInfo> = answerControllerAdvice
+        val response: ResponseEntity<Any> = answerControllerAdvice
                 .handleDecryptionCodeNotFoundException(decryptionCodeNotFoundException)
+
+        assertResponse(response, expectedErrorInfo, HttpStatus.BAD_REQUEST)
+    }
+
+    private fun assertResponse(
+            response: ResponseEntity<Any>,
+            expectedErrorInfo: ErrorInfo,
+            expectedHttpStatus: HttpStatus
+    ) {
         assertNotNull(response)
         assertNotNull(response.body)
         assertNotNull(response.statusCode)
-        assertEquals(expectedErrorInfo.developerMessage, response.body?.developerMessage)
-        assertEquals(expectedErrorInfo.userMessage, response.body?.userMessage)
-        assertEquals(expectedErrorInfo.errorCode, response.body?.errorCode)
-        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertEquals(expectedErrorInfo.toString(), response.body?.toString())
+        assertEquals(expectedHttpStatus, response.statusCode)
     }
 }

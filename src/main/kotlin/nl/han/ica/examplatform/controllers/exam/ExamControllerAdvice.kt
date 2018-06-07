@@ -21,7 +21,7 @@ class ExamControllerAdvice : BaseControllerAdvice() {
      */
     @ResponseBody
     @ExceptionHandler(InvalidExamException::class)
-    fun handleInvalidAnswerException(e: InvalidExamException): ResponseEntity<ErrorInfo> =
+    fun handleInvalidAnswerException(e: InvalidExamException): ResponseEntity<Any> =
             createResponseEntity(HttpStatus.BAD_REQUEST, "Given Exam is not correct.", e)
 
     /**
@@ -31,7 +31,7 @@ class ExamControllerAdvice : BaseControllerAdvice() {
      */
     @ResponseBody
     @ExceptionHandler(ExamNotFoundException::class)
-    fun handleExamNotFoundException(e: ExamNotFoundException): ResponseEntity<ErrorInfo> =
+    fun handleExamNotFoundException(e: ExamNotFoundException): ResponseEntity<Any> =
             createResponseEntity(HttpStatus.NOT_FOUND, "Requested Exam has not been found.", e)
 
 }
