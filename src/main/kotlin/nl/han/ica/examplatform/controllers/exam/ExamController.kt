@@ -134,7 +134,7 @@ class ExamController(
             examService.addClassesToExam(examId, classes)
 
     /**
-     * HTTP REST function publish an Exam.
+     * HTTP REST function to publish an Exam.
      * This makes the exam ready for download.
      *
      * @param examId [Int] the ID of the exam that should be published
@@ -203,4 +203,24 @@ class ExamController(
             notes = "This only deletes the exam information, not the questions"
     )
     fun deleteExam(@RequestParam examId: Int) = examService.deleteExam(examId)
+
+    /**
+     * HTTP REST function that de-couples questions from an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
+     */
+    @PutMapping("/removeQuestions")
+    @ApiOperation(
+            value = "Removes questions from an exam",
+            notes = "This doesn't remove any questions, but just decouples them from the exam"
+    )
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 403, message = "Bad request"))
+    fun removeQuestionFromExam(
+            @ApiParam(value = "The ID of the exam", required = true)
+            @RequestParam examId: Int,
+            @ApiParam(value = "An array containing the questionIds that should be removed from the exam. Put every item on a newline in swagger", required = true)
+            @RequestParam questionIds: Array<Int>) = examQuestionService.removeQuestionsFromExam(examId, questionIds)
 }
