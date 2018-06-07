@@ -1,32 +1,26 @@
 [
   {
     "questionType": "OpenQuestion",
-    "percentage": 0.0,
-    "amount": 2
+    "percentage": 66.66666666666667
   },
   {
     "questionType": "MultipleChoiceQuestion",
-    "percentage": 0.0,
-    "amount": 8
+    "percentage": 9.444444444444445
   },
   {
     "questionType": "TreeQuestion",
-    "percentage": 0.0,
-    "amount": 6
+    "percentage": 80.0
   },
   {
     "questionType": "GraphQuestion",
-    "percentage": 0.0,
-    "amount": 8
+    "percentage": 26.666666666666668
   },
   {
     "questionType": "DrawQuestion",
-    "percentage": 10.0,
-    "amount": 5
+    "percentage": 10.0
   },
   {
     "questionType": "BigOhQuestion",
-    "percentage": 0.0,
-    "amount": 3
+    "percentage": 26.666666666666668
   }
 ]
