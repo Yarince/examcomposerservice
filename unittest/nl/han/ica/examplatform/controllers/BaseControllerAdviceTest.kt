@@ -36,7 +36,8 @@ class BaseControllerAdviceTest {
         val expectedErrorInfo = ErrorInfo(
                 developerMessage = "exception",
                 userMessage = "Something went wrong.",
-                errorCode = "SQL state error code: state"
+                errorCode = "SQL state error code: state",
+                moreInfo = "https://en.wikipedia.org/wiki/SQLSTATE"
         )
 
         val response: ResponseEntity<Any> = baseControllerAdvice
@@ -50,7 +51,8 @@ class BaseControllerAdviceTest {
         val expectedErrorInfo = ErrorInfo(
                 developerMessage = "Something went wrong with the database.",
                 userMessage = "Something went wrong.",
-                errorCode = "SQL state error code: state"
+                errorCode = "SQL state error code: state",
+                moreInfo = "https://en.wikipedia.org/wiki/SQLSTATE"
         )
 
         val response: ResponseEntity<Any> = baseControllerAdvice

@@ -28,7 +28,7 @@ class DecryptionCodeControllerAdviceTest {
         val response: ResponseEntity<Any> = answerControllerAdvice
                 .handleDecryptionCodeNotFoundException(decryptionCodeNotFoundException)
 
-        assertResponse(response, expectedErrorInfo, HttpStatus.BAD_REQUEST)
+        assertResponse(response, expectedErrorInfo, HttpStatus.NOT_FOUND)
     }
 
     private fun assertResponse(
