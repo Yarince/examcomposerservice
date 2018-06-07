@@ -46,7 +46,7 @@ private fun addQuestionsToPracticeExam(questions: Array<Question>, strippedQuest
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
 
-    subjectsAvailable.elementAtOrElse(iterator, { return exam }) // todo: create exception for this
+    subjectsAvailable.elementAtOrElse(iterator, { return exam })
     // get questions grouped in current category
 
     currentSubjectList = strippedQuestions.filter { it.categories.contains(subjectsAvailable[iterator]) }
