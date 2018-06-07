@@ -118,6 +118,6 @@ abstract class BaseControllerAdvice : ResponseEntityExceptionHandler() {
             request: WebRequest?
     ): ResponseEntity<Any> {
         super.handleHttpMessageNotReadable(ex, headers, status, request)
-        return createResponseEntity(HttpStatus.BAD_REQUEST, "Something went wrong.", ex)
+        return createResponseEntity(HttpStatus.BAD_REQUEST, "Something went wrong reading input.", ex)
     }
 }
