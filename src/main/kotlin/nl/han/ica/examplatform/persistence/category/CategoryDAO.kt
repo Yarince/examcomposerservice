@@ -47,7 +47,7 @@ class CategoryDAO : ICategoryDAO {
 
             val rs = preparedQuestionStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute query")
             while (rs.next())
-                categories.add(rs.getString(0))
+                categories.add(rs.getString("CATEGORYNAME"))
         } catch (e: SQLException) {
             logger.error("Something went wrong while getting categories by course", e)
         } finally {
