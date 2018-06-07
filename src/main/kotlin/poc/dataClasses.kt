@@ -15,7 +15,7 @@ data class ExamResult(
         val examId: Int,
         val examDate: Date,
         var questions: ArrayList<ReviewedQuestion>?
-        )
+)
 
 data class WeightedExam(
         val examId: Int,
@@ -23,18 +23,17 @@ data class WeightedExam(
         var groupedQuestions: Map<String, List<ReviewedQuestion>>
 )
 
+data class QuestionTypePercentage(
+        val questionType: String,
+        var percentage: Double = 0.0
+)
+
 data class ReviewedQuestion(
-        var weight: Double = 0.0,
         val questionId: Int,
         val resultWasGood: Boolean,
         val questionText: String,
         val categories: ArrayList<String>,
         val questionType: String
-)
-
-data class QuestionTypePercentage(
-        val questionType: String,
-        var percentage: Double = 0.0
 )
 
 data class Question(

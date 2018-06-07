@@ -32,7 +32,7 @@ fun generatePracticeExam(courseId: Int, studentNumber: Int): ArrayList<Question>
 private fun calculateQuestionTypeRelevance(courseId: Int, examResults: ArrayList<ExamResult>): ArrayList<QuestionTypePercentage> {
 
     val weightedExams = getWeightedExams(examResults)
-    val questionTypePercentageList = getQuestionTypePercentageList(courseId)
+    val questionTypePercentageList = createQuestionTypePercentageList(courseId)
 
     // Loop through all available questionTypes for this course
     questionTypePercentageList.forEach questionTypes@{ questionTypePercentage: QuestionTypePercentage ->
@@ -53,17 +53,45 @@ private fun calculateQuestionTypeRelevance(courseId: Int, examResults: ArrayList
         if (perfectScore)
             questionTypePercentage.percentage = MAGIC_NUMBER
         else {
-
             // TODO: Assign score with Content-based filtering
+
             // TODO: Combine both percentages
-            questionTypePercentage.percentage = 0.0
+            val relevance = 0.0
+
+            // The total amount of questions made by student for a course
+            val totalAmountQuestions = weightedExams.sumByDouble { it.groupedQuestions.values.sumByDouble { it.size.toDouble() } }
+
+            // The amount of questions with this QuestionType
+            val questionTypeInExams = weightedExams.sumBy {
+                (it.groupedQuestions[questionTypePercentage.questionType] ?: return@sumBy 0).size
+            }
+            // The percentage questionTypes appeared in all exams
+            val questionTypeAppearance = questionTypeInExams.div(totalAmountQuestions)
+            // The amount of questions with current question type correctly answered
+            val correct = weightedExams.sumByDouble {
+                (it.groupedQuestions[questionTypePercentage.questionType]
+                        ?: return@sumByDouble 0.0).filter { it.resultWasGood }.size.toDouble()
+            }
+            // The amount of questions with current question type incorrectly answered
+            val incorrect = questionTypeInExams - correct
+
+            println(totalAmountQuestions)
+
+            println(questionTypePercentage.questionType)
+            println(questionTypeAppearance)
+            println(questionTypeInExams)
+            println(correct)
+            println(incorrect)
+            println()
+
+            questionTypePercentage.percentage = relevance
         }
     }
 
     return questionTypePercentageList
 }
 
-private fun getQuestionTypePercentageList(courseId: Int): ArrayList<QuestionTypePercentage> {
+private fun createQuestionTypePercentageList(courseId: Int): ArrayList<QuestionTypePercentage> {
     // Fill questionTypePercentageList with all available questionTypes
     val questionTypePercentageList = ArrayList<QuestionTypePercentage>()
     loadQuestionTypes(courseId).forEach { questionTypePercentageList.add(QuestionTypePercentage(it.questionType)) }
