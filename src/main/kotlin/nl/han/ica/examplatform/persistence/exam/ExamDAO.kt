@@ -326,6 +326,40 @@ class ExamDAO : IExamDAO {
     }
 
     /**
+     * De-couples questions from an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
+     */
+    override fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>) {
+        var query = "DELETE FROM QUESTION_IN_EXAM WHERE EXAMID = ? AND QUESTIONID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+
+        for (questionId in questionIds.copyOfRange(0, questionIds.size - 1)) {
+            query += " OR QUESTIONID = ?"
+        }
+
+        preparedStatement = conn?.prepareStatement(query)
+
+        try {
+            preparedStatement?.setInt(1, examId)
+            for ((i, questionId) in questionIds.withIndex()) {
+                preparedStatement?.setInt(i + 2, questionId)
+            }
+
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam $examId", e)
+            throw DatabaseException("Error while publishing exam $examId")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+    }
+
+    /**
      * Deletes an exam.
      * This doesn't delete any questions.
      *
