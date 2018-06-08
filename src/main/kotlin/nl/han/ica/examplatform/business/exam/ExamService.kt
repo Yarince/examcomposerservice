@@ -104,9 +104,9 @@ class ExamService(private val examDAO: IExamDAO,
      * Publishes an exam.
      *
      * @param examId [Int] The ID of the exam that should be published
-     * @param shouldBePublished [Boolean] Indicates whether the exam should be published or un-published
+     * @param shouldBePublished [Boolean] Indicates whether the exam should be published or un-published. Default true
      */
-    fun publishExam(examId: Int, shouldBePublished: Boolean) = examDAO.publishExam(examId, shouldBePublished)
+    fun publishExam(examId: Int, shouldBePublished: Boolean = true) = examDAO.publishExam(examId, shouldBePublished)
 
     /**
      * Deletes an exam.
