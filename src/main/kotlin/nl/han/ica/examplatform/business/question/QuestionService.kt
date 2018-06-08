@@ -33,8 +33,9 @@ class QuestionService(
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
             try {
-                if (!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question)))
-                    throw CategoriesDontExistException("Categories don't exist")
+                if (question.categories.isNotEmpty())
+                    if (!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question)))
+                        throw CategoriesDontExistException("Categories don't exist")
 
                 val insertedQuestion = questionDAO.insertQuestion(question)
                 question.subQuestions?.let {
@@ -106,4 +107,12 @@ class QuestionService(
      */
     fun getQuestionForId(questionId: Int): ResponseEntity<Question> =
             ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
+
+    /**
+     * Updates a question.
+     *
+     * @param question [Question] Question that should be updated.
+     * @return [Question] The updated question
+     */
+    fun updateQuestion(question: Question) = ResponseEntity(questionDAO.updateQuestion(question), HttpStatus.ACCEPTED)
 }

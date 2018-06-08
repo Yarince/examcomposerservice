@@ -93,4 +93,23 @@ class QuestionController(
     )
     fun getQuestionTypes(): ResponseEntity<ArrayList<String>> =
             questionTypeService.getQuestionTypes()
+
+    /**
+     * HTTP REST function to update a Question.
+     * Returns the updated Question.
+     *
+     * @param question [Question] The question that should be updated
+     * @return [ResponseEntity]<[Question]> The updated question
+     */
+    @PutMapping()
+    @ApiOperation(value = "Update a question", notes = "Update a question")
+    @ApiResponses(
+            ApiResponse(code = 202, message = "Accepted"),
+            ApiResponse(code = 404, message= "Not found"),
+            ApiResponse(code = 500, message = "Internal server error")
+    )
+    fun updateQuestion(
+            @ApiParam(value = "Question object", required = true)
+            @RequestBody question: Question): ResponseEntity<Question> =
+            questionService.updateQuestion(question)
 }
