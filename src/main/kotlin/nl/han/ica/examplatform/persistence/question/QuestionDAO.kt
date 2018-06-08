@@ -453,10 +453,12 @@ class QuestionDAO : IQuestionDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
 
-        val query = "UPDATE QUESTION SET EXAMTYPENAME = ?, COURSEID = ?, QUESTIONTEXT = ?, QUESTIONTYPE = ?, ANSWERTYPE = ?, ANSWERTYPEPLUGINVERSION = ?, PLUGINVERSION = ? WHERE QUESTIONID = ?"
+        val updateQuestionQuery = """UPDATE QUESTION SET EXAMTYPENAME = ?, COURSEID = ?,
+            QUESTIONTEXT = ?, QUESTIONTYPE = ?, ANSWERTYPE = ?,
+            ANSWERTYPEPLUGINVERSION = ?, PLUGINVERSION = ? WHERE QUESTIONID = ?"""
 
         try {
-            preparedStatement = conn?.prepareStatement(query)
+            preparedStatement = conn?.prepareStatement(updateQuestionQuery)
             preparedStatement?.setString(1, question.examType)
             preparedStatement?.setInt(2, question.courseId)
             preparedStatement?.setString(3, question.questionText)
