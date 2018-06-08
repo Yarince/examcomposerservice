@@ -489,7 +489,6 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setString(7, question.pluginVersion)
             preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
 
-
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
             logger.error("Something went wrong while updating questions", e)
@@ -514,7 +513,6 @@ class QuestionDAO : IQuestionDAO {
 
         for (questionId in questionIds.copyOfRange(0, questionIds.size - 1))
             query += " OR QUESTIONINEXAMID = ?"
-
 
         var thereAreAnswersGivenToQuestions = false
 
