@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform;
 
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
-public class Application implements WebMvcConfigurer {
+public class Application implements WebMvcConfigurer, CommandLineRunner {
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -24,5 +26,10 @@ public class Application implements WebMvcConfigurer {
                         .allowedMethods("GET", "POST", "DELETE", "PUT");
             }
         };
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+
     }
 }

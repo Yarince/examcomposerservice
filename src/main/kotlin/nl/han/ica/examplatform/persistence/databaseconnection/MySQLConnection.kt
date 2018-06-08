@@ -6,6 +6,7 @@ import java.io.*
 import java.sql.*
 import java.util.*
 
+
 /**
  * A singleton object that handles the connection with the MySQL database.
  */
@@ -60,12 +61,13 @@ object MySQLConnection {
         val databaseProperties = Properties()
 
         return try {
-            val jarPath = File(this::class.java.protectionDomain.codeSource.location.path)
-            databaseProperties.load(FileInputStream("$jarPath/application.properties"))
-
-            databaseProperties
+            val jarPath = File(this::class.java!!.protectionDomain.codeSource.location.path)
+            val propertiesPath = jarPath.parentFile.absolutePath
+            databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
+            return databaseProperties
         } catch (e: IOException) {
             logger.error("Error when getting connection", e)
+            println(e.printStackTrace())
             throw DatabaseException("")
         }
     }
