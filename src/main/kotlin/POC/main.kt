@@ -6,13 +6,34 @@ import java.io.FileReader
 import kotlin.math.pow
 
 
-fun main(args : Array<String>) {
-    var everythingToArrayList: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
-    var questionResult: ArrayList<QuestionResult> = everythingToArrayList[0].questions.toCollection(ArrayList())
-    var dataPairs: ArrayList<Pair<Int, Double>> = fetchStudentPracticeExamsWithTheirRelevancePercentages(123)
+fun main(args: Array<String>) {
+    val results: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
+    val dataPairs: ArrayList<Pair<Int, Double>> = fetchStudentPracticeExamsWithTheirRelevancePercentages(123)
+    dataPairs.forEach { println(it) }
 
+    val categories = results.map { r -> r.questions.map { q -> q.categories }.reduce { acc, list -> acc.plus(list) } }.reduce { acc, list -> acc.plus(list) }.distinct()
 
-    println(categoriesByExamId(1, everythingToArrayList))
+    val array = mutableMapOf<String, Double>()
+    for (result in results) {
+        if (result.studentNr != 123) break
+        for (category in categories) {
+            val toets1Vragen = result.questions.filter { it.categories.contains(category) }
+            if (toets1Vragen.isEmpty())
+                break
+
+            val x = toets1Vragen.map { q -> if (q.resultWasGood) 0.0 else 100.0 }.reduce { acc, i -> acc + i }
+            val y = x / toets1Vragen.size
+            val huidigeToetsPercentage = dataPairs.find { it.first == result.examId }
+            val reducedPercentage = (y * huidigeToetsPercentage!!.second) / 100
+            if (array.containsKey(category)) {
+                array[category] = array[category]!! + reducedPercentage
+            } else {
+                array[category] = reducedPercentage
+            }
+        }
+    }
+
+    array.forEach { println(it) }
 }
 
 internal fun loadQuestions(): Array<Results> {
@@ -30,10 +51,10 @@ data class PracticeExam(val examId: Int, val studentNr: Int, val name: String, v
 //=========================================================================================================================================================================
 
 //Step 1
-internal fun checkIfStudentCompletedOtherPracticeExams(studentNr: Int) : Boolean {
+internal fun checkIfStudentCompletedOtherPracticeExams(studentNr: Int): Boolean {
     var data: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
-    for(examens in data) {
-        if(examens.studentNr == studentNr)
+    for (examens in data) {
+        if (examens.studentNr == studentNr)
             return true
     }
     return false
@@ -41,36 +62,36 @@ internal fun checkIfStudentCompletedOtherPracticeExams(studentNr: Int) : Boolean
 //=========================================================================================================================================================================
 
 // Step 2
-internal fun fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr: Int) : ArrayList<Pair<Int, Double>> {
+internal fun fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr: Int): ArrayList<Pair<Int, Double>> {
     var data: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
-    var practiceExamsOfAStudentPairedWithTheirWeightingAscending : ArrayList<Pair<Int, Double>> = ArrayList()
+    var practiceExamsOfAStudentPairedWithTheirWeightingAscending: ArrayList<Pair<Int, Double>> = ArrayList()
     for (oefentoetsen in data) {
         if (oefentoetsen.studentNr == studentNr) {
-            practiceExamsOfAStudentPairedWithTheirWeightingAscending.add(Pair(oefentoetsen.examId, calculateRelevanceOfPracticeExam(amountOfPracticeExamsOfAStudent(oefentoetsen.studentNr, data), data.indexOf(oefentoetsen)+1)))
+            practiceExamsOfAStudentPairedWithTheirWeightingAscending.add(Pair(oefentoetsen.examId, calculateRelevanceOfPracticeExam(amountOfPracticeExamsOfAStudent(oefentoetsen.studentNr, data), data.indexOf(oefentoetsen) + 1)))
         }
     }
-        return practiceExamsOfAStudentPairedWithTheirWeightingAscending
+    return practiceExamsOfAStudentPairedWithTheirWeightingAscending
 }
 
 internal tailrec fun recurPow(n: Int, iterator: Int = 0, total: Double = 0.0): Double {
     if (iterator >= n) return total
-    return recurPow(n, iterator+1 , total + 2.0.pow(iterator))
+    return recurPow(n, iterator + 1, total + 2.0.pow(iterator))
 }
 
-internal tailrec fun recurMultiplication(n: Int, iterator: Int = 1, total: Int=1) : Int {
+internal tailrec fun recurMultiplication(n: Int, iterator: Int = 1, total: Int = 1): Int {
     if (iterator >= n) return total
-    return recurMultiplication(n, iterator+1, total*2)
+    return recurMultiplication(n, iterator + 1, total * 2)
 }
 
-internal fun calculateRelevanceOfPracticeExam(amountOfPracticeExams: Int, importanceRanking: Int) : Double {
-    return 100/(recurPow(amountOfPracticeExams)) * recurMultiplication(importanceRanking)
+internal fun calculateRelevanceOfPracticeExam(amountOfPracticeExams: Int, importanceRanking: Int): Double {
+    return 100 / (recurPow(amountOfPracticeExams)) * recurMultiplication(importanceRanking)
 }
 
-internal fun amountOfPracticeExamsOfAStudent(studentNr: Int, data: ArrayList<Results>) : Int {
+internal fun amountOfPracticeExamsOfAStudent(studentNr: Int, data: ArrayList<Results>): Int {
     var total = 0
     for (oefentoetsen in data) {
         if (oefentoetsen.studentNr == studentNr) {
-           total++
+            total++
         }
     }
     return total
@@ -87,7 +108,7 @@ internal fun categoryResultsPerPastPracticeExam(examResults: ArrayList<Results>)
 
 
 
-    for(resultaten in examResults) {
+    for (resultaten in examResults) {
         //categoriesWithTheirPercentageCorrectAnswered.add((Triple(resultaten.examId, resultaten.questions[counterFout+counterGoed].categories.)))
     }
 
@@ -97,8 +118,8 @@ internal fun categoriesByExamId(examid: Int): ArrayList<Pair<Int, ArrayList<Stri
     var categories: ArrayList<Pair<Int, ArrayList<String>>> = ArrayList()
     var results: ArrayList<Results> = loadQuestions().toCollection(ArrayList())
 
-    for(i in results.withIndex()) {
-        if(i.value.examId==examid) {
+    for (i in results.withIndex()) {
+        if (i.value.examId == examid) {
             for (j in i.value.questions.withIndex()) {
                 categories.add(Pair(examid, getCategoriesOutOfQuestions(results[i.index].questions.toCollection(ArrayList()))))
             }
@@ -107,10 +128,10 @@ internal fun categoriesByExamId(examid: Int): ArrayList<Pair<Int, ArrayList<Stri
     return categories.distinct().toCollection(ArrayList())
 }
 
-internal fun getCategoriesOutOfQuestions(questions: ArrayList<QuestionResult>) : ArrayList<String> {
+internal fun getCategoriesOutOfQuestions(questions: ArrayList<QuestionResult>): ArrayList<String> {
     var categories: ArrayList<String> = ArrayList()
 
-    for((i, question) in questions.withIndex()) {
+    for ((i, question) in questions.withIndex()) {
         for (category in question.categories.withIndex()) {
             categories.add(category.value)
         }
@@ -118,7 +139,7 @@ internal fun getCategoriesOutOfQuestions(questions: ArrayList<QuestionResult>) :
     return categories.distinct().toCollection(ArrayList())
 }
 
-internal fun calculatePercentageGoodAnswered(examId: Int, categoriesInExam: ArrayList<String>, results: ArrayList<Results>) : ArrayList<Double> {
+internal fun calculatePercentageGoodAnswered(examId: Int, categoriesInExam: ArrayList<String>, results: ArrayList<Results>): ArrayList<Double> {
     var cGoed = 0.0
     var cTotalCategoryQuestions = 0.0
     var cTotalQuestions = 0.0
@@ -155,10 +176,10 @@ internal fun percentageWrongAnsweredQuestions(studentNr: Int) {
     var mapWithExamsAndCategoriesWrongAnswered: MutableMap<Int, Pair<String, Double>>
     var categoriesPerExam: ArrayList<Pair<Int, ArrayList<String>>> = categoriesByExamId(1)
 
-    for(data in studentPracticeExamResultData) {
-        if(data.studentNr==studentNr) {
-            for(questions in data.questions) {
-                for(categories in questions.categories) {
+    for (data in studentPracticeExamResultData) {
+        if (data.studentNr == studentNr) {
+            for (questions in data.questions) {
+                for (categories in questions.categories) {
 
                 }
             }

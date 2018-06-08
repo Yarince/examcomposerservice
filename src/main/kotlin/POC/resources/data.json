@@ -1,417 +1,417 @@
 [
   {
-    "examId":1,
-    "studentNr":123,
-    "questions":[
+    "examId": 1,
+    "studentNr": 123,
+    "questions": [
       {
-        "questionId":1,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 1,
+        "resultWasGood": false,
+        "categories": [
           "ATAM",
           "NOG IETS",
           "DCAR"
         ]
       },
       {
-        "questionId":2,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 2,
+        "resultWasGood": true,
+        "categories": [
           "ATAM",
           "ONDERWERP2"
         ]
       },
       {
-        "questionId":3,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 3,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":4,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 4,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":5,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 5,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":6,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 6,
+        "resultWasGood": false,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":7,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 7,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":8,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 8,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":9,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 9,
+        "resultWasGood": false,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":10,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 10,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":11,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 11,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       }
     ]
   },
   {
-    "examId":2,
-    "studentNr":123,
-    "questions":[
+    "examId": 2,
+    "studentNr": 123,
+    "questions": [
       {
-        "questionId":2,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 2,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":3,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 3,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":4,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 4,
+        "resultWasGood": false,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":5,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 5,
+        "resultWasGood": false,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":6,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 6,
+        "resultWasGood": false,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":7,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 7,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":8,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 8,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":9,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 9,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":10,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 10,
+        "resultWasGood": true,
+        "categories": [
           "DCAR"
         ]
       },
       {
-        "questionId":11,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 11,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":12,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 12,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       }
     ]
   },
   {
-    "examId":3,
-    "studentNr":123,
-    "questions":[
+    "examId": 3,
+    "studentNr": 123,
+    "questions": [
       {
-        "questionId":3,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 3,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":4,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 4,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":5,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 5,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":6,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 6,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":7,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 7,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":8,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 8,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":9,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 9,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":10,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 10,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":11,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 11,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":12,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 12,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":13,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 13,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       }
     ]
   },
   {
-    "examId":4,
-    "studentNr":456,
-    "questions":[
+    "examId": 4,
+    "studentNr": 456,
+    "questions": [
       {
-        "questionId":4,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 4,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":5,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 5,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":6,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 6,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":7,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 7,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":8,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 8,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":9,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 9,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":10,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 10,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":11,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 11,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":12,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 12,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":13,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 13,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":14,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 14,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       }
     ]
   },
   {
-    "examId":5,
-    "studentNr":654,
-    "questions":[
+    "examId": 5,
+    "studentNr": 654,
+    "questions": [
       {
-        "questionId":5,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 5,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":6,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 6,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":7,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 7,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":8,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 8,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":9,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 9,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":10,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 10,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":11,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 11,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":12,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 12,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":13,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 13,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":14,
-        "resultWasGood":false,
-        "categories":[
+        "questionId": 14,
+        "resultWasGood": false,
+        "categories": [
           "ATAM"
         ]
       },
       {
-        "questionId":15,
-        "resultWasGood":true,
-        "categories":[
+        "questionId": 15,
+        "resultWasGood": true,
+        "categories": [
           "ATAM"
         ]
       }
