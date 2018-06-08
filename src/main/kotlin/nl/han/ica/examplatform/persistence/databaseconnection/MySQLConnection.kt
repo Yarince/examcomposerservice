@@ -64,10 +64,9 @@ object MySQLConnection {
             val jarPath = File(this::class.java!!.protectionDomain.codeSource.location.path)
             val propertiesPath = jarPath.parentFile.absolutePath
             databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
-            return databaseProperties
+            databaseProperties
         } catch (e: IOException) {
             logger.error("Error when getting connection", e)
-            println(e.printStackTrace())
             throw DatabaseException("")
         }
     }
