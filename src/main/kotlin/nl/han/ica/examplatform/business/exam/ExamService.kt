@@ -1,15 +1,12 @@
 package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
-import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.models.exam.PracticeExam
-import nl.han.ica.examplatform.models.exam.PreparedExam
-import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.controllers.exam.InvalidExamException
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
-import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.exam.IExamDAO
+import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -102,6 +99,7 @@ class ExamService(private val examDAO: IExamDAO,
      * @return [Exam] The updated exam
      */
     fun updateExam(exam: Exam) = ResponseEntity(examDAO.updateExam(exam), HttpStatus.ACCEPTED)
+
     /**
      * Publishes an exam.
      *

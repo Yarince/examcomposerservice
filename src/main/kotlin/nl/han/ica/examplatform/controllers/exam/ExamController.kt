@@ -1,15 +1,9 @@
 package nl.han.ica.examplatform.controllers.exam
 
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiParam
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.*
 import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
-import nl.han.ica.examplatform.models.exam.Exam
-import nl.han.ica.examplatform.models.exam.PracticeExam
-import nl.han.ica.examplatform.models.exam.PreparedExam
-import nl.han.ica.examplatform.models.exam.SimpleExam
+import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -57,7 +51,7 @@ class ExamController(
             notes = "This returns a list of exams containing ID, name, ",
             response = Array<SimpleExam>::class
     )
-    fun getExams() = examService.getExams()
+    fun getExams(): ResponseEntity<ArrayList<SimpleExam>> = examService.getExams()
 
     /**
      * HTTP REST function add a new Exam to the system.
@@ -122,7 +116,10 @@ class ExamController(
      * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes.
      */
     @PostMapping("/addClasses")
-    @ApiOperation(value = "Add classes to an exam", notes = "This makes it so the students are able to perform the exam", response = PreparedExam::class)
+    @ApiOperation(
+            value = "Add classes to an exam",
+            notes = "This makes it so the students are able to perform the exam",
+            response = PreparedExam::class)
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))
@@ -130,7 +127,8 @@ class ExamController(
             @ApiParam(value = "An array of classes, e.g. ASD-A ASD-B ASD-C", required = true)
             @RequestParam classes: Array<String>,
             @ApiParam(value = "The ID of the exam you want to add the classes to", required = true)
-            @RequestParam examId: Int) =
+            @RequestParam examId: Int
+    ): ResponseEntity<PreparedExam> =
             examService.addClassesToExam(examId, classes)
 
     /**

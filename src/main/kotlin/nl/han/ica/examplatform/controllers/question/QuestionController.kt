@@ -1,10 +1,6 @@
 package nl.han.ica.examplatform.controllers.question
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
-import io.swagger.annotations.ApiParam
+import io.swagger.annotations.*
 import nl.han.ica.examplatform.business.question.QuestionService
 import nl.han.ica.examplatform.business.question.QuestionTypeService
 import nl.han.ica.examplatform.models.question.Question
@@ -40,8 +36,8 @@ class QuestionController(
     )
     fun createQuestion(
             @ApiParam(value = "Question object", required = true)
-            @RequestBody question: Question): ResponseEntity<Question> =
-            questionService.addQuestion(question)
+            @RequestBody question: Question
+    ): ResponseEntity<Question> = questionService.addQuestion(question)
 
     /**
      * Endpoint for getting questions for a course.
@@ -59,8 +55,9 @@ class QuestionController(
             ApiResponse(code = 403, message = "Bad request"),
             ApiResponse(code = 404, message = "Not found"))
     fun getQuestionsForCourse(
-            @ApiParam(value = "The ID of the course you want to retrieve the questions of", required = true)
-            @PathVariable("courseId") courseId: Int): ResponseEntity<Array<Question>> =
+            @ApiParam(value = "The ID of the course you want to retrieve the questions of.", required = true)
+            @PathVariable("courseId") courseId: Int
+    ): ResponseEntity<Array<Question>> =
             questionService.getQuestionsForCourse(courseId)
 
     /**

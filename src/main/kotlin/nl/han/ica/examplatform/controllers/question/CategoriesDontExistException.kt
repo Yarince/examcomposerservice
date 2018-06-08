@@ -1,4 +1,4 @@
-package nl.han.ica.examplatform.controllers.responseexceptions
+package nl.han.ica.examplatform.controllers.question
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

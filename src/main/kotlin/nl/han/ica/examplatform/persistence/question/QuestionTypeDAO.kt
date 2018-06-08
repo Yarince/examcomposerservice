@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.persistence.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection

@@ -1,15 +1,9 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileReader
-import java.io.IOException
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.SQLException
-import java.sql.Statement
+import nl.han.ica.examplatform.controllers.DatabaseException
+import java.io.*
+import java.sql.*
 import java.util.*
 
 /**

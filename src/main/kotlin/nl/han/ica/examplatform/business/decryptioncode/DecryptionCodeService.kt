@@ -1,6 +1,5 @@
 package nl.han.ica.examplatform.business.decryptioncode
 
-import nl.han.ica.examplatform.persistence.decryptioncode.DecryptionCodeDAO
 import nl.han.ica.examplatform.persistence.decryptioncode.IDecryptionCodeDAO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,5 +17,5 @@ class DecryptionCodeService(private val decryptionCodeDAO: IDecryptionCodeDAO) {
      * @return [ResponseEntity]<String> decryption code [String]
      */
     fun getDecryptionCode(examId: Int): ResponseEntity<String> =
-        ResponseEntity(decryptionCodeDAO.getDecryptionCode(examId), HttpStatus.OK)
+            ResponseEntity(decryptionCodeDAO.getDecryptionCode(examId), HttpStatus.OK)
 }

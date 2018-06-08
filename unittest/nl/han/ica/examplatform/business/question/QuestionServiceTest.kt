@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.business.question
 
-import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
+import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
@@ -24,12 +24,10 @@ class QuestionServiceTest {
     lateinit var questionService: QuestionService
 
     @Mock
-    private
-    lateinit var questionDAO: QuestionDAO
+    private lateinit var questionDAO: QuestionDAO
 
     @Mock
-    private
-    lateinit var categoryDAO: CategoryDAO
+    private lateinit var categoryDAO: CategoryDAO
 
     @Test
     fun testAddQuestionSuccess() {
@@ -45,16 +43,17 @@ class QuestionServiceTest {
         assertEquals(expectedResult, result)
     }
 
-    @Test
+    @Test(expected = QuestionNotInsertedException::class)
     fun testAddQuestionError() {
         val categories = arrayListOf("ASD", "QA")
         val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen" , pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, categories = categories)
         val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
 
-        doThrow(DatabaseException("DAO Error")).`when`(questionDAO).insertQuestion(questionInserted)
+        doThrow(DatabaseException("DAO Error"))
+                .`when`(questionDAO)
+                .insertQuestion(questionInserted)
         doReturn(true).`when`(categoryDAO).checkIfCategoriesExist(categories)
 
-        val result = questionService.addQuestion(questionInserted)
-        assertEquals(expectedResult, result)
+        questionService.addQuestion(questionInserted)
     }
 }

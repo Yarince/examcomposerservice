@@ -1,8 +1,7 @@
 package nl.han.ica.examplatform.controllers.answer
 
 import nl.han.ica.examplatform.business.answer.AnswerService
-import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
+import nl.han.ica.examplatform.business.answer.CouldNotAddAnswerToQuestionException
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import org.junit.Assert
@@ -16,7 +15,7 @@ import org.springframework.http.HttpStatus
 import kotlin.test.assertEquals
 
 @RunWith(MockitoJUnitRunner::class)
-internal class AnswerControllerTest {
+class AnswerControllerTest {
 
     @InjectMocks
     private lateinit var answerController: AnswerController

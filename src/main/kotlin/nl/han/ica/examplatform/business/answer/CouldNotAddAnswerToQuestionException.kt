@@ -1,7 +1,4 @@
-package nl.han.ica.examplatform.controllers.responseexceptions
-
-import nl.han.ica.examplatform.models.answermodel.answer.Answer
-import nl.han.ica.examplatform.models.question.Question
+package nl.han.ica.examplatform.business.answer
 
 /**
  * Exception thrown when a [Answer] could not be added to a [Question].
@@ -10,6 +7,6 @@ import nl.han.ica.examplatform.models.question.Question
  * @param cause [Throwable] Previous exception
  */
 class CouldNotAddAnswerToQuestionException(
-    message: String?,
-    cause: Throwable?
+        message: String?,
+        cause: Throwable?
 ) : RuntimeException(message, cause)
