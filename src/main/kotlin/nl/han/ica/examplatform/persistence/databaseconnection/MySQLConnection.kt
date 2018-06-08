@@ -1,10 +1,10 @@
 package nl.han.ica.examplatform.persistence.databaseconnection
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.DatabaseException
 import java.io.*
 import java.sql.*
 import java.util.*
+
 
 /**
  * A singleton object that handles the connection with the MySQL database.
@@ -61,12 +61,12 @@ object MySQLConnection {
 
         return try {
             val jarPath = File(this::class.java.protectionDomain.codeSource.location.path)
-            databaseProperties.load(FileInputStream("$jarPath/application.properties"))
-
+            val propertiesPath = jarPath.parentFile.absolutePath
+            databaseProperties.load(FileInputStream("$propertiesPath/application.properties"))
             databaseProperties
         } catch (e: IOException) {
             logger.error("Error when getting connection", e)
-            throw DatabaseException("")
+            throw IOException("Er is iets fout gegaan met het initialiseren van de databaseconnectie", e)
         }
     }
 
