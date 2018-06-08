@@ -9,8 +9,8 @@ package nl.han.ica.examplatform.models
  * @param moreInfo [String] Url to site which has more information about the error
  */
 data class ErrorInfo(
-    val developerMessage: String,
-    val userMessage: String,
-    val errorCode: String? = null,
-    val moreInfo: String? = null
-)
+        val developerMessage: String,
+        val userMessage: String,
+        val errorCode: String? = null,
+        val moreInfo: String? = null
+) : Any()

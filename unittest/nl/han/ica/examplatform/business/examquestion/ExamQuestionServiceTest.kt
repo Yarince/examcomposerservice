@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.business.examquestion
 
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
+import nl.han.ica.examplatform.controllers.exam.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
