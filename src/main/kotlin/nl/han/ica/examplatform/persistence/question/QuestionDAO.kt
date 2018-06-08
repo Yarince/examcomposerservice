@@ -321,8 +321,6 @@ class QuestionDAO : IQuestionDAO {
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
 
-        if (questions.isEmpty()) throw DatabaseException("No questions found for exam with ID: $examId.")
-
         return questions
     }
 
