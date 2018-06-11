@@ -4,37 +4,38 @@ import poc.models.Question
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-    simulateResults(5, 123)
+    simulateResults(5, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
 }
 
-private fun simulateResults(amountOfResults: Int, studentNr: Int, iterator: Int = 0, questionsNotAnswered: ArrayList<Question> = ArrayList(), questionsAnswered: ArrayList<Question> = ArrayList()) {
+private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, iterator: Int = 0, questionsAnswered: ArrayList<Question> = ArrayList(), previousResults: ArrayList<Results> = ArrayList()) {
     if (iterator == amountOfResults) return
 
     // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
-    val exam = generateExam(1, 123, questionsNotAnswered, questionsAnswered)
+    val exam = generateExam(previousResults,1, 123, questionsNotAnswered, questionsAnswered)
     // Simulate results
     val results = simulateCorrectAndFalseAnswers(exam, studentNr, iterator)
+    previousResults.add(results)
 
     // Add questions to answered list
-    questionsAnswered.plus(results)
+    val newQuestionsAnswered = questionsAnswered.plus(results.questions)
 
     // Remove just answered questions from list
-    questionsNotAnswered.removeIf { questionsAnswered.contains(it) }
+    // Solution for remove????
+    questionsNotAnswered.removeIf { r -> newQuestionsAnswered.any { it.questionId == r.questionId } }
 
-    simulateResults(amountOfResults, studentNr, iterator + 1, questionsNotAnswered, questionsAnswered)
+    simulateResults(amountOfResults, studentNr, questionsNotAnswered, iterator + 1, newQuestionsAnswered.toCollection(arrayListOf()), previousResults)
 }
 
 private fun simulateCorrectAndFalseAnswers(questions: ArrayList<Question>, studentNr: Int, examId: Int): Results {
-    val questionResults = questions.map { QuestionResult(questionId = it.questionId, categories = it.categories, resultWasGood = ThreadLocalRandom.current().nextBoolean()) }.toTypedArray()
+    val questionResults = questions.map { Question(questionId = it.questionId, categories = it.categories, wasCorrect = ThreadLocalRandom.current().nextBoolean(), questionText = it.questionText, type = it.type) }.toTypedArray()
     return Results(examId, studentNr, questionResults)
 }
 
-internal fun generateExam(courseId: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, questionsAnswered: ArrayList<Question>): ArrayList<Question> {
-    val questionsNotAnsweredUpdated: Array<Question> = if (questionsAnswered.isEmpty()) loadQuestions(courseId, studentNr, "questionBankNotAnswered") else questionsNotAnswered.toTypedArray()
+internal fun generateExam(previousResults: ArrayList<Results>, courseId: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, questionsAnswered: ArrayList<Question>): ArrayList<Question> {
 
-    val ratedCategories = categoriesWithRelevancePercentages(studentNr).toList()
+    val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults).toList()
     ratedCategories.forEach { println(it) }
-    val exam = addQuestionToExam(studentNr, questionsNotAnsweredUpdated.toCollection(arrayListOf()), questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
+    val exam = addQuestionToExam(studentNr, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
     exam.forEach { println(it) }
     return exam
 }

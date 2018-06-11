@@ -5,7 +5,9 @@
     "questions": [
       {
         "questionId": 1,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM",
           "NOG IETS",
@@ -14,7 +16,9 @@
       },
       {
         "questionId": 2,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM",
           "ONDERWERP2"
@@ -22,63 +26,81 @@
       },
       {
         "questionId": 3,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 4,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 5,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 6,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 7,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 8,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 9,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 10,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 11,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
@@ -91,77 +113,99 @@
     "questions": [
       {
         "questionId": 2,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 3,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 4,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 5,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 6,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 7,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 8,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 9,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 10,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "DCAR"
         ]
       },
       {
         "questionId": 11,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 12,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
@@ -174,77 +218,99 @@
     "questions": [
       {
         "questionId": 3,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 4,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 5,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 6,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 7,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 8,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 9,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 10,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 11,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 12,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 13,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
@@ -257,77 +323,99 @@
     "questions": [
       {
         "questionId": 4,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 5,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 6,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 7,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 8,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 9,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 10,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 11,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 12,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 13,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 14,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
@@ -340,77 +428,99 @@
     "questions": [
       {
         "questionId": 5,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 6,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 7,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 8,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 9,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 10,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 11,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 12,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 13,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 14,
-        "resultWasGood": false,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": false,
         "categories": [
           "ATAM"
         ]
       },
       {
         "questionId": 15,
-        "resultWasGood": true,
+        "questionText": "text",
+        "type": "OpenQuestion",
+        "wasCorrect": true,
         "categories": [
           "ATAM"
         ]

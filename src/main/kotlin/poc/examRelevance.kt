@@ -2,6 +2,7 @@ package poc
 
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
+import poc.models.Question
 import java.io.FileReader
 import kotlin.math.pow
 
@@ -11,7 +12,7 @@ internal fun loadQuestions(): Array<Results> {
     return Gson().fromJson(reader, Array<Results>::class.java)
 }
 
-data class Results(val examId: Int, val studentNr: Int, val questions: Array<QuestionResult>)
+data class Results(val examId: Int, val studentNr: Int, val questions: Array<Question>)
 data class QuestionResult(val questionId: Int, val categories: Array<String>, val resultWasGood: Boolean)
 //TODO add Questions ArrayList
 data class PracticeExam(val examId: Int, val studentNr: Int, val name: String, val courseId: Int)
@@ -20,7 +21,7 @@ data class PracticeExam(val examId: Int, val studentNr: Int, val name: String, v
 
 //Step 1
 internal fun checkIfStudentCompletedOtherPracticeExams(studentNr: Int): Boolean {
-    var data: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
+    val data: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
     for (examens in data) {
         if (examens.studentNr == studentNr)
             return true
@@ -30,12 +31,11 @@ internal fun checkIfStudentCompletedOtherPracticeExams(studentNr: Int): Boolean 
 //=========================================================================================================================================================================
 
 // Step 2
-internal fun fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr: Int): ArrayList<Pair<Int, Double>> {
-    var data: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
-    var practiceExamsOfAStudentPairedWithTheirWeightingAscending: ArrayList<Pair<Int, Double>> = ArrayList()
-    for (oefentoetsen in data) {
+internal fun fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr: Int, results: ArrayList<Results>): ArrayList<Pair<Int, Double>> {
+    val practiceExamsOfAStudentPairedWithTheirWeightingAscending: ArrayList<Pair<Int, Double>> = ArrayList()
+    for (oefentoetsen in results) {
         if (oefentoetsen.studentNr == studentNr) {
-            practiceExamsOfAStudentPairedWithTheirWeightingAscending.add(Pair(oefentoetsen.examId, calculateRelevanceOfPracticeExam(amountOfPracticeExamsOfAStudent(oefentoetsen.studentNr, data), data.indexOf(oefentoetsen) + 1)))
+            practiceExamsOfAStudentPairedWithTheirWeightingAscending.add(Pair(oefentoetsen.examId, calculateRelevanceOfPracticeExam(amountOfPracticeExamsOfAStudent(oefentoetsen.studentNr, results), results.indexOf(oefentoetsen) + 1)))
         }
     }
     return practiceExamsOfAStudentPairedWithTheirWeightingAscending
