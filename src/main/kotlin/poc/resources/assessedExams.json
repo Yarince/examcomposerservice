@@ -9,8 +9,7 @@
         "type": "OpenQuestion",
         "wasCorrect": false,
         "categories": [
-          "ATAM",
-          "NOG IETS",
+          "QA",
           "DCAR"
         ]
       },
@@ -21,7 +20,7 @@
         "wasCorrect": true,
         "categories": [
           "ATAM",
-          "ONDERWERP2"
+          "ASR"
         ]
       },
       {
@@ -48,7 +47,7 @@
         "type": "OpenQuestion",
         "wasCorrect": false,
         "categories": [
-          "ATAM"
+          "ASR"
         ]
       },
       {
@@ -75,7 +74,7 @@
         "type": "OpenQuestion",
         "wasCorrect": true,
         "categories": [
-          "ATAM"
+          "QA"
         ]
       },
       {
@@ -84,7 +83,7 @@
         "type": "OpenQuestion",
         "wasCorrect": false,
         "categories": [
-          "DCAR"
+          "QA"
         ]
       },
       {

@@ -1,53 +1,74 @@
 package poc
 
+import nl.han.ica.examplatform.business.exam.addQuestionsToPracticeExam
 import poc.models.Question
+import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-    simulateResults(5, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
+    simulateResults(37, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
 }
 
 private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, iterator: Int = 0, questionsAnswered: ArrayList<Question> = ArrayList(), previousResults: ArrayList<Results> = ArrayList()) {
     if (iterator == amountOfResults) return
 
     // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
-    val exam = generateExam(previousResults,1, 123, questionsNotAnswered, questionsAnswered)
+    val exam = generateExam(previousResults, 1, 123, questionsNotAnswered, questionsAnswered)
     // Simulate results
     val results = simulateCorrectAndFalseAnswers(exam, studentNr, iterator)
+    println("Exam ${iterator + 1} results ------------------------")
+    for (question in results.questions) {
+        println(question)
+    }
     previousResults.add(results)
 
     // Add questions to answered list
-    val newQuestionsAnswered = questionsAnswered.plus(results.questions)
-
+    val newQuestionsAnswered = questionsAnswered.plus(results.questions).distinct()
     // Remove just answered questions from list
-    // Solution for remove????
     questionsNotAnswered.removeIf { r -> newQuestionsAnswered.any { it.questionId == r.questionId } }
 
+    Thread.sleep(100)
     simulateResults(amountOfResults, studentNr, questionsNotAnswered, iterator + 1, newQuestionsAnswered.toCollection(arrayListOf()), previousResults)
 }
 
 private fun simulateCorrectAndFalseAnswers(questions: ArrayList<Question>, studentNr: Int, examId: Int): Results {
-    val questionResults = questions.map { Question(questionId = it.questionId, categories = it.categories, wasCorrect = ThreadLocalRandom.current().nextBoolean(), questionText = it.questionText, type = it.type) }.toTypedArray()
+    val questionResults = questions.map { Question(questionId = it.questionId, categories = it.categories, wasCorrect = ThreadLocalRandom.current().nextBoolean(), questionText = it.questionText, type = it.type, answeredOn = Date()) }.toTypedArray()
     return Results(examId, studentNr, questionResults)
 }
 
 internal fun generateExam(previousResults: ArrayList<Results>, courseId: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, questionsAnswered: ArrayList<Question>): ArrayList<Question> {
+    return if (previousResults.isEmpty()) {
+        val convertedQuestions = questionsNotAnswered.map {
+            nl.han.ica.examplatform.models.question.Question(questionId = it.questionId,
+                    answerType = it.type, questionType = it.type, questionText = it.questionText,
+                    courseId = courseId, answerTypePluginVersion = "1", pluginVersion = "1",
+                    examType = it.type, categories = it.categories.toCollection(arrayListOf()))
+        }.toTypedArray()
 
-    val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults).toList()
-    ratedCategories.forEach { println(it) }
-    val exam = addQuestionToExam(studentNr, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
-    exam.forEach { println(it) }
-    return exam
+        val exam = addQuestionsToPracticeExam(convertedQuestions, convertedQuestions, listOf("ATAM", "DCAR", "ASR", "QA"))
+        exam.map {
+            Question(questionId = it.questionId ?: 0, questionText = it.questionText
+                    ?: "Not set", type = it.questionType, categories = it.categories.toTypedArray())
+        }.toCollection(arrayListOf())
+    } else {
+        val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults).toList()
+        ratedCategories.forEach { println(it) }
+        val exam = addQuestionToExam(studentNr, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
+        exam
+    }
 }
 
 private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Question>, alreadyAskedQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
     // Return if the category is not in the list with categories
-    if (!ratedCategories.contains(currentCategory)) return questionsInExam
+    if (!ratedCategories.contains(currentCategory))
+        return questionsInExam
     // Return if the prerequisites are met
-    if (checkIfExamCompliesToPrerequisites(questionsInExam, notYetAskedQuestions)) return questionsInExam
+    if (checkIfExamCompliesToPrerequisites(questionsInExam, notYetAskedQuestions))
+        return questionsInExam
 
     // If there are no questions available, it should be returned
-    if (ratedCategories.isEmpty()) return questionsInExam
+    if (ratedCategories.isEmpty())
+        return questionsInExam
 
     val ratedCategoriesWithoutEmptyQuestions = ratedCategories.toMutableList()
     if (questionOfCategoryWillBeAdded(currentCategory.second)) {
@@ -92,7 +113,7 @@ private fun questionOfCategoryWillBeAdded(chanceToGetAdded: Double): Boolean {
  * Checks if the exam has enough questions or meets other demands
  */
 private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQuestions: ArrayList<Question>): Boolean {
-    val thresholdForPercentage = 30
+    val thresholdForPercentage = 0
     val percentageOfQuestionsInExam = 0.33
     val maxAmountOfQuestionsInExam = if (allQuestions.size < thresholdForPercentage) (allQuestions.size * percentageOfQuestionsInExam).toInt() else 10
 
