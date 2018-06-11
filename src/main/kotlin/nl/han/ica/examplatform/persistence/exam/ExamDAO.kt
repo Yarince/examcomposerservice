@@ -1,8 +1,8 @@
 package nl.han.ica.examplatform.persistence.exam
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
-import nl.han.ica.examplatform.controllers.responseexceptions.ExamNotFoundException
+import nl.han.ica.examplatform.controllers.DatabaseException
+import nl.han.ica.examplatform.controllers.exam.ExamNotFoundException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
@@ -78,7 +78,8 @@ class ExamDAO : IExamDAO {
                 EXAM.EXAMTYPENAME,
                 EXAMNAME,
                 LOCATION,
-                INSTRUCTIONS
+                INSTRUCTIONS,
+                READYFORDOWNLOAD
             FROM EXAM
                 INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID
             WHERE EXAMID = ?
@@ -109,11 +110,12 @@ class ExamDAO : IExamDAO {
                     name = examRs.getString("ExamName"),
                     location = examRs.getString("Location"),
                     instructions = examRs.getString("Instructions"),
-                    questions = null
+                    questions = null,
+                    readyForDownload = examRs.getBoolean("READYFORDOWNLOAD")
             )
         } catch (e: SQLException) {
             logger.error("Error while getting exam $id", e)
-            throw DatabaseException("Error while interacting with the database")
+            throw DatabaseException("Error while interacting with the database", e)
         } finally {
             MySQLConnection.closeStatement(examStatement)
             MySQLConnection.closeConnection(conn)
@@ -142,8 +144,9 @@ class ExamDAO : IExamDAO {
                 ENDTIME,
                 INSTRUCTIONS,
                 EXAMVERSION,
-                LOCATION)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                LOCATION,
+                READYFORDOWNLOAD)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """.trimIndent()
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
@@ -156,6 +159,7 @@ class ExamDAO : IExamDAO {
         preparedStatement?.setString(7, exam.instructions)
         preparedStatement?.setInt(8, exam.version)
         preparedStatement?.setString(9, exam.location)
+        preparedStatement?.setBoolean(10, exam.readyForDownload ?: false)
 
         try {
             val insertedRows = preparedStatement?.executeUpdate()
@@ -226,5 +230,165 @@ class ExamDAO : IExamDAO {
     override fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam {
         // Not implemented in this branch, see other PR
         return PreparedExam(examId = 0, endTime = Date(), startTime = Date(), durationInMinutes = 10, name = "name", classes = arrayOf(), courseName = "APP", creator = "Uwe van Heesch", version = 1, examType = "OpenQuestion", questions = arrayListOf())
+    }
+
+    /**
+     * Updates the meta data of an exam.
+     *
+     * @param exam [Exam] The Exam to update
+     * @return [Exam] The updated exam
+     */
+    override fun updateExam(exam: Exam): Exam {
+        if (exam.examId == null) throw DatabaseException("Can't update exam when examId is not set")
+
+        val query = "UPDATE EXAM SET COURSEID = ?, EXAMTYPENAME = ?, EXAMNAME = ?, STARTTIME = ?, ENDTIME = ?, INSTRUCTIONS = ?, EXAMVERSION = ?, LOCATION = ? WHERE EXAMID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+        preparedStatement = conn?.prepareStatement(query)
+
+        preparedStatement?.setInt(1, exam.courseId)
+        preparedStatement?.setString(2, exam.examType)
+        preparedStatement?.setString(3, exam.name)
+        preparedStatement?.setDate(4, java.sql.Date(exam.startTime.time))
+        preparedStatement?.setDate(5, java.sql.Date(exam.endTime.time))
+        preparedStatement?.setString(6, exam.instructions)
+        preparedStatement?.setInt(7, exam.version)
+        preparedStatement?.setString(8, exam.location)
+        preparedStatement?.setInt(9, exam.examId)
+
+        try {
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam", e)
+            throw DatabaseException("Error while updating exam")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+        return exam
+    }
+
+    /**
+     * Changes the order of questions in an exam
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionsAndSequenceNumbers [Array]<[Pair]<[Int], [Int]>> An array containing the questionIds and the new sequence number
+     */
+    override fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>) {
+        if (questionsAndSequenceNumbers.size < 2)
+            throw DatabaseException("Can't change order if no or only 1 questions and sequencenumbers are provided")
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        var preparedStatement: PreparedStatement? = null
+
+        try {
+            val query = "UPDATE QUESTION_IN_EXAM SET SEQUENCENUMBER = ? WHERE QUESTIONID = ? AND EXAMID = ?"
+
+            for (pair in questionsAndSequenceNumbers) {
+                preparedStatement = conn?.prepareStatement(query)
+                preparedStatement?.setInt(1, pair.second)
+                preparedStatement?.setInt(2, pair.first)
+                preparedStatement?.setInt(3, examId)
+                preparedStatement?.executeUpdate()
+            }
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam", e)
+            throw DatabaseException("Error while updating exam")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+    }
+
+    /**
+     * Publishes an exam.
+     *
+     * @param examId [Int] The ID of the exam that should be published
+     */
+    override fun publishExam(examId: Int, shouldBePublished: Boolean) {
+        val query = "UPDATE EXAM SET READYFORDOWNLOAD = ? WHERE EXAMID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+        preparedStatement = conn?.prepareStatement(query)
+
+        preparedStatement?.setBoolean(1, shouldBePublished)
+        preparedStatement?.setInt(2, examId)
+
+        try {
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam $examId", e)
+            throw DatabaseException("Error while publishing exam $examId")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+    }
+
+    /**
+     * De-couples questions from an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
+     */
+    override fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>) {
+        var query = "DELETE FROM QUESTION_IN_EXAM WHERE EXAMID = ? AND QUESTIONID = ?"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+        val preparedStatement: PreparedStatement?
+
+        for (questionId in questionIds.copyOfRange(0, questionIds.size - 1)) {
+            query += " OR QUESTIONID = ?"
+        }
+
+        preparedStatement = conn?.prepareStatement(query)
+
+        try {
+            preparedStatement?.setInt(1, examId)
+            for ((i, questionId) in questionIds.withIndex()) {
+                preparedStatement?.setInt(i + 2, questionId)
+            }
+
+            preparedStatement?.executeUpdate()
+        } catch (e: SQLException) {
+            logger.error("Error while publishing exam $examId", e)
+            throw DatabaseException("Error while publishing exam $examId")
+        } finally {
+            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeConnection(conn)
+        }
+    }
+
+    /**
+     * Deletes an exam.
+     * This doesn't delete any questions.
+     *
+     * @param examId [Int] The ID of the exam that should be deleted
+     */
+    override fun deleteExam(examId: Int) {
+        val queries = arrayOf("DELETE FROM COMMENT_ON_QUESTION WHERE EXAMID = ?",
+                "DELETE FROM PARTIAL_ANSWER_IN_QUESTION_IN_EXAM WHERE EXAMID = ?",
+                "DELETE FROM GIVEN_ANSWER WHERE EXAMID = ?",
+                "DELETE FROM QUESTION_IN_EXAM WHERE EXAMID = ?",
+                "DELETE FROM EXAM WHERE EXAMID = ?"
+        )
+
+        val conn: Connection? = MySQLConnection.getConnection()
+
+        try {
+            for (query in queries) {
+                val preparedStatementExam = conn?.prepareStatement(query)
+                preparedStatementExam?.setInt(1, examId)
+                preparedStatementExam?.executeUpdate()
+                MySQLConnection.closeStatement(preparedStatementExam)
+            }
+        } catch (e: SQLException) {
+            logger.error("Error deleting exam $examId", e)
+            throw DatabaseException("Error while deleting exam $examId")
+        } finally {
+            MySQLConnection.closeConnection(conn)
+        }
     }
 }

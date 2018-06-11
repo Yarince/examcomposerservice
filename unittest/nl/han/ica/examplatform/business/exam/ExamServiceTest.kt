@@ -2,7 +2,7 @@ package nl.han.ica.examplatform.business.exam
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
+import nl.han.ica.examplatform.controllers.exam.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
@@ -62,7 +62,7 @@ internal class ExamServiceTest {
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
         val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = "Tentamen",
-                questions = arrayListOf(Question(questionType = "OpenQuestion", questionPoints = 1, examType = "Tentamen", pluginVersion = "1.0"))) // Faulty exam object
+                questions = arrayListOf(Question(questionType = "OpenQuestion", questionPoints = 1, examType = "Tentamen", pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1))) // Faulty exam object
         examService.checkExam(exam)
     }
 

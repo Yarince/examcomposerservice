@@ -11,6 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 public class Application implements WebMvcConfigurer {
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -20,8 +21,10 @@ public class Application implements WebMvcConfigurer {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**");
+                registry.addMapping("/**")
+                        .allowedMethods("GET", "POST", "DELETE", "PUT");
             }
         };
     }
+
 }

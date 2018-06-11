@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.examquestion
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidExamException
+import nl.han.ica.examplatform.controllers.exam.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
@@ -56,5 +56,30 @@ class ExamQuestionService(
         val updatedObject = examDAO.addQuestionsToExam(exam)
 
         return ResponseEntity(updatedObject, HttpStatus.ACCEPTED)
+    }
+
+    /**
+     * Changes the order of questions in an exam
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionsAndSequenceNumbers [Array]<[Pair]<[Int], [Int]>> An array containing the questionIds and the new sequence number
+     */
+    fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>) =
+            examDAO.changeQuestionOrderInExam(examId, questionsAndSequenceNumbers)
+
+    /**
+     * De-couples questions from an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
+     */
+    fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>) {
+        if (questionIds.isEmpty())
+            throw InvalidExamException("Can't remove any questions if no ID's are provided")
+
+        if (questionDAO.answersGivenOnQuestions(questionIds))
+            throw InvalidExamException("Can't remove questions if students gave answers to any of these.")
+
+        return examDAO.removeQuestionsFromExam(examId, questionIds)
     }
 }

@@ -112,6 +112,7 @@
         <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <testSourceDirectory>${project.basedir}/unittest/</testSourceDirectory>
         <plugins>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -212,7 +213,7 @@
 
                     <execution>
                         <id>ktlint</id>
-                        <phase>verify</phase>
+                        <!--<phase>verify</phase>-->
                         <configuration>
                             <target name="ktlint">
                                 <java taskname="ktlint" dir="${basedir}"
@@ -247,7 +248,7 @@
                     <execution>
                         <!-- This can be run separately with mvn antrun:run@detekt -->
                         <id>detekt</id>
-                        <phase>verify</phase>
+                        <!--<phase>verify</phase>-->
                         <configuration>
                             <target name="detekt">
                                 <java taskname="detekt" dir="${basedir}"

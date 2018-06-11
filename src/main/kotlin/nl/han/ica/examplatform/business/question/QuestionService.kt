@@ -1,7 +1,11 @@
 package nl.han.ica.examplatform.business.question
 
 import nl.han.ica.examplatform.config.logger.loggerFor
+import nl.han.ica.examplatform.controllers.DatabaseException
+import nl.han.ica.examplatform.controllers.question.CategoriesDontExistException
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.category.CategoryDAO
+import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
@@ -12,9 +16,12 @@ import org.springframework.stereotype.Service
  * Question service for handling requests related to the [Question] model.
  *
  * @param questionDAO [QuestionDAO] The QuestionDAO
+ * @param categoryDAO [CategoryDAO] The CategoryDAO
  */
 @Service
-class QuestionService(private val questionDAO: IQuestionDAO) {
+class QuestionService(
+        private val questionDAO: IQuestionDAO,
+        private val categoryDAO: ICategoryDAO) {
 
     private val logger = loggerFor(javaClass)
 
@@ -26,6 +33,10 @@ class QuestionService(private val questionDAO: IQuestionDAO) {
      */
     fun addQuestion(question: Question): ResponseEntity<Question> =
             try {
+                if (question.categories.isNotEmpty())
+                    if (!categoryDAO.checkIfCategoriesExist(getAllCategoriesInQuestionAndSubQuestions(question)))
+                        throw CategoriesDontExistException("Categories don't exist")
+
                 val insertedQuestion = questionDAO.insertQuestion(question)
                 question.subQuestions?.let {
                     if (insertedQuestion.questionId == null) return@let
@@ -33,16 +44,23 @@ class QuestionService(private val questionDAO: IQuestionDAO) {
                         addSubQuestions(it, insertedQuestion.questionId)
                     }
                 }
-                ResponseEntity(insertedQuestion, HttpStatus.CREATED)
-            } catch (exception: Exception) {
-                logger.error("Couldn't insert question: ${question.questionText}")
-                ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-            }
 
+                insertedQuestion.questionId?.let {
+                    categoryDAO.addCategoriesToQuestion(question.categories, it)
+                }
+
+                ResponseEntity(insertedQuestion, HttpStatus.CREATED)
+            } catch (e: DatabaseException) {
+                val message = "Couldn't insert question: ${question.questionText}"
+                logger.error(message, e)
+                throw QuestionNotInsertedException(message, e)
+            }
 
     private fun addSubQuestions(question: Question, parentQuestionId: Int) {
         val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)
-
+        insertedQuestion.questionId?.let {
+            categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
+        }
         if (insertedQuestion.questionId == null) return
         if (question.subQuestions == null) return
         if (question.subQuestions.isEmpty()) return
@@ -50,6 +68,26 @@ class QuestionService(private val questionDAO: IQuestionDAO) {
         question.subQuestions.forEach {
             addSubQuestions(it, insertedQuestion.questionId)
         }
+    }
+
+    private fun getAllCategoriesInQuestionAndSubQuestions(
+            question: Question,
+            allCategories: ArrayList<String> = ArrayList()
+    ): ArrayList<String> {
+        for (category in question.categories)
+            if (!allCategories.contains(category))
+                allCategories.add(category)
+
+        if (question.subQuestions == null)
+            return allCategories
+
+        if (question.subQuestions.isEmpty())
+            return allCategories
+
+
+        question.subQuestions.forEach { return getAllCategoriesInQuestionAndSubQuestions(it, allCategories) }
+
+        return allCategories
     }
 
     /**
@@ -67,5 +105,14 @@ class QuestionService(private val questionDAO: IQuestionDAO) {
      * @param questionId [Int] ID of the question that you want retrieved.
      * @return [ResponseEntity]<[Question]> The question.
      */
-    fun getQuestionForId(questionId: Int): ResponseEntity<Question> = ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
+    fun getQuestionForId(questionId: Int): ResponseEntity<Question> =
+            ResponseEntity(questionDAO.getQuestionById(questionId), HttpStatus.OK)
+
+    /**
+     * Updates a question.
+     *
+     * @param question [Question] Question that should be updated.
+     * @return [Question] The updated question
+     */
+    fun updateQuestion(question: Question) = ResponseEntity(questionDAO.updateQuestion(question), HttpStatus.ACCEPTED)
 }

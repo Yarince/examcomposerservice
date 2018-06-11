@@ -4,8 +4,7 @@ import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
-import nl.han.ica.examplatform.persistence.question.QuestionDAO
-import java.util.concurrent.ThreadLocalRandom
+import java.util.concurrent.*
 
 /**
  * Generates a practice exam based on course and categories
@@ -46,7 +45,7 @@ private fun addQuestionsToPracticeExam(questions: Array<Question>, strippedQuest
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
 
-    subjectsAvailable.elementAtOrElse(iterator, { return exam }) // todo: create exception for this
+    subjectsAvailable.elementAtOrElse(iterator, { return exam })
     // get questions grouped in current category
 
     currentSubjectList = strippedQuestions.filter { it.categories.contains(subjectsAvailable[iterator]) }

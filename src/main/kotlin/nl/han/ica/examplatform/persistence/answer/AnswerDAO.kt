@@ -1,9 +1,8 @@
 package nl.han.ica.examplatform.persistence.answer
 
 import nl.han.ica.examplatform.config.logger.loggerFor
-import nl.han.ica.examplatform.controllers.responseexceptions.DatabaseException
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
-import nl.han.ica.examplatform.controllers.responseexceptions.QuestionNotFoundException
+import nl.han.ica.examplatform.controllers.DatabaseException
+import nl.han.ica.examplatform.controllers.question.QuestionNotFoundException
 import nl.han.ica.examplatform.models.answermodel.AnswerModel
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
@@ -66,7 +65,7 @@ class AnswerDAO : IAnswerDAO {
      */
     override fun addOrUpdateAnswerInQuestionInExam(answer: Answer, examId: Int) {
         if (answer.partialAnswers == null || answer.partialAnswers.size < 1)
-            throw InvalidAnswerException("Please provide partialAnswers to for question")
+            throw DatabaseException("Please provide partialAnswers to for question")
 
         val paInQeQuery = "INSERT INTO PARTIAL_ANSWER_IN_QUESTION_IN_EXAM (PARTIALANSWERID, QUESTIONID, EXAMID, POINTS) value (?,?,?,?) on DUPLICATE KEY UPDATE POINTS = ?"
 
@@ -76,7 +75,7 @@ class AnswerDAO : IAnswerDAO {
         for (partialAnswer in answer.partialAnswers) {
 
             preparedStatement?.setInt(1, partialAnswer.partialAnswerId
-                    ?: throw InvalidAnswerException("PartialAnswerId is not set"))
+                    ?: throw DatabaseException("PartialAnswerId is not set"))
 
             preparedStatement?.setInt(2, answer.questionId)
 

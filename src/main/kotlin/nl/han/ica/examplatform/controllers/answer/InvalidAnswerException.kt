@@ -1,6 +1,4 @@
-package nl.han.ica.examplatform.controllers.responseexceptions
-
-import nl.han.ica.examplatform.models.answermodel.answer.Answer
+package nl.han.ica.examplatform.controllers.answer
 
 /**
  * Exception thrown when there is an invalid [Answer] submitted.

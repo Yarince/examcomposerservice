@@ -4,7 +4,6 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
-import org.springframework.http.ResponseEntity
 
 /**
  * This class handles all the Database operations for [Exam].
@@ -47,7 +46,47 @@ interface IExamDAO {
      *
      * @param examId [Int] the ID of the exam
      * @param classes [Array]<[String]> an array containing classes
-     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes
+     * @return [PreparedExam] the exam containing the added classes
      */
     fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam
+
+    /**
+     * Changes the order of questions in an exam
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionsAndSequenceNumbers [Array]<[Pair]<[Int], [Int]>> An array containing the questionIds and the new sequence number
+     */
+    fun changeQuestionOrderInExam(examId: Int, questionsAndSequenceNumbers: Array<Pair<Int, Int>>)
+
+    /**
+     * Publishes an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param shouldBePublished [Boolean] Indicates whether the exam should be published or un-published
+     */
+    fun publishExam(examId: Int, shouldBePublished: Boolean)
+
+    /**
+     * Updates the meta data of an exam.
+     *
+     * @param exam [Exam] The Exam to update
+     * @return [Exam] The updated exam
+     */
+    fun updateExam(exam: Exam): Exam
+
+    /**
+     * De-couples questions from an exam.
+     *
+     * @param examId [Int] The ID of the exam
+     * @param questionIds [Array]<[Int]> Array containing the IDs of the questions that should be removed
+     */
+    fun removeQuestionsFromExam(examId: Int, questionIds: Array<Int>)
+
+    /**
+     * Deletes an exam.
+     * This doesn't delete any questions.
+     *
+     * @param examId [Int] The ID of the exam that should be deleted
+     */
+    fun deleteExam(examId: Int)
 }

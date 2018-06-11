@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.models.exam
 
-import java.util.Arrays
+import java.util.*
 
 /**
  * Request body for generating practice exam.

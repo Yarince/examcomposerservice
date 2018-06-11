@@ -1,8 +1,8 @@
 package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
-import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
+import nl.han.ica.examplatform.models.exam.Exam
 
 /**
  * Represents a question that can be asked in a [Exam].
@@ -16,6 +16,8 @@ import nl.han.ica.examplatform.models.answermodel.answer.Answer
  * @param questionPoints [Int] The amount of point the question is worth
  * @param courseId [Int] The ID of the course the question is for
  * @param examType [String] The type of exam the question is for
+ * @param answerType [String] The type of answer expected
+ * @param answerTypePluginVersion [String] The version of the answer type plugin
  * @param pluginVersion [String] The version of the plugin used as question type
  * @param categories [ArrayList]<[String]> The list of categories of this question
  * @param subQuestions [Array]<[Question]> List of questions that represent one larger question
@@ -25,7 +27,7 @@ data class Question(
         val questionId: Int? = null,
         @ApiModelProperty(notes = "Order of question in an Exam")
         val questionOrderInExam: Int? = null,
-        @ApiModelProperty(notes = "Text of order in exam text. Example: \"Question 1\" or \"a\"", required = true)
+        @ApiModelProperty(notes = """Text of order in exam text. Example: "Question 1" or "a"""")
         val questionOrderText: String? = null,
         @ApiModelProperty(notes = "This is the name of the plugin used, e.g. OpenQuestion", required = true)
         val questionType: String,
@@ -33,10 +35,14 @@ data class Question(
         val questionText: String? = null,
         @ApiModelProperty(notes = "Points assigned to a question in an Exam")
         val questionPoints: Int? = null,
-        @ApiModelProperty(notes = "ID of the course")
-        val courseId: Int? = null,
-        @ApiModelProperty(notes = "Type of exam the question is for.")
+        @ApiModelProperty(notes = "ID of the course", required = true)
+        val courseId: Int,
+        @ApiModelProperty(notes = "Type of exam the question is for", required = true)
         val examType: String,
+        @ApiModelProperty(notes = "The type of answer expected", required = true)
+        val answerType: String,
+        @ApiModelProperty(notes = "The version of the answer type plugin", required = true)
+        val answerTypePluginVersion: String,
         @ApiModelProperty(notes = "The version of the plugin used as questionType. References plugin version in database.", required = true)
         val pluginVersion: String,
         @ApiModelProperty(notes = "The categories that this question is about")

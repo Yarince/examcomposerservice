@@ -54,4 +54,20 @@ interface IQuestionDAO {
      * @return [Question] Question corresponding to the ID.
      */
     fun getQuestionById(questionId: Int): Question
+
+    /**
+     * Updates a question.
+     *
+     * @param question [Question] Question that should be updated.
+     * @return [Question] The updated question
+     */
+    fun updateQuestion(question: Question): Question
+
+    /**
+     * Check if question is answered by students.
+     *
+     * @param questionIds [Array]<[Int]> The IDs of the questions
+     * @return [Boolean] true if any of them have been answered, otherwise false
+     */
+    fun answersGivenOnQuestions(questionIds: Array<Int>): Boolean
 }
