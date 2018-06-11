@@ -5,49 +5,14 @@ import com.google.gson.stream.JsonReader
 import java.io.FileReader
 import kotlin.math.pow
 
-
-fun main(args: Array<String>) {
-}
-
-internal fun categoriesWithRelevancePercentages(studentNr: Int) : MutableMap<String, Double>{
-    val results: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
-    val dataPairs: ArrayList<Pair<Int, Double>> = fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr)
-    dataPairs.forEach { println(it) }
-
-    val categories = results.map { r -> r.questions.map { q -> q.categories }.reduce { acc, list -> acc.plus(list) } }.reduce { acc, list -> acc.plus(list) }.distinct()
-
-    val mapOfCategoriesAndTheirRelevancePercentages = mutableMapOf<String, Double>()
-    for (result in results) {
-        if (result.studentNr != studentNr) break
-        for (category in categories) {
-            val toetsVragen = result.questions.filter { it.categories.contains(category) }
-            if (toetsVragen.isEmpty())
-                break
-
-            val practiceExamQuestionsGoodOrFalse = toetsVragen.map { q -> if (q.resultWasGood) 0.0 else 100.0 }.reduce { acc, i -> acc + i }
-            val percentageGoodQuestions = practiceExamQuestionsGoodOrFalse / toetsVragen.size
-            val huidigeToetsPercentage = dataPairs.find { it.first == result.examId }
-            val reducedPercentage = (percentageGoodQuestions * huidigeToetsPercentage!!.second) / 100
-            if (mapOfCategoriesAndTheirRelevancePercentages.containsKey(category)) {
-                mapOfCategoriesAndTheirRelevancePercentages[category] = mapOfCategoriesAndTheirRelevancePercentages[category]!! + reducedPercentage
-            } else {
-                mapOfCategoriesAndTheirRelevancePercentages[category] = reducedPercentage
-            }
-        }
-    }
-
-    return mapOfCategoriesAndTheirRelevancePercentages
-}
-
 internal fun loadQuestions(): Array<Results> {
     // Here the db should do some stuff in the real implementation
-    val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/data.json"))
+    val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/assessedExams.json"))
     return Gson().fromJson(reader, Array<Results>::class.java)
 }
 
 data class Results(val examId: Int, val studentNr: Int, val questions: Array<QuestionResult>)
 data class QuestionResult(val questionId: Int, val categories: Array<String>, val resultWasGood: Boolean)
-
 //TODO add Questions ArrayList
 data class PracticeExam(val examId: Int, val studentNr: Int, val name: String, val courseId: Int)
 

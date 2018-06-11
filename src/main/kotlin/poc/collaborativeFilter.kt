@@ -11,6 +11,7 @@ import poc.models.Question
  */
 internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>): Question? {
     val assessedQuestionsOfOthers = loadResultsOfOthers(category)
+    // todo: If there are questions available that no one has answered before, add one of those instead
 
     // Filter questions to only contain current category
     val questionIdsOfCategory = questions.filter { it.categories.contains(category) }.map { it.questionId }
