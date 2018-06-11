@@ -46,5 +46,5 @@ data class Exam(
         @ApiModelProperty(notes = "The questions in the exam")
         val questions: ArrayList<Question>? = null,
         @ApiModelProperty(notes = "Codes to be able to decrypt exam files")
-        val decryptionCodes: String
+        val decryptionCodes: String? = null
 )
