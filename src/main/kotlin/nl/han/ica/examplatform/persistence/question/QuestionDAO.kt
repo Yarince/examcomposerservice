@@ -119,38 +119,36 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlQuestionQuery = """
             SELECT distinct
-                Q.QUESTIONID,
-                QE.SEQUENCENUMBER,
-                QE.QUESTIONID,
+                QUESTIONID,
+                SEQUENCENUMBER,
+                QUESTIONID,
                 QUESTIONTYPE,
                 QUESTIONTEXT,
-                QUESTIONPOINTS,
                 COURSEID,
                 EXAMTYPENAME,
                 PLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
-            FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
+            FROM QUESTION
             WHERE
                 COURSEID = ? and PARENTQUESTIONID is null;"""
 
         val sqlSubQuestionQuery = """
             SELECT
-                Q.QUESTIONID,
-                QE.SEQUENCENUMBER,
-                QE.QUESTIONID,
+                QUESTIONID,
+                SEQUENCENUMBER,
+                QUESTIONID,
                 QUESTIONTYPE,
                 QUESTIONTEXT,
-                QUESTIONPOINTS,
                 COURSEID,
                 EXAMTYPENAME,
                 PLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
-            FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
+            FROM QUESTION
             WHERE PARENTQUESTIONID = ?;"""
 
-        var questions = ArrayList<Question>()
+        val questions: ArrayList<Question>
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
             preparedQuestionStatement?.setInt(1, courseId)
@@ -242,7 +240,7 @@ class QuestionDAO : IQuestionDAO {
                         questionText = questionRs.getString("QuestionText"),
                         examType = questionRs.getString("EXAMTYPENAME"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QuestionID"), conn),
-                        subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery),
+                        subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery),
                         pluginVersion = questionRs.getString("PLUGINVERSION"),
                         courseId = questionRs.getInt("COURSEID"),
                         answerType = questionRs.getString("ANSWERTYPE"),
@@ -310,7 +308,7 @@ class QuestionDAO : IQuestionDAO {
             preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
             preparedQuestionStatement?.setInt(1, examId)
 
-            questions = initQuestionsByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
+            questions = initQuestionsInExamByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
 
         } catch (e: SQLException) {
             val message = "Question could not be retrieved from the database."
@@ -318,6 +316,50 @@ class QuestionDAO : IQuestionDAO {
             throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(conn)
+            MySQLConnection.closeStatement(preparedQuestionStatement)
+        }
+
+        return questions
+    }
+
+    private fun initQuestionsInExamByResultSet(preparedQuestionStatement: PreparedStatement?, sqlSubQuestionQuery: String, conn: Connection?): ArrayList<Question> {
+        val questions = ArrayList<Question>()
+        val questionRs = preparedQuestionStatement?.executeQuery()
+                ?: throw DatabaseException("Error while interacting with the database")
+
+        while (questionRs.next())
+            questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
+                    questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
+                    questionOrderText = questionRs.getString("SEQUENCENUMBER"),
+                    questionType = questionRs.getString("QUESTIONTYPE"),
+                    questionText = questionRs.getString("QUESTIONTEXT"),
+                    questionPoints = questionRs.getInt("QUESTIONPOINTS"),
+                    courseId = questionRs.getInt("COURSEID"),
+                    examType = questionRs.getString("EXAMTYPENAME"),
+                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
+                    subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
+                    pluginVersion = questionRs.getString("PLUGINVERSION"),
+                    answerType = questionRs.getString("ANSWERTYPE"),
+                    answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION")
+            ))
+        return questions
+    }
+
+    private fun getSubQuestionsInExamOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String): ArrayList<Question>? {
+        var preparedQuestionStatement: PreparedStatement? = null
+        val questions: ArrayList<Question>
+
+        try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlSubQuestionQuery)
+            preparedQuestionStatement?.setInt(1, questionId)
+
+            questions = initQuestionsInExamByResultSet(preparedQuestionStatement, sqlSubQuestionQuery, conn)
+
+        } catch (e: SQLException) {
+            val message = "Subquestions"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
+        } finally {
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
 
@@ -332,10 +374,9 @@ class QuestionDAO : IQuestionDAO {
         while (questionRs.next())
             questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
                     questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                    questionOrderText = questionRs.getString("SEQUENCENUMBER"),
+                    questionOrderText = "Vraag", // To be removed
                     questionType = questionRs.getString("QUESTIONTYPE"),
                     questionText = questionRs.getString("QUESTIONTEXT"),
-                    questionPoints = questionRs.getInt("QUESTIONPOINTS"),
                     courseId = questionRs.getInt("COURSEID"),
                     examType = questionRs.getString("EXAMTYPENAME"),
                     categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
@@ -391,8 +432,6 @@ class QuestionDAO : IQuestionDAO {
             MySQLConnection.closeStatement(preparedQuestionCategoryStatement)
         }
 
-        if (categories.isEmpty()) throw DatabaseException("No categories found for $questionId")
-
         return categories
     }
 
@@ -409,34 +448,32 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlQuestionQuery = """
                 SELECT distinct
-                    Q.QUESTIONID,
-                    QE.SEQUENCENUMBER,
-                    QE.QUESTIONID,
+                    QUESTIONID,
+                    SEQUENCENUMBER,
+                    QUESTIONID,
                     QUESTIONTYPE,
                     QUESTIONTEXT,
-                    QUESTIONPOINTS,
                     COURSEID,
                     EXAMTYPENAME,
                     PLUGINVERSION,
                     ANSWERTYPE,
                     ANSWERTYPEPLUGINVERSION
-                FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
-                WHERE Q.QUESTIONID = ?;"""
+                FROM QUESTION
+                WHERE QUESTIONID = ?;"""
 
         val sqlSubQuestionQuery = """
             SELECT
-                Q.QUESTIONID,
-                QE.SEQUENCENUMBER,
-                QE.QUESTIONID,
+                QUESTIONID,
+                SEQUENCENUMBER,
+                QUESTIONID,
                 QUESTIONTYPE,
                 QUESTIONTEXT,
-                QUESTIONPOINTS,
                 COURSEID,
                 EXAMTYPENAME,
                 PLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
-            FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
+            FROM QUESTION
             WHERE PARENTQUESTIONID = ?;"""
 
         val questions: ArrayList<Question>
