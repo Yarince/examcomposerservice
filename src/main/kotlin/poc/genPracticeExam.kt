@@ -6,20 +6,24 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-    simulateResults(37, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
+    simulateResults(100, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
 }
 
 private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, iterator: Int = 0, questionsAnswered: ArrayList<Question> = ArrayList(), previousResults: ArrayList<Results> = ArrayList()) {
     if (iterator == amountOfResults) return
+    println("Exam ${iterator + 1} results ------------------------")
 
     // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
     val exam = generateExam(previousResults, 1, 123, questionsNotAnswered, questionsAnswered)
     // Simulate results
     val results = simulateCorrectAndFalseAnswers(exam, studentNr, iterator)
-    println("Exam ${iterator + 1} results ------------------------")
     for (question in results.questions) {
         println(question)
     }
+    // Limit to 10 previous results
+    if (previousResults.size > 10)
+        previousResults.removeAt(0)
+
     previousResults.add(results)
 
     // Add questions to answered list
@@ -27,7 +31,6 @@ private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAn
     // Remove just answered questions from list
     questionsNotAnswered.removeIf { r -> newQuestionsAnswered.any { it.questionId == r.questionId } }
 
-    Thread.sleep(100)
     simulateResults(amountOfResults, studentNr, questionsNotAnswered, iterator + 1, newQuestionsAnswered.toCollection(arrayListOf()), previousResults)
 }
 
@@ -51,10 +54,9 @@ internal fun generateExam(previousResults: ArrayList<Results>, courseId: Int, st
                     ?: "Not set", type = it.questionType, categories = it.categories.toTypedArray())
         }.toCollection(arrayListOf())
     } else {
-        val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults).toList()
+        val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults)
         ratedCategories.forEach { println(it) }
-        val exam = addQuestionToExam(studentNr, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
-        exam
+        addQuestionToExam(studentNr, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
     }
 }
 

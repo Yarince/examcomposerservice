@@ -1,8 +1,6 @@
 package poc
 
-internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayList<Results>): MutableMap<String, Double> {
-    if (results.isEmpty()) return mutableMapOf(Pair("ATAM", 100.0)) //todo all categories 100?
-
+internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayList<Results>): List<Pair<String, Double>> {
     val dataPairs: ArrayList<Pair<Int, Double>> = fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr, results)
 
     val categories = results.map { r -> r.questions.map { q -> q.categories }.reduce { acc, list -> acc.plus(list) } }.reduce { acc, list -> acc.plus(list) }.distinct()
@@ -26,6 +24,14 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayLi
             }
         }
     }
+
     mapOfCategoriesAndTheirRelevancePercentages.forEach { if (it.value == 0.0) mapOfCategoriesAndTheirRelevancePercentages[it.key] = 10.0 }
-    return mapOfCategoriesAndTheirRelevancePercentages.toList().sortedBy { it.second }.toMap().toMutableMap()
+    var sorted = mapOfCategoriesAndTheirRelevancePercentages.toList().sortedBy { it.second }
+
+    if (sorted.last().second <= 50.0) {
+        val multiplier = 100 / sorted.last().second
+        sorted = sorted.map { Pair(it.first, it.second * multiplier) }
+    }
+
+    return sorted
 }
