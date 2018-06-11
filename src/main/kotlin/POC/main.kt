@@ -9,7 +9,7 @@ import kotlin.math.pow
 fun main(args: Array<String>) {
 }
 
-internal fun categoriesWithRelevancePercentages(studentNr: Int) : MutableMap<String, Double>{
+internal fun categoriesWithRelevancePercentages(studentNr: Int) : ArrayList<Pair<String, Double>> {
     val results: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
     val dataPairs: ArrayList<Pair<Int, Double>> = fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr)
     dataPairs.forEach { println(it) }
@@ -36,7 +36,13 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int) : MutableMap<Str
         }
     }
 
-    return mapOfCategoriesAndTheirRelevancePercentages
+    return ArrayList(toListOfMaps(mapOfCategoriesAndTheirRelevancePercentages))
+}
+
+fun toListOfMaps(map: Map<String, Double>): List<Pair<String, Double>> {
+    return map.map { (number, answer) ->
+        Pair(number, answer)
+    }
 }
 
 internal fun loadQuestions(): Array<Results> {
