@@ -1,20 +1,41 @@
 package poc
 
-import kotlin.coroutines.experimental.*
 import poc.models.Question
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-    generateExam(1, 123)
+    simulateResults()
 }
 
-fun generateExam(courseId: Int, studentNr: Int) {
+private fun simulateResults(iterator: Int = 0, questionsNotAnswered: ArrayList<Question> = ArrayList(), questionsAnswered: ArrayList<Question> = ArrayList()) {
+    if (iterator == 5) return
+
+    // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
+    val exam = generateExam(1, 123)//, questionsNotAnswered, questionsAnswered)
+    // Simulate results
+    val results = simulateResults(exam)
+
+    // Add questions to answered list
+    questionsAnswered.plus(results)
+
+    // Remove just answered questions from list
+    questionsNotAnswered.removeIf { questionsAnswered.contains(it) }
+
+    simulateResults(iterator + 1, questionsNotAnswered, questionsAnswered)
+}
+
+private fun simulateResults(questions: ArrayList<Question>): Results {
+    return Results(1, 1, arrayOf())
+}
+
+internal fun generateExam(courseId: Int, studentNr: Int): ArrayList<Question> {
     val questions = loadQuestions(courseId, studentNr, "questionBankNotAnswered")
     val alreadyAskedQuestions = loadQuestions(courseId, studentNr, "questionsAnswered")
     val ratedCategories = categoriesWithRelevancePercentages(studentNr).toList()
     ratedCategories.forEach { println(it) }
     val exam = addQuestionToExam(studentNr, questions.toCollection(arrayListOf()), alreadyAskedQuestions.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
     exam.forEach { println(it) }
+    return exam
 }
 
 private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Question>, alreadyAskedQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
