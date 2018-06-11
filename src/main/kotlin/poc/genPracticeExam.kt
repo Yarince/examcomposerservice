@@ -4,16 +4,16 @@ import poc.models.Question
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-    simulateResults()
+    simulateResults(5, 123)
 }
 
-private fun simulateResults(iterator: Int = 0, questionsNotAnswered: ArrayList<Question> = ArrayList(), questionsAnswered: ArrayList<Question> = ArrayList()) {
-    if (iterator == 5) return
+private fun simulateResults(amountOfResults: Int, studentNr: Int, iterator: Int = 0, questionsNotAnswered: ArrayList<Question> = ArrayList(), questionsAnswered: ArrayList<Question> = ArrayList()) {
+    if (iterator == amountOfResults) return
 
     // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
-    val exam = generateExam(1, 123)//, questionsNotAnswered, questionsAnswered)
+    val exam = generateExam(1, 123, questionsNotAnswered, questionsAnswered)
     // Simulate results
-    val results = simulateResults(exam)
+    val results = simulateCorrectAndFalseAnswers(exam, studentNr, iterator)
 
     // Add questions to answered list
     questionsAnswered.plus(results)
@@ -21,19 +21,20 @@ private fun simulateResults(iterator: Int = 0, questionsNotAnswered: ArrayList<Q
     // Remove just answered questions from list
     questionsNotAnswered.removeIf { questionsAnswered.contains(it) }
 
-    simulateResults(iterator + 1, questionsNotAnswered, questionsAnswered)
+    simulateResults(amountOfResults, studentNr, iterator + 1, questionsNotAnswered, questionsAnswered)
 }
 
-private fun simulateResults(questions: ArrayList<Question>): Results {
-    return Results(1, 1, arrayOf())
+private fun simulateCorrectAndFalseAnswers(questions: ArrayList<Question>, studentNr: Int, examId: Int): Results {
+    val questionResults = questions.map { QuestionResult(questionId = it.questionId, categories = it.categories, resultWasGood = ThreadLocalRandom.current().nextBoolean()) }.toTypedArray()
+    return Results(examId, studentNr, questionResults)
 }
 
-internal fun generateExam(courseId: Int, studentNr: Int): ArrayList<Question> {
-    val questions = loadQuestions(courseId, studentNr, "questionBankNotAnswered")
-    val alreadyAskedQuestions = loadQuestions(courseId, studentNr, "questionsAnswered")
+internal fun generateExam(courseId: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, questionsAnswered: ArrayList<Question>): ArrayList<Question> {
+    val questionsNotAnsweredUpdated: Array<Question> = if (questionsAnswered.isEmpty()) loadQuestions(courseId, studentNr, "questionBankNotAnswered") else questionsNotAnswered.toTypedArray()
+
     val ratedCategories = categoriesWithRelevancePercentages(studentNr).toList()
     ratedCategories.forEach { println(it) }
-    val exam = addQuestionToExam(studentNr, questions.toCollection(arrayListOf()), alreadyAskedQuestions.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
+    val exam = addQuestionToExam(studentNr, questionsNotAnsweredUpdated.toCollection(arrayListOf()), questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
     exam.forEach { println(it) }
     return exam
 }
@@ -56,8 +57,8 @@ private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Qu
             if (alreadyAskedQuestionsInCurrentCategory.isNotEmpty())
                 questionToAdd = getFirstAskedQuestion(alreadyAskedQuestionsInCurrentCategory, studentNr)
             else
-                // No assessed questions are available, and no already asked questions are available
-                // Thus, the category should be removed
+            // No assessed questions are available, and no already asked questions are available
+            // Thus, the category should be removed
                 ratedCategoriesWithoutEmptyQuestions.remove(currentCategory)
         }
 
@@ -68,7 +69,7 @@ private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Qu
 
     val indexOfCurrentCategory = ratedCategories.indexOf(currentCategory)
     val nextCategory = if (indexOfCurrentCategory == 0)
-        // go back to most relevant category
+    // go back to most relevant category
         ratedCategories.last()
     else
         ratedCategories[indexOfCurrentCategory - 1]
