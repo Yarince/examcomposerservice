@@ -40,7 +40,8 @@ internal class ExamServiceTest {
     fun testCheckExamEmptyId() {
         val exam = Exam(5, "name-0", 10, Date(6000), courseId = 1,
                 version = 1,
-                examType = "Tentamen") // Faulty exam object
+                examType = "Tentamen",
+                decryptionCodes = "1111111111111111") // Faulty exam object
 
         examService.checkExam(exam)
     }
@@ -62,19 +63,19 @@ internal class ExamServiceTest {
     @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
         val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = "Tentamen",
-                questions = arrayListOf(Question(questionType = "OpenQuestion", questionPoints = 1, examType = "Tentamen", pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1))) // Faulty exam object
+                questions = arrayListOf(Question(questionType = "OpenQuestion", questionPoints = 1, examType = "Tentamen", pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)), decryptionCodes = "1111111111111111") // Faulty exam object
         examService.checkExam(exam)
     }
 
     @Test
     fun testCheckExamNoException() {
-        val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = "Tentamen")
+        val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = "Tentamen", decryptionCodes = "1111111111111111")
         examService.checkExam(exam)
     }
 
     @Test
     fun testAddExam() {
-        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = "Tentamen")
+        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = "Tentamen", decryptionCodes = "1111111111111111")
         val expectedResult = ResponseEntity(examInserted, HttpStatus.CREATED)
 
         doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
@@ -85,7 +86,7 @@ internal class ExamServiceTest {
     @Test
     fun testGetExam() {
         val idOfExamToGet = 1
-        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = "Tentamen", examId = idOfExamToGet, questions = arrayListOf())
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = "Tentamen", examId = idOfExamToGet, questions = arrayListOf(), decryptionCodes = "1111111111111111")
         doReturn(expected).`when`(examDAO).getExam(idOfExamToGet)
         val result = examService.getExam(idOfExamToGet)
         assertNotNull(result)
