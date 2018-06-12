@@ -14,12 +14,15 @@ fun main(args: Array<String>) {
 private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, iterator: Int = 0, questionsAnswered: ArrayList<Question> = ArrayList(), previousResults: ArrayList<Results> = ArrayList()) {
     if (iterator == amountOfResults) return
     var exam: ArrayList<Question> = arrayListOf()
+    val memBefore = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
     val timeElapsed = measureTimeMillis {
         println("Exam ${iterator + 1} results ------------------------")
 
         // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
         exam = generateExam(previousResults, 1, 123, questionsNotAnswered, questionsAnswered)
     }
+    println("Memory before generating exam $iterator: $memBefore")
+    println("Memory after generating exam $iterator: ${Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()}")
 
     // Simulate results
     val results = simulateCorrectAndFalseAnswers(exam, studentNr, iterator)
@@ -39,6 +42,7 @@ private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAn
     questionsNotAnswered.removeIf { r -> newQuestionsAnswered.any { it.questionId == r.questionId } }
 
     println("Time for generating exam $iterator: $timeElapsed ms")
+
     simulateResults(amountOfResults, studentNr, questionsNotAnswered, iterator + 1, newQuestionsAnswered.toCollection(arrayListOf()), previousResults)
 }
 
