@@ -44,5 +44,7 @@ data class Exam(
         @ApiModelProperty(notes = "Boolean that states if students can download the exam")
         val readyForDownload: Boolean? = false,
         @ApiModelProperty(notes = "The questions in the exam")
-        val questions: ArrayList<Question>? = null
+        val questions: ArrayList<Question>? = null,
+        @ApiModelProperty(notes = "Codes to be able to decrypt exam files")
+        val decryptionCodes: String? = null
 )

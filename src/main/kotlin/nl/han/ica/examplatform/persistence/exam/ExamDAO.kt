@@ -20,6 +20,7 @@ import kotlin.collections.ArrayList
  */
 @Repository
 class ExamDAO : IExamDAO {
+
     private val logger = loggerFor(javaClass)
 
     /**
@@ -79,7 +80,8 @@ class ExamDAO : IExamDAO {
                 EXAMNAME,
                 LOCATION,
                 INSTRUCTIONS,
-                READYFORDOWNLOAD
+                READYFORDOWNLOAD,
+                DECRYPTKEY
             FROM EXAM
                 INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID
             WHERE EXAMID = ?
@@ -111,7 +113,8 @@ class ExamDAO : IExamDAO {
                     location = examRs.getString("Location"),
                     instructions = examRs.getString("Instructions"),
                     questions = null,
-                    readyForDownload = examRs.getBoolean("READYFORDOWNLOAD")
+                    readyForDownload = examRs.getBoolean("READYFORDOWNLOAD"),
+                    decryptionCodes = examRs.getString("DECRYPTKEY") ?: "Geen decryptiecode ingesteld"
             )
         } catch (e: SQLException) {
             logger.error("Error while getting exam $id", e)
