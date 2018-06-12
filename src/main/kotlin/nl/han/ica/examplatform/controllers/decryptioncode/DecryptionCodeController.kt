@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*
 
 /**
  * REST controller for interaction with decryption code.
+ *
+ * @param decryptionCodeService [DecryptionCodeService] The DecryptionCodeService
  */
 @RestController
 @RequestMapping("decryptioncode")
@@ -30,7 +32,7 @@ class DecryptionCodeController(private val decryptionCodeService: DecryptionCode
     )
     fun getDecryptionCode(
             @ApiParam(value = "The ID of the exam you want to retrieve the decryption code for", required = true)
-            @PathVariable("id") examId: Int
+            @RequestParam("id") examId: Int
     ): ResponseEntity<String> =
             decryptionCodeService.getDecryptionCode(examId)
 }
