@@ -1,0 +1,247 @@
+[
+  {
+    "examId": 1,
+    "questions": [
+      {
+        "questionId": 1,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 2,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 3,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 4,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 5,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 6,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 7,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 8,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 9,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 10,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 11,
+        "resultWasGood": true
+      }
+    ]
+  },
+  {
+    "examId": 2,
+    "questions": [
+      {
+        "questionId": 2,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 3,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 4,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 5,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 6,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 7,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 8,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 9,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 10,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 11,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 12,
+        "resultWasGood": false
+      }
+    ]
+  },
+  {
+    "examId": 3,
+    "questions": [
+      {
+        "questionId": 3,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 4,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 5,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 6,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 7,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 8,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 9,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 10,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 11,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 12,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 13,
+        "resultWasGood": false
+      }
+    ]
+  },
+  {
+    "examId": 4,
+    "questions": [
+      {
+        "questionId": 4,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 5,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 6,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 7,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 8,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 9,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 10,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 11,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 12,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 13,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 14,
+        "resultWasGood": false
+      }
+    ]
+  },
+  {
+    "examId": 5,
+    "questions": [
+      {
+        "questionId": 5,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 6,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 7,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 8,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 9,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 10,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 11,
+        "resultWasGood": true
+      },
+      {
+        "questionId": 12,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 13,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 14,
+        "resultWasGood": false
+      },
+      {
+        "questionId": 15,
+        "resultWasGood": true
+      }
+    ]
+  }
+]

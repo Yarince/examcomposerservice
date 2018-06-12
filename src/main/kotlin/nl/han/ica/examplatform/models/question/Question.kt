@@ -22,11 +22,11 @@ import nl.han.ica.examplatform.models.exam.Exam
  * @param categories [ArrayList]<[String]> The list of categories of this question
  * @param subQuestions [Array]<[Question]> List of questions that represent one larger question
  */
-data class Question(
+open class Question(
         @ApiModelProperty(notes = "The ID of the question")
         val questionId: Int? = null,
         @ApiModelProperty(notes = "Order of question in an Exam")
-        val questionOrderInExam: Int? = null,
+        var questionOrderInExam: Int? = null,
         @ApiModelProperty(notes = """Text of order in exam text. Example: "Question 1" or "a"""")
         val questionOrderText: String? = null,
         @ApiModelProperty(notes = "This is the name of the plugin used, e.g. OpenQuestion", required = true)
@@ -49,4 +49,22 @@ data class Question(
         val categories: ArrayList<String> = arrayListOf(),
         @ApiModelProperty(notes = "A question can contain subQuestions when the type is noQuestion")
         val subQuestions: ArrayList<Question>? = null
-)
+) {
+    fun copy(questionId: Int): Question {
+        return Question(
+                questionId,
+                questionOrderInExam,
+                questionOrderText,
+                questionType,
+                questionText,
+                questionPoints,
+                courseId,
+                examType,
+                answerType,
+                answerTypePluginVersion,
+                pluginVersion,
+                categories,
+                subQuestions
+        )
+    }
+}

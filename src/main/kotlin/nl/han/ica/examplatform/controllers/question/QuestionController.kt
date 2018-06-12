@@ -105,7 +105,7 @@ class QuestionController(
     @ApiOperation(value = "Update a question", notes = "Update a question")
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
-            ApiResponse(code = 404, message= "Not found"),
+            ApiResponse(code = 404, message = "Not found"),
             ApiResponse(code = 500, message = "Internal server error")
     )
     fun updateQuestion(

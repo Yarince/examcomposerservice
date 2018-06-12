@@ -1,0 +1,90 @@
+[
+  {
+    "questionId": 43,
+    "resultWasGood": false,
+    "questionText": "Beantwoorde vraag over ASR",
+    "categories": [
+      "ASR",
+      "DCAR"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-01-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 44,
+    "resultWasGood": true,
+    "questionText": "Beantwoorde vraag over ASR",
+    "categories": [
+      "ASR",
+      "AVL"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-05-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 45,
+    "resultWasGood": false,
+    "questionText": "Beantwoorde vraag over DCAR",
+    "categories": [
+      "DCAR",
+      "QA"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-06-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 46,
+    "resultWasGood": true,
+    "questionText": "Beantwoorde vraag over DCAR",
+    "categories": [
+      "DCAR",
+      "ATAM",
+      "GRAVEN"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-02-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 47,
+    "resultWasGood": true,
+    "questionText": "Beantwoorde vraag over ATAM",
+    "categories": [
+      "ATAM",
+      "GRAVEN"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-07-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 48,
+    "resultWasGood": false,
+    "questionText": "Beantwoorde vraag over ATAM",
+    "categories": [
+      "ATAM",
+      "DCAR"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-06-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 49,
+    "resultWasGood": true,
+    "questionText": "Beantwoorde vraag over QA",
+    "categories": [
+      "QA",
+      "AVL"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-06-03T14:39:14.534Z"
+  },
+  {
+    "questionId": 50,
+    "resultWasGood": false,
+    "questionText": "Beantwoorde vraag over QA",
+    "categories": [
+      "QA"
+    ],
+    "type": "OpenQuestion",
+    "answeredOn": "2018-03-03T14:39:14.534Z"
+  }
+]

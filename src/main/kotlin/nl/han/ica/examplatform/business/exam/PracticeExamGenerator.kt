@@ -22,7 +22,7 @@ fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDA
     // Recursively add questions to exam
     val practiceExam = addQuestionsToPracticeExam(questions, questions, categories.toList())
 
-    return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
+    return PracticeExam(name = "Practice exam", courseId = courseId, questions = questions)
 }
 
 /**
