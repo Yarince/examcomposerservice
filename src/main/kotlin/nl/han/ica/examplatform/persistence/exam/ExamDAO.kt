@@ -112,8 +112,7 @@ class ExamDAO : IExamDAO {
                     location = examRs.getString("Location"),
                     instructions = examRs.getString("Instructions"),
                     questions = null,
-                    readyForDownload = examRs.getBoolean("READYFORDOWNLOAD"),
-                    decryptionCodes = "1111111111111111"
+                    readyForDownload = examRs.getBoolean("READYFORDOWNLOAD")
             )
         } catch (e: SQLException) {
             logger.error("Error while getting exam $id", e)
