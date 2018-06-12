@@ -32,7 +32,7 @@ class DecryptionCodeController(private val decryptionCodeService: DecryptionCode
     )
     fun getDecryptionCode(
             @ApiParam(value = "The ID of the exam you want to retrieve the decryption code for", required = true)
-            @RequestParam("id") examId: Int
+            @PathVariable("examId") examId: Int
     ): ResponseEntity<String> =
             decryptionCodeService.getDecryptionCode(examId)
 }
