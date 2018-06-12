@@ -91,4 +91,14 @@ internal class ExamServiceTest {
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
     }
+
+    @Test
+    fun testGetAllClasses() {
+        val expected = arrayListOf<String>("APP1", "3EJAAR", "4EJAAR")
+
+        doReturn(expected).`when`(examDAO).getAllClasses()
+        val result = examService.getAllClasses()
+        assertNotNull(result)
+        assertEquals(ResponseEntity(expected, HttpStatus.OK), result)
+    }
 }

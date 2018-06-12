@@ -5,6 +5,7 @@ import nl.han.ica.examplatform.business.exam.ExamService
 import nl.han.ica.examplatform.business.examquestion.ExamQuestionService
 import nl.han.ica.examplatform.models.exam.*
 import nl.han.ica.examplatform.models.question.Question
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -113,22 +114,22 @@ class ExamController(
      *
      * @param examId [Int] the ID of the exam of which the classes should be added to.
      * @param classes [Array]<[String]> An array containing the classes.
-     * @return [ResponseEntity]<[PreparedExam]> the exam containing the added classes.
+     * @return [ResponseEntity]<[Exam]> the exam containing the added classes.
      */
     @PostMapping("/addClasses")
     @ApiOperation(
             value = "Add classes to an exam",
             notes = "This makes it so the students are able to perform the exam",
-            response = PreparedExam::class)
+            response = Exam::class)
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))
     fun addClassesToExam(
             @ApiParam(value = "An array of classes, e.g. ASD-A ASD-B ASD-C", required = true)
-            @RequestParam classes: Array<String>,
+            @RequestParam classes: ArrayList<String>,
             @ApiParam(value = "The ID of the exam you want to add the classes to", required = true)
             @RequestParam examId: Int
-    ): ResponseEntity<PreparedExam> =
+    ): ResponseEntity<HttpStatus> =
             examService.addClassesToExam(examId, classes)
 
     /**
@@ -221,4 +222,23 @@ class ExamController(
             @RequestParam examId: Int,
             @ApiParam(value = "An array containing the questionIds that should be removed from the exam. Put every item on a newline in swagger", required = true)
             @RequestParam questionIds: Array<Int>) = examQuestionService.removeQuestionsFromExam(examId, questionIds)
+
+    /**
+     * Returns the decryption code to unlock the exam
+     *
+     * @return [String]
+     */
+    @GetMapping("/classes")
+    @ApiOperation(
+            value = "Returns the decryption code to unlock the exam",
+            response = HttpStatus::class
+    )
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Decryption code received"),
+            ApiResponse(code = 400, message = "Invalid Answer"),
+            ApiResponse(code = 500, message = "Something went wrong")
+    )
+    fun getAllClasses(): ResponseEntity<ArrayList<String>> = examService.getAllClasses()
+
+
 }

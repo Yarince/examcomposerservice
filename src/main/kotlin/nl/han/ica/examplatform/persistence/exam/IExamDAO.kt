@@ -4,6 +4,7 @@ import nl.han.ica.examplatform.models.exam.Exam
 import nl.han.ica.examplatform.models.exam.PreparedExam
 import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
+import org.springframework.http.HttpStatus
 
 /**
  * This class handles all the Database operations for [Exam].
@@ -48,7 +49,7 @@ interface IExamDAO {
      * @param classes [Array]<[String]> an array containing classes
      * @return [PreparedExam] the exam containing the added classes
      */
-    fun addClassesToExam(examId: Int, classes: Array<String>): PreparedExam
+    fun addClassesToExam(examId: Int, classes: ArrayList<String>) : HttpStatus
 
     /**
      * Changes the order of questions in an exam
@@ -89,4 +90,11 @@ interface IExamDAO {
      * @param examId [Int] The ID of the exam that should be deleted
      */
     fun deleteExam(examId: Int)
+
+    /**
+     * Retrieves all the classes available
+     *
+     * @return [ArrayList]<[String]> The classes
+     */
+    fun getAllClasses() : ArrayList<String>
 }
