@@ -57,7 +57,7 @@ class ExamControllerTest {
 
     @Test
     fun testAddExam() {
-        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", decryptionCodes = "1111111111111111")
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen")
         doReturn(ResponseEntity(expected, HttpStatus.CREATED)).`when`(examService).addExam(expected)
         val result = examController.addExam(expected)
         assertNotNull(result)
@@ -67,7 +67,7 @@ class ExamControllerTest {
     @Test
     fun addQuestionToExam() {
         val expected = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", questions = arrayListOf(
-                Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 5, examType = "Tentamen", pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)), decryptionCodes = "1111111111111111")
+                Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 5, examType = "Tentamen", pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)))
 
         doReturn(ResponseEntity(expected, HttpStatus.ACCEPTED)).`when`(examQuestionService).addQuestionToExam(expected)
         val result = examController.addQuestionToExam(expected)
@@ -78,7 +78,7 @@ class ExamControllerTest {
     @Test
     fun testGetExam() {
         val idOfExamToGet = 1
-        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = "Tentamen", examId = idOfExamToGet, decryptionCodes = "1111111111111111")
+        val expected = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = "Tentamen", examId = idOfExamToGet)
         doReturn(ResponseEntity(expected, HttpStatus.OK)).`when`(examService).getExam(idOfExamToGet)
         val result = examController.getExam(idOfExamToGet)
         assertNotNull(result)

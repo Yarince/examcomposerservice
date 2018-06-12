@@ -53,7 +53,7 @@ class ExamQuestionServiceTest {
     @Test
     fun testAddQuestionToExam() {
         val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, examType = "Tentamen", pluginVersion = "1.0", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1)
-        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", questions = arrayListOf(expectedQuestion), decryptionCodes = "1111111111111111")
+        val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", questions = arrayListOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).addQuestionsToExam(expectedExam)
         doReturn(true).`when`(questionDAO).exists(expectedQuestion)
