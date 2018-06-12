@@ -6,7 +6,7 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 fun main(args: Array<String>) {
-    simulateResults(100, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
+    simulateResults(5, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
 }
 
 private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, iterator: Int = 0, questionsAnswered: ArrayList<Question> = ArrayList(), previousResults: ArrayList<Results> = ArrayList()) {
@@ -115,7 +115,7 @@ private fun questionOfCategoryWillBeAdded(chanceToGetAdded: Double): Boolean {
  * Checks if the exam has enough questions or meets other demands
  */
 private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQuestions: ArrayList<Question>): Boolean {
-    val thresholdForPercentage = 0
+    val thresholdForPercentage = 3
     val percentageOfQuestionsInExam = 0.33
     val maxAmountOfQuestionsInExam = if (allQuestions.size < thresholdForPercentage) (allQuestions.size * percentageOfQuestionsInExam).toInt() else 10
 

@@ -10,7 +10,7 @@ import poc.models.Question
  * @return [Question] the first made question of the student
  */
 internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>): Question? {
-    val assessedQuestionsOfOthers = loadResultsOfOthers(category)
+    val assessedQuestionsOfOthers = QuestionLoader.getResultsOfOthers()
     // todo: If there are questions available that no one has answered before, add one of those instead
 
     // Filter questions to only contain current category

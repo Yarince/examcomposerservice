@@ -28,10 +28,9 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayLi
     mapOfCategoriesAndTheirRelevancePercentages.forEach { if (it.value == 0.0) mapOfCategoriesAndTheirRelevancePercentages[it.key] = 10.0 }
     var sorted = mapOfCategoriesAndTheirRelevancePercentages.toList().sortedBy { it.second }
 
-    if (sorted.last().second <= 50.0) {
-        val multiplier = 100 / sorted.last().second
-        sorted = sorted.map { Pair(it.first, it.second * multiplier) }
-    }
+    val multiplier = 100 / sorted.last().second
+    sorted = sorted.map { Pair(it.first, it.second * multiplier) }
+
 
     return sorted
 }

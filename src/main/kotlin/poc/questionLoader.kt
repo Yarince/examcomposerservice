@@ -12,7 +12,16 @@ internal fun loadQuestions(courseId: Int, studentNr: Int, type: String): Array<Q
     return Gson().fromJson(reader, Array<Question>::class.java)
 }
 
-internal fun loadResultsOfOthers(category: String): Array<QuestionResultStats> {
-    val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/questionsMadeByOtherStudents.json"))
-    return Gson().fromJson(reader, Array<QuestionResultStats>::class.java)
+object QuestionLoader {
+    private var results: Array<QuestionResultStats>? = null
+
+    fun getResultsOfOthers(): Array<QuestionResultStats> {
+        return if (this.results == null) {
+            val reader = JsonReader(FileReader("src/main/kotlin/poc/resources/questionsMadeByOtherStudents.json"))
+            results = Gson().fromJson(reader, Array<QuestionResultStats>::class.java)
+            results!!
+        } else {
+            results!!
+        }
+    }
 }
