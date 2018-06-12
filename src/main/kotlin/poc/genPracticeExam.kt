@@ -4,6 +4,8 @@ import nl.han.ica.examplatform.business.exam.addQuestionsToPracticeExam
 import poc.models.Question
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.collections.ArrayList
+import kotlin.system.measureTimeMillis
 
 fun main(args: Array<String>) {
     simulateResults(5, 123, loadQuestions(1, 123, "questionBankNotAnswered").toCollection(arrayListOf()))
@@ -11,15 +13,20 @@ fun main(args: Array<String>) {
 
 private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAnswered: ArrayList<Question>, iterator: Int = 0, questionsAnswered: ArrayList<Question> = ArrayList(), previousResults: ArrayList<Results> = ArrayList()) {
     if (iterator == amountOfResults) return
-    println("Exam ${iterator + 1} results ------------------------")
+    var exam: ArrayList<Question> = arrayListOf()
+    val timeElapsed = measureTimeMillis {
+        println("Exam ${iterator + 1} results ------------------------")
 
-    // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
-    val exam = generateExam(previousResults, 1, 123, questionsNotAnswered, questionsAnswered)
+        // questionsNotAnswered should be all the questions in the course, if there is no exam generated yet
+        exam = generateExam(previousResults, 1, 123, questionsNotAnswered, questionsAnswered)
+    }
+
     // Simulate results
     val results = simulateCorrectAndFalseAnswers(exam, studentNr, iterator)
     for (question in results.questions) {
         println(question)
     }
+
     // Limit to 10 previous results
     if (previousResults.size > 10)
         previousResults.removeAt(0)
@@ -31,6 +38,7 @@ private fun simulateResults(amountOfResults: Int, studentNr: Int, questionsNotAn
     // Remove just answered questions from list
     questionsNotAnswered.removeIf { r -> newQuestionsAnswered.any { it.questionId == r.questionId } }
 
+    println("Time for generating exam $iterator: $timeElapsed ms")
     simulateResults(amountOfResults, studentNr, questionsNotAnswered, iterator + 1, newQuestionsAnswered.toCollection(arrayListOf()), previousResults)
 }
 
@@ -65,7 +73,7 @@ private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Qu
     if (!ratedCategories.contains(currentCategory))
         return questionsInExam
     // Return if the prerequisites are met
-    if (checkIfExamCompliesToPrerequisites(questionsInExam, notYetAskedQuestions))
+    if (checkIfExamCompliesToPrerequisites(questionsInExam, notYetAskedQuestions.size + alreadyAskedQuestions.size))
         return questionsInExam
 
     // If there are no questions available, it should be returned
@@ -114,10 +122,10 @@ private fun questionOfCategoryWillBeAdded(chanceToGetAdded: Double): Boolean {
 /**
  * Checks if the exam has enough questions or meets other demands
  */
-private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQuestions: ArrayList<Question>): Boolean {
-    val thresholdForPercentage = 3
+private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQuestionsSize: Int): Boolean {
+    val thresholdForPercentage = 0
     val percentageOfQuestionsInExam = 0.33
-    val maxAmountOfQuestionsInExam = if (allQuestions.size < thresholdForPercentage) (allQuestions.size * percentageOfQuestionsInExam).toInt() else 10
+    val maxAmountOfQuestionsInExam = if (allQuestionsSize < thresholdForPercentage) (allQuestionsSize * percentageOfQuestionsInExam).toInt() else 10
 
     return exam.size >= maxAmountOfQuestionsInExam
 }
