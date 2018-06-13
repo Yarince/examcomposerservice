@@ -6,109 +6,102 @@
       {
         "questionId": 1,
         "resultWasGood": true,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 1 over ATAM",
         "categories": [
-          "Bomen",
-          "Graph"
+          "ATAM"
         ],
-        "questionType": "MultipleChoiceQuestion",
-        "answerType": "DrawQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       },
       {
         "questionId": 32,
         "resultWasGood": false,
-        "questionText": "Vraag over ATAM",
+        "questionText": "Vraag nummer 32 over DCAR",
         "categories": [
-          "Trees",
-          "AVL"
+          "DCAR"
         ],
-        "questionType": "DrawQuestion",
+        "questionType": "OpenQuestion",
         "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 2,
-        "resultWasGood": true,
-        "questionText": "Vraag over dingen",
+        "resultWasGood": false,
+        "questionText": "Vraag nummer 2 over QA",
         "categories": [
-          "ASD",
-          "Bomen"
+          "QA"
         ],
-        "questionType": "TreeQuestion",
-        "answerType": "DrawQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       },
       {
         "questionId": 3,
         "resultWasGood": false,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 3 over ASR",
         "categories": [
-          "Graph",
-          "ASD"
+          "ASR"
         ],
-        "questionType": "MultipleChoiceQuestion",
+        "questionType": "OpenQuestion",
         "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       },
       {
         "questionId": 4,
         "resultWasGood": true,
-        "questionText": "Vraag over dingen",
+        "questionText": "Vraag nummer 4 over DCAR",
         "categories": [
-          "Trees",
-          "ASD"
+          "DCAR"
         ],
-        "questionType": "TreeQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       },
       {
         "questionId": 5,
         "resultWasGood": true,
-        "questionText": "Vraag over ATAM",
+        "questionText": "Vraag nummer 5 over ATAM",
         "categories": [
-          "ASD",
-          "Fietsen"
+          "ATAM"
         ],
-        "questionType": "MultipleChoiceQuestion",
-        "answerType": "TreeQuestion",
+        "questionType": "multipleChoice",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       },
       {
         "questionId": 6,
-        "resultWasGood": true,
-        "questionText": "Vraag over dingen",
+        "resultWasGood": false,
+        "questionText": "Vraag nummer 6 over QA",
         "categories": [
-          "AVL",
-          "AVL"
+          "QA"
         ],
-        "questionType": "BigOhQuestion",
-        "answerType": "DrawQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       },
       {
         "questionId": 7,
         "resultWasGood": false,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 7 over ASR",
         "categories": [
-          "Trees",
-          "Bomen"
+          "ASR",
+          "QA",
+          "AVL"
         ],
-        "questionType": "MultipleChoiceQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       },
       {
         "questionId": 8,
         "resultWasGood": true,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 8 over DCAR",
         "categories": [
-          "Fietsen",
-          "AVL"
+          "DCAR"
         ],
-        "questionType": "BigOhQuestion",
-        "answerType": "TreeQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Oct 1, 44895395 11:16:27 AM"
       }
     ]
@@ -120,97 +113,90 @@
       {
         "questionId": 9,
         "resultWasGood": false,
-        "questionText": "Vraag over dingen",
+        "questionText": "Vraag nummer 9 over ATAM",
         "categories": [
-          "ASD",
-          "Bomen"
+          "ATAM"
         ],
-        "questionType": "GraphQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       },
       {
         "questionId": 10,
         "resultWasGood": true,
-        "questionText": "Vraag over dingen",
+        "questionText": "Vraag nummer 10 over QA",
         "categories": [
-          "Graph",
-          "Fietsen"
+          "QA"
         ],
-        "questionType": "MultipleChoiceQuestion",
-        "answerType": "BigOhQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       },
       {
         "questionId": 11,
         "resultWasGood": false,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 11 over ASR",
         "categories": [
-          "ASD",
-          "Algorithms"
+          "ASR"
         ],
-        "questionType": "GraphQuestion",
-        "answerType": "BigOhQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       },
       {
         "questionId": 12,
         "resultWasGood": true,
-        "questionText": "Vraag over ATAM",
+        "questionText": "Vraag nummer 12 over DCAR",
         "categories": [
-          "Algorithms",
-          "Graph"
+          "DCAR",
+          "ASR"
         ],
-        "questionType": "DrawQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       },
       {
         "questionId": 13,
         "resultWasGood": true,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 13 over ATAM",
         "categories": [
-          "Graph",
-          "Trees"
+          "ATAM"
         ],
-        "questionType": "TreeQuestion",
-        "answerType": "DrawQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       },
       {
         "questionId": 14,
         "resultWasGood": false,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 14 over QA",
         "categories": [
-          "Graph",
-          "Bomen"
+          "QA"
         ],
-        "questionType": "DrawQuestion",
-        "answerType": "OpenQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       },
       {
         "questionId": 15,
         "resultWasGood": true,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 15 over ASR",
         "categories": [
-          "Bomen",
-          "Bomen"
+          "ASR"
         ],
-        "questionType": "TreeQuestion",
-        "answerType": "DrawQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       },
       {
         "questionId": 16,
         "resultWasGood": true,
-        "questionText": "Vraag over dingen",
+        "questionText": "Vraag nummer 16 over DCAR",
         "categories": [
-          "Trees",
-          "ASD"
+          "DCAR"
         ],
-        "questionType": "OpenQuestion",
-        "answerType": "DrawQuestion",
+        "questionType": "multipleChoice",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Aug 13, 108302150 7:41:18 AM"
       }
     ]
@@ -222,22 +208,21 @@
       {
         "questionId": 17,
         "resultWasGood": false,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 17 over ATAM",
         "categories": [
-          "Algorithms",
-          "Trees"
+          "ATAM",
+          "DCAR"
         ],
-        "questionType": "GraphQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Mar 24, 65030890 9:15:14 PM"
       },
       {
         "questionId": 18,
         "resultWasGood": false,
-        "questionText": "Vraag over ATAM",
+        "questionText": "Vraag nummer 18 over QA",
         "categories": [
-          "Bomen",
-          "Bomen"
+          "QA"
         ],
         "questionType": "OpenQuestion",
         "answerType": "MultipleChoiceQuestion",
@@ -246,73 +231,67 @@
       {
         "questionId": 19,
         "resultWasGood": true,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 19 over ASR",
         "categories": [
-          "Graph",
-          "AVL"
+          "ASR"
         ],
-        "questionType": "TreeQuestion",
-        "answerType": "OpenQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Mar 24, 65030890 9:15:14 PM"
       },
       {
         "questionId": 20,
         "resultWasGood": false,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 20 over DCAR",
         "categories": [
-          "ASD",
-          "Algorithms"
+          "DCAR"
         ],
-        "questionType": "BigOhQuestion",
-        "answerType": "BigOhQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Mar 24, 65030890 9:15:14 PM"
       },
       {
         "questionId": 21,
         "resultWasGood": false,
-        "questionText": "Vraag over ATAM",
+        "questionText": "Vraag nummer 21 over ATAM",
         "categories": [
-          "ASD",
-          "ASD"
+          "ATAM"
         ],
-        "questionType": "MultipleChoiceQuestion",
-        "answerType": "BigOhQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Mar 24, 65030890 9:15:14 PM"
       },
       {
         "questionId": 22,
         "resultWasGood": true,
-        "questionText": "Vraag over dingen",
+        "questionText": "Vraag nummer 22 over QA",
         "categories": [
-          "Fietsen",
-          "Bomen"
+          "QA"
         ],
-        "questionType": "MultipleChoiceQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Mar 24, 65030890 9:15:14 PM"
       },
       {
         "questionId": 23,
         "resultWasGood": false,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 23 over ASR",
         "categories": [
-          "Algorithms",
-          "Bomen"
+          "ASR"
         ],
-        "questionType": "TreeQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Mar 24, 65030890 9:15:14 PM"
       },
       {
         "questionId": 24,
         "resultWasGood": true,
-        "questionText": "Vraag over dingen",
+        "questionText": "Vraag nummer 24 over DCAR",
         "categories": [
-          "Graph",
-          "AVL"
+          "DCAR"
         ],
         "questionType": "OpenQuestion",
-        "answerType": "DrawQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Mar 24, 65030890 9:15:14 PM"
       }
     ]
@@ -324,96 +303,88 @@
       {
         "questionId": 25,
         "resultWasGood": false,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 25 over ATAM",
         "categories": [
-          "ASD",
-          "Graph"
+          "ATAM"
         ],
-        "questionType": "BigOhQuestion",
+        "questionType": "OpenQuestion",
         "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 26,
         "resultWasGood": true,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 26 over QA",
         "categories": [
-          "AVL",
-          "Bomen"
+          "QA"
         ],
-        "questionType": "GraphQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 27,
         "resultWasGood": false,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 27 over ASR",
         "categories": [
-          "ASD",
-          "ASD"
+          "ASR"
         ],
-        "questionType": "OpenQuestion",
-        "answerType": "BigOhQuestion",
+        "questionType": "multipleChoice",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 28,
         "resultWasGood": false,
-        "questionText": "Vraag over dingen",
+        "questionText": "Vraag nummer 28 over DCAR",
         "categories": [
-          "Graph",
-          "AVL"
+          "DCAR"
         ],
-        "questionType": "BigOhQuestion",
-        "answerType": "GraphQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 29,
         "resultWasGood": false,
-        "questionText": "Vraag over ASR",
+        "questionText": "Vraag nummer 29 over ATAM",
         "categories": [
-          "ASD",
-          "Trees"
+          "ATAM"
         ],
-        "questionType": "BigOhQuestion",
-        "answerType": "BigOhQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 30,
         "resultWasGood": true,
-        "questionText": "Vraag over ATAM",
+        "questionText": "Vraag nummer 30 over QA",
         "categories": [
-          "Fietsen",
-          "Graph"
+          "QA"
         ],
-        "questionType": "TreeQuestion",
-        "answerType": "TreeQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 31,
         "resultWasGood": false,
-        "questionText": "Vraag over DCAR",
+        "questionText": "Vraag nummer 31 over ASR",
         "categories": [
-          "Bomen",
-          "AVL"
+          "ASR"
         ],
-        "questionType": "DrawQuestion",
-        "answerType": "TreeQuestion",
+        "questionType": "OpenQuestion",
+        "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       },
       {
         "questionId": 32,
         "resultWasGood": false,
-        "questionText": "Vraag over ATAM",
+        "questionText": "Vraag nummer 32 over DCAR",
         "categories": [
-          "Trees",
-          "AVL"
+          "DCAR"
         ],
-        "questionType": "DrawQuestion",
+        "questionType": "OpenQuestion",
         "answerType": "MultipleChoiceQuestion",
         "answeredOn": "Feb 4, 129060974 7:55:57 AM"
       }

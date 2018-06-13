@@ -16,7 +16,7 @@ import java.util.concurrent.*
 import kotlin.collections.ArrayList
 
 fun main(args: Array<String>) {
-    for (i in 1..5) {
+    for (i in 10..110) {
 
         val time: Long = System.currentTimeMillis()
         val practiceExam: PracticeExam = GeneratePersonalPracticeExam(QuestionDAO()).generatePracticeExam(200000, 425)
@@ -98,21 +98,61 @@ class GeneratePersonalPracticeExam(val QuestionDAO: QuestionDAO) {
                 .asReversed()
                 .toMap()
 
+        println(questionRelevance.map { it.key })
+
         // --- GENERATING PRACTICE EXAM --- //
 
         val questionsMap: Map<Int, Question> = allQuestionsFromCourse.map { Pair(it.questionId!!, it) }.toMap()
         val examQuestions: ArrayList<Question> = ArrayList()
+        val categoriesInExam: MutableMap<String, Int> = HashMap()
+        var totalCategoriesInExam = 0
 
-        var questionOrderInExam = 1
-        for (questionID: Int in questionRelevance.keys) {
-            val question: Question = questionsMap[questionID]!!
-            question.questionOrderInExam = questionOrderInExam
-            examQuestions.add(question)
-            questionOrderInExam++
-            if (examQuestions.size >= 10) {
-                break
+            for (questionID: Int in questionRelevance.keys) {
+                val question: Question = questionsMap[questionID]!!
+
+                // For each question calculate the percentage of the categories in the question that are already in the exam
+                for (category in question.categories) {
+                    // If there are no categories added to the exam (No questions)
+                    // Than add the most relevant one.
+                    var questionAdded = false
+                    if (totalCategoriesInExam == 0) {
+                        question.questionOrderInExam = examQuestions.size + 1
+                        examQuestions.add(question)
+                        questionAdded = true
+                    } else {
+                        // Percentage of the current category in the exam
+                        val categoryPercentage = 100 / totalCategoriesInExam * categoriesInExam.getOrDefault(category, 0)
+
+                        // Category should not have more than 50% of one exam, so random got til 50
+                        val random = ThreadLocalRandom.current().nextInt(50)
+                        // If the random number is higher than the current percentage of the category in the exam.
+                        // Than add the question to the exam
+                        if (random > categoryPercentage) {
+                            question.questionOrderInExam = examQuestions.size + 1
+                            examQuestions.add(question)
+                            questionAdded = true
+                        }
+                    }
+
+                    if (questionAdded) {
+                        // Update the category map with the categories of the added exam
+                        for (category2 in question.categories) {
+                            categoriesInExam[category2] = (categoriesInExam.getOrDefault(category2, 0)) + 1
+                            totalCategoriesInExam++
+                        }
+                        // Break for loop because a question was added
+                        break
+                    }
+                }
+
+                // If the exam does have 10 or more questions quit adding new questions
+                if (examQuestions.size >= 10){
+                    break
+                }
             }
-        }
+
+
+        println(examQuestions.map { it.questionId })
 
         return PracticeExam("Practice Exam (${LocalDateTime.now()})", courseId, examQuestions.toTypedArray())
     }
