@@ -89,7 +89,7 @@ class ExamService(private val examDAO: IExamDAO,
      *
      * @param examId [Int] the ID of the exam
      * @param classes [Array]<[String]> an array containing classes
-     * @return [ResponseEntity]<[Exam]> the exam containing the added classes
+     * @return [ResponseEntity]<[HttpStatus] The response of the retrieved classes
      */
     fun addClassesToExam(examId: Int, classes: ArrayList<String>): ResponseEntity<HttpStatus> =
             ResponseEntity(examDAO.addClassesToExam(examId, classes), HttpStatus.ACCEPTED)
@@ -117,11 +117,4 @@ class ExamService(private val examDAO: IExamDAO,
      * @param examId [Int] The ID of the exam that should be deleted
      */
     fun deleteExam(examId: Int) = examDAO.deleteExam(examId)
-
-    /**
-     * Retrieves all available classes
-     *
-     * @return [ArrayList]<[String]> The classes
-     */
-    fun getAllClasses() : ResponseEntity<ArrayList<String>> = ResponseEntity(examDAO.getAllClasses(), HttpStatus.OK)
 }

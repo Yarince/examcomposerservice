@@ -120,7 +120,7 @@ class ExamController(
     @ApiOperation(
             value = "Add classes to an exam",
             notes = "This makes it so the students are able to perform the exam",
-            response = Exam::class)
+            response = HttpStatus::class)
     @ApiResponses(
             ApiResponse(code = 202, message = "Accepted"),
             ApiResponse(code = 403, message = "Bad request"))
@@ -222,23 +222,4 @@ class ExamController(
             @RequestParam examId: Int,
             @ApiParam(value = "An array containing the questionIds that should be removed from the exam. Put every item on a newline in swagger", required = true)
             @RequestParam questionIds: Array<Int>) = examQuestionService.removeQuestionsFromExam(examId, questionIds)
-
-    /**
-     * Returns the decryption code to unlock the exam
-     *
-     * @return [String]
-     */
-    @GetMapping("/classes")
-    @ApiOperation(
-            value = "Returns the decryption code to unlock the exam",
-            response = HttpStatus::class
-    )
-    @ApiResponses(
-            ApiResponse(code = 200, message = "Decryption code received"),
-            ApiResponse(code = 400, message = "Invalid Answer"),
-            ApiResponse(code = 500, message = "Something went wrong")
-    )
-    fun getAllClasses(): ResponseEntity<ArrayList<String>> = examService.getAllClasses()
-
-
 }

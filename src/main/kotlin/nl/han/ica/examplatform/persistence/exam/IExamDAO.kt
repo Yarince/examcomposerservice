@@ -90,11 +90,4 @@ interface IExamDAO {
      * @param examId [Int] The ID of the exam that should be deleted
      */
     fun deleteExam(examId: Int)
-
-    /**
-     * Retrieves all the classes available
-     *
-     * @return [ArrayList]<[String]> The classes
-     */
-    fun getAllClasses() : ArrayList<String>
 }

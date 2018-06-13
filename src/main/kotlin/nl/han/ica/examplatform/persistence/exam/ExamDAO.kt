@@ -9,8 +9,11 @@ import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
-import java.sql.*
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.SQLException
 import java.util.Date
+import kotlin.collections.ArrayList
 
 /**
  * This class handles all the Database operations for [Exam].
@@ -407,29 +410,4 @@ class ExamDAO : IExamDAO {
             MySQLConnection.closeConnection(conn)
         }
     }
-
-
-    override fun getAllClasses() : ArrayList<String> {
-        var classes: ArrayList<String> = ArrayList()
-        val conn: Connection? = MySQLConnection.getConnection()
-        val sqlGetAllClassesQuery = "SELECT CLASSNAME FROM CLASSES"
-        val preparedStatementExam = conn?.prepareStatement(sqlGetAllClassesQuery)
-
-        return try {
-            var rs: ResultSet? = preparedStatementExam?.executeQuery()
-            while(rs!!.next()) {
-                classes.add(rs.getString("CLASSNAME"))
-            }
-            classes
-        } catch (e: SQLException) {
-            logger.error("Error while publishing exam", e)
-            throw DatabaseException("Error while retrieving all classes")
-        }
-
-
-
-
-
-    }
-
 }
