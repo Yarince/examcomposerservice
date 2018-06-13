@@ -28,23 +28,23 @@ class AnswerDAO : IAnswerDAO {
      * @param answer The [Answer] you want to add to a [Question]
      */
     override fun addOrUpdateAnswerInQuestion(answer: Answer) {
-        if (answer.partialAnswers == null || answer.partialAnswers.size < 1)
-            throw DatabaseException("Please provide partialAnswers to for question")
+        if (answer.partial_answers == null || answer.partial_answers.size < 1)
+            throw DatabaseException("Please provide partial_answers to for question")
 
         val query = "INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT) value (?,?,?) on DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?"
 
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement = conn?.prepareStatement(query)
 
-        for (partialAnswer in answer.partialAnswers) {
+        for (partialAnswer in answer.partial_answers) {
 
-            partialAnswer.partialAnswerId?.let { preparedStatement?.setInt(1, it) }
+            partialAnswer.id?.let { preparedStatement?.setInt(1, it) }
                     ?: preparedStatement?.setNull(1, java.sql.Types.INTEGER)
 
             preparedStatement?.setInt(2, answer.questionId)
 
-            preparedStatement?.setString(3, partialAnswer.partialAnswerText)
-            preparedStatement?.setString(4, partialAnswer.partialAnswerText)
+            preparedStatement?.setString(3, partialAnswer.text)
+            preparedStatement?.setString(4, partialAnswer.text)
             try {
                 preparedStatement?.executeUpdate()
                         ?: throw DatabaseException("Error while interacting with the database")
@@ -64,17 +64,17 @@ class AnswerDAO : IAnswerDAO {
      * @param examId [Int] The ID of the exam you want to add the Answer to
      */
     override fun addOrUpdateAnswerInQuestionInExam(answer: Answer, examId: Int) {
-        if (answer.partialAnswers == null || answer.partialAnswers.size < 1)
-            throw DatabaseException("Please provide partialAnswers to for question")
+        if (answer.partial_answers == null || answer.partial_answers.size < 1)
+            throw DatabaseException("Please provide partial_answers to for question")
 
         val paInQeQuery = "INSERT INTO PARTIAL_ANSWER_IN_QUESTION_IN_EXAM (PARTIALANSWERID, QUESTIONID, EXAMID, POINTS) value (?,?,?,?) on DUPLICATE KEY UPDATE POINTS = ?"
 
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement = conn?.prepareStatement(paInQeQuery)
 
-        for (partialAnswer in answer.partialAnswers) {
+        for (partialAnswer in answer.partial_answers) {
 
-            preparedStatement?.setInt(1, partialAnswer.partialAnswerId
+            preparedStatement?.setInt(1, partialAnswer.id
                     ?: throw DatabaseException("PartialAnswerId is not set"))
 
             preparedStatement?.setInt(2, answer.questionId)
@@ -128,8 +128,8 @@ class AnswerDAO : IAnswerDAO {
             while (answerRs.next())
                 partialAnswers.add(
                         PartialAnswer(
-                                partialAnswerId = answerRs.getInt("PARTIALANSWERID"),
-                                partialAnswerText = answerRs.getString("PARTIALANSWERTEXT"),
+                                id = answerRs.getInt("PARTIALANSWERID"),
+                                text = answerRs.getString("PARTIALANSWERTEXT"),
                                 points = answerRs.getInt("POINTS")
                         )
                 )
@@ -141,7 +141,7 @@ class AnswerDAO : IAnswerDAO {
 
             Answer(
                     questionId = questionId,
-                    partialAnswers = partialAnswers
+                    partial_answers = partialAnswers
             )
         } catch (e: SQLException) {
             logger.error("SQLException thrown when adding answer to question", e)
@@ -192,8 +192,8 @@ class AnswerDAO : IAnswerDAO {
                     }
 
                     partialAnswers.add(PartialAnswer(
-                            partialAnswerId = answerRs.getInt("PARTIALANSWERID"),
-                            partialAnswerText = answerRs.getString("PARTIALANSWERTEXT"),
+                            id = answerRs.getInt("PARTIALANSWERID"),
+                            text = answerRs.getString("PARTIALANSWERTEXT"),
                             points = answerRs.getInt("POINTS")
 
                     ))
@@ -202,7 +202,7 @@ class AnswerDAO : IAnswerDAO {
                 answers.add(Answer(
                         questionId = questionId,
                         example_answer = questionRs.getString("ANSWERTEXT"),
-                        partialAnswers = partialAnswers
+                        partial_answers = partialAnswers
                 ))
 
                 partialAnswers = ArrayList()

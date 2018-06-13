@@ -10,7 +10,7 @@ import nl.han.ica.examplatform.models.question.Question
  * @param questionId [Int] The id of the [Question] this answer is for
  * @param example_answer [String] An example answer
  * @param description [String] The description of the Question
- * @param partialAnswers [ArrayList]<[PartialAnswer]> List of parts that need to be in the answer
+ * @param partial_answers [ArrayList]<[PartialAnswer]> List of parts that need to be in the answer
  * @param points [Int] The total amount of point for a question
  */
 data class Answer(
@@ -21,7 +21,7 @@ data class Answer(
         @ApiModelProperty(notes = "The description of the Question")
         val description: String? = null,
         @ApiModelProperty(notes = "The id of the Question this answer is for")
-        val partialAnswers: ArrayList<PartialAnswer>? = null,
+        val partial_answers: ArrayList<PartialAnswer>? = null,
         @ApiModelProperty(notes = "The total amount of point for a question")
-        val points: Int? = partialAnswers?.map { i -> i.points ?: 0 }?.sum()
+        val points: Int? = partial_answers?.map { i -> i.points ?: 0 }?.sum()
 )
