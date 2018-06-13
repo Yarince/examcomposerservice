@@ -15,13 +15,13 @@ fun calculateWeightForExams(exams: Map<Int, Array<AnsweredQuestion>>): Map<Int, 
             .toTypedArray()
 
     val questionMap: MutableMap<Int, MutableList<Double>> = HashMap()
-    for ((index: Int, exam: Pair<Int, Array<AnsweredQuestion>>) in exams.toList().withIndex()){
-        for (answeredQuestion: AnsweredQuestion in exam.second){
+    for ((index: Int, exam: Pair<Int, Array<AnsweredQuestion>>) in exams.toList().withIndex()) {
+        for (answeredQuestion: AnsweredQuestion in exam.second) {
             val examFactors = questionMap.getOrDefault(answeredQuestion.questionId, ArrayList())
-            examFactors.add(powPercentageArray[index])
+            examFactors.add(powPercentageArray.getOrElse(index, { _ -> 0.0 }))
             questionMap[answeredQuestion.questionId] = examFactors
         }
     }
 
-    return questionMap.map { Pair(it.key, it.value.average()) }.toMap()
+    return questionMap.map { Pair(it.key, it.value.average() * -1) }.toMap()
 }

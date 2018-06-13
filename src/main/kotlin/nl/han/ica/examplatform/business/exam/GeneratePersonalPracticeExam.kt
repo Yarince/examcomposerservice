@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.business.exam
 
-import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.stream.JsonReader
 import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.models.exam.AnsweredExam
@@ -14,14 +14,14 @@ import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.*
 import kotlin.collections.ArrayList
-import com.google.gson.GsonBuilder
-
-
 
 fun main(args: Array<String>) {
-    val time: Long = System.currentTimeMillis()
-    for (i in 1..100) {
+    for (i in 1..5) {
+
+        val time: Long = System.currentTimeMillis()
         val practiceExam: PracticeExam = GeneratePersonalPracticeExam(QuestionDAO()).generatePracticeExam(200000, 425)
+        println("$i - ${System.currentTimeMillis() - time} Millis")
+        println("$i - Memory after generating exam: ${Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()}")
 
         val gson = GsonBuilder().setPrettyPrinting().create()
         val reader1 = JsonReader(FileReader("src/main/resources/examsAnswered2.json"))
@@ -29,7 +29,7 @@ fun main(args: Array<String>) {
                 reader1, Array<AnsweredExam>::class.java).toMutableList()
 
         val answeredExam = AnsweredExam(
-                examId = 1,
+                examId = i,
                 examDate = Date(),
                 answeredQuestions = practiceExam.questions.map {
                     AnsweredQuestion(
@@ -46,7 +46,7 @@ fun main(args: Array<String>) {
         madeGeneratedExams.add(answeredExam)
         File("src/main/resources/examsAnswered2.json").writeText(gson.toJson(madeGeneratedExams), Charsets.UTF_8)
     }
-    print("${System.currentTimeMillis() - time} Millis")
+
 }
 
 class GeneratePersonalPracticeExam(val QuestionDAO: QuestionDAO) {
@@ -98,8 +98,6 @@ class GeneratePersonalPracticeExam(val QuestionDAO: QuestionDAO) {
                 .asReversed()
                 .toMap()
 
-        println(questionRelevance)
-
         // --- GENERATING PRACTICE EXAM --- //
 
         val questionsMap: Map<Int, Question> = allQuestionsFromCourse.map { Pair(it.questionId!!, it) }.toMap()
@@ -120,4 +118,4 @@ class GeneratePersonalPracticeExam(val QuestionDAO: QuestionDAO) {
     }
 }
 
-internal fun Boolean.toInteger() = if (this) 1 else -1
+internal fun Boolean.toInteger() = if (this) -1 else 1

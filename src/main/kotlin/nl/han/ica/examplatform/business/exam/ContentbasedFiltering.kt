@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package nl.han.ica.examplatform.business.exam
 
 import nl.han.ica.examplatform.models.question.AnsweredQuestion
@@ -19,10 +21,10 @@ fun contentBasedFiltering(
     val answeredQuestions: Map<Int, Int> = answeredQuestions.map { Pair(it.questionId, it.resultWasGood.toInteger()) }.toMap()
 
     // Category, PersonalScore
-    val userProfile = generateUserProfile(normalisedQuestions, answeredQuestions)
+    val userProfile: Map<String, Double> = generateUserProfile(normalisedQuestions, answeredQuestions)
 
     // Category, IDF score
-    val idfMap = calculateIDF(allQuestions)
+    val idfMap: Map<String, Double> = calculateIDF(allQuestions)
 
     return makePrediction(normalisedQuestions[questionToPredict]!!, userProfile, idfMap)
 }
