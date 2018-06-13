@@ -5,7 +5,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 2,
@@ -13,7 +14,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 3,
@@ -21,7 +23,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 4,
@@ -29,7 +32,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 5,
@@ -37,7 +41,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "multipleChoice"
+    "questionType": "multipleChoice",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 6,
@@ -45,7 +50,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 7,
@@ -55,7 +61,8 @@
       "QA",
       "AVL"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 8,
@@ -63,7 +70,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 9,
@@ -71,7 +79,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 10,
@@ -79,7 +88,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 11,
@@ -87,7 +97,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 12,
@@ -96,7 +107,8 @@
       "DCAR",
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 13,
@@ -104,7 +116,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 14,
@@ -112,7 +125,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 15,
@@ -120,7 +134,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 16,
@@ -128,7 +143,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "multipleChoice"
+    "questionType": "multipleChoice",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 17,
@@ -137,7 +153,8 @@
       "ATAM",
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 18,
@@ -145,7 +162,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 19,
@@ -153,7 +171,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 20,
@@ -161,7 +180,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 21,
@@ -169,7 +189,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 22,
@@ -177,7 +198,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 23,
@@ -185,7 +207,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 24,
@@ -193,7 +216,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 25,
@@ -201,7 +225,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 26,
@@ -209,7 +234,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 27,
@@ -217,7 +243,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "multipleChoice"
+    "questionType": "multipleChoice",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 28,
@@ -225,7 +252,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 29,
@@ -233,7 +261,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 30,
@@ -241,7 +270,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 31,
@@ -249,7 +279,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 32,
@@ -257,7 +288,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 33,
@@ -265,7 +297,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 34,
@@ -273,7 +306,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 35,
@@ -281,7 +315,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 36,
@@ -289,7 +324,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 37,
@@ -297,7 +333,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 38,
@@ -305,7 +342,8 @@
     "categories": [
       "QA"
     ],
-    "type": "multipleChoice"
+    "questionType": "multipleChoice",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 39,
@@ -313,7 +351,8 @@
     "categories": [
       "ASR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 40,
@@ -321,7 +360,8 @@
     "categories": [
       "DCAR"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 41,
@@ -329,7 +369,8 @@
     "categories": [
       "ATAM"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   },
   {
     "questionId": 42,
@@ -337,6 +378,7 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion"
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion"
   }
 ]

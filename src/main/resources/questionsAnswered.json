@@ -7,7 +7,8 @@
       "ASR",
       "DCAR"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-01-03T14:39:14.534Z"
   },
   {
@@ -18,7 +19,8 @@
       "ASR",
       "AVL"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-05-03T14:39:14.534Z"
   },
   {
@@ -29,7 +31,8 @@
       "DCAR",
       "QA"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-06-03T14:39:14.534Z"
   },
   {
@@ -41,7 +44,8 @@
       "ATAM",
       "GRAVEN"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-02-03T14:39:14.534Z"
   },
   {
@@ -52,7 +56,8 @@
       "ATAM",
       "GRAVEN"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-07-03T14:39:14.534Z"
   },
   {
@@ -63,7 +68,8 @@
       "ATAM",
       "DCAR"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-06-03T14:39:14.534Z"
   },
   {
@@ -74,7 +80,8 @@
       "QA",
       "AVL"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-06-03T14:39:14.534Z"
   },
   {
@@ -84,7 +91,8 @@
     "categories": [
       "QA"
     ],
-    "type": "OpenQuestion",
+    "questionType": "OpenQuestion",
+    "answerType": "MultipleChoiceQuestion",
     "answeredOn": "2018-03-03T14:39:14.534Z"
   }
 ]

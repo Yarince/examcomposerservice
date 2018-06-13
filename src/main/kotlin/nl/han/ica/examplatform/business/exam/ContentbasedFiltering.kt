@@ -1,13 +1,13 @@
 package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.models.question.AnswerdQuestion
+import nl.han.ica.examplatform.models.question.AnsweredQuestion
 import nl.han.ica.examplatform.models.question.Question
 import kotlin.math.log10
 import kotlin.math.sqrt
 
 fun contentBasedFiltering(
         allQuestions: Array<Question>,
-        answeredQuestions: Array<AnswerdQuestion>,
+        answeredQuestions: Array<AnsweredQuestion>,
         questionToPredict: Int
 ): Double {
     // QuestionID, (Category, Normalised value)
@@ -16,7 +16,7 @@ fun contentBasedFiltering(
     }.toMap()
 
     // QuestionID, Integer( -1 answered correctly, 0 not answered, 1 answered wrong)
-    val answeredQuestions: Map<Int, Int> = answeredQuestions.map { Pair(it.questionId!!, it.resultWasGood.toInteger()) }.toMap()
+    val answeredQuestions: Map<Int, Int> = answeredQuestions.map { Pair(it.questionId, it.resultWasGood.toInteger()) }.toMap()
 
     // Category, PersonalScore
     val userProfile = generateUserProfile(normalisedQuestions, answeredQuestions)

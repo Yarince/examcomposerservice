@@ -4,7 +4,8 @@ import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.DatabaseException
-import nl.han.ica.examplatform.models.question.AnswerdQuestion
+import nl.han.ica.examplatform.models.exam.AnsweredExam
+import nl.han.ica.examplatform.models.question.AnsweredQuestion
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
@@ -542,9 +543,12 @@ class QuestionDAO : IQuestionDAO {
         return thereAreAnswersGivenToQuestions
     }
 
-    fun getAllAnsweredQuestionsByStudent(studentNumber: Int): Array<AnswerdQuestion> {
-        val reader = JsonReader(FileReader("src/main/resources/questionsAnswered.json"))
-        return Gson().fromJson(reader, Array<AnswerdQuestion>::class.java)
+    fun getAllAnsweredExamsByStudent(studentNumber: Int): Array<AnsweredExam> {
+        val reader1 = JsonReader(FileReader("src/main/resources/examsAnswered.json"))
+        val reader2 = JsonReader(FileReader("src/main/resources/examsAnswered2.json"))
+        val results1: Array<AnsweredExam> = Gson().fromJson(reader1, Array<AnsweredExam>::class.java)
+        val results2: Array<AnsweredExam> = Gson().fromJson(reader2, Array<AnsweredExam>::class.java)
+        return results1.plus(results2)
     }
 
     fun getAllQuestionsFromCourse(courseId: Int): Array<Question> {
@@ -564,17 +568,17 @@ class QuestionDAO : IQuestionDAO {
         return allQuestions.map { q -> q.categories }.flatten().distinct().toTypedArray()
     }
 
-    fun getAnsweredQuestionsByRelevantOthers(studentNumber: Int): Map<Int, Map<Int, AnswerdQuestion>> {
+    fun getAnsweredQuestionsByRelevantOthers(studentNumber: Int): Map<Int, Map<Int, AnsweredQuestion>> {
         val readerArray: Array<JsonReader> = arrayOf(
                 JsonReader(FileReader("src/main/resources/questionsAnsweredByOthers1.json")),
                 JsonReader(FileReader("src/main/resources/questionsAnsweredByOthers2.json")),
                 JsonReader(FileReader("src/main/resources/questionsAnsweredByOthers3.json"))
         )
-        val studentMap: MutableMap<Int, Map<Int, AnswerdQuestion>> = HashMap()
+        val studentMap: MutableMap<Int, Map<Int, AnsweredQuestion>> = HashMap()
 
         var randomStudentNumber: Int = (100000 + ThreadLocalRandom.current().nextInt(800000))
         for (reader: JsonReader in readerArray) {
-            val array: Array<AnswerdQuestion> = Gson().fromJson(reader, Array<AnswerdQuestion>::class.java)
+            val array: Array<AnsweredQuestion> = Gson().fromJson(reader, Array<AnsweredQuestion>::class.java)
             studentMap[randomStudentNumber] = array.map { Pair(it.questionId!!, it) }.toMap()
             randomStudentNumber += 1
         }

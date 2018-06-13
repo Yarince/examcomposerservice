@@ -1,24 +1,24 @@
 package nl.han.ica.examplatform.business.exam
 
-import nl.han.ica.examplatform.models.question.AnswerdQuestion
+import nl.han.ica.examplatform.models.question.AnsweredQuestion
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 fun collaborativeFiltering(
-        answeredQuestionsStudent: Array<AnswerdQuestion>,
-        answeredQuestionsOtherStudents: Map<Int, Map<Int, AnswerdQuestion>>,
+        answeredQuestionsStudent: Array<AnsweredQuestion>,
+        answeredQuestionsOtherStudents: Map<Int, Map<Int, AnsweredQuestion>>,
         idQuestionToPredict: Int
 ): Double {
     // If a question has not bean answered by anyone make it top priority
     return if (answeredQuestionsOtherStudents.containsKey(idQuestionToPredict)) {
-        answeredQuestionsOtherStudents.map { it: Map.Entry<Int, Map<Int, AnswerdQuestion>> ->
+        answeredQuestionsOtherStudents.map { it: Map.Entry<Int, Map<Int, AnsweredQuestion>> ->
             calculateRelevance(answeredQuestionsStudent, it.value.values.toTypedArray()) *
                     it.value.getValue(idQuestionToPredict).resultWasGood.toInteger()
         }.average()
     } else 1.0
 }
 
-private fun calculateRelevance(answeredQuestionsStudent1: Array<AnswerdQuestion>, answeredQuestionsStudent2: Array<AnswerdQuestion>): Double {
+private fun calculateRelevance(answeredQuestionsStudent1: Array<AnsweredQuestion>, answeredQuestionsStudent2: Array<AnsweredQuestion>): Double {
     val questionMapStudent1: Map<Int, Pair<Double, Double>> =
             calculateQuestionAnswersIntegers(answeredQuestionsStudent1)
     val questionMapStudent2: Map<Int, Pair<Double, Double>> =
@@ -40,9 +40,9 @@ private fun calculateProductOfStudent1And2(stud1: Map<Int, Double>, stud2: Map<I
     return resultMap.map { it.value }.sum()
 }
 
-private fun calculateQuestionAnswersIntegers(answeredQuestions: Array<AnswerdQuestion>): Map<Int, Pair<Double, Double>> {
+private fun calculateQuestionAnswersIntegers(answeredQuestions: Array<AnsweredQuestion>): Map<Int, Pair<Double, Double>> {
     val questionMap: MutableMap<Int, Int> = HashMap()
-    for (answeredQuestion: AnswerdQuestion in answeredQuestions)
+    for (answeredQuestion: AnsweredQuestion in answeredQuestions)
         questionMap[answeredQuestion.questionId!!] = answeredQuestion.resultWasGood.toInteger()
 
     val avg: Double = questionMap.values.average()
