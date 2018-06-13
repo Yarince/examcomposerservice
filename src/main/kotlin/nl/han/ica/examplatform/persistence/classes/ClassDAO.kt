@@ -28,7 +28,7 @@ class ClassDAO : IClassDAO {
                 }
             classes
         } catch (e: SQLException) {
-            logger.error("Error while publishing exam", e)
+            logger.error("Error retrieving classes", e)
             throw DatabaseException("Error while retrieving all classes", e)
         }
     }
