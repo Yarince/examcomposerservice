@@ -16,8 +16,6 @@ import nl.han.ica.examplatform.models.question.Question
 data class Answer(
         @ApiModelProperty(notes = "The id of the Question this answer is for")
         val questionId: Int,
-        @ApiModelProperty(notes = "An example answer")
-        val example_answer: String? = null,
         @ApiModelProperty(notes = "The description of the Question")
         val description: String? = null,
         @ApiModelProperty(notes = "The id of the Question this answer is for")

@@ -107,7 +107,7 @@ class AnswerDAO : IAnswerDAO {
         var preparedQuestionStatement: PreparedStatement? = null
         val preparedQuestionStatement2: PreparedStatement?
 
-        val sqlQuestionQuery = "SELECT ANSWERTEXT FROM QUESTION WHERE QUESTIONID = ?"
+        val sqlQuestionQuery = "SELECT Q.ANSWERTEXT, Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
 
         val sqlPartialQuery = """SELECT PA.PARTIALANSWERTEXT, PA.PARTIALANSWERID, PAIQIE.POINTS
                                  FROM PARTIAL_ANSWER PA JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE ON
@@ -144,6 +144,7 @@ class AnswerDAO : IAnswerDAO {
 
             Answer(
                     questionId = questionId,
+                    description = questionRs.getString("ASSESSMENTCOMMENTS"),
                     partial_answers = partialAnswers
             )
         } catch (e: SQLException) {
@@ -173,7 +174,7 @@ class AnswerDAO : IAnswerDAO {
                               WHERE PAIQIE.EXAMID = ?"""
 
 
-        val sqlQuestionQuery = "SELECT ANSWERTEXT, Q.QUESTIONID FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q on QE.QUESTIONID = Q.QUESTIONID where QE.EXAMID = ?"
+        val sqlQuestionQuery = "SELECT ANSWERTEXT, Q.QUESTIONID, Q.ASSESSMENTCOMMENTS FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q on QE.QUESTIONID = Q.QUESTIONID where QE.EXAMID = ?"
 
         val preparedAnswerStatement = conn?.prepareStatement(sqlAnswerQuery)
         val preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
@@ -210,7 +211,7 @@ class AnswerDAO : IAnswerDAO {
 
                 answers.add(Answer(
                         questionId = questionId,
-                        example_answer = questionRs.getString("ANSWERTEXT"),
+                        description = questionRs.getString("ASSESSMENTCOMMENTS"),
                         partial_answers = partialAnswers
                 ))
 
@@ -219,7 +220,7 @@ class AnswerDAO : IAnswerDAO {
 
             AnswerModel(
                     examId = examId,
-                    answerModelId = null,
+                    answerModelId = ,
                     answers = answers
             )
         } catch (e: SQLException) {
