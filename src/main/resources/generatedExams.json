@@ -1,0 +1,604 @@
+[
+  {
+    "name": "Practice Exam (2018-06-14T12:08:48.746535800)",
+    "courseId": 425,
+    "questions": [
+      {
+        "questionId": 45,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "QA"
+        ]
+      },
+      {
+        "questionId": 28,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 28 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 17,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 17 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 40,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 40 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 5,
+        "questionType": "multipleChoice",
+        "questionText": "Vraag nummer 5 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      },
+      {
+        "questionId": 7,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 7 over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR",
+          "QA",
+          "AVL"
+        ]
+      },
+      {
+        "questionId": 49,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over QA",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "QA",
+          "AVL"
+        ]
+      },
+      {
+        "questionId": 24,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 24 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 24,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 24 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 49,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over QA",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "QA",
+          "AVL"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Practice Exam (2018-06-14T12:08:48.850256400)",
+    "courseId": 425,
+    "questions": [
+      {
+        "questionId": 36,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 36 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 12,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 12 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "ASR"
+        ]
+      },
+      {
+        "questionId": 48,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 46,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "ATAM",
+          "GRAVEN"
+        ]
+      },
+      {
+        "questionId": 45,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "QA"
+        ]
+      },
+      {
+        "questionId": 17,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 17 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 39,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 39 over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR"
+        ]
+      },
+      {
+        "questionId": 38,
+        "questionOrderInExam": 0,
+        "questionType": "multipleChoice",
+        "questionText": "Vraag nummer 38 over QA",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "QA"
+        ]
+      },
+      {
+        "questionId": 35,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 35 over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR"
+        ]
+      },
+      {
+        "questionId": 31,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 31 over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Practice Exam (2018-06-14T12:08:48.901121400)",
+    "courseId": 425,
+    "questions": [
+      {
+        "questionId": 32,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 32 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 43,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 17,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 17 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 46,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "ATAM",
+          "GRAVEN"
+        ]
+      },
+      {
+        "questionId": 48,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 12,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 12 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "ASR"
+        ]
+      },
+      {
+        "questionId": 45,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "QA"
+        ]
+      },
+      {
+        "questionId": 47,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "GRAVEN"
+        ]
+      },
+      {
+        "questionId": 41,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 41 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      },
+      {
+        "questionId": 37,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 37 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Practice Exam (2018-06-14T12:08:48.941015100)",
+    "courseId": 425,
+    "questions": [
+      {
+        "questionId": 46,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "ATAM",
+          "GRAVEN"
+        ]
+      },
+      {
+        "questionId": 20,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 20 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 47,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "GRAVEN"
+        ]
+      },
+      {
+        "questionId": 40,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 40 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 12,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 12 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "ASR"
+        ]
+      },
+      {
+        "questionId": 33,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 33 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      },
+      {
+        "questionId": 29,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 29 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      },
+      {
+        "questionId": 9,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 9 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      },
+      {
+        "questionId": 43,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 45,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "QA"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Practice Exam (2018-06-14T12:08:48.989885400)",
+    "courseId": 425,
+    "questions": [
+      {
+        "questionId": 27,
+        "questionOrderInExam": 0,
+        "questionType": "multipleChoice",
+        "questionText": "Vraag nummer 27 over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR"
+        ]
+      },
+      {
+        "questionId": 12,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 12 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR",
+          "ASR"
+        ]
+      },
+      {
+        "questionId": 44,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR",
+          "AVL"
+        ]
+      },
+      {
+        "questionId": 17,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 17 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 7,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 7 over ASR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ASR",
+          "QA",
+          "AVL"
+        ]
+      },
+      {
+        "questionId": 25,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 25 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      },
+      {
+        "questionId": 21,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 21 over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM"
+        ]
+      },
+      {
+        "questionId": 16,
+        "questionOrderInExam": 0,
+        "questionType": "multipleChoice",
+        "questionText": "Vraag nummer 16 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 4,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Vraag nummer 4 over DCAR",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "DCAR"
+        ]
+      },
+      {
+        "questionId": 48,
+        "questionOrderInExam": 0,
+        "questionType": "OpenQuestion",
+        "questionText": "Beantwoorde vraag over ATAM",
+        "courseId": 0,
+        "answerType": "MultipleChoiceQuestion",
+        "categories": [
+          "ATAM",
+          "DCAR"
+        ]
+      }
+    ]
+  }
+]
