@@ -12,7 +12,6 @@ import nl.han.ica.examplatform.models.question.Question
  * @param answers [ArrayList]<[Answer]> List of correct answers
  */
 data class AnswerModel(
-        val answerModelId: Int? = null,
         val examId: Int,
         val answers: ArrayList<Answer>? = null
 )

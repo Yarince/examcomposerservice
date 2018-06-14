@@ -220,7 +220,6 @@ class AnswerDAO : IAnswerDAO {
 
             AnswerModel(
                     examId = examId,
-                    answerModelId = ,
                     answers = answers
             )
         } catch (e: SQLException) {
