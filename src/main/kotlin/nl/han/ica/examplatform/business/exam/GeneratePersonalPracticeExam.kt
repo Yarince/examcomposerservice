@@ -14,16 +14,24 @@ import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.math.ceil
 
 fun main(args: Array<String>) {
-    for (i in 10..110) {
+
+    val gson = GsonBuilder().setPrettyPrinting().create()
+    val generatedExams: MutableList<PracticeExam> = ArrayList()
+
+    for (i in 1..5) {
 
         val time: Long = System.currentTimeMillis()
         val practiceExam: PracticeExam = GeneratePersonalPracticeExam(QuestionDAO()).generatePracticeExam(200000, 425)
         println("$i - ${System.currentTimeMillis() - time} Millis")
         println("$i - Memory after generating exam: ${Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()}")
 
-        val gson = GsonBuilder().setPrettyPrinting().create()
+        generatedExams.add(practiceExam)
+
+
         val reader1 = JsonReader(FileReader("src/main/resources/examsAnswered2.json"))
         val madeGeneratedExams: MutableList<AnsweredExam> = gson.fromJson<Array<AnsweredExam>>(
                 reader1, Array<AnsweredExam>::class.java).toMutableList()
@@ -47,6 +55,8 @@ fun main(args: Array<String>) {
         File("src/main/resources/examsAnswered2.json").writeText(gson.toJson(madeGeneratedExams), Charsets.UTF_8)
     }
 
+    File("src/main/resources/generatedExams.json").writeText(gson.toJson(generatedExams), Charsets.UTF_8)
+
 }
 
 class GeneratePersonalPracticeExam(val QuestionDAO: QuestionDAO) {
@@ -60,15 +70,18 @@ class GeneratePersonalPracticeExam(val QuestionDAO: QuestionDAO) {
             throw e
         }
 
-        val answeredQuestionsByRelevantOthers: Map<Int, Map<Int, AnsweredQuestion>> = try {
-            QuestionDAO.getAnsweredQuestionsByRelevantOthers(studentNumber)
+        val answeredExams: Array<AnsweredExam> = try {
+            QuestionDAO.getAllAnsweredExamsByStudent(studentNumber)
         } catch (e: DatabaseException) {
             // Add Logger
             throw e
         }
 
-        val answeredExams: Array<AnsweredExam> = try {
-            QuestionDAO.getAllAnsweredExamsByStudent(studentNumber)
+        // If the student has not made any practise exams generate a random exam
+        if (answeredExams.isEmpty()) return generateRandomPracticeExam(allQuestionsFromCourse, courseId)
+
+        val answeredQuestionsByRelevantOthers: Map<Int, Map<Int, AnsweredQuestion>> = try {
+            QuestionDAO.getAnsweredQuestionsByRelevantOthers(studentNumber)
         } catch (e: DatabaseException) {
             // Add Logger
             throw e
@@ -105,54 +118,74 @@ class GeneratePersonalPracticeExam(val QuestionDAO: QuestionDAO) {
         val questionsMap: Map<Int, Question> = allQuestionsFromCourse.map { Pair(it.questionId!!, it) }.toMap()
         val examQuestions: ArrayList<Question> = ArrayList()
         val categoriesInExam: MutableMap<String, Int> = HashMap()
+        val maxAmountOfQuestionsInExam =
+                if (allQuestionsFromCourse.size <= 30)
+                    ceil(100.0 / allQuestionsFromCourse.size * 33).toInt()
+                else 10
+        var questionSequenceNumber = 0
         var totalCategoriesInExam = 0
 
-            for (questionID: Int in questionRelevance.keys) {
-                val question: Question = questionsMap[questionID]!!
+        for (questionID: Int in questionRelevance.keys) {
+            val question: Question = questionsMap[questionID]!!
 
-                // For each question calculate the percentage of the categories in the question that are already in the exam
-                for (category in question.categories) {
-                    // If there are no categories added to the exam (No questions)
-                    // Than add the most relevant one.
-                    var questionAdded = false
-                    if (totalCategoriesInExam == 0) {
-                        question.questionOrderInExam = examQuestions.size + 1
+            // For each question calculate the percentage of the categories in the question that are already in the exam
+            for (category in question.categories) {
+                // If there are no categories added to the exam (No questions)
+                // Than add the most relevant one.
+                var questionAdded = false
+                if (totalCategoriesInExam == 0) {
+                    questionSequenceNumber += question.subQuestions?.size ?: 0
+                    question.questionOrderInExam = questionSequenceNumber
+                    examQuestions.add(question)
+                    questionAdded = true
+                } else {
+                    // Percentage of the current category in the exam
+                    val categoryPercentage = 100 / totalCategoriesInExam * categoriesInExam.getOrDefault(category, 0)
+
+                    // Category should not have more than 50% of one exam, so random got til 50
+                    val random = ThreadLocalRandom.current().nextInt(50)
+                    // If the random number is higher than the current percentage of the category in the exam.
+                    // Than add the question to the exam
+                    if (random > categoryPercentage) {
+                        questionSequenceNumber += question.subQuestions?.size ?: 0
+                        question.questionOrderInExam = questionSequenceNumber
                         examQuestions.add(question)
                         questionAdded = true
-                    } else {
-                        // Percentage of the current category in the exam
-                        val categoryPercentage = 100 / totalCategoriesInExam * categoriesInExam.getOrDefault(category, 0)
-
-                        // Category should not have more than 50% of one exam, so random got til 50
-                        val random = ThreadLocalRandom.current().nextInt(50)
-                        // If the random number is higher than the current percentage of the category in the exam.
-                        // Than add the question to the exam
-                        if (random > categoryPercentage) {
-                            question.questionOrderInExam = examQuestions.size + 1
-                            examQuestions.add(question)
-                            questionAdded = true
-                        }
-                    }
-
-                    if (questionAdded) {
-                        // Update the category map with the categories of the added exam
-                        for (category2 in question.categories) {
-                            categoriesInExam[category2] = (categoriesInExam.getOrDefault(category2, 0)) + 1
-                            totalCategoriesInExam++
-                        }
-                        // Break for loop because a question was added
-                        break
                     }
                 }
 
-                // If the exam does have 10 or more questions quit adding new questions
-                if (examQuestions.size >= 10){
+                if (questionAdded) {
+                    // Update the category map with the categories of the added exam
+                    for (category2 in question.categories) {
+                        categoriesInExam[category2] = (categoriesInExam.getOrDefault(category2, 0)) + 1
+                        totalCategoriesInExam++
+                    }
+
+                    // Break for loop because a question was added
                     break
                 }
             }
 
+            // If the exam does have 10 or more questions quit adding new questions
+            if (examQuestions.size >= maxAmountOfQuestionsInExam) {
+                break
+            }
+        }
+
 
         println(examQuestions.map { it.questionId })
+
+        return PracticeExam("Practice Exam (${LocalDateTime.now()})", courseId, examQuestions.toTypedArray())
+    }
+
+    private fun generateRandomPracticeExam(allQuestionsFromCourse: Array<Question>, courseId: Int): PracticeExam {
+        val examQuestions: MutableList<Question> = ArrayList()
+
+        while (examQuestions.size < 10) {
+            val random = ThreadLocalRandom.current().nextInt(allQuestionsFromCourse.size - 1)
+            examQuestions += allQuestionsFromCourse[random]
+
+        }
 
         return PracticeExam("Practice Exam (${LocalDateTime.now()})", courseId, examQuestions.toTypedArray())
     }

@@ -544,11 +544,12 @@ class QuestionDAO : IQuestionDAO {
     }
 
     fun getAllAnsweredExamsByStudent(studentNumber: Int): Array<AnsweredExam> {
-        val reader1 = JsonReader(FileReader("src/main/resources/examsAnswered.json"))
+        //val reader1 = JsonReader(FileReader("src/main/resources/examsAnswered.json"))
         val reader2 = JsonReader(FileReader("src/main/resources/examsAnswered2.json"))
-        val results1: Array<AnsweredExam> = Gson().fromJson(reader1, Array<AnsweredExam>::class.java)
+        //val results1: Array<AnsweredExam> = Gson().fromJson(reader1, Array<AnsweredExam>::class.java)
         val results2: Array<AnsweredExam> = Gson().fromJson(reader2, Array<AnsweredExam>::class.java)
-        return results1.plus(results2)
+        //return results1.plus(results2)
+        return results2
     }
 
     fun getAllQuestionsFromCourse(courseId: Int): Array<Question> {
