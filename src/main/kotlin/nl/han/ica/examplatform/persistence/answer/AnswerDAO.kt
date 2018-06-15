@@ -107,7 +107,7 @@ class AnswerDAO : IAnswerDAO {
         var preparedQuestionStatement: PreparedStatement? = null
         val preparedQuestionStatement2: PreparedStatement?
 
-        val sqlQuestionQuery = "SELECT ANSWERTEXT FROM QUESTION WHERE QUESTIONID = ?"
+        val sqlQuestionQuery = "SELECT Q.ANSWERTEXT, Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
 
         val sqlPartialQuery = """
             SELECT
@@ -149,6 +149,7 @@ class AnswerDAO : IAnswerDAO {
 
             Answer(
                     questionId = questionId,
+                    description = questionRs.getString("ASSESSMENTCOMMENTS"),
                     partial_answers = partialAnswers
             )
         } catch (e: SQLException) {
@@ -189,9 +190,10 @@ class AnswerDAO : IAnswerDAO {
         val sqlQuestionQuery = """
             SELECT
                 ANSWERTEXT,
-                Q.QUESTIONID
+                Q.QUESTIONID,
+                Q.ASSESSMENTCOMMENTS
             FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q
-                on QE.QUESTIONID = Q.QUESTIONID
+                ON QE.QUESTIONID = Q.QUESTIONID
             WHERE QE.EXAMID = ?"""
 
         val preparedAnswerStatement = conn?.prepareStatement(sqlAnswerQuery)
@@ -229,7 +231,7 @@ class AnswerDAO : IAnswerDAO {
 
                 answers.add(Answer(
                         questionId = questionId,
-                        example_answer = questionRs.getString("ANSWERTEXT"),
+                        description = questionRs.getString("ASSESSMENTCOMMENTS"),
                         partial_answers = partialAnswers
                 ))
 
@@ -238,7 +240,6 @@ class AnswerDAO : IAnswerDAO {
 
             AnswerModel(
                     examId = examId,
-                    answerModelId = null,
                     answers = answers
             )
         } catch (e: SQLException) {
