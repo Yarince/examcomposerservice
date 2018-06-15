@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import nl.han.ica.examplatform.models.exam.Exam
 
 /**
@@ -20,6 +21,7 @@ import nl.han.ica.examplatform.models.exam.Exam
  * @param answerTypePluginVersion [String] The version of the answer type plugin
  * @param pluginVersion [String] The version of the plugin used as question type
  * @param categories [ArrayList]<[String]> The list of categories of this question
+ * @param partial_answers [Array]<[PartialAnswer]> List of partial answers of a question
  * @param subQuestions [Array]<[Question]> List of questions that represent one larger question
  */
 data class Question(
@@ -47,6 +49,8 @@ data class Question(
         val pluginVersion: String,
         @ApiModelProperty(notes = "The categories that this question is about")
         val categories: ArrayList<String> = arrayListOf(),
+        @ApiModelProperty(notes = "Partial answers of the question. Required if the question is not a noQuestion type")
+        val partial_answers: ArrayList<PartialAnswer>,
         @ApiModelProperty(notes = "A question can contain subQuestions when the type is noQuestion")
         val subQuestions: ArrayList<Question>? = null
 )

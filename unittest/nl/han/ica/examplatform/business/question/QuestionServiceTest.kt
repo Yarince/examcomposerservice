@@ -31,19 +31,20 @@ class QuestionServiceTest {
 
     @Test
     fun testAddQuestionSuccess() {
-        val categories: ArrayList<String> = arrayListOf("ASD", "QA")
+        val categories = arrayListOf("ASD", "QA")
         val questionInserted = Question(
                 questionId = 0,
                 questionOrderInExam = 1,
                 questionType = "OpenQuestion",
                 questionText = "name",
                 questionPoints = 5,
-                examType = "exam",
-                pluginVersion = "1.0",
+                courseId = 1,
+                examType = "Tentamen",
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
-                courseId = 1,
-                categories = categories)
+                pluginVersion = "1.0",
+                categories = categories,
+                partial_answers = arrayListOf())
         val expectedResult: ResponseEntity<Question> = ResponseEntity(questionInserted, HttpStatus.CREATED)
 
         doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)
@@ -54,6 +55,23 @@ class QuestionServiceTest {
         assertEquals(expectedResult, result)
     }
 
+    @Test(expected = QuestionNotInsertedException::class)
+    fun testAddQuestionError() {
+        val categories = arrayListOf("ASD", "QA")
+        val questionInserted = Question(
+                questionId = 0,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                courseId = 1,
+                examType = "Tentamen",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                pluginVersion = "1.0",
+                categories = categories,
+                partial_answers = arrayListOf())
+        val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
     @Test
     fun testAddQuestionSuccessWithSubQuestions() {
         val categories: ArrayList<String> = arrayListOf("ASD", "QA")
