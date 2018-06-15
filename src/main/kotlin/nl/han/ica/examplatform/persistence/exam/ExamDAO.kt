@@ -195,43 +195,70 @@ class ExamDAO : IExamDAO {
     override fun addQuestionsToExam(exam: Exam): Exam {
         if (exam.questions == null || exam.questions.size < 1)
             throw DatabaseException("Please provide questions to add to exam")
+        if (exam.examId == null)
+            throw DatabaseException("Please provide examID")
 
-        var query = "INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER, QUESTIONPOINTS) VALUES"
-        for (question in exam.questions) {
-            query = query.plus("(?, ?, ?, ?)")
-            if (question != exam.questions.last()) query = query.plus(", ")
-        }
+        val sqlQuestionQuery = """
+            INSERT INTO QUESTION_IN_EXAM (
+                EXAMID,
+                QUESTIONID,
+                SEQUENCENUMBER,
+                QUESTIONPOINTS)
+            VALUES (?, ?, ?, ?)
+        """
+
+        val sqlPartialAnswerQuery = """
+           INSERT INTO PARTIAL_ANSWER_IN_QUESTION_IN_EXAM (
+               EXAMID,
+               QUESTIONID,
+               PARTIALANSWERID,
+               POINTS
+               )
+           VALUES (?, ?, ?, ?)
+        """
 
         val conn: Connection? = MySQLConnection.getConnection()
-        val preparedStatement: PreparedStatement?
-        preparedStatement = conn?.prepareStatement(query)
-
-        var index = 0
-        for (question in exam.questions) {
-            preparedStatement?.setInt(++index, exam.examId ?: throw DatabaseException("Please provide examID"))
-            preparedStatement?.setInt(++index, question.questionId
-                    ?: throw DatabaseException("Can't insert question without ID"))
-            preparedStatement?.setInt(++index, question.questionOrderInExam
-                    ?: throw DatabaseException("Can't insert question without sequence number"))
-            preparedStatement?.setInt(++index, question.questionPoints
-                    ?: throw DatabaseException("Can't insert question without question points"))
-        }
+        val preparedStatementQuestion: PreparedStatement? = conn?.prepareStatement(sqlQuestionQuery)
 
         try {
-            preparedStatement?.executeUpdate()
+            for (question in exam.questions) {
+                preparedStatementQuestion?.setInt(1, exam.examId)
+                preparedStatementQuestion?.setInt(2, question.questionId
+                        ?: throw DatabaseException("Can't insert question without ID"))
+                preparedStatementQuestion?.setInt(3, question.questionOrderInExam
+                        ?: throw DatabaseException("Can't insert question without sequence number"))
+                preparedStatementQuestion?.setInt(4, question.questionPoints
+                        ?: throw DatabaseException("Can't insert question without question points"))
+                preparedStatementQuestion?.addBatch()
+
+                val preparedStatementPartialAnswer = conn?.prepareStatement(sqlPartialAnswerQuery)
+                for (partialAnswer in question.partial_answers) {
+                    preparedStatementPartialAnswer?.setInt(1, exam.examId)
+                    preparedStatementPartialAnswer?.setInt(2, question.questionId
+                            ?: throw DatabaseException("Can't insert partial answer without question ID"))
+                    preparedStatementPartialAnswer?.setInt(3, partialAnswer.id
+                            ?: throw DatabaseException("Can't insert partial answer without ID"))
+                    preparedStatementPartialAnswer?.setInt(4, partialAnswer.points
+                            ?: throw DatabaseException("Can't insert partial answer without points"))
+                    preparedStatementPartialAnswer?.addBatch()
+                }
+                preparedStatementPartialAnswer?.executeBatch()
+            }
+
+            preparedStatementQuestion?.executeBatch()
         } catch (e: SQLException) {
             logger.error("Error when adding questions to exam", e)
-            throw DatabaseException("Error while interacting with the database")
+            throw DatabaseException("Error while interacting with the database", e)
         } finally {
-            MySQLConnection.closeStatement(preparedStatement)
+            MySQLConnection.closeStatement(preparedStatementQuestion)
             MySQLConnection.closeConnection(conn)
         }
 
         return exam
     }
 
-    override fun addClassesToExam(examId: Int, classes: ArrayList<String>) : HttpStatus {
-        if (classes == null || classes.isEmpty())
+    override fun addClassesToExam(examId: Int, classes: ArrayList<String>): HttpStatus {
+        if (classes.isEmpty())
             throw DatabaseException("Please provide a class to add to this exam")
         val conn: Connection? = MySQLConnection.getConnection()
         val sqlAddClassesToExamQuery = "INSERT INTO CLASSES_TAKING_EXAMS (CLASSNAME, EXAMID) VALUES(?, ?)"
