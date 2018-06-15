@@ -119,30 +119,31 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlQuestionQuery = """
             SELECT distinct
-                QUESTIONID,
-                SEQUENCENUMBER,
-                QUESTIONID,
-                QUESTIONTYPE,
-                QUESTIONTEXT,
-                COURSEID,
-                EXAMTYPENAME,
-                PLUGINVERSION,
-                ANSWERTYPE,
-                ANSWERTYPEPLUGINVERSION
-            FROM QUESTION
+                Q.QUESTIONID,
+                QIE.SEQUENCENUMBER,
+                Q.QUESTIONTYPE,
+                Q.QUESTIONTEXT,
+                QIE.QUESTIONPOINTS,
+                Q.COURSEID,
+                Q.EXAMTYPENAME,
+                Q.QUESTIONTYPEPLUGINVERSION,
+                Q.ANSWERTYPE,
+                Q.ANSWERTYPEPLUGINVERSION
+            FROM QUESTION Q
+              JOIN QUESTION_IN_EXAM QIE
+                ON Q.QUESTIONID = QIE.QUESTIONID
             WHERE
                 COURSEID = ? and PARENTQUESTIONID is null;"""
 
         val sqlSubQuestionQuery = """
             SELECT
                 QUESTIONID,
-                SEQUENCENUMBER,
                 QUESTIONID,
                 QUESTIONTYPE,
                 QUESTIONTEXT,
                 COURSEID,
                 EXAMTYPENAME,
-                PLUGINVERSION,
+                QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION
@@ -238,13 +239,13 @@ class QuestionDAO : IQuestionDAO {
                 questions.add(Question(questionId = questionRs.getInt("QuestionID"),
                         questionType = questionRs.getString("QuestionType"),
                         questionText = questionRs.getString("QuestionText"),
-                        examType = questionRs.getString("EXAMTYPENAME"),
-                        categories = getCategoriesOfQuestion(questionRs.getInt("QuestionID"), conn),
-                        subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery),
-                        pluginVersion = questionRs.getString("PLUGINVERSION"),
                         courseId = questionRs.getInt("COURSEID"),
+                        examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
-                        answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION")
+                        answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
+                        pluginVersion = questionRs.getString("PLUGINVERSION"),
+                        categories = getCategoriesOfQuestion(questionRs.getInt("QuestionID"), conn),
+                        subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery)
                 ))
             }
         } catch (e: SQLException) {
@@ -276,12 +277,12 @@ class QuestionDAO : IQuestionDAO {
                 Q.QUESTIONID,
                 QE.SEQUENCENUMBER,
                 QE.QUESTIONID,
-                QUESTIONTYPE,
-                QUESTIONTEXT,
-                QUESTIONPOINTS,
+                Q.QUESTIONTYPE,
+                Q.QUESTIONTEXT,
+                QE.QUESTIONPOINTS,
                 COURSEID,
                 EXAMTYPENAME,
-                PLUGINVERSION,
+                QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION as Q INNER JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
@@ -297,7 +298,7 @@ class QuestionDAO : IQuestionDAO {
                 QUESTIONPOINTS,
                 COURSEID,
                 EXAMTYPENAME,
-                PLUGINVERSION,
+                QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION as Q JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
@@ -329,18 +330,17 @@ class QuestionDAO : IQuestionDAO {
 
         while (questionRs.next())
             questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
-                    questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                    questionOrderText = questionRs.getString("SEQUENCENUMBER"),
+                    //questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
                     questionType = questionRs.getString("QUESTIONTYPE"),
                     questionText = questionRs.getString("QUESTIONTEXT"),
                     questionPoints = questionRs.getInt("QUESTIONPOINTS"),
                     courseId = questionRs.getInt("COURSEID"),
                     examType = questionRs.getString("EXAMTYPENAME"),
-                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                    subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
-                    pluginVersion = questionRs.getString("PLUGINVERSION"),
                     answerType = questionRs.getString("ANSWERTYPE"),
-                    answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION")
+                    answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
+                    pluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
+                    subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery)
             ))
         return questions
     }
@@ -373,17 +373,17 @@ class QuestionDAO : IQuestionDAO {
 
         while (questionRs.next())
             questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
-                    questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                    questionOrderText = "Vraag", // To be removed
-                    questionType = questionRs.getString("QUESTIONTYPE"),
+//                    questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
+                    questionType = questionRs.getString("QUESTIONTYPE"), // To be removed
                     questionText = questionRs.getString("QUESTIONTEXT"),
+                    questionPoints = questionRs.getInt("QUESTIONPOINTS"),
                     courseId = questionRs.getInt("COURSEID"),
                     examType = questionRs.getString("EXAMTYPENAME"),
-                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                    subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
-                    pluginVersion = questionRs.getString("PLUGINVERSION"),
                     answerType = questionRs.getString("ANSWERTYPE"),
-                    answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION")
+                    answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
+                    pluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
+                    subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery)
             ))
         return questions
     }
@@ -449,13 +449,11 @@ class QuestionDAO : IQuestionDAO {
         val sqlQuestionQuery = """
                 SELECT distinct
                     QUESTIONID,
-                    SEQUENCENUMBER,
-                    QUESTIONID,
                     QUESTIONTYPE,
                     QUESTIONTEXT,
                     COURSEID,
                     EXAMTYPENAME,
-                    PLUGINVERSION,
+                    QUESTIONTYPEPLUGINVERSION,
                     ANSWERTYPE,
                     ANSWERTYPEPLUGINVERSION
                 FROM QUESTION
@@ -464,13 +462,11 @@ class QuestionDAO : IQuestionDAO {
         val sqlSubQuestionQuery = """
             SELECT
                 QUESTIONID,
-                SEQUENCENUMBER,
-                QUESTIONID,
                 QUESTIONTYPE,
                 QUESTIONTEXT,
                 COURSEID,
                 EXAMTYPENAME,
-                PLUGINVERSION,
+                QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION

@@ -10,7 +10,6 @@ import nl.han.ica.examplatform.models.exam.Exam
  *
  * @param questionId [Int] The id that the Question has in the database
  * @param questionOrderInExam [Int] The index number that represents the position of the question in the exam
- * @param questionOrderText [String] Text that go's along with the [questionOrderInExam]
  * @param questionType [String] The type of question this question is
  * @param questionText [String] The sentence that makes a request for information
  * @param questionPoints [Int] The amount of point the question is worth
@@ -27,8 +26,6 @@ data class Question(
         val questionId: Int? = null,
         @ApiModelProperty(notes = "Order of question in an Exam")
         val questionOrderInExam: Int? = null,
-        @ApiModelProperty(notes = """Text of order in exam text. Example: "Question 1" or "a"""")
-        val questionOrderText: String? = null,
         @ApiModelProperty(notes = "This is the name of the plugin used, e.g. OpenQuestion", required = true)
         val questionType: String,
         @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")

@@ -234,13 +234,13 @@ class ExamDAO : IExamDAO {
         if (classes == null || classes.isEmpty())
             throw DatabaseException("Please provide a class to add to this exam")
         val conn: Connection? = MySQLConnection.getConnection()
-        val sqlAddClassesToExamQuery = "INSERT INTO CLASSES_TAKING_EXAMS (CLASSNAME, EXAMID) VALUES(?, ?)"
+        val sqlAddClassesToExamQuery = "INSERT INTO CLASSES_TAKING_EXAMS (EXAMID, CLASSNAME) VALUES(?, ?)"
 
         val preparedStatement: PreparedStatement? = conn?.prepareStatement(sqlAddClassesToExamQuery)
         return try {
             for (`class` in classes.withIndex()) {
-                preparedStatement?.setString(1, `class`.value)
-                preparedStatement?.setInt(2, examId)
+                preparedStatement?.setInt(1, examId)
+                preparedStatement?.setString(2, `class`.value)
 
                 preparedStatement?.executeUpdate()
             }

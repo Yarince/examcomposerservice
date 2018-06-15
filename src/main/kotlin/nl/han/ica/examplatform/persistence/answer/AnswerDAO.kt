@@ -107,7 +107,7 @@ class AnswerDAO : IAnswerDAO {
         var preparedQuestionStatement: PreparedStatement? = null
         val preparedQuestionStatement2: PreparedStatement?
 
-        val sqlQuestionQuery = "SELECT Q.ANSWERTEXT, Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
+        val sqlQuestionQuery = "SELECT Q.QUESTIONTEXT, Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
 
         val sqlPartialQuery = """
             SELECT
@@ -177,7 +177,6 @@ class AnswerDAO : IAnswerDAO {
                 PARTIALANSWERTEXT,
                 PA.PARTIALANSWERID,
                 PAIQIE.POINTS,
-                ANSWERTEXT,
                 Q.QUESTIONID
             FROM PARTIAL_ANSWER PA
                 JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE
@@ -189,7 +188,6 @@ class AnswerDAO : IAnswerDAO {
 
         val sqlQuestionQuery = """
             SELECT
-                ANSWERTEXT,
                 Q.QUESTIONID,
                 Q.ASSESSMENTCOMMENTS
             FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q
