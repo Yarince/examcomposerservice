@@ -109,10 +109,15 @@ class AnswerDAO : IAnswerDAO {
 
         val sqlQuestionQuery = "SELECT Q.ANSWERTEXT, Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
 
-        val sqlPartialQuery = """SELECT PA.PARTIALANSWERTEXT, PA.PARTIALANSWERID, PAIQIE.POINTS
-                                 FROM PARTIAL_ANSWER PA JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE ON
-                                 PA.PARTIALANSWERID = PAIQIE.PARTIALANSWERID
-                                 WHERE PA.PARTIALANSWERID = ?;"""
+        val sqlPartialQuery = """
+            SELECT
+                PA.PARTIALANSWERTEXT,
+                PA.PARTIALANSWERID,
+                PAIQIE.POINTS
+            FROM PARTIAL_ANSWER PA
+               LEFT JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE
+                    ON PA.PARTIALANSWERID = PAIQIE.PARTIALANSWERID AND PA.QUESTIONID = PAIQIE.QUESTIONID
+            WHERE PA.QUESTIONID = ?"""
 
         return try {
             preparedQuestionStatement = conn?.prepareStatement(sqlPartialQuery)
@@ -167,14 +172,22 @@ class AnswerDAO : IAnswerDAO {
         val conn: Connection? = MySQLConnection.getConnection()
 
 
-        val sqlAnswerQuery = """SELECT PARTIALANSWERTEXT, PA.PARTIALANSWERID, PAIQIE.POINTS, ANSWERTEXT, Q.QUESTIONID
-                              FROM PARTIAL_ANSWER PA
-                              JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE ON PA.PARTIALANSWERID = PAIQIE.PARTIALANSWERID
-                              JOIN QUESTION Q on PA.QUESTIONID = Q.QUESTIONID
-                              WHERE PAIQIE.EXAMID = ?"""
+        val sqlAnswerQuery = """
+            SELECT
+                PARTIALANSWERTEXT,
+                PA.PARTIALANSWERID,
+                PAIQIE.POINTS,
+                ANSWERTEXT,
+                Q.QUESTIONID
+            FROM PARTIAL_ANSWER PA
+                JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE
+                    ON PA.PARTIALANSWERID = PAIQIE.PARTIALANSWERID
+                JOIN QUESTION Q
+                    on PA.QUESTIONID = Q.QUESTIONID
+            WHERE PAIQIE.EXAMID = ?"""
 
 
-        val sqlQuestionQuery = "SELECT ANSWERTEXT, Q.QUESTIONID, Q.ASSESSMENTCOMMENTS FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q on QE.QUESTIONID = Q.QUESTIONID where QE.EXAMID = ?"
+        val sqlQuestionQuery = """SELECT ANSWERTEXT, Q.QUESTIONID, Q.ASSESSMENTCOMMENTS FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q on QE.QUESTIONID = Q.QUESTIONID WHERE QE.EXAMID = ?"""
 
         val preparedAnswerStatement = conn?.prepareStatement(sqlAnswerQuery)
         val preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
