@@ -287,7 +287,36 @@ class ExamDAO : IExamDAO {
     override fun updateExam(exam: Exam): Exam {
         if (exam.examId == null) throw DatabaseException("Can't update exam when examId is not set")
 
-        val query = "UPDATE EXAM SET COURSEID = ?, EXAMTYPENAME = ?, EXAMNAME = ?, STARTTIME = ?, ENDTIME = ?, INSTRUCTIONS = ?, EXAMVERSION = ?, LOCATION = ? WHERE EXAMID = ?"
+        val query = """
+            UPDATE EXAM
+            SET
+                COURSEID = ?,
+                EXAMTYPENAME = ?,
+                EXAMNAME = ?,
+                STARTTIME = ?,
+                ENDTIME = ?,
+                INSTRUCTIONS = ?,
+                EXAMVERSION = ?,
+                LOCATION = ?
+            WHERE EXAMID = ?
+            """
+        val sqlQuestionQuery = """
+            UPDATE QUESTION_IN_EXAM
+            SET
+                SEQUENCENUMBER = ?,
+                QUESTIONPOINTS = ?
+            WHERE EXAMID = ? and QUESTIONID = ?
+        """
+
+        val sqlPartialAnswerQuery = """
+           UPDATE PARTIAL_ANSWER_IN_QUESTION_IN_EXAM
+           SET
+               POINTS = ?
+           WHERE
+              EXAMID = ? AND
+              QUESTIONID = ? AND
+              PARTIALANSWERID =?
+        """
 
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement: PreparedStatement?
@@ -303,11 +332,39 @@ class ExamDAO : IExamDAO {
         preparedStatement?.setString(8, exam.location)
         preparedStatement?.setInt(9, exam.examId)
 
+
         try {
+            if (exam.questions != null) {
+                val preparedStatementQuestion: PreparedStatement? = conn?.prepareStatement(sqlQuestionQuery)
+                for (question in exam.questions) {
+                    preparedStatementQuestion?.setInt(1, question.questionOrderInExam
+                            ?: throw DatabaseException("Can't update question without sequence number"))
+                    preparedStatementQuestion?.setInt(2, question.questionPoints
+                            ?: throw DatabaseException("Can't update question without question points"))
+                    preparedStatementQuestion?.setInt(3, exam.examId)
+                    preparedStatementQuestion?.setInt(4, question.questionId
+                            ?: throw DatabaseException("Can't update question without ID"))
+                    preparedStatementQuestion?.addBatch()
+
+                    val preparedStatementPartialAnswer = conn?.prepareStatement(sqlPartialAnswerQuery)
+                    for (partialAnswer in question.partial_answers) {
+                        preparedStatementPartialAnswer?.setInt(1, partialAnswer.points
+                                ?: throw DatabaseException("Can't update partial answer without points"))
+                        preparedStatementPartialAnswer?.setInt(2, exam.examId)
+                        preparedStatementPartialAnswer?.setInt(3, question.questionId
+                                ?: throw DatabaseException("Can't update partial answer without question ID"))
+                        preparedStatementPartialAnswer?.setInt(4, partialAnswer.id
+                                ?: throw DatabaseException("Can't update partial answer without ID"))
+                        preparedStatementPartialAnswer?.addBatch()
+                    }
+                    preparedStatementPartialAnswer?.executeBatch()
+                }
+                preparedStatementQuestion?.executeBatch()
+            }
             preparedStatement?.executeUpdate()
         } catch (e: SQLException) {
             logger.error("Error while publishing exam", e)
-            throw DatabaseException("Error while updating exam")
+            throw DatabaseException("Error while updating exam", e)
         } finally {
             MySQLConnection.closeStatement(preparedStatement)
             MySQLConnection.closeConnection(conn)
