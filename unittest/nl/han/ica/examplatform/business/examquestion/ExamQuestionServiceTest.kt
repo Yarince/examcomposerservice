@@ -60,4 +60,50 @@ class ExamQuestionServiceTest {
 
         assertEquals(ResponseEntity(expectedExam, HttpStatus.ACCEPTED), examQuestionService.addQuestionToExam(expectedExam))
     }
+
+    @Test
+    fun testRemoveQuestionsFromExam() {
+        val examID = 1
+        val questionIDs: Array<Int> = arrayOf(1, 2, 3)
+
+        doReturn(false).`when`(questionDAO).answersGivenOnQuestions(questionIDs)
+
+        examQuestionService.removeQuestionsFromExam(examID, questionIDs)
+        verify(examDAO,
+                times(1))
+                .removeQuestionsFromExam(examID, questionIDs)
+    }
+
+    @Test(expected = InvalidExamException::class)
+    fun testRemoveQuestionsFromExamNoQuestionIds() {
+        val examID = 1
+        val questionIDs: Array<Int> = arrayOf()
+
+        examQuestionService.removeQuestionsFromExam(examID, questionIDs)
+    }
+
+    @Test(expected = InvalidExamException::class)
+    fun testRemoveQuestionsFromExamAnswersGivenOnQuestion() {
+        val examID = 1
+        val questionIDs: Array<Int> = arrayOf(1, 2, 3)
+
+        doReturn(true).`when`(questionDAO).answersGivenOnQuestions(questionIDs)
+
+        examQuestionService.removeQuestionsFromExam(examID, questionIDs)
+    }
+
+    @Test
+    fun testChangeQuestionOrderInExam(){
+        val examID = 1
+        val questionsAndSequenceNumbers: Array<Pair<Int, Int>> = arrayOf(
+                Pair(1, 3),
+                Pair(2, 1),
+                Pair(3, 2))
+
+        examQuestionService.changeQuestionOrderInExam(examID, questionsAndSequenceNumbers)
+
+        verify(examDAO,
+                times(1))
+                .changeQuestionOrderInExam(examID, questionsAndSequenceNumbers)
+    }
 }
