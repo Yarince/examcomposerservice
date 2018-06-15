@@ -192,7 +192,7 @@ class ExamController(
 
     /**
      * HTTP REST function to delete an [Exam].
-     * This does not delete the questions in an exam.
+     * This also updates the questions in an exam.
      *
      * @param examId [Int] The ID of the exam to delete
      */
