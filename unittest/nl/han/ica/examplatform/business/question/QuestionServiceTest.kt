@@ -55,23 +55,6 @@ class QuestionServiceTest {
         assertEquals(expectedResult, result)
     }
 
-    @Test(expected = QuestionNotInsertedException::class)
-    fun testAddQuestionError() {
-        val categories = arrayListOf("ASD", "QA")
-        val questionInserted = Question(
-                questionId = 0,
-                questionOrderInExam = 1,
-                questionType = "OpenQuestion",
-                questionText = "name",
-                questionPoints = 5,
-                courseId = 1,
-                examType = "Tentamen",
-                answerType = "OpenQuestion",
-                answerTypePluginVersion = "1.0",
-                pluginVersion = "1.0",
-                categories = categories,
-                partial_answers = arrayListOf())
-        val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
     @Test
     fun testAddQuestionSuccessWithSubQuestions() {
         val categories: ArrayList<String> = arrayListOf("ASD", "QA")
@@ -87,7 +70,8 @@ class QuestionServiceTest {
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
                 categories = categories,
-                subQuestions = arrayListOf())
+                subQuestions = arrayListOf(),
+                partial_answers = arrayListOf())
         val subQuestion = Question(
                 questionId = 1,
                 questionOrderInExam = 1,
@@ -100,7 +84,8 @@ class QuestionServiceTest {
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
                 categories = categories,
-                subQuestions = arrayListOf(secondLayerSubQuestion))
+                subQuestions = arrayListOf(secondLayerSubQuestion),
+                partial_answers = arrayListOf())
         val insertedQuestion = Question(
                 questionId = 3,
                 questionOrderInExam = 1,
@@ -112,7 +97,8 @@ class QuestionServiceTest {
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
                 categories = categories,
-                subQuestions = arrayListOf(subQuestion))
+                subQuestions = arrayListOf(subQuestion),
+                partial_answers = arrayListOf())
         val question = Question(
                 questionId = null,
                 questionOrderInExam = 1,
@@ -124,7 +110,8 @@ class QuestionServiceTest {
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
                 categories = categories,
-                subQuestions = arrayListOf(subQuestion))
+                subQuestions = arrayListOf(subQuestion),
+                partial_answers = arrayListOf())
 
         val expectedResult: ResponseEntity<Question> = ResponseEntity(insertedQuestion, HttpStatus.CREATED)
 
@@ -143,7 +130,7 @@ class QuestionServiceTest {
 
     @Test(expected = CategoriesDontExistException::class)
     fun testAddQuestionErrorCheckIfCategoriesExist() {
-        val categories = arrayListOf("ASD", "QA")
+        val categories: ArrayList<String> = arrayListOf("ASD", "QA")
         val questionInserted = Question(
                 questionId = 0,
                 questionOrderInExam = 1,
@@ -155,7 +142,8 @@ class QuestionServiceTest {
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
-                categories = categories)
+                categories = categories,
+                partial_answers = arrayListOf())
 
         doReturn(false).`when`(categoryDAO).checkIfCategoriesExist(categories)
 
@@ -176,7 +164,8 @@ class QuestionServiceTest {
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
-                categories = categories)
+                categories = categories,
+                partial_answers = arrayListOf())
 
         doThrow(DatabaseException("Message")).`when`(categoryDAO).checkIfCategoriesExist(categories)
 
@@ -197,7 +186,8 @@ class QuestionServiceTest {
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
-                categories = arrayListOf("ASD", "QA")))
+                categories = arrayListOf("ASD", "QA"),
+                partial_answers = arrayListOf()))
         val expected: ResponseEntity<Array<Question>> = ResponseEntity(questions, HttpStatus.OK)
         doReturn(questions).`when`(questionDAO).getQuestionsByCourse(courseId)
         val result: ResponseEntity<Array<Question>> = questionService.getQuestionsForCourse(courseId)
@@ -219,7 +209,8 @@ class QuestionServiceTest {
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
-                categories = arrayListOf("ASD", "QA"))
+                categories = arrayListOf("ASD", "QA"),
+                partial_answers = arrayListOf())
         val expected: ResponseEntity<Question> = ResponseEntity(question, HttpStatus.OK)
         doReturn(question).`when`(questionDAO).getQuestionById(questionId)
         val result: ResponseEntity<Question> = questionService.getQuestionForId(questionId)
@@ -240,7 +231,8 @@ class QuestionServiceTest {
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
                 courseId = 1,
-                categories = arrayListOf("ASD", "QA"))
+                categories = arrayListOf("ASD", "QA"),
+                partial_answers = arrayListOf())
         val expected: ResponseEntity<Question> = ResponseEntity(question, HttpStatus.ACCEPTED)
         doReturn(question).`when`(questionDAO).updateQuestion(question)
         val result: ResponseEntity<Question> = questionService.updateQuestion(question)
