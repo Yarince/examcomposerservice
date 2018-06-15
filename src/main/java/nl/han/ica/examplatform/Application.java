@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform;
 
 
+import nl.han.ica.examplatform.persistence.exam.ExamDAO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ public class Application implements WebMvcConfigurer {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+        ExamDAO e = new ExamDAO();
     }
 
     @Bean

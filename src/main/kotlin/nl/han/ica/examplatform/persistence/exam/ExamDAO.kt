@@ -150,7 +150,7 @@ class ExamDAO : IExamDAO {
                 LOCATION,
                 READYFORDOWNLOAD)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """.trimIndent()
+        """
         val preparedStatement: PreparedStatement?
         preparedStatement = conn?.prepareStatement(insertExamQuery)
         preparedStatement?.setInt(1, exam.courseId)
