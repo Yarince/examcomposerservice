@@ -28,16 +28,16 @@ internal class PracticeExamGeneratorTest {
         val studentNr = 1
         val categories = arrayListOf("ATAM", "DCAR")
         val expectedQuestions = arrayOf(
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 1, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("QA", "ATAM"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 2, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("DCAR"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 3, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("ATAM"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 4, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("ATAM"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 5, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("ASR", "DCAR", "QA"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 6, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("DCAR"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 7, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("DCAR"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 8, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("DCAR"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 9, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("DCAR"), pluginVersion = "1.0"),
-                Question(answerType = "OpenQuestion", answerTypePluginVersion = "1.0", courseId = 1, questionId = 10, questionType = "OpenQuestion", examType = "Proeftoets", categories = arrayListOf("DCAR"), pluginVersion = "1.0")
+                Question(questionId = 1, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("QA", "ATAM"), partial_answers = arrayListOf()),
+                Question(questionId = 2, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("DCAR"), partial_answers = arrayListOf()),
+                Question(questionId = 3, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("ATAM"), partial_answers = arrayListOf()),
+                Question(questionId = 4, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("ATAM"), partial_answers = arrayListOf()),
+                Question(questionId = 5, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("ASR", "DCAR", "QA"), partial_answers = arrayListOf()),
+                Question(questionId = 6, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("DCAR"), partial_answers = arrayListOf()),
+                Question(questionId = 7, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("DCAR"), partial_answers = arrayListOf()),
+                Question(questionId = 8, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("DCAR"), partial_answers = arrayListOf()),
+                Question(questionId = 9, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("DCAR"), partial_answers = arrayListOf()),
+                Question(questionId = 10, questionType = "OpenQuestion", courseId = 1, examType = "Proeftoets", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", categories = arrayListOf("DCAR"), partial_answers = arrayListOf())
         )
 
         doReturn(expectedQuestions).`when`(questionDAO).getQuestionsByCourse(courseId)

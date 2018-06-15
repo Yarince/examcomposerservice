@@ -3,12 +3,9 @@ package nl.han.ica.examplatform.business.question
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.controllers.question.CategoriesDontExistException
-import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import nl.han.ica.examplatform.models.question.Question
-import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
-import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -16,8 +13,8 @@ import org.springframework.stereotype.Service
 /**
  * Question service for handling requests related to the [Question] model.
  *
- * @param questionDAO [QuestionDAO] The QuestionDAO
- * @param categoryDAO [CategoryDAO] The CategoryDAO
+ * @param questionDAO [IQuestionDAO] The QuestionDAO
+ * @param categoryDAO [ICategoryDAO] The CategoryDAO
  */
 @Service
 class QuestionService(
@@ -39,10 +36,12 @@ class QuestionService(
                         throw CategoriesDontExistException("Categories don't exist")
 
                 val insertedQuestion = questionDAO.insertQuestion(question)
-                question.subQuestions?.let {
-                    if (insertedQuestion.questionId == null) return@let
-                    it.forEach {
-                        addSubQuestions(it, insertedQuestion.questionId)
+
+                insertedQuestion.questionId?.let {
+                    question.subQuestions?.let {
+                        it.forEach {
+                            addSubQuestion(it, insertedQuestion.questionId)
+                        }
                     }
                 }
 
@@ -57,7 +56,7 @@ class QuestionService(
                 throw QuestionNotInsertedException(message, e)
             }
 
-    private fun addSubQuestions(question: Question, parentQuestionId: Int) {
+    private fun addSubQuestion(question: Question, parentQuestionId: Int) {
         val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)
         insertedQuestion.questionId?.let {
             categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
@@ -67,7 +66,7 @@ class QuestionService(
         if (question.subQuestions.isEmpty()) return
 
         question.subQuestions.forEach {
-            addSubQuestions(it, insertedQuestion.questionId)
+            addSubQuestion(it, insertedQuestion.questionId)
         }
     }
 
