@@ -20,10 +20,41 @@ internal class AnswerServiceTest {
     private lateinit var answerService: AnswerService
 
     @Test
-    fun testAddAnswerToQuestion() {
+    fun testAddOrUpdateAnswerInQuestion() {
         val answer = Answer(questionId = 1)
 
         answerService.addOrUpdateAnswerInQuestion(answer)
         verify(answerDAO, times(1)).addOrUpdateAnswerInQuestion(answer)
+    }
+
+    @Test
+    fun testAddOrUpdateAnswerInQuestionInExam(){
+        val answer = Answer(questionId = 1)
+        val examID  = 1
+
+        answerService.addOrUpdateAnswerInQuestionInExam(answer, examID)
+        verify(answerDAO,
+                times(1))
+                .addOrUpdateAnswerInQuestionInExam(answer, examID)
+    }
+
+    @Test
+    fun testGetAnswerForQuestion(){
+        val questionId = 1
+
+        answerService.getAnswerForQuestion(questionId)
+        verify(answerDAO,
+                times(1))
+                .getAnswerForQuestion(questionId)
+    }
+
+    @Test
+    fun testGetAnswersForExam(){
+        val examId = 1
+
+        answerService.getAnswersForExam(examId)
+        verify(answerDAO,
+                times(1))
+                .getAnswersForExam(examId)
     }
 }
