@@ -187,7 +187,14 @@ class AnswerDAO : IAnswerDAO {
             WHERE PAIQIE.EXAMID = ?"""
 
 
-        val sqlQuestionQuery = """SELECT ANSWERTEXT, Q.QUESTIONID, Q.ASSESSMENTCOMMENTS FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q on QE.QUESTIONID = Q.QUESTIONID WHERE QE.EXAMID = ?"""
+        val sqlQuestionQuery = """
+            SELECT
+                ANSWERTEXT,
+                Q.QUESTIONID,
+                Q.ASSESSMENTCOMMENTS
+            FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q
+                ON QE.QUESTIONID = Q.QUESTIONID
+            WHERE QE.EXAMID = ?"""
 
         val preparedAnswerStatement = conn?.prepareStatement(sqlAnswerQuery)
         val preparedQuestionStatement = conn?.prepareStatement(sqlQuestionQuery)
