@@ -1,22 +1,14 @@
 package nl.han.ica.examplatform.persistence.partialanswer
 
 import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
+import org.springframework.stereotype.Repository
 
 
 /**
  * Database access object that handles all database queries regarding [PartialAnswer].
  */
+@Repository
 interface IPartialAnswerDAO {
-
-    /**
-     * Insert partial answers in the database.
-     */
-    fun insertPartialAnswers(questionId: Int, partialAnswers: ArrayList<PartialAnswer>)
-
-    /**
-     * Update partialAnswers in the database.
-     */
-    fun updatePartialAnswers(questionId: Int, partialAnswers: ArrayList<PartialAnswer>)
 
     /**
      * Delete the partial answer from the database.
