@@ -40,7 +40,7 @@ class QuestionControllerTest {
                 questionPoints = 5,
                 courseId = 1,
                 examType = "Tentamen",
-                pluginVersion = "1.0",
+                questionTypePluginVersion = "1.0",
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
                 partial_answers = arrayListOf())

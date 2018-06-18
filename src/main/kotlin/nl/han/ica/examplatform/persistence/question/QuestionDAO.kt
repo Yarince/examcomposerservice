@@ -64,7 +64,7 @@ class QuestionDAO : IQuestionDAO {
                 preparedStatementQuestion?.setNull(4, java.sql.Types.INTEGER)
 
             preparedStatementQuestion?.setString(5, question.examType)
-            preparedStatementQuestion?.setString(6, question.pluginVersion)
+            preparedStatementQuestion?.setString(6, question.questionTypePluginVersion)
             preparedStatementQuestion?.setString(7, question.answerType)
             preparedStatementQuestion?.setString(8, question.answerTypePluginVersion)
 
@@ -267,7 +267,7 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        pluginVersion = questionRs.getString("PLUGINVERSION"),
+                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QuestionID"), conn),
                         subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QuestionID"), conn, sqlSubQuestionQuery),
                         partial_answers = getPartialAnswers(conn, questionId)
@@ -356,7 +356,7 @@ class QuestionDAO : IQuestionDAO {
 
         while (questionRs.next()) {
         val questionId = questionRs.getInt("QuestionID")
-            questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
+            questions.add(Question(questionId = questionId,
                     questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
                     questionType = questionRs.getString("QUESTIONTYPE"),
                     questionText = questionRs.getString("QUESTIONTEXT"),
@@ -365,9 +365,9 @@ class QuestionDAO : IQuestionDAO {
                     examType = questionRs.getString("EXAMTYPENAME"),
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                    pluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                    questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                     categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                    subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
+                    subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
                     partial_answers = getPartialAnswers(conn, questionId)
             ))}
         return questions
@@ -404,14 +404,14 @@ class QuestionDAO : IQuestionDAO {
             val questionId = questionRs.getInt("QuestionID")
             questions.add(Question(questionId = questionId,
                     questionOrderInExam = null,
-                    questionType = questionRs.getString("QUESTIONTYPE"), // To be removed
+                    questionType = questionRs.getString("QUESTIONTYPE"),
                     questionText = questionRs.getString("QUESTIONTEXT"),
                     questionPoints = null,
                     courseId = questionRs.getInt("COURSEID"),
                     examType = questionRs.getString("EXAMTYPENAME"),
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                    pluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                    questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                     categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
                     subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
                     partial_answers = getPartialAnswers(conn, questionId)
@@ -504,18 +504,14 @@ private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<Par
         val sqlQuestionQuery = """
                 SELECT distinct
                     Q.QUESTIONID,
-                    QIE.SEQUENCENUMBER,
                     Q.QUESTIONTYPE,
                     Q.QUESTIONTEXT,
-                    QIE.QUESTIONPOINTS,
                     Q.COURSEID,
                     Q.EXAMTYPENAME,
                     Q.QUESTIONTYPEPLUGINVERSION,
                     Q.ANSWERTYPE,
                     Q.ANSWERTYPEPLUGINVERSION
                 FROM QUESTION Q
-                JOIN QUESTION_IN_EXAM QIE
-                ON Q.QUESTIONID = QIE.QUESTIONID
                 WHERE Q.QUESTIONID = ?;"""
 
         val sqlSubQuestionQuery = """
@@ -559,14 +555,14 @@ private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<Par
      * @return [Question] The updated question
      */
     override fun updateQuestion(question: Question): Question {
-        val conn: Connection? = MySQLConnection.getConnection()
-        var preparedStatement: PreparedStatement? = null
+                val conn: Connection? = MySQLConnection.getConnection()
+                var preparedStatement: PreparedStatement? = null
 
-        val updateQuestionQuery = """UPDATE QUESTION SET EXAMTYPENAME = ?, COURSEID = ?,
+                val updateQuestionQuery = """UPDATE QUESTION SET EXAMTYPENAME = ?, COURSEID = ?,
             QUESTIONTEXT = ?, QUESTIONTYPE = ?, ANSWERTYPE = ?,
             ANSWERTYPEPLUGINVERSION = ?, PLUGINVERSION = ? WHERE QUESTIONID = ?"""
 
-        try {
+                try {
             preparedStatement = conn?.prepareStatement(updateQuestionQuery)
             preparedStatement?.setString(1, question.examType)
             preparedStatement?.setInt(2, question.courseId)
@@ -574,7 +570,7 @@ private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<Par
             preparedStatement?.setString(4, question.questionType)
             preparedStatement?.setString(5, question.answerType)
             preparedStatement?.setString(6, question.answerTypePluginVersion)
-            preparedStatement?.setString(7, question.pluginVersion)
+            preparedStatement?.setString(7, question.questionTypePluginVersion)
             preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
 
             preparedStatement?.executeUpdate()
