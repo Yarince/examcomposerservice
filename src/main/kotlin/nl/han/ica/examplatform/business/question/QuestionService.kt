@@ -114,5 +114,6 @@ class QuestionService(
      * @param question [Question] Question that should be updated.
      * @return [Question] The updated question
      */
-    fun updateQuestion(question: Question) = ResponseEntity(questionDAO.updateQuestion(question), HttpStatus.ACCEPTED)
+    fun updateQuestion(question: Question) =
+            ResponseEntity(questionDAO.updateQuestion(question), HttpStatus.ACCEPTED)
 }
