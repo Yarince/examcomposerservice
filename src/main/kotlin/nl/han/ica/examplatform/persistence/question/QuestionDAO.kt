@@ -344,7 +344,6 @@ class QuestionDAO : IQuestionDAO {
                 val questionId = questionRs.getInt("QuestionID")
                 questions.add(Question(questionId = questionId,
                         questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                        questionOrderText = questionRs.getString("SEQUENCENUMBER"),
                         questionType = questionRs.getString("QUESTIONTYPE"),
                         questionText = questionRs.getString("QUESTIONTEXT"),
                         questionPoints = questionRs.getInt("QUESTIONPOINTS"),
@@ -371,29 +370,29 @@ class QuestionDAO : IQuestionDAO {
         return questions
     }
 
-    private fun getSubQuestionsInExamOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String, examId: Int): ArrayList<Question>? {
+    private fun getSubQuestionsInExamOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String, examId: Int? = null): ArrayList<Question>? {
         var preparedQuestionStatement: PreparedStatement? = null
         val questions = ArrayList<Question>()
 
         try {
             preparedQuestionStatement = conn?.prepareStatement(sqlSubQuestionQuery)
             preparedQuestionStatement?.setInt(1, questionId)
-            preparedQuestionStatement?.setInt(2, examId)
+            if (examId != null) preparedQuestionStatement?.setInt(2, examId)
 
             val questionRs = preparedQuestionStatement?.executeQuery()
                     ?: throw DatabaseException("Error while interacting with the database")
             while (questionRs.next()) {
 
-                questions.add(Question(questionId = questionId,
+                questions.add(Question(
+                        questionId = questionId,
                         questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                        questionOrderText = questionRs.getString("SEQUENCENUMBER"),
                         questionType = questionRs.getString("QUESTIONTYPE"),
                         questionText = questionRs.getString("QUESTIONTEXT"),
                         questionPoints = questionRs.getInt("QUESTIONPOINTS"),
                         courseId = questionRs.getInt("COURSEID"),
                         examType = questionRs.getString("EXAMTYPENAME"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                        subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery, examId),
+                        subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery, examId),
                         pluginVersion = questionRs.getString("PLUGINVERSION"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
@@ -431,8 +430,8 @@ class QuestionDAO : IQuestionDAO {
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                     pluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
-                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                    subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
+                    categories = getCategoriesOfQuestion(questionId, conn),
+                    subQuestions = getSubQuestionsOfQuestion(questionId, conn, sqlSubQuestionQuery),
                     partial_answers = getPartialAnswers(conn, questionId)
             ))
         }
@@ -605,9 +604,16 @@ class QuestionDAO : IQuestionDAO {
         val conn: Connection? = MySQLConnection.getConnection()
         var preparedStatement: PreparedStatement? = null
 
-        val updateQuestionQuery = """UPDATE QUESTION SET EXAMTYPENAME = ?, COURSEID = ?,
-            QUESTIONTEXT = ?, QUESTIONTYPE = ?, ANSWERTYPE = ?,
-            ANSWERTYPEPLUGINVERSION = ?, PLUGINVERSION = ? WHERE QUESTIONID = ?"""
+        val updateQuestionQuery = """
+            UPDATE QUESTION
+            SET EXAMTYPENAME = ?,
+                COURSEID = ?,
+                QUESTIONTEXT = ?,
+                QUESTIONTYPE = ?,
+                ANSWERTYPE = ?,
+                ANSWERTYPEPLUGINVERSION = ?,
+                PLUGINVERSION = ?
+            WHERE QUESTIONID = ?"""
 
         try {
             preparedStatement = conn?.prepareStatement(updateQuestionQuery)
