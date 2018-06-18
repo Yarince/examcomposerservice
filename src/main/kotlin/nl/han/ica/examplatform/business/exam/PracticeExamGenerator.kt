@@ -22,12 +22,12 @@ fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDA
     val questionsInCourse = questionDAO.getQuestionsByCourse(courseId)
     val categoriesInCourse = categoryDAO.getCategoriesByCourse(courseId)
 
-    val previousResults: ArrayList<Results>? = examResultsDAO.getPreviousResultsOfStudent(studentNr) // Should be limited to 10 results
+    val previousResults: ArrayList<Results>? = examResultsDAO.getPreviousResultsOfStudent(studentNr, courseId) // Should be limited to 10 results
     val practiceExam: ArrayList<Question>
     practiceExam = if (previousResults == null || previousResults.isEmpty()) {
         addRandomQuestionsToPracticeExam(questionsInCourse, questionsInCourse, categoriesInCourse.toList())
     } else {
-        generatePersonalExam(previousResults, courseId, studentNr, categoriesInCourse, questionDAO)
+        generatePersonalExam(previousResults, courseId, studentNr, categoriesInCourse, questionDAO, examResultsDAO)
     }
 
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)

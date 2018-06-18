@@ -4,6 +4,7 @@ import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
 import nl.han.ica.examplatform.business.exam.practice.models.QuestionResultStats
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
+import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 
 /**
  * Here the results of other students on this subject should be analysed.
@@ -42,6 +43,6 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
  * @param questionsInCategory the questions in the category
  * @return [Question] the first made question of the student
  */
-internal fun getFirstAskedQuestion(questionsInCategory: List<QuestionResult>, studentNr: Int): Question {
-    return questionsInCategory.sortedBy { it.answeredOn }.first()
+internal fun getFirstAskedQuestion(questionsInCategory: List<QuestionResult>, questionDAO: IQuestionDAO): Question {
+    return questionDAO.getQuestionById(questionsInCategory.sortedBy { it.answeredOn }.first().questionId)
 }
