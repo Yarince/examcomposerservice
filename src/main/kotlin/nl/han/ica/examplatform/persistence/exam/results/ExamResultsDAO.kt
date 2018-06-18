@@ -94,9 +94,4 @@ class ExamResultsDAO : IExamResultsDAO {
             preparedStatement?.close()
         }
     }
-
-    override fun getQuestionsAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<QuestionResult> {
-
-    }
-
 }

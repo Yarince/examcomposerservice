@@ -10,7 +10,7 @@ import kotlin.collections.ArrayList
 
 fun generatePersonalExam(previousResults: ArrayList<Results>, courseId: Int, studentNr: Int, categories: ArrayList<String>, questionDAO: IQuestionDAO, examResultsDAO: IExamResultsDAO): ArrayList<Question> {
     val questionsNotAnswered: ArrayList<Question> = questionDAO.getQuestionsNotAnsweredByStudentInCourse(studentNr, courseId)
-    val questionsAnswered: ArrayList<QuestionResult> = examResultsDAO.getQuestionsAnsweredByStudentInCourse(studentNr, courseId)
+    val questionsAnswered: ArrayList<QuestionResult> = examResultsDAO.getPreviousResultsOfStudent(studentNr, courseId).map { it.questions }.toTypedArray().reduce { acc, arrayList -> acc.plus(arrayList).toCollection(arrayListOf()) }
 
     val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults, categories)
     ratedCategories.forEach { println(it) }
