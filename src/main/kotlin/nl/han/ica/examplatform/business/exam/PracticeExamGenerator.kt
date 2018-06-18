@@ -37,9 +37,9 @@ fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDA
  *
  * @return [ArrayList]<[Question]> An array of questions, representing a practiceExam
  */
-private fun addQuestionsToPracticeExam(questions: Array<Question>, strippedQuestions: Array<Question>, subjectsAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
+fun addQuestionsToPracticeExam(questions: Array<Question>, strippedQuestions: Array<Question>, subjectsAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
     // If the exam contains 50% of the questions, exit this function
-    if (exam.size > 0) if (exam.size >= (questions.size / 2)) return exam
+    if (exam.size > 0) if (exam.size >= 10) return exam
     if (subjectsAvailable.isEmpty()) return exam
 
     // Gets the list of questions in the current subject
