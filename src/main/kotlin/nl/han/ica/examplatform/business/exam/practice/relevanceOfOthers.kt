@@ -44,5 +44,5 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
  * @return [Question] the first made question of the student
  */
 internal fun getFirstAskedQuestion(questionsInCategory: List<QuestionResult>, questionDAO: IQuestionDAO): Question {
-    return questionDAO.getQuestionById(questionsInCategory.sortedBy { it.answeredOn }.first().questionId)
+    return questionDAO.getQuestionById(questionsInCategory.sortedBy { it.practiceTestResultId }.first().questionId)
 }
