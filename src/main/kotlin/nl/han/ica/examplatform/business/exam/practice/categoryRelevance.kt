@@ -1,20 +1,20 @@
 package nl.han.ica.examplatform.business.exam.practice
 
-internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayList<Results>): List<Pair<String, Double>> {
-    val dataPairs: ArrayList<Pair<Int, Double>> = fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr, results)
+import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
 
-    val categories = results.map { r -> r.questions.map { q -> q.categories }.reduce { acc, list -> acc.plus(list) } }.reduce { acc, list -> acc.plus(list) }.distinct()
+internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayList<Results>, categories: ArrayList<String>): List<Pair<String, Double>> {
+    val examRelevance: ArrayList<Pair<Int, Double>> = getExamRelevance(studentNr, results)
 
     val mapOfCategoriesAndTheirRelevancePercentages = mutableMapOf<String, Double>()
     for (result in results) {
         if (result.studentNr != studentNr) break
         for (category in categories) {
-            val toetsVragen = result.questions.filter { it.categories.contains(category) }
+            val toetsVragen: Array<QuestionResult> = result.questions.filter { it.categories.contains(category) }
             if (toetsVragen.isEmpty())
                 break
 
             val percentageGoodQuestions = toetsVragen.map { q -> if (q.wasCorrect!!) 0.0 else 100.0 }.reduce { acc, i -> acc + i } / toetsVragen.size
-            val huidigeToetsPercentage = dataPairs.find { it.first == result.examId }
+            val huidigeToetsPercentage = examRelevance.find { it.first == result.examId }
             val reducedPercentage = (percentageGoodQuestions * huidigeToetsPercentage!!.second) / 100
             if (mapOfCategoriesAndTheirRelevancePercentages.containsKey(category)) {
                 mapOfCategoriesAndTheirRelevancePercentages[category] = mapOfCategoriesAndTheirRelevancePercentages[category]!! + reducedPercentage
@@ -25,11 +25,9 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayLi
     }
 
     mapOfCategoriesAndTheirRelevancePercentages.forEach { if (it.value == 0.0) mapOfCategoriesAndTheirRelevancePercentages[it.key] = 10.0 }
-    var sorted = mapOfCategoriesAndTheirRelevancePercentages.toList().sortedBy { it.second }
 
+    val sorted = mapOfCategoriesAndTheirRelevancePercentages.toList().sortedBy { it.second }
     val multiplier = 100 / sorted.last().second
-    sorted = sorted.map { Pair(it.first, it.second * multiplier) }
 
-
-    return sorted
+    return sorted.map { Pair(it.first, it.second * multiplier) }
 }

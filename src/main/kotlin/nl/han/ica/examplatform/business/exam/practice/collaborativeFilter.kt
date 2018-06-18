@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.exam.practice
 
-import nl.han.ica.examplatform.business.exam.practice.models.Question
+import nl.han.ica.examplatform.business.exam.practice.models.QuestionResultStats
+import nl.han.ica.examplatform.models.question.Question
 
 /**
  * Here the results of other students on this subject should be analysed.
@@ -10,7 +11,7 @@ import nl.han.ica.examplatform.business.exam.practice.models.Question
  * @return [Question] the first made question of the student
  */
 internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>): Question? {
-    val assessedQuestionsOfOthers = QuestionLoader.getResultsOfOthers()
+    val assessedQuestionsOfOthers: ArrayList<QuestionResultStats> = questionDAO.getResultsOfOthersInCourse(courseId)
     // todo: If there are questions available that no one has answered before, add one of those instead
 
     // Filter questions to only contain current category
@@ -40,6 +41,6 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
  * @param questionsInCategory the questions in the category
  * @return [Question] the first made question of the student
  */
-internal fun getFirstAskedQuestion(questionsInCategory: List<Question>, studentNr: Int): Question {
+internal fun getFirstAskedQuestion(questionsInCategory: List<QuestionResult>, studentNr: Int): Question {
     return questionsInCategory.sortedBy { it.answeredOn }.first()
 }

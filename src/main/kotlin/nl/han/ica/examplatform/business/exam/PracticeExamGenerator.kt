@@ -1,5 +1,7 @@
 package nl.han.ica.examplatform.business.exam
 
+import nl.han.ica.examplatform.business.exam.practice.Results
+import nl.han.ica.examplatform.business.exam.practice.generatePersonalExam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
@@ -16,11 +18,16 @@ import java.util.concurrent.*
  * @return [PracticeExam] returns a practiceExam
  */
 fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDAO, categoryDAO: ICategoryDAO): PracticeExam {
-    val questions = questionDAO.getQuestionsByCourse(courseId)
-    val categories = categoryDAO.getCategoriesByCourse(courseId)
+    val questionsInCourse = questionDAO.getQuestionsByCourse(courseId)
+    val categoriesInCourse = categoryDAO.getCategoriesByCourse(courseId)
 
-    // Recursively add questions to exam
-    val practiceExam = addQuestionsToPracticeExam(questions, questions, categories.toList())
+    val previousResults: ArrayList<Results>? = examResultDAO.getPreviousResultsOfStudent(studentNr) // Should be limited to 10 results
+    val practiceExam: ArrayList<Question>
+    practiceExam = if (previousResults == null || previousResults.isEmpty()) {
+        addRandomQuestionsToPracticeExam(questionsInCourse, questionsInCourse, categoriesInCourse.toList())
+    } else {
+        generatePersonalExam(previousResults, courseId, studentNr, categoriesInCourse, questionDAO)
+    }
 
     return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
 }
@@ -37,7 +44,7 @@ fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDA
  *
  * @return [ArrayList]<[Question]> An array of questions, representing a practiceExam
  */
-fun addQuestionsToPracticeExam(questions: Array<Question>, strippedQuestions: Array<Question>, subjectsAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
+fun addRandomQuestionsToPracticeExam(questions: Array<Question>, strippedQuestions: Array<Question>, subjectsAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size >= 10) return exam
     if (subjectsAvailable.isEmpty()) return exam
@@ -45,7 +52,7 @@ fun addQuestionsToPracticeExam(questions: Array<Question>, strippedQuestions: Ar
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
 
-    subjectsAvailable.elementAtOrElse(iterator, { return exam })
+    subjectsAvailable.elementAtOrElse(iterator) { return exam }
     // get questions grouped in current category
 
     currentSubjectList = strippedQuestions.filter { it.categories.contains(subjectsAvailable[iterator]) }
@@ -72,12 +79,12 @@ fun addQuestionsToPracticeExam(questions: Array<Question>, strippedQuestions: Ar
 
     // Recursively add more questions
     if (questionToAdd == null) {
-        addQuestionsToPracticeExam(questions, strippedQuestions, subjectsAvailable, newIt, newItForward, exam)
+        addRandomQuestionsToPracticeExam(questions, strippedQuestions, subjectsAvailable, newIt, newItForward, exam)
     } else {
         val newQuestionsList = strippedQuestions.toMutableList()
         newQuestionsList.removeAll { it.questionId == questionToAdd!!.questionId }
 
-        addQuestionsToPracticeExam(questions, newQuestionsList.toTypedArray(), subjectsAvailable, newIt, newItForward, exam)
+        addRandomQuestionsToPracticeExam(questions, newQuestionsList.toTypedArray(), subjectsAvailable, newIt, newItForward, exam)
     }
     return exam
 }

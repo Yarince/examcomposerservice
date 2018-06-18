@@ -1,37 +1,13 @@
 package nl.han.ica.examplatform.business.exam.practice
 
-import com.google.gson.Gson
-import com.google.gson.stream.JsonReader
-import nl.han.ica.examplatform.business.exam.practice.models.Question
-import java.io.FileReader
+
 import kotlin.math.pow
 
-internal fun loadQuestions(): Array<Results> {
-    // Here the db should do some stuff in the real implementation
-    val reader = JsonReader(FileReader("src/main/kotlin/nl.han.ica.examplatform.business.exam.practice/resources/assessedExams.json"))
-    return Gson().fromJson(reader, Array<Results>::class.java)
-}
-
-data class Results(val examId: Int, val studentNr: Int, val questions: Array<Question>)
-data class QuestionResult(val questionId: Int, val categories: Array<String>, val resultWasGood: Boolean)
-//TODO add Questions ArrayList
+data class Results(val examId: Int, val studentNr: Int, val questions: Array<QuestionResult>)
 data class PracticeExam(val examId: Int, val studentNr: Int, val name: String, val courseId: Int)
 
-//=========================================================================================================================================================================
-
-//Step 1
-internal fun checkIfStudentCompletedOtherPracticeExams(studentNr: Int): Boolean {
-    val data: ArrayList<Results> = loadQuestions().toCollection(arrayListOf())
-    for (examens in data) {
-        if (examens.studentNr == studentNr)
-            return true
-    }
-    return false
-}
-//=========================================================================================================================================================================
-
-// Step 2
-internal fun fetchStudentPracticeExamsWithTheirRelevancePercentages(studentNr: Int, results: ArrayList<Results>): ArrayList<Pair<Int, Double>> {
+internal fun getExamRelevance(studentNr: Int, results: ArrayList<Results>): ArrayList<Pair<Int, Double>> {
+    //return results.map { r -> Pair(r.examId, calculateRelevanceOfPracticeExam(results.size, )) }
     val practiceExamsOfAStudentPairedWithTheirWeightingAscending: ArrayList<Pair<Int, Double>> = ArrayList()
     for (oefentoetsen in results) {
         if (oefentoetsen.studentNr == studentNr) {
