@@ -19,7 +19,7 @@ import nl.han.ica.examplatform.models.exam.Exam
  * @param examType [String] The type of exam the question is for
  * @param answerType [String] The type of answer expected
  * @param answerTypePluginVersion [String] The version of the answer type plugin
- * @param pluginVersion [String] The version of the plugin used as question type
+ * @param questionTypePluginVersion [String] The version of the plugin used as question type
  * @param categories [ArrayList]<[String]> The list of categories of this question
  * @param partial_answers [Array]<[PartialAnswer]> List of partial answers of a question
  * @param subQuestions [Array]<[Question]> List of questions that represent one larger question
@@ -46,7 +46,7 @@ data class Question(
         @ApiModelProperty(notes = "The version of the answer type plugin", required = true)
         val answerTypePluginVersion: String,
         @ApiModelProperty(notes = "The version of the plugin used as questionType. References plugin version in database.", required = true)
-        val pluginVersion: String,
+        val questionTypePluginVersion: String,
         @ApiModelProperty(notes = "The categories that this question is about")
         val categories: ArrayList<String> = arrayListOf(),
         @ApiModelProperty(notes = "Partial answers of the question. Required if the question is not a noQuestion type")

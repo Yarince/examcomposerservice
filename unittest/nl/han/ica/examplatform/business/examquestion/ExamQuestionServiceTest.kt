@@ -31,7 +31,7 @@ class ExamQuestionServiceTest {
 
     @Test
     fun testCheckQuestion() {
-        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", partial_answers = arrayListOf())
+        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", questionTypePluginVersion = "1.0", partial_answers = arrayListOf())
         doReturn(true).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayListOf(question))
         verify(questionDAO, times(1)).exists(question)
@@ -45,14 +45,14 @@ class ExamQuestionServiceTest {
 
     @Test(expected = InvalidExamException::class)
     fun testCheckQuestionNotExisting() {
-        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", partial_answers = arrayListOf())
+        val question = Question(questionId = 1, questionType = "OpenQuestion", questionPoints = 4, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", questionTypePluginVersion = "1.0", partial_answers = arrayListOf())
         doReturn(false).`when`(questionDAO).exists(question)
         examQuestionService.checkQuestion(arrayListOf(question))
     }
 
     @Test
     fun testAddQuestionToExam() {
-        val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", pluginVersion = "1.0", partial_answers = arrayListOf())
+        val expectedQuestion = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", questionTypePluginVersion = "1.0", partial_answers = arrayListOf())
         val expectedExam = Exam(examId = 1, name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, version = 1, examType = "Tentamen", questions = arrayListOf(expectedQuestion))
 
         doReturn(expectedExam).`when`(examDAO).addQuestionsToExam(expectedExam)

@@ -42,7 +42,7 @@ class QuestionControllerTest {
                 examType = "Tentamen",
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
-                pluginVersion = "1.0",
+                questionTypePluginVersion = "1.0",
                 partial_answers = arrayListOf())
         val expectedStatusCode = HttpStatus.CREATED
 

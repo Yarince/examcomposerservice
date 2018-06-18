@@ -64,7 +64,7 @@ class QuestionDAO : IQuestionDAO {
                 preparedStatementQuestion?.setNull(4, java.sql.Types.INTEGER)
 
             preparedStatementQuestion?.setString(5, question.examType)
-            preparedStatementQuestion?.setString(6, question.pluginVersion)
+            preparedStatementQuestion?.setString(6, question.questionTypePluginVersion)
             preparedStatementQuestion?.setString(7, question.answerType)
             preparedStatementQuestion?.setString(8, question.answerTypePluginVersion)
 
@@ -265,7 +265,7 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         categories = getCategoriesOfQuestion(questionId, conn),
                         subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery),
-                        pluginVersion = questionRs.getString("PLUGINVERSION"),
+                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                         courseId = questionRs.getInt("COURSEID"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
@@ -366,7 +366,7 @@ class QuestionDAO : IQuestionDAO {
                     examType = questionRs.getString("EXAMTYPENAME"),
                     categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
                     subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
-                    pluginVersion = questionRs.getString("PLUGINVERSION"),
+                    questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                     partial_answers = getPartialAnswers(conn, questionId)
@@ -413,7 +413,7 @@ class QuestionDAO : IQuestionDAO {
                     examType = questionRs.getString("EXAMTYPENAME"),
                     categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
                     subQuestions = getSubQuestionsOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
-                    pluginVersion = questionRs.getString("PLUGINVERSION"),
+                    questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                     partial_answers = getPartialAnswers(conn, questionId)
@@ -578,7 +578,7 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setString(4, question.questionType)
             preparedStatement?.setString(5, question.answerType)
             preparedStatement?.setString(6, question.answerTypePluginVersion)
-            preparedStatement?.setString(7, question.pluginVersion)
+            preparedStatement?.setString(7, question.questionTypePluginVersion)
             preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
 
             preparedStatement?.executeUpdate()
@@ -633,7 +633,41 @@ class QuestionDAO : IQuestionDAO {
         return thereAreAnswersGivenToQuestions
     }
 
-    override fun getQuestionsNotAnsweredByStudentInCourse(studentId: Int, courseId: Int): ArrayList<Question> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getQuestionsNotAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<Question> {
+        var conn: Connection? = null
+        var preparedStatement: PreparedStatement? = null
+
+        val query = """SELECT * FROM QUESTION"""
+        return try {
+            conn = MySQLConnection.getConnection()
+            preparedStatement = conn?.prepareStatement(query)
+            preparedStatement?.setInt(1, studentNr)
+            preparedStatement?.setInt(2, courseId)
+            val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
+            val results = ArrayList<Question>()
+            while (rs.next()) {
+                val questionId = rs.getInt("QUESTIONID")
+                results.add(Question(
+                        courseId = rs.getInt("COURSEID"),
+                        questionText = rs.getString("QUESTIONTEXT"),
+                        questionType = rs.getString("QUESTIONTYPE"),
+                        questionTypePluginVersion = rs.getString("QUESTIONTYPEPLUGINVERSION"),
+                        categories = getCategoriesOfQuestion(questionId, conn),
+                        answerType = rs.getString("ANSWERTYPE"),
+                        answerTypePluginVersion = rs.getString("ANSWERTYPEPLUGINVERSION"),
+                        examType = rs.getString("EXAMTYPENAME"),
+                        partial_answers = getPartialAnswers(conn, questionId),
+                        questionId = questionId
+                ))
+            }
+            results
+        } catch (e: SQLException) {
+            val message = "Something went wrong while getting questions"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            preparedStatement?.close()
+        }
     }
 }

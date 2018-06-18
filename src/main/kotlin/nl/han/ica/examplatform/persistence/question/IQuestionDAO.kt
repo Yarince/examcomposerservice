@@ -74,5 +74,5 @@ interface IQuestionDAO {
     /**
      * TODO!
      */
-    fun getQuestionsNotAnsweredByStudentInCourse(studentId: Int, courseId: Int): ArrayList<Question>
+    fun getQuestionsNotAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<Question>
 }
