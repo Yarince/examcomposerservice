@@ -5,13 +5,12 @@
     "questionText": "Vraag nummer 7 over ASR",
     "categories": [
       "ASR",
-      "QA",
-      "AVL"
+      "QA"
     ],
     "type": "OpenQuestion"
   },
   {
-    "questionId": 43,
+    "questionId": 12,
     "resultWasGood": false,
     "questionText": "Beantwoorde vraag over ASR",
     "categories": [
@@ -22,74 +21,67 @@
     "answeredOn": "2018-01-03T14:39:14.534Z"
   },
   {
-    "questionId": 44,
+    "questionId": 3,
     "resultWasGood": true,
     "questionText": "Beantwoorde vraag over ASR",
     "categories": [
-      "ASR",
-      "AVL"
+      "ASR"
     ],
     "type": "OpenQuestion",
     "answeredOn": "2018-05-03T14:39:14.534Z"
   },
   {
-    "questionId": 45,
+    "questionId": 42,
     "resultWasGood": false,
     "questionText": "Beantwoorde vraag over DCAR",
     "categories": [
-      "DCAR",
       "QA"
     ],
     "type": "OpenQuestion",
     "answeredOn": "2018-06-03T14:39:14.534Z"
   },
   {
-    "questionId": 46,
+    "questionId": 41,
     "resultWasGood": true,
     "questionText": "Beantwoorde vraag over DCAR",
     "categories": [
-      "DCAR",
-      "ATAM",
-      "GRAVEN"
+      "ATAM"
     ],
     "type": "OpenQuestion",
     "answeredOn": "2018-02-03T14:39:14.534Z"
   },
   {
-    "questionId": 47,
+    "questionId": 40,
     "resultWasGood": true,
     "questionText": "Beantwoorde vraag over ATAM",
     "categories": [
-      "ATAM",
-      "GRAVEN"
+      "DCAR"
     ],
     "type": "OpenQuestion",
     "answeredOn": "2018-07-03T14:39:14.534Z"
   },
   {
-    "questionId": 48,
+    "questionId": 38,
     "resultWasGood": false,
     "questionText": "Beantwoorde vraag over ATAM",
     "categories": [
-      "ATAM",
-      "DCAR"
+      "QA"
     ],
     "type": "OpenQuestion",
     "answeredOn": "2018-06-03T14:39:14.534Z"
   },
   {
-    "questionId": 49,
+    "questionId": 23,
     "resultWasGood": true,
     "questionText": "Beantwoorde vraag over QA",
     "categories": [
-      "QA",
-      "AVL"
+      "ASR"
     ],
     "type": "OpenQuestion",
     "answeredOn": "2018-06-03T14:39:14.534Z"
   },
   {
-    "questionId": 50,
+    "questionId": 22,
     "resultWasGood": false,
     "questionText": "Beantwoorde vraag over QA",
     "categories": [

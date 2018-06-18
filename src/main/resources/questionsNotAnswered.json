@@ -36,48 +36,11 @@
     "answerType": "MultipleChoiceQuestion"
   },
   {
-    "questionId": 5,
-    "questionText": "Vraag nummer 5 over ATAM",
-    "categories": [
-      "ATAM"
-    ],
-    "questionType": "multipleChoice",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
-    "questionId": 6,
-    "questionText": "Vraag nummer 6 over QA",
-    "categories": [
-      "QA"
-    ],
-    "questionType": "OpenQuestion",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
     "questionId": 7,
     "questionText": "Vraag nummer 7 over ASR",
     "categories": [
       "ASR",
-      "QA",
-      "AVL"
-    ],
-    "questionType": "OpenQuestion",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
-    "questionId": 8,
-    "questionText": "Vraag nummer 8 over DCAR",
-    "categories": [
-      "DCAR"
-    ],
-    "questionType": "OpenQuestion",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
-    "questionId": 9,
-    "questionText": "Vraag nummer 9 over ATAM",
-    "categories": [
-      "ATAM"
+      "QA"
     ],
     "questionType": "OpenQuestion",
     "answerType": "MultipleChoiceQuestion"
@@ -175,15 +138,6 @@
     "answerType": "MultipleChoiceQuestion"
   },
   {
-    "questionId": 20,
-    "questionText": "Vraag nummer 20 over DCAR",
-    "categories": [
-      "DCAR"
-    ],
-    "questionType": "OpenQuestion",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
     "questionId": 21,
     "questionText": "Vraag nummer 21 over ATAM",
     "categories": [
@@ -260,15 +214,6 @@
     "questionText": "Vraag nummer 29 over ATAM",
     "categories": [
       "ATAM"
-    ],
-    "questionType": "OpenQuestion",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
-    "questionId": 30,
-    "questionText": "Vraag nummer 30 over QA",
-    "categories": [
-      "QA"
     ],
     "questionType": "OpenQuestion",
     "answerType": "MultipleChoiceQuestion"
@@ -355,28 +300,10 @@
     "answerType": "MultipleChoiceQuestion"
   },
   {
-    "questionId": 40,
-    "questionText": "Vraag nummer 40 over DCAR",
-    "categories": [
-      "DCAR"
-    ],
-    "questionType": "OpenQuestion",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
     "questionId": 41,
     "questionText": "Vraag nummer 41 over ATAM",
     "categories": [
       "ATAM"
-    ],
-    "questionType": "OpenQuestion",
-    "answerType": "MultipleChoiceQuestion"
-  },
-  {
-    "questionId": 42,
-    "questionText": "Vraag nummer 42 over QA",
-    "categories": [
-      "QA"
     ],
     "questionType": "OpenQuestion",
     "answerType": "MultipleChoiceQuestion"
