@@ -64,7 +64,7 @@ class QuestionDAO : IQuestionDAO {
                 preparedStatementQuestion?.setNull(4, java.sql.Types.INTEGER)
 
             preparedStatementQuestion?.setString(5, question.examType)
-            preparedStatementQuestion?.setString(6, question.pluginVersion)
+            preparedStatementQuestion?.setString(6, question.questionTypePluginVersion)
             preparedStatementQuestion?.setString(7, question.answerType)
             preparedStatementQuestion?.setString(8, question.answerTypePluginVersion)
 
@@ -268,7 +268,7 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        pluginVersion = questionRs.getString("PLUGINVERSION"),
+                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                         categories = getCategoriesOfQuestion(questionId, conn),
                         subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery),
                         partial_answers = getPartialAnswers(conn, questionId)
@@ -351,7 +351,7 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
                         subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery, examId),
-                        pluginVersion = questionRs.getString("PLUGINVERSION"),
+                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                         partial_answers = getPartialAnswers(conn, questionId, examId)
@@ -393,7 +393,7 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
                         subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery, examId),
-                        pluginVersion = questionRs.getString("PLUGINVERSION"),
+                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                         partial_answers = getPartialAnswers(conn, questionId, examId)
@@ -429,7 +429,7 @@ class QuestionDAO : IQuestionDAO {
                     examType = questionRs.getString("EXAMTYPENAME"),
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                    pluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                    questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                     categories = getCategoriesOfQuestion(questionId, conn),
                     subQuestions = getSubQuestionsOfQuestion(questionId, conn, sqlSubQuestionQuery),
                     partial_answers = getPartialAnswers(conn, questionId)
@@ -623,7 +623,7 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setString(4, question.questionType)
             preparedStatement?.setString(5, question.answerType)
             preparedStatement?.setString(6, question.answerTypePluginVersion)
-            preparedStatement?.setString(7, question.pluginVersion)
+            preparedStatement?.setString(7, question.questionTypePluginVersion)
             preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
 
             preparedStatement?.executeUpdate()
