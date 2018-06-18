@@ -86,7 +86,7 @@ internal class ExamServiceTest {
                         answerType = "OpenQuestion",
                         answerTypePluginVersion = "1.0",
                         questionTypePluginVersion = "1.0",
-                        partial_answers = arrayListOf())))
+                        partialAnswers = arrayListOf())))
 
         examService.checkExam(exam)
     }
@@ -180,7 +180,7 @@ internal class ExamServiceTest {
                         answerType = "OpenQuestion",
                         answerTypePluginVersion = "1.0",
                         courseId = 1,
-                        partial_answers = arrayListOf())),
+                        partialAnswers = arrayListOf())),
                 decryptionCodes = "decryptionCodes",
                 classes = arrayListOf("class 1", "class 2"))
         val expected: ResponseEntity<Exam> = ResponseEntity(exam, HttpStatus.ACCEPTED)
