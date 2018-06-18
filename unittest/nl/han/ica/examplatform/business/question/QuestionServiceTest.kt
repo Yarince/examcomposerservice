@@ -55,194 +55,187 @@ class QuestionServiceTest {
         assertEquals(expectedResult, result)
     }
 
+    @Test
+    fun testAddQuestionSuccessWithSubQuestions() {
+        val categories: ArrayList<String> = arrayListOf("ASD", "QA")
+        val secondLayerSubQuestion = Question(
+                questionId = 2,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = categories,
+                subQuestions = arrayListOf(),
+                partialAnswers = arrayListOf())
+        val subQuestion = Question(
+                questionId = 1,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = categories,
+                subQuestions = arrayListOf(secondLayerSubQuestion),
+                partialAnswers = arrayListOf())
+        val insertedQuestion = Question(
+                questionId = 3,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = categories,
+                subQuestions = arrayListOf(subQuestion),
+                partialAnswers = arrayListOf())
+        val question = Question(
+                questionId = null,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = categories,
+                subQuestions = arrayListOf(subQuestion),
+                partialAnswers = arrayListOf())
+
+        val expectedResult: ResponseEntity<Question> = ResponseEntity(insertedQuestion, HttpStatus.CREATED)
+
+        `when`(questionDAO.insertQuestion(com.nhaarman.mockito_kotlin.any(), anyOrNull()))
+                .thenReturn(insertedQuestion)
+                .thenReturn(subQuestion)
+                .thenReturn(secondLayerSubQuestion)
+        doReturn(true).`when`(categoryDAO).checkIfCategoriesExist(categories)
+
+        val result: ResponseEntity<Question> = questionService.addQuestion(question)
+
+        assertNotNull(result)
+        assertEquals(expectedResult, result)
+    }
+
+    @Test(expected = CategoriesDontExistException::class)
+    fun testAddQuestionErrorCheckIfCategoriesExist() {
+        val categories: ArrayList<String> = arrayListOf("ASD", "QA")
+        val questionInserted = Question(
+                questionId = 0,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = categories,
+                partialAnswers = arrayListOf())
+
+        doReturn(false).`when`(categoryDAO).checkIfCategoriesExist(categories)
+
+        questionService.addQuestion(questionInserted)
+    }
+
     @Test(expected = QuestionNotInsertedException::class)
-    fun testAddQuestionError() {
-        val categories = arrayListOf("ASD", "QA")
-        val questionInserted = Question(questionId = 0, questionOrderInExam = 1, questionType = "OpenQuestion", questionText = "name", questionPoints = 5, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", questionTypePluginVersion = "1.0", categories = categories, partial_answers = arrayListOf())
-        val expectedResult = ResponseEntity<Question>(HttpStatus.INTERNAL_SERVER_ERROR)
-        @Test
-        fun testAddQuestionSuccessWithSubQuestions() {
-            val categories: ArrayList<String> = arrayListOf("ASD", "QA")
-            val secondLayerSubQuestion = Question(
-                    questionId = 2,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    questionPoints = 5,
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = categories,
-                    subQuestions = arrayListOf(),
-                    partialAnswers = arrayListOf())
-            val subQuestion = Question(
-                    questionId = 1,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    questionPoints = 5,
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = categories,
-                    subQuestions = arrayListOf(secondLayerSubQuestion),
-                    partialAnswers = arrayListOf())
-            val insertedQuestion = Question(
-                    questionId = 3,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = categories,
-                    subQuestions = arrayListOf(subQuestion),
-                    partialAnswers = arrayListOf())
-            val question = Question(
-                    questionId = null,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = categories,
-                    subQuestions = arrayListOf(subQuestion),
-                    partialAnswers = arrayListOf())
+    fun testAddQuestionErrorDatabaseException() {
+        val categories: ArrayList<String> = arrayListOf("ASD", "QA")
+        val questionInserted = Question(
+                questionId = 0,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = categories,
+                partialAnswers = arrayListOf())
 
-            val expectedResult: ResponseEntity<Question> = ResponseEntity(insertedQuestion, HttpStatus.CREATED)
+        doThrow(DatabaseException("Message")).`when`(categoryDAO).checkIfCategoriesExist(categories)
 
-            //doReturn(insertedQuestion).`when`(questionDAO).insertQuestion(question)
-            `when`(questionDAO.insertQuestion(com.nhaarman.mockito_kotlin.any(), anyOrNull()))
-                    .thenReturn(insertedQuestion)
-                    .thenReturn(subQuestion)
-                    .thenReturn(secondLayerSubQuestion)
-            doReturn(true).`when`(categoryDAO).checkIfCategoriesExist(categories)
+        questionService.addQuestion(questionInserted)
+    }
 
-            val result: ResponseEntity<Question> = questionService.addQuestion(question)
+    @Test
+    fun testGetQuestionsForCourse() {
+        val courseId = 1
+        val questions = arrayOf(Question(
+                questionId = 0,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = arrayListOf("ASD", "QA"),
+                partialAnswers = arrayListOf()))
+        val expected: ResponseEntity<Array<Question>> = ResponseEntity(questions, HttpStatus.OK)
+        doReturn(questions).`when`(questionDAO).getQuestionsByCourse(courseId)
+        val result: ResponseEntity<Array<Question>> = questionService.getQuestionsForCourse(courseId)
 
-            assertNotNull(result)
-            assertEquals(expectedResult, result)
-        }
+        assertEquals(expected, result)
+    }
 
-        @Test(expected = CategoriesDontExistException::class)
-        fun testAddQuestionErrorCheckIfCategoriesExist() {
-            val categories: ArrayList<String> = arrayListOf("ASD", "QA")
-            val questionInserted = Question(
-                    questionId = 0,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    questionPoints = 5,
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = categories,
-                    partialAnswers = arrayListOf())
+    @Test
+    fun testGetQuestionForId() {
+        val questionId = 1
+        val question = Question(
+                questionId = 0,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = arrayListOf("ASD", "QA"),
+                partialAnswers = arrayListOf())
+        val expected: ResponseEntity<Question> = ResponseEntity(question, HttpStatus.OK)
+        doReturn(question).`when`(questionDAO).getQuestionById(questionId)
+        val result: ResponseEntity<Question> = questionService.getQuestionForId(questionId)
 
-            doReturn(false).`when`(categoryDAO).checkIfCategoriesExist(categories)
+        assertEquals(expected, result)
+    }
 
-            questionService.addQuestion(questionInserted)
-        }
+    @Test
+    fun testUpdateQuestion() {
+        val question = Question(
+                questionId = 0,
+                questionOrderInExam = 1,
+                questionType = "OpenQuestion",
+                questionText = "name",
+                questionPoints = 5,
+                examType = "exam",
+                questionTypePluginVersion = "1.0",
+                answerType = "OpenQuestion",
+                answerTypePluginVersion = "1.0",
+                courseId = 1,
+                categories = arrayListOf("ASD", "QA"),
+                partialAnswers = arrayListOf())
+        val expected: ResponseEntity<Question> = ResponseEntity(question, HttpStatus.ACCEPTED)
+        doReturn(question).`when`(questionDAO).updateQuestion(question)
+        val result: ResponseEntity<Question> = questionService.updateQuestion(question)
 
-        @Test(expected = QuestionNotInsertedException::class)
-        fun testAddQuestionErrorDatabaseException() {
-            val categories: ArrayList<String> = arrayListOf("ASD", "QA")
-            val questionInserted = Question(
-                    questionId = 0,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    questionPoints = 5,
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = categories,
-                    partialAnswers = arrayListOf())
-
-            doThrow(DatabaseException("Message")).`when`(categoryDAO).checkIfCategoriesExist(categories)
-
-            questionService.addQuestion(questionInserted)
-        }
-
-        @Test
-        fun testGetQuestionsForCourse() {
-            val courseId = 1
-            val questions = arrayOf(Question(
-                    questionId = 0,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    questionPoints = 5,
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = arrayListOf("ASD", "QA"),
-                    partialAnswers = arrayListOf()))
-            val expected: ResponseEntity<Array<Question>> = ResponseEntity(questions, HttpStatus.OK)
-            doReturn(questions).`when`(questionDAO).getQuestionsByCourse(courseId)
-            val result: ResponseEntity<Array<Question>> = questionService.getQuestionsForCourse(courseId)
-
-            assertEquals(expected, result)
-        }
-
-        @Test
-        fun testGetQuestionForId() {
-            val questionId = 1
-            val question = Question(
-                    questionId = 0,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    questionPoints = 5,
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = arrayListOf("ASD", "QA"),
-                    partialAnswers = arrayListOf())
-            val expected: ResponseEntity<Question> = ResponseEntity(question, HttpStatus.OK)
-            doReturn(question).`when`(questionDAO).getQuestionById(questionId)
-            val result: ResponseEntity<Question> = questionService.getQuestionForId(questionId)
-
-            assertEquals(expected, result)
-        }
-
-        @Test
-        fun testUpdateQuestion() {
-            val question = Question(
-                    questionId = 0,
-                    questionOrderInExam = 1,
-                    questionType = "OpenQuestion",
-                    questionText = "name",
-                    questionPoints = 5,
-                    examType = "exam",
-                    questionTypePluginVersion = "1.0",
-                    answerType = "OpenQuestion",
-                    answerTypePluginVersion = "1.0",
-                    courseId = 1,
-                    categories = arrayListOf("ASD", "QA"),
-                    partialAnswers = arrayListOf())
-            val expected: ResponseEntity<Question> = ResponseEntity(question, HttpStatus.ACCEPTED)
-            doReturn(question).`when`(questionDAO).updateQuestion(question)
-            val result: ResponseEntity<Question> = questionService.updateQuestion(question)
-
-            assertEquals(expected, result)
-        }
+        assertEquals(expected, result)
     }
 }
