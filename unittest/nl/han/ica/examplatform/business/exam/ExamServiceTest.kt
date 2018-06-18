@@ -1,5 +1,7 @@
 package nl.han.ica.examplatform.business.exam
 
+import com.nhaarman.mockito_kotlin.times
+import com.nhaarman.mockito_kotlin.verify
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import nl.han.ica.examplatform.controllers.exam.InvalidExamException
@@ -36,15 +38,6 @@ internal class ExamServiceTest {
     @Mock
     private lateinit var categoryDAO: CategoryDAO
 
-    @Test(expected = InvalidExamException::class)
-    fun testCheckExamEmptyId() {
-        val exam = Exam(5, "name-0", 10, Date(6000), courseId = 1,
-                version = 1,
-                examType = "Tentamen") // Faulty exam object
-
-        examService.checkExam(exam)
-    }
-
     @Test
     fun testGetExams() {
         val expected = arrayListOf(SimpleExam(1, "SWA Toets 1", 1),
@@ -60,25 +53,55 @@ internal class ExamServiceTest {
     }
 
     @Test(expected = InvalidExamException::class)
+    fun testCheckExamEmptyId() {
+        // Faulty exam object
+        val exam = Exam(
+                5,
+                "name-0",
+                10,
+                Date(6000),
+                courseId = 1,
+                version = 1,
+                examType = "Tentamen")
+
+        examService.checkExam(exam)
+    }
+
+    @Test(expected = InvalidExamException::class)
     fun testCheckExamEmptyQuestions() {
-        val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = "Tentamen",
-                questions = arrayListOf(Question(questionType = "OpenQuestion", questionPoints = 1, courseId = 1, examType = "Tentamen", answerType = "OpenQuestion", answerTypePluginVersion = "1.0", questionTypePluginVersion = "1.0", partial_answers = arrayListOf()))) // Faulty exam object
+        // Faulty exam object
+        val exam = Exam(
+                null,
+                "name-0",
+                10,
+                Date(6000),
+                courseId = 1,
+                version = 1,
+                examType = "Exam",
+                questions = arrayListOf(Question(
+                        questionType = "OpenQuestion",
+                        questionPoints = 1,
+                        courseId = 1,
+                        examType = "Tentamen",
+                        answerType = "OpenQuestion",
+                        answerTypePluginVersion = "1.0",
+                        questionTypePluginVersion = "1.0",
+                        partial_answers = arrayListOf())))
+
         examService.checkExam(exam)
     }
-
-    @Test
-    fun testCheckExamNoException() {
-        val exam = Exam(null, "name-0", 10, Date(6000), courseId = 1, version = 1, examType = "Tentamen")
-        examService.checkExam(exam)
-    }
-
     @Test
     fun testAddExam() {
-        val examInserted = Exam(name = "name-0", durationInMinutes = 10, startTime = Date(6000), courseId = 1, examType = "Tentamen")
-        val expectedResult = ResponseEntity(examInserted, HttpStatus.CREATED)
+        val examInserted = Exam(
+                name = "name-0",
+                durationInMinutes = 10,
+                startTime = Date(6000),
+                courseId = 1,
+                examType = "Tentamen")
 
+        val expectedResult: ResponseEntity<Exam> = ResponseEntity(examInserted, HttpStatus.CREATED)
         doReturn(examInserted).`when`(examDAO).insertExam(examInserted)
-        val result = examService.addExam(examInserted)
+        val result: ResponseEntity<Exam> = examService.addExam(examInserted)
         assertEquals(expectedResult, result)
     }
 
@@ -101,5 +124,73 @@ internal class ExamServiceTest {
         val result = examService.addClassesToExam(examIdToAddClassesTo, classesToAddToExam)
         assertNotNull(result)
         assertEquals(ResponseEntity(expected, HttpStatus.ACCEPTED), result)
+    }
+
+    @Test
+    fun testDeleteExam(){
+        val examId = 1
+
+        examService.deleteExam(examId)
+        verify(examDAO,
+                times(1))
+                .deleteExam(examId)
+    }
+
+    @Test
+    fun testPublishExamTrue(){
+        val examID = 1
+        val shouldBePublished = true
+
+        examService.publishExam(examID, shouldBePublished)
+        verify(examDAO,
+                times(1))
+                .publishExam(examID, shouldBePublished)
+    }
+
+    @Test
+    fun testPublishExamFalse(){
+        val examID = 1
+        val shouldBePublished = false
+
+        examService.publishExam(examID, shouldBePublished)
+        verify(examDAO,
+                times(1))
+                .publishExam(examID, shouldBePublished)
+    }
+
+    @Test
+    fun updateExam(){
+        val exam = Exam(
+                examId = 1,
+                name = "Exam",
+                durationInMinutes = 60,
+                startTime = Date(6000),
+                endTime = Date(8000),
+                courseId = 1,
+                version = 2,
+                examType = "exam",
+                instructions = "No instructions",
+                location = "Arnhem",
+                readyForDownload = false,
+                questions = arrayListOf(Question(
+                        questionType = "OpenQuestion",
+                        questionPoints = 1,
+                        examType = "Tentamen",
+                        questionTypePluginVersion = "1.0",
+                        answerType = "OpenQuestion",
+                        answerTypePluginVersion = "1.0",
+                        courseId = 1,
+                        partial_answers = arrayListOf())),
+                decryptionCodes = "decryptionCodes",
+                classes = arrayListOf("class 1", "class 2"))
+        val expected: ResponseEntity<Exam> = ResponseEntity(exam, HttpStatus.ACCEPTED)
+
+        doReturn(exam).`when`(examDAO).updateExam(exam)
+
+        val result: ResponseEntity<Exam> = examService.updateExam(exam)
+        verify(examDAO,
+                times(1))
+                .updateExam(exam)
+        assertEquals(result, expected)
     }
 }

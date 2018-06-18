@@ -25,7 +25,9 @@ class AnswerControllerTest {
 
     private val answer: Answer = Answer(
             questionId = 5,
-            partial_answers = arrayListOf(PartialAnswer(id = 1, text = "sad", points = 7))
+            description = "Description",
+            partial_answers = arrayListOf(PartialAnswer(id = 1, text = "sad", points = 7)),
+            points = 5
     )
 
     @Test
