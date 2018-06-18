@@ -44,7 +44,7 @@ class QuestionServiceTest {
                 answerTypePluginVersion = "1.0",
                 pluginVersion = "1.0",
                 categories = categories,
-                partial_answers = arrayListOf())
+                partialAnswers = arrayListOf())
         val expectedResult: ResponseEntity<Question> = ResponseEntity(questionInserted, HttpStatus.CREATED)
 
         doReturn(questionInserted).`when`(questionDAO).insertQuestion(questionInserted)
@@ -71,7 +71,7 @@ class QuestionServiceTest {
                 courseId = 1,
                 categories = categories,
                 subQuestions = arrayListOf(),
-                partial_answers = arrayListOf())
+                partialAnswers = arrayListOf())
         val subQuestion = Question(
                 questionId = 1,
                 questionOrderInExam = 1,
@@ -85,7 +85,7 @@ class QuestionServiceTest {
                 courseId = 1,
                 categories = categories,
                 subQuestions = arrayListOf(secondLayerSubQuestion),
-                partial_answers = arrayListOf())
+                partialAnswers = arrayListOf())
         val insertedQuestion = Question(
                 questionId = 3,
                 questionOrderInExam = 1,
@@ -98,7 +98,7 @@ class QuestionServiceTest {
                 courseId = 1,
                 categories = categories,
                 subQuestions = arrayListOf(subQuestion),
-                partial_answers = arrayListOf())
+                partialAnswers = arrayListOf())
         val question = Question(
                 questionId = null,
                 questionOrderInExam = 1,
@@ -111,7 +111,7 @@ class QuestionServiceTest {
                 courseId = 1,
                 categories = categories,
                 subQuestions = arrayListOf(subQuestion),
-                partial_answers = arrayListOf())
+                partialAnswers = arrayListOf())
 
         val expectedResult: ResponseEntity<Question> = ResponseEntity(insertedQuestion, HttpStatus.CREATED)
 

@@ -29,7 +29,7 @@ class AnswerDAO : IAnswerDAO {
      */
     override fun addOrUpdateAnswerInQuestion(answer: Answer) {
         if (answer.partial_answers == null || answer.partial_answers.size < 1)
-            throw DatabaseException("Please provide partial_answers to for question")
+            throw DatabaseException("Please provide partialAnswers to for question")
 
         val query = "INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT) value (?,?,?) on DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?"
 
@@ -65,7 +65,7 @@ class AnswerDAO : IAnswerDAO {
      */
     override fun addOrUpdateAnswerInQuestionInExam(answer: Answer, examId: Int) {
         if (answer.partial_answers == null || answer.partial_answers.size < 1)
-            throw DatabaseException("Please provide partial_answers to for question")
+            throw DatabaseException("Please provide partialAnswers to for question")
 
         val paInQeQuery = "INSERT INTO PARTIAL_ANSWER_IN_QUESTION_IN_EXAM (PARTIALANSWERID, QUESTIONID, EXAMID, POINTS) value (?,?,?,?) on DUPLICATE KEY UPDATE POINTS = ?"
 
