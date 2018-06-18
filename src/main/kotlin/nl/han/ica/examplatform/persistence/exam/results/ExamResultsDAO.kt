@@ -83,7 +83,34 @@ class ExamResultsDAO : IExamResultsDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val query = "SELECT QUESTIONTEXT FROM QUESTION WHERE COURSEID = ?"
+        val query = """SELECT PQR.QUESTIONID, COUNT(PQR.QUESTIONID) AS NRESULTS, (SELECT COUNT(PQR.RESULT) FROM PRACTICETEST_QUESTION_RESULT PQR WHERE PQR.RESULT=TRUE AND EXISTS(SELECT 1
+            FROM QUESTION Q
+            WHERE PQR.QUESTIONID = Q.QUESTIONID AND EXISTS(
+                                                            SELECT 1
+                                                            FROM CATEGORIES_OF_QUESTION COQ
+                                                            WHERE COQ.QUESTIONID = Q.QUESTIONID AND EXISTS(
+                                                                                                            SELECT 1
+                                                                                                            FROM CATEGORY C
+                                                                                                            WHERE C.CATEGORYID = COQ.CATEGORYID AND C.CATEGORYNAME = "APP"
+                                                                                                            )
+                                                            )
+            ) ) AS NCORRECT
+            FROM PRACTICETEST_QUESTION_RESULT PQR
+            WHERE EXISTS(
+            SELECT 1
+            FROM QUESTION Q
+            WHERE PQR.QUESTIONID = Q.QUESTIONID AND EXISTS(
+                                                            SELECT 1
+                                                            FROM CATEGORIES_OF_QUESTION COQ
+                                                            WHERE COQ.QUESTIONID = Q.QUESTIONID AND EXISTS(
+                                                                                                            SELECT 1
+                                                                                                            FROM CATEGORY C
+                                                                                                            WHERE C.CATEGORYID = COQ.CATEGORYID AND C.CATEGORYNAME = "APP"
+                                                                                                            )
+                                                            )
+            )
+            GROUP BY PQR.QUESTIONID
+        """
         return try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(query)
@@ -92,11 +119,13 @@ class ExamResultsDAO : IExamResultsDAO {
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
             val results = ArrayList<QuestionResultStats>()
             while (rs.next()) {
+                val nCorrect = rs.getInt("NCORRECT")
+                val nTotal = rs.getInt("NRESULTS")
                 results.add(QuestionResultStats(
                         rs.getInt("QUESTIONID"),
-                        rs.getInt("NRESULTS"),
-                        rs.getInt("NCORRECT"),
-                        rs.getInt("NWRONG")))
+                        nTotal,
+                        nCorrect,
+                        nTotal - nCorrect))
             }
             results
         } catch (e: SQLException) {
