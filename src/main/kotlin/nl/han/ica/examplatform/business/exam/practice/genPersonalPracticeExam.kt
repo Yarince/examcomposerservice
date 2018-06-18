@@ -1,21 +1,23 @@
 package nl.han.ica.examplatform.business.exam.practice
 
 
+import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.ArrayList
 
-internal fun generatePersonalExam(previousResults: ArrayList<Results>, courseId: Int, studentNr: Int, categories: ArrayList<String>, questionDAO: IQuestionDAO): ArrayList<Question> {
+internal fun generatePersonalExam(previousResults: ArrayList<Results>, courseId: Int, studentNr: Int, categories: ArrayList<String>, questionDAO: IQuestionDAO, examResultsDAO: IExamResultsDAO): ArrayList<Question> {
     val questionsNotAnswered: ArrayList<Question> = questionDAO.getQuestionsNotAnsweredByStudentInCourse(studentNr, courseId)
-    val questionsAnswered: ArrayList<Question> = questionDAO.getQuestionsAnsweredByStudentInCourse(studentNr, courseId)
+    val questionsAnswered: ArrayList<QuestionResult> = examResultsDAO.getQuestionsAnsweredByStudentInCourse(studentNr, courseId)
 
     val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults, categories)
     ratedCategories.forEach { println(it) }
     return addQuestionToExam(studentNr, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
 }
 
-private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Question>, alreadyAskedQuestions: ArrayList<Question>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
+private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Question>, alreadyAskedQuestions: ArrayList<QuestionResult>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
     // Return if the category is not in the list with categories
     if (!ratedCategories.contains(currentCategory))
         return questionsInExam
@@ -41,7 +43,7 @@ private fun addQuestionToExam(studentNr: Int, notYetAskedQuestions: ArrayList<Qu
                 ratedCategoriesWithoutEmptyQuestions.remove(currentCategory)
         }
 
-        questionsInExam.add(questionToAdd)
+        questionToAdd?.let { questionsInExam.add(it) }
         alreadyAskedQuestions.remove(questionToAdd)
         notYetAskedQuestions.remove(questionToAdd)
     }

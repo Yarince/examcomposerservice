@@ -70,4 +70,9 @@ interface IQuestionDAO {
      * @return [Boolean] true if any of them have been answered, otherwise false
      */
     fun answersGivenOnQuestions(questionIds: Array<Int>): Boolean
+
+    /**
+     * TODO!
+     */
+    fun getQuestionsNotAnsweredByStudentInCourse(studentId: Int, courseId: Int): ArrayList<Question>
 }

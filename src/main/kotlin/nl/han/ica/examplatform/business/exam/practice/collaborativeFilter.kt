@@ -1,7 +1,9 @@
 package nl.han.ica.examplatform.business.exam.practice
 
+import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
 import nl.han.ica.examplatform.business.exam.practice.models.QuestionResultStats
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
 
 /**
  * Here the results of other students on this subject should be analysed.
@@ -10,9 +12,8 @@ import nl.han.ica.examplatform.models.question.Question
  * @param category the category of which the question should be about
  * @return [Question] the first made question of the student
  */
-internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>): Question? {
-    val assessedQuestionsOfOthers: ArrayList<QuestionResultStats> = questionDAO.getResultsOfOthersInCourse(courseId)
-    // todo: If there are questions available that no one has answered before, add one of those instead
+internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>, examResultsDAO: IExamResultsDAO, courseId: Int): Question? {
+    val assessedQuestionsOfOthers: ArrayList<QuestionResultStats> = examResultsDAO.getResultsOfOthersInCourse(courseId)
 
     // Filter questions to only contain current category
     val questionIdsOfCategory = questions.filter { it.categories.contains(category) }.map { it.questionId }

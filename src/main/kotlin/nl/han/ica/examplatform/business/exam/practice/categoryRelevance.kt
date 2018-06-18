@@ -9,7 +9,7 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayLi
     for (result in results) {
         if (result.studentNr != studentNr) break
         for (category in categories) {
-            val toetsVragen: Array<QuestionResult> = result.questions.filter { it.categories.contains(category) }
+            val toetsVragen: List<QuestionResult> = result.questions.filter { it.categories.contains(category) }
             if (toetsVragen.isEmpty())
                 break
 

@@ -87,7 +87,7 @@ class QuestionDAO : IQuestionDAO {
                     }
                     preparedStatementPartialAnswer?.executeBatch()
                             ?: throw DatabaseException("Couldn't insert partial answer batch")
-                }                
+                }
             }
         } catch (e: SQLException) {
             val message = "Something went wrong while inserting a question in the database"
@@ -631,5 +631,9 @@ class QuestionDAO : IQuestionDAO {
         }
 
         return thereAreAnswersGivenToQuestions
+    }
+
+    override fun getQuestionsNotAnsweredByStudentInCourse(studentId: Int, courseId: Int): ArrayList<Question> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

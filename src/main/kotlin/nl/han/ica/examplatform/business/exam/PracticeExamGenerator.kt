@@ -5,6 +5,7 @@ import nl.han.ica.examplatform.business.exam.practice.generatePersonalExam
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
+import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import java.util.concurrent.*
 
@@ -17,11 +18,11 @@ import java.util.concurrent.*
  *
  * @return [PracticeExam] returns a practiceExam
  */
-fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDAO, categoryDAO: ICategoryDAO): PracticeExam {
+fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDAO, categoryDAO: ICategoryDAO, examResultsDAO: IExamResultsDAO): PracticeExam {
     val questionsInCourse = questionDAO.getQuestionsByCourse(courseId)
     val categoriesInCourse = categoryDAO.getCategoriesByCourse(courseId)
 
-    val previousResults: ArrayList<Results>? = examResultDAO.getPreviousResultsOfStudent(studentNr) // Should be limited to 10 results
+    val previousResults: ArrayList<Results>? = examResultsDAO.getPreviousResultsOfStudent(studentNr) // Should be limited to 10 results
     val practiceExam: ArrayList<Question>
     practiceExam = if (previousResults == null || previousResults.isEmpty()) {
         addRandomQuestionsToPracticeExam(questionsInCourse, questionsInCourse, categoriesInCourse.toList())
