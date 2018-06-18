@@ -8,7 +8,7 @@ import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.ArrayList
 
-internal fun generatePersonalExam(previousResults: ArrayList<Results>, courseId: Int, studentNr: Int, categories: ArrayList<String>, questionDAO: IQuestionDAO, examResultsDAO: IExamResultsDAO): ArrayList<Question> {
+fun generatePersonalExam(previousResults: ArrayList<Results>, courseId: Int, studentNr: Int, categories: ArrayList<String>, questionDAO: IQuestionDAO, examResultsDAO: IExamResultsDAO): ArrayList<Question> {
     val questionsNotAnswered: ArrayList<Question> = questionDAO.getQuestionsNotAnsweredByStudentInCourse(studentNr, courseId)
     val questionsAnswered: ArrayList<QuestionResult> = examResultsDAO.getQuestionsAnsweredByStudentInCourse(studentNr, courseId)
 

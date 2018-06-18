@@ -10,6 +10,7 @@ import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.CategoryDAO
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
+import nl.han.ica.examplatform.persistence.exam.results.ExamResultsDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,6 +38,9 @@ internal class ExamServiceTest {
 
     @Mock
     private lateinit var categoryDAO: CategoryDAO
+
+    @Mock
+    private lateinit var examResults: ExamResultsDAO
 
     @Test
     fun testGetExams() {

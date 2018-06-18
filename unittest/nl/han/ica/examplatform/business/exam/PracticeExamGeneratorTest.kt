@@ -2,8 +2,10 @@ package nl.han.ica.examplatform.business.exam
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import nl.han.ica.examplatform.business.exam.practice.generatePracticeExam
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
+import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,6 +23,9 @@ internal class PracticeExamGeneratorTest {
 
     @Mock
     private lateinit var categoryDAO: ICategoryDAO
+
+    @Mock
+    private lateinit var examResultsDAO: IExamResultsDAO
 
     @Test
     fun testGenerateExamSuccess() {
@@ -43,11 +48,11 @@ internal class PracticeExamGeneratorTest {
         doReturn(expectedQuestions).`when`(questionDAO).getQuestionsByCourse(courseId)
         doReturn(categories).`when`(categoryDAO).getCategoriesByCourse(courseId)
 
-        val result = generatePracticeExam(courseId, studentNr, questionDAO, categoryDAO)
+        val result = generatePracticeExam(courseId, studentNr, questionDAO, categoryDAO, examResultsDAO)
 
         assertNotNull(result)
         assertEquals(courseId, result.courseId)
-        assertEquals(expectedQuestions.size / 2, result.questions.size)
+        assertEquals(10, result.questions.size)
 
         // Check if all categories are in the practice exam
         val filteredQuestions: MutableMap<String, List<Question>> = mutableMapOf()
