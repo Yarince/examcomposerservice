@@ -12,14 +12,58 @@ import java.sql.PreparedStatement
 import java.sql.SQLException
 
 @Repository
-class ExamResultsDAO: IExamResultsDAO {
+class ExamResultsDAO : IExamResultsDAO {
     private val logger = loggerFor(javaClass)
 
-    override fun getPreviousResultsOfStudent(studentId: Int, courseId: Int): ArrayList<Results> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getPreviousResultsOfStudent(studentNr: Int, courseId: Int): ArrayList<Results> {
+        var dbConnection: Connection? = null
+        var preparedStatement: PreparedStatement? = null
+
+        val query = """SELECT QUESTIONID FROM QUESTION Q
+            INNER JOIN PRACTICETEST_QUESTION_RESULT P
+            ON Q.QUESTIONID = P.QUESTIONID"""
+        return try {
+            dbConnection = MySQLConnection.getConnection()
+            preparedStatement = dbConnection?.prepareStatement(query)
+            preparedStatement?.setInt(1, studentNr)
+            preparedStatement?.setInt(2, courseId)
+            val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
+            val results = ArrayList<Results>()
+            while (rs.next()) {
+                val examId = rs.getInt("PRACTICETESTRESULTID")
+                val questionId = rs.getInt("QUESTIONID")
+                val questionResult = QuestionResult(questionId,
+                        categories = arrayListOf(rs.getString("CATEGORYNAME")),
+                        questionText = rs.getString("QUESTIONTEXT"),
+                        type = rs.getString("QUESTIONTYPE"),
+                        practiceTestResultId = examId,
+                        wasCorrect = rs.getBoolean("RESULT"))
+                val result = results.find { it.examId == examId }
+                if (result == null) {
+                    results.add(Results(examId, studentNr, arrayListOf(questionResult)))
+                } else {
+                    val question = result.questions.find { it.questionId == questionId }
+                    if (question == null) {
+                        result.questions.add(questionResult)
+                    } else {
+                        question.categories.add(rs.getString("CATEGORYNAME"))
+                        result.questions[result.questions.indexOf(question)] = question
+                    }
+                    results[results.indexOf(result)] = result
+                }
+            }
+            results
+        } catch (e: SQLException) {
+            val message = "Something went wrong while getting results of student"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
+        } finally {
+            MySQLConnection.closeConnection(dbConnection)
+            preparedStatement?.close()
+        }
     }
 
-    override fun getResultsOfOthersInCategory(studentId: Int, category: String): ArrayList<QuestionResultStats> {
+    override fun getResultsOfOthersInCategory(studentNr: Int, category: String): ArrayList<QuestionResultStats> {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
@@ -27,7 +71,7 @@ class ExamResultsDAO: IExamResultsDAO {
         return try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(query)
-            preparedStatement?.setInt(1, studentId)
+            preparedStatement?.setInt(1, studentNr)
             preparedStatement?.setString(2, category)
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
             val results = ArrayList<QuestionResultStats>()
@@ -49,8 +93,8 @@ class ExamResultsDAO: IExamResultsDAO {
         }
     }
 
-    override fun getQuestionsAnsweredByStudentInCourse(studentId: Int, courseId: Int): ArrayList<QuestionResult> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getQuestionsAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<QuestionResult> {
+
     }
 
 }

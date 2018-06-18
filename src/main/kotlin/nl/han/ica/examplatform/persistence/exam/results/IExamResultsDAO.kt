@@ -5,9 +5,9 @@ import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
 import nl.han.ica.examplatform.business.exam.practice.models.QuestionResultStats
 
 interface IExamResultsDAO {
-    fun getResultsOfOthersInCategory(studentId: Int, category: String): ArrayList<QuestionResultStats>
+    fun getResultsOfOthersInCategory(studentNr: Int, category: String): ArrayList<QuestionResultStats>
 
-    fun getQuestionsAnsweredByStudentInCourse(studentId: Int, courseId: Int): ArrayList<QuestionResult>
+    fun getQuestionsAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<QuestionResult>
 
-    fun getPreviousResultsOfStudent(studentId: Int, courseId: Int): ArrayList<Results>
+    fun getPreviousResultsOfStudent(studentNr: Int, courseId: Int): ArrayList<Results>
 }
