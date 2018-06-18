@@ -85,7 +85,7 @@ class ExamDAO : IExamDAO {
             FROM EXAM
                 INNER JOIN COURSE ON EXAM.COURSEID = COURSE.COURSEID
             WHERE EXAMID = ?
-           """.trimIndent()
+           """
         val examStatement: PreparedStatement?
         examStatement = conn?.prepareStatement(examQuery)
         examStatement?.setInt(1, id)
