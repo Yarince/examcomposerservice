@@ -2,6 +2,7 @@ package nl.han.ica.examplatform.persistence.decryptioncode
 
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.DatabaseException
+import nl.han.ica.examplatform.controllers.decryptioncode.DecryptionCodeNotFoundException
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.Connection
@@ -29,10 +30,11 @@ class DecryptionCodeDAO : IDecryptionCodeDAO {
         val preparedStatement: PreparedStatement? = conn?.prepareStatement(sqlRetrieveExamDecryptKeyQuery)
         preparedStatement?.setInt(1, examId)
 
-        return try{
-            val resultSet = preparedStatement?.executeQuery()?: throw DatabaseException("Error while fetching decryption codes from the database.")
+        return try {
+            val resultSet = preparedStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while fetching decryption codes from the database.")
             resultSet.next()
-            resultSet.getString("DECRYPTKEY")
+            resultSet.getString("DECRYPTKEY") ?: throw DecryptionCodeNotFoundException()
         } catch (e: SQLException) {
             logger.error("Error retrieving exam decryption key $examId", e)
             throw DatabaseException("Error while retrieving exam decryption key $examId")
