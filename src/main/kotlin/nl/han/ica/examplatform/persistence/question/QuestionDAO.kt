@@ -80,7 +80,7 @@ class QuestionDAO : IQuestionDAO {
                     val questionId = result.getInt("ID")
                     questionToReturn = question.copy(questionId = questionId)
 
-                    question.partial_answers.forEach {
+                    question.partialAnswers.forEach {
                         preparedStatementPartialAnswer?.setInt(1, questionId)
                         preparedStatementPartialAnswer?.setString(2, it.text)
                         preparedStatementPartialAnswer?.addBatch()
@@ -269,7 +269,7 @@ class QuestionDAO : IQuestionDAO {
                         courseId = questionRs.getInt("COURSEID"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        partial_answers = getPartialAnswers(conn, questionId)
+                        partialAnswers = getPartialAnswers(conn, questionId)
                 ))
             }
         } catch (e: SQLException) {
@@ -351,7 +351,7 @@ class QuestionDAO : IQuestionDAO {
                         pluginVersion = questionRs.getString("PLUGINVERSION"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        partial_answers = getPartialAnswers(conn, questionId, examId)
+                        partialAnswers = getPartialAnswers(conn, questionId, examId)
                 ))
             }
 
@@ -393,7 +393,7 @@ class QuestionDAO : IQuestionDAO {
                         pluginVersion = questionRs.getString("PLUGINVERSION"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        partial_answers = getPartialAnswers(conn, questionId, examId)
+                        partialAnswers = getPartialAnswers(conn, questionId, examId)
                 ))
             }
 
@@ -428,7 +428,7 @@ class QuestionDAO : IQuestionDAO {
                     pluginVersion = questionRs.getString("PLUGINVERSION"),
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                    partial_answers = getPartialAnswers(conn, questionId)
+                    partialAnswers = getPartialAnswers(conn, questionId)
             ))
         }
         return questions
