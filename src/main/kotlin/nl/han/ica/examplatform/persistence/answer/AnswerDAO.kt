@@ -110,7 +110,7 @@ class AnswerDAO : IAnswerDAO {
         var preparedQuestionStatement: PreparedStatement? = null
         val preparedQuestionStatement2: PreparedStatement?
 
-        val sqlQuestionQuery = "SELECT Q.QUESTIONTEXT, Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
+        val sqlQuestionQuery = "SELECT Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
 
         val sqlPartialQuery = """
             SELECT
