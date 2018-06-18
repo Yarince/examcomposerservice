@@ -31,7 +31,10 @@ class AnswerDAO : IAnswerDAO {
         if (answer.partial_answers == null || answer.partial_answers.size < 1)
             throw DatabaseException("Please provide partial_answers to for question")
 
-        val query = "INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT) value (?,?,?) on DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?"
+        val query = """
+            INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT)
+            VALUE (?,?,?) ON DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?
+            """
 
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement = conn?.prepareStatement(query)

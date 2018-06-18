@@ -15,17 +15,18 @@ class ClassDAO : IClassDAO {
 
     private val logger = loggerFor(javaClass)
 
-    override fun getAllClasses() : ArrayList<String> {
+    override fun getAllClasses(): ArrayList<String> {
         val classes: ArrayList<String> = ArrayList()
         val conn: Connection? = MySQLConnection.getConnection()
         val sqlGetAllClassesQuery = "SELECT CLASSNAME FROM CLASSES"
         val preparedStatementExam = conn?.prepareStatement(sqlGetAllClassesQuery)
 
         return try {
-            val rs = preparedStatementExam?.executeQuery() ?: throw DatabaseException("Error while trying to retrieve all the classes.")
-                while (rs.next()) {
-                    classes.add(rs.getString("CLASSNAME"))
-                }
+            val rs = preparedStatementExam?.executeQuery()
+                    ?: throw DatabaseException("Error while trying to retrieve all the classes.")
+            while (rs.next()) {
+                classes.add(rs.getString("CLASSNAME"))
+            }
             classes
         } catch (e: SQLException) {
             logger.error("Error retrieving classes", e)

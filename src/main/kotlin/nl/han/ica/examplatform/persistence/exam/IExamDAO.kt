@@ -49,7 +49,7 @@ interface IExamDAO {
      * @param classes [Array]<[String]> an array containing classes
      * @return [PreparedExam] the exam containing the added classes
      */
-    fun addClassesToExam(examId: Int, classes: ArrayList<String>) : HttpStatus
+    fun addClassesToExam(examId: Int, classes: ArrayList<String>): HttpStatus
 
     /**
      * Changes the order of questions in an exam

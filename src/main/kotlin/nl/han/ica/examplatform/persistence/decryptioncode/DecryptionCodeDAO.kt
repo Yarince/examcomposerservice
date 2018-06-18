@@ -29,8 +29,9 @@ class DecryptionCodeDAO : IDecryptionCodeDAO {
         val preparedStatement: PreparedStatement? = conn?.prepareStatement(sqlRetrieveExamDecryptKeyQuery)
         preparedStatement?.setInt(1, examId)
 
-        return try{
-            val resultSet = preparedStatement?.executeQuery()?: throw DatabaseException("Error while fetching decryption codes from the database.")
+        return try {
+            val resultSet = preparedStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while fetching decryption codes from the database.")
             resultSet.next()
             resultSet.getString("DECRYPTKEY")
         } catch (e: SQLException) {

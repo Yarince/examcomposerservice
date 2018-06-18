@@ -260,7 +260,8 @@ class QuestionDAO : IQuestionDAO {
             while (questionRs.next()) {
 
                 val questionId = questionRs.getInt("QuestionID")
-                questions.add(Question(questionId = questionId,
+                questions.add(Question(
+                        questionId = questionId,
                         questionType = questionRs.getString("QuestionType"),
                         questionText = questionRs.getString("QuestionText"),
                         courseId = questionRs.getInt("COURSEID"),
@@ -355,8 +356,9 @@ class QuestionDAO : IQuestionDAO {
                 ?: throw DatabaseException("Error while interacting with the database")
 
         while (questionRs.next()) {
-        val questionId = questionRs.getInt("QuestionID")
-            questions.add(Question(questionId = questionRs.getInt("QUESTIONID"),
+            val questionId = questionRs.getInt("QUESTIONID")
+            questions.add(Question(
+                    questionId = questionId,
                     questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
                     questionType = questionRs.getString("QUESTIONTYPE"),
                     questionText = questionRs.getString("QUESTIONTEXT"),
@@ -366,10 +368,11 @@ class QuestionDAO : IQuestionDAO {
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                     pluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
-                    categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
+                    categories = getCategoriesOfQuestion(questionId, conn),
                     subQuestions = getSubQuestionsInExamOfQuestion(questionRs.getInt("QUESTIONID"), conn, sqlSubQuestionQuery),
                     partial_answers = getPartialAnswers(conn, questionId)
-            ))}
+            ))
+        }
         return questions
     }
 
@@ -402,7 +405,8 @@ class QuestionDAO : IQuestionDAO {
         while (questionRs.next()) {
 
             val questionId = questionRs.getInt("QuestionID")
-            questions.add(Question(questionId = questionId,
+            questions.add(Question(
+                    questionId = questionId,
                     questionOrderInExam = null,
                     questionType = questionRs.getString("QUESTIONTYPE"), // To be removed
                     questionText = questionRs.getString("QUESTIONTEXT"),
@@ -419,7 +423,8 @@ class QuestionDAO : IQuestionDAO {
         }
         return questions
     }
-private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<PartialAnswer> {
+
+    private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<PartialAnswer> {
         val preparedStatementPartialAnswer: PreparedStatement?
 
         val queryPartialAnswers = """
@@ -443,6 +448,7 @@ private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<Par
         }
         return partialAnswers
     }
+
     private fun getSubQuestionsOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String): ArrayList<Question>? {
         var preparedQuestionStatement: PreparedStatement? = null
         val questions: ArrayList<Question>
@@ -502,7 +508,7 @@ private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<Par
         var preparedQuestionStatement: PreparedStatement? = null
 
         val sqlQuestionQuery = """
-                SELECT distinct
+                SELECT DISTINCT
                     Q.QUESTIONID,
                     QIE.SEQUENCENUMBER,
                     Q.QUESTIONTYPE,
@@ -515,7 +521,7 @@ private fun getPartialAnswers(conn: Connection?, questionId: Int): ArrayList<Par
                     Q.ANSWERTYPEPLUGINVERSION
                 FROM QUESTION Q
                 JOIN QUESTION_IN_EXAM QIE
-                ON Q.QUESTIONID = QIE.QUESTIONID
+                    ON Q.QUESTIONID = QIE.QUESTIONID
                 WHERE Q.QUESTIONID = ?;"""
 
         val sqlSubQuestionQuery = """
