@@ -4,9 +4,9 @@ package nl.han.ica.examplatform.business.exam.practice
 import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
 import kotlin.math.pow
 
-data class Results(val examId: Int, val studentNr: Int, val questions: ArrayList<QuestionResult>)
+data class PracticeExamResult(val examId: Int, val studentNr: Int, val questions: ArrayList<QuestionResult>)
 
-internal fun getExamRelevance(studentNr: Int, results: ArrayList<Results>): ArrayList<Pair<Int, Double>> {
+internal fun getExamRelevance(studentNr: Int, results: ArrayList<PracticeExamResult>): ArrayList<Pair<Int, Double>> {
     //return results.map { r -> Pair(r.examId, calculateRelevanceOfPracticeExam(results.size, )) }
     val practiceExamsOfAStudentPairedWithTheirWeightingAscending: ArrayList<Pair<Int, Double>> = ArrayList()
     for (oefentoetsen in results) {
@@ -31,7 +31,7 @@ internal fun calculateRelevanceOfPracticeExam(amountOfPracticeExams: Int, import
     return 100 / (recurPow(amountOfPracticeExams)) * recurMultiplication(importanceRanking)
 }
 
-internal fun amountOfPracticeExamsOfAStudent(studentNr: Int, data: ArrayList<Results>): Int {
+internal fun amountOfPracticeExamsOfAStudent(studentNr: Int, data: ArrayList<PracticeExamResult>): Int {
     var total = 0
     for (oefentoetsen in data) {
         if (oefentoetsen.studentNr == studentNr) {

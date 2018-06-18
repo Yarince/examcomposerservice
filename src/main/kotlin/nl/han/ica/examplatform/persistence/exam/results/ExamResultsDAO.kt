@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.exam.results
 
-import nl.han.ica.examplatform.business.exam.practice.Results
+import nl.han.ica.examplatform.business.exam.practice.PracticeExamResult
 import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
 import nl.han.ica.examplatform.business.exam.practice.models.QuestionResultStats
 import nl.han.ica.examplatform.config.logger.loggerFor
@@ -15,7 +15,14 @@ import java.sql.SQLException
 class ExamResultsDAO : IExamResultsDAO {
     private val logger = loggerFor(javaClass)
 
-    override fun getPreviousResultsOfStudent(studentNr: Int, courseId: Int): ArrayList<Results> {
+    /**
+     * Gets the previous results of a student in a course.
+     *
+     * @param studentNr [Int] the student nr.
+     * @param courseId [Int] the courseID
+     * @return [ArrayList]<[PracticeExamResult]>
+     */
+    override fun getPreviousResultsOfStudent(studentNr: Int, courseId: Int): ArrayList<PracticeExamResult> {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
@@ -30,7 +37,7 @@ class ExamResultsDAO : IExamResultsDAO {
             preparedStatement?.setInt(1, courseId)
             preparedStatement?.setInt(2, studentNr)
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
-            val results = ArrayList<Results>()
+            val results = ArrayList<PracticeExamResult>()
             while (rs.next()) {
                 val examId = rs.getInt("PRACTICETESTRESULTID")
                 val questionId = rs.getInt("QUESTIONID")
@@ -42,7 +49,7 @@ class ExamResultsDAO : IExamResultsDAO {
                         wasCorrect = rs.getBoolean("RESULT"))
                 val result = results.find { it.examId == examId }
                 if (result == null) {
-                    results.add(Results(examId, studentNr, arrayListOf(questionResult)))
+                    results.add(PracticeExamResult(examId, studentNr, arrayListOf(questionResult)))
                 } else {
                     val question = result.questions.find { it.questionId == questionId }
                     if (question == null) {
@@ -65,6 +72,13 @@ class ExamResultsDAO : IExamResultsDAO {
         }
     }
 
+    /**
+     * Gets the combined results of other students in a specific category.
+     *
+     * @param studentNr [Int] the student nr.
+     * @param category [String] the category
+     * @return [ArrayList]<[QuestionResultStats]>
+     */
     override fun getResultsOfOthersInCategory(studentNr: Int, category: String): ArrayList<QuestionResultStats> {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null

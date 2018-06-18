@@ -72,7 +72,11 @@ interface IQuestionDAO {
     fun answersGivenOnQuestions(questionIds: Array<Int>): Boolean
 
     /**
-     * TODO!
+     * Gets the questions that a student hasn't answered yet in a course.
+     *
+     * @param studentNr [Int] the studentNumber
+     * @param courseId [Int] the ID of the course
+     * @return [ArrayList]<[Question]> the questions
      */
     fun getQuestionsNotAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<Question>
 }

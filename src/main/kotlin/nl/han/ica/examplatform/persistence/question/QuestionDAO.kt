@@ -633,6 +633,13 @@ class QuestionDAO : IQuestionDAO {
         return thereAreAnswersGivenToQuestions
     }
 
+    /**
+     * Gets the questions that a student hasn't answered yet in a course.
+     *
+     * @param studentNr [Int] the studentNumber
+     * @param courseId [Int] the ID of the course
+     * @return [ArrayList]<[Question]> the questions
+     */
     override fun getQuestionsNotAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<Question> {
         var conn: Connection? = null
         var preparedStatement: PreparedStatement? = null
