@@ -32,7 +32,7 @@ private fun addQuestionToExam(courseId: Int, studentNr: Int, examResultsDAO: IEx
     val ratedCategoriesWithoutEmptyQuestions = ratedCategories.toMutableList()
     if (questionOfCategoryWillBeAdded(currentCategory.second)) {
 
-        var questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory.first, notYetAskedQuestions, examResultsDAO, courseId)
+        var questionToAdd = getMostRelevantNotAssessedQuestionOfCategory(currentCategory.first, notYetAskedQuestions, examResultsDAO, courseId, studentNr)
         if (questionToAdd == null) {
             val alreadyAskedQuestionsInCurrentCategory = alreadyAskedQuestions.filter { it.categories.contains(currentCategory.first) }
             if (alreadyAskedQuestionsInCurrentCategory.isNotEmpty())

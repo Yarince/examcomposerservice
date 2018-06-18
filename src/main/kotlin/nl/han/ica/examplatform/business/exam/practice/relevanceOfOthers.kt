@@ -13,8 +13,8 @@ import nl.han.ica.examplatform.persistence.question.IQuestionDAO
  * @param category the category of which the question should be about
  * @return [Question] the first made question of the student
  */
-internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>, examResultsDAO: IExamResultsDAO, courseId: Int): Question? {
-    val assessedQuestionsOfOthers: ArrayList<QuestionResultStats> = examResultsDAO.getResultsOfOthersInCourse(courseId)
+internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, questions: ArrayList<Question>, examResultsDAO: IExamResultsDAO, courseId: Int, studentNr: Int): Question? {
+    val assessedQuestionsOfOthers: ArrayList<QuestionResultStats> = examResultsDAO.getResultsOfOthersInCategory(studentNr, category)
 
     // Filter questions to only contain current category
     val questionIdsOfCategory = questions.filter { it.categories.contains(category) }.map { it.questionId }
