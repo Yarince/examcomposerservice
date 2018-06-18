@@ -19,14 +19,16 @@ class ExamResultsDAO : IExamResultsDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val query = """SELECT QUESTIONID FROM QUESTION Q
-            INNER JOIN PRACTICETEST_QUESTION_RESULT P
-            ON Q.QUESTIONID = P.QUESTIONID"""
+        val query = """SELECT PRACTICETESTRESULTID, Q.QUESTIONID, CATEGORYNAME, QUESTIONTEXT, QUESTIONTYPE, RESULT
+            FROM QUESTION Q INNER JOIN PRACTICETEST_QUESTION_RESULT P
+            ON Q.QUESTIONID = P.QUESTIONID INNER JOIN CATEGORIES_OF_QUESTION COQ
+            ON COQ.QUESTIONID = Q.QUESTIONID INNER JOIN CATEGORY C ON
+            COQ.CATEGORYID = C.CATEGORYID WHERE COURSEID = ? AND STUDENTNUMBER = ?"""
         return try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(query)
-            preparedStatement?.setInt(1, studentNr)
-            preparedStatement?.setInt(2, courseId)
+            preparedStatement?.setInt(1, courseId)
+            preparedStatement?.setInt(2, studentNr)
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
             val results = ArrayList<Results>()
             while (rs.next()) {
