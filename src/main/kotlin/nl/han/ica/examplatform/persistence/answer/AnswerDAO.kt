@@ -180,12 +180,10 @@ class AnswerDAO : IAnswerDAO {
                 PARTIALANSWERTEXT,
                 PA.PARTIALANSWERID,
                 PAIQIE.POINTS,
-                Q.QUESTIONID
+                PA.QUESTIONID
             FROM PARTIAL_ANSWER PA
                 JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE
                     ON PA.PARTIALANSWERID = PAIQIE.PARTIALANSWERID
-                JOIN QUESTION Q
-                    on PA.QUESTIONID = Q.QUESTIONID
             WHERE PAIQIE.EXAMID = ?"""
 
 

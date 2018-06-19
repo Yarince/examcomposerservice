@@ -37,12 +37,12 @@ class QuestionDAO : IQuestionDAO {
                 COURSEID,
                 PARENTQUESTIONID,
                 EXAMTYPENAME,
-                PLUGINVERSION,
+                QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION,
                 PLUGINDATA
                 )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
         val sqlPartialAnswerQuery = """
            INSERT INTO PARTIAL_ANSWER (
@@ -146,20 +146,16 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlQuestionQuery = """
             SELECT distinct
-                Q.QUESTIONID,
-                QIE.SEQUENCENUMBER,
-                Q.QUESTIONTYPE,
-                Q.QUESTIONTEXT,
-                QIE.QUESTIONPOINTS,
-                Q.COURSEID,
-                Q.EXAMTYPENAME,
-                Q.QUESTIONTYPEPLUGINVERSION,
-                Q.ANSWERTYPE,
-                Q.ANSWERTYPEPLUGINVERSION,
-                Q.PLUGINDATA
-            FROM QUESTION Q
-              JOIN QUESTION_IN_EXAM QIE
-                ON Q.QUESTIONID = QIE.QUESTIONID
+                QUESTIONID,
+                QUESTIONTYPE,
+                QUESTIONTEXT,
+                COURSEID,
+                EXAMTYPENAME,
+                QUESTIONTYPEPLUGINVERSION,
+                ANSWERTYPE,
+                ANSWERTYPEPLUGINVERSION,
+                PLUGINDATA
+            FROM QUESTION
             WHERE
                 COURSEID = ? and PARENTQUESTIONID is null;"""
 
@@ -219,9 +215,7 @@ class QuestionDAO : IQuestionDAO {
                 QUESTIONTYPE,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION,
-                SEQUENCENUMBER,
-                QUESTIONSUFFIX,
-                PLUGINVERSION,
+                QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION,
                 PLUGINDATA
@@ -243,7 +237,8 @@ class QuestionDAO : IQuestionDAO {
                 EXAMTYPENAME,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION,
-                PLUGINDATA
+                PLUGINDATA,
+                QUESTIONTYPEPLUGINVERSION
             FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
             WHERE PARENTQUESTIONID = ?;"""
 
@@ -270,17 +265,17 @@ class QuestionDAO : IQuestionDAO {
                 val questionId = questionRs.getInt("QuestionID")
                 questions.add(Question(
                         questionId = questionId,
-                        questionType = questionRs.getString("QuestionType"),
-                        questionText = questionRs.getString("QuestionText"),
+                        questionType = questionRs.getString("QUESTIONTYPE"),
+                        questionText = questionRs.getString("QUESTIONTEXT"),
                         courseId = questionRs.getInt("COURSEID"),
                         examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                         pluginData = questionRs.getString("PLUGINDATA"),
+                        questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                         categories = getCategoriesOfQuestion(questionId, conn),
-                        subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery),
-                        partialAnswers = getPartialAnswers(conn, questionId)
+                        partialAnswers = getPartialAnswers(conn, questionId),
+                        subQuestions = getSubQuestionsOfQuestion(questionId, conn, sqlSubQuestionQuery)
                 ))
             }
         } catch (e: SQLException) {
@@ -332,16 +327,15 @@ class QuestionDAO : IQuestionDAO {
                 QE.QUESTIONID,
                 Q.QUESTIONTYPE,
                 Q.QUESTIONTEXT,
-                Q.QUESTIONPOINTS,
                 Q.COURSEID,
                 Q.EXAMTYPENAME,
-                Q.QUESTIONTYPEPLUGINVERSION,
                 Q.ANSWERTYPE,
                 Q.ANSWERTYPEPLUGINVERSION,
+                Q.QUESTIONTYPEPLUGINVERSION,
                 Q.PLUGINDATA
             FROM QUESTION AS Q JOIN QUESTION_IN_EXAM AS QE
                 ON Q.QUESTIONID = QE.QUESTIONID
-            WHERE PARENTQUESTIONID = ?"""
+            WHERE PARENTQUESTIONID = ? AND EXAMID = ?"""
 
         val questions = ArrayList<Question>()
         try {
@@ -357,16 +351,15 @@ class QuestionDAO : IQuestionDAO {
                         questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
                         questionType = questionRs.getString("QUESTIONTYPE"),
                         questionText = questionRs.getString("QUESTIONTEXT"),
-                        questionPoints = questionRs.getInt("QUESTIONPOINTS"),
                         courseId = questionRs.getInt("COURSEID"),
                         examType = questionRs.getString("EXAMTYPENAME"),
-                        categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                        subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery, examId),
-                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         pluginData = questionRs.getString("PLUGINDATA"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        partialAnswers = getPartialAnswers(conn, questionId, examId)
+                        questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                        categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
+                        partialAnswers = getPartialAnswers(conn, questionId, examId),
+                        subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery, examId)
                 ))
             }
 
@@ -376,48 +369,6 @@ class QuestionDAO : IQuestionDAO {
             throw DatabaseException(message, e)
         } finally {
             MySQLConnection.closeConnection(conn)
-            MySQLConnection.closeStatement(preparedQuestionStatement)
-        }
-
-        return questions
-    }
-
-    private fun getSubQuestionsInExamOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String, examId: Int? = null): ArrayList<Question>? {
-        var preparedQuestionStatement: PreparedStatement? = null
-        val questions = ArrayList<Question>()
-
-        try {
-            preparedQuestionStatement = conn?.prepareStatement(sqlSubQuestionQuery)
-            preparedQuestionStatement?.setInt(1, questionId)
-            if (examId != null) preparedQuestionStatement?.setInt(2, examId)
-
-            val questionRs = preparedQuestionStatement?.executeQuery()
-                    ?: throw DatabaseException("Error while interacting with the database")
-            while (questionRs.next()) {
-
-                questions.add(Question(
-                        questionId = questionId,
-                        questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
-                        questionType = questionRs.getString("QUESTIONTYPE"),
-                        questionText = questionRs.getString("QUESTIONTEXT"),
-                        questionPoints = questionRs.getInt("QUESTIONPOINTS"),
-                        courseId = questionRs.getInt("COURSEID"),
-                        examType = questionRs.getString("EXAMTYPENAME"),
-                        categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
-                        subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery, examId),
-                        questionTypePluginVersion = questionRs.getString("PLUGINVERSION"),
-                        answerType = questionRs.getString("ANSWERTYPE"),
-                        pluginData = questionRs.getString("PLUGINDATA"),
-                        answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
-                        partialAnswers = getPartialAnswers(conn, questionId, examId)
-                ))
-            }
-
-        } catch (e: SQLException) {
-            val message = "Getting subquestions in exam went wrong with questionId $questionId"
-            logger.error(message, e)
-            throw DatabaseException(message, e)
-        } finally {
             MySQLConnection.closeStatement(preparedQuestionStatement)
         }
 
@@ -434,6 +385,7 @@ class QuestionDAO : IQuestionDAO {
             val questionId = questionRs.getInt("QuestionID")
             questions.add(Question(
                     questionId = questionId,
+                    questionOrderInExam = null,
                     questionType = questionRs.getString("QUESTIONTYPE"),
                     questionText = questionRs.getString("QUESTIONTEXT"),
                     courseId = questionRs.getInt("COURSEID"),
@@ -443,8 +395,8 @@ class QuestionDAO : IQuestionDAO {
                     questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                     pluginData = questionRs.getString("PLUGINDATA"),
                     categories = getCategoriesOfQuestion(questionId, conn),
-                    subQuestions = getSubQuestionsOfQuestion(questionId, conn, sqlSubQuestionQuery),
-                    partialAnswers = getPartialAnswers(conn, questionId)
+                    partialAnswers = getPartialAnswers(conn, questionId),
+                    subQuestions = getSubQuestionsOfQuestion(questionId, conn, sqlSubQuestionQuery)
             ))
         }
         return questions
@@ -495,6 +447,47 @@ class QuestionDAO : IQuestionDAO {
             ))
         }
         return partialAnswers
+    }
+
+    private fun getSubQuestionsInExamOfQuestion(parentQuestionId: Int, conn: Connection?, sqlSubQuestionQuery: String, examId: Int? = null): ArrayList<Question>? {
+        var preparedQuestionStatement: PreparedStatement? = null
+        val questions = ArrayList<Question>()
+
+        try {
+            preparedQuestionStatement = conn?.prepareStatement(sqlSubQuestionQuery)
+            preparedQuestionStatement?.setInt(1, parentQuestionId)
+            if (examId != null) preparedQuestionStatement?.setInt(2, examId)
+
+            val questionRs = preparedQuestionStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while interacting with the database")
+            while (questionRs.next()) {
+
+                val questionId = questionRs.getInt("QUESTIONID")
+                questions.add(Question(
+                        questionId = questionId,
+                        questionOrderInExam = questionRs.getInt("SEQUENCENUMBER"),
+                        questionType = questionRs.getString("QUESTIONTYPE"),
+                        questionText = questionRs.getString("QUESTIONTEXT"),
+                        courseId = questionRs.getInt("COURSEID"),
+                        examType = questionRs.getString("EXAMTYPENAME"),
+                        answerType = questionRs.getString("ANSWERTYPE"),
+                        answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
+                        questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                        categories = getCategoriesOfQuestion(questionId, conn),
+                        partialAnswers = getPartialAnswers(conn, questionId, examId),
+                        pluginData = questionRs.getString("PLUGINDATA"),
+                        subQuestions = getSubQuestionsInExamOfQuestion(questionId, conn, sqlSubQuestionQuery, examId)
+                ))
+            }
+        } catch (e: SQLException) {
+            val message = "Subquestions"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
+        } finally {
+            MySQLConnection.closeStatement(preparedQuestionStatement)
+        }
+
+        return questions
     }
 
     private fun getSubQuestionsOfQuestion(questionId: Int, conn: Connection?, sqlSubQuestionQuery: String): ArrayList<Question>? {
@@ -626,7 +619,7 @@ class QuestionDAO : IQuestionDAO {
                 QUESTIONTYPE = ?,
                 ANSWERTYPE = ?,
                 ANSWERTYPEPLUGINVERSION = ?,
-                PLUGINVERSION = ?,
+                QUESTIONTYPEPLUGINVERSION = ?,
                 PLUGINDATA = ?
             WHERE QUESTIONID = ?"""
 

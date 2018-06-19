@@ -24,7 +24,7 @@ class PluginDAO : IPluginDAO {
      */
     override fun getAllPlugins(): ArrayList<Plugin> {
         val dbConnection: Connection? = MySQLConnection.getConnection()
-        val dbQuery = "SELECT PluginId, PluginName, PluginVersion, PluginDescription FROM PLUGIN"
+        val dbQuery = "SELECT PluginId, PluginName, QUESTIONTYPEVERSION, PluginDescription FROM PLUGIN"
         val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(dbQuery)
 
         val result = arrayListOf<Plugin>()
@@ -36,7 +36,7 @@ class PluginDAO : IPluginDAO {
                 result.add(Plugin(
                         rs.getInt("PluginId"),
                         rs.getString("PluginName"),
-                        rs.getString("PluginVersion"),
+                        rs.getString("QUESTIONTYPEVERSION"),
                         rs.getString("PluginDescription")
                 ))
         } catch (e: SQLException) {

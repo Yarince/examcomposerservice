@@ -37,12 +37,11 @@ class QuestionControllerTest {
                 questionOrderInExam = 1,
                 questionType = "OpenQuestion",
                 questionText = "name",
-                questionPoints = 5,
                 courseId = 1,
                 examType = "Tentamen",
-                questionTypePluginVersion = "1.0",
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
+                questionTypePluginVersion = "1.0",
                 partialAnswers = arrayListOf())
         val expectedStatusCode = HttpStatus.CREATED
 

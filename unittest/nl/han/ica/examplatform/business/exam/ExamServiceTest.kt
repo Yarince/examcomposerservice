@@ -80,7 +80,6 @@ internal class ExamServiceTest {
                 examType = "Exam",
                 questions = arrayListOf(Question(
                         questionType = "OpenQuestion",
-                        questionPoints = 1,
                         courseId = 1,
                         examType = "Tentamen",
                         answerType = "OpenQuestion",
@@ -174,12 +173,11 @@ internal class ExamServiceTest {
                 readyForDownload = false,
                 questions = arrayListOf(Question(
                         questionType = "OpenQuestion",
-                        questionPoints = 1,
+                        courseId = 1,
                         examType = "Tentamen",
-                        questionTypePluginVersion = "1.0",
                         answerType = "OpenQuestion",
                         answerTypePluginVersion = "1.0",
-                        courseId = 1,
+                        questionTypePluginVersion = "1.0",
                         partialAnswers = arrayListOf())),
                 decryptionCodes = "decryptionCodes",
                 classes = arrayListOf("class 1", "class 2"))

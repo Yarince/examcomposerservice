@@ -33,8 +33,6 @@ data class Question(
         val questionType: String,
         @ApiModelProperty(notes = "Text of the question. This could be null if the question has subquestions")
         val questionText: String? = null,
-        @ApiModelProperty(notes = "Points assigned to a question in an Exam")
-        val questionPoints: Int? = null,
         @ApiModelProperty(notes = "ID of the course", required = true)
         val courseId: Int,
         @ApiModelProperty(notes = "Type of exam the question is for", required = true)
