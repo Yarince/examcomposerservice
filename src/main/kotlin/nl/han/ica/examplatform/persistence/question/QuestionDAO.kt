@@ -6,8 +6,7 @@ import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
-import java.sql.Connection
-import java.sql.PreparedStatement
+import java.sql.*
 import java.sql.SQLException
 
 /**
@@ -25,7 +24,6 @@ class QuestionDAO : IQuestionDAO {
      * @return [Question] the inserted question
      */
     override fun insertQuestion(question: Question, parentQuestionId: Int?): Question {
-        var questionToReturn = question
         var dbConnection: Connection? = null
         var preparedStatementQuestion: PreparedStatement? = null
         val preparedStatementPartialAnswer: PreparedStatement?
@@ -52,8 +50,8 @@ class QuestionDAO : IQuestionDAO {
         """
         try {
             dbConnection = MySQLConnection.getConnection()
-            preparedStatementQuestion = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
-            preparedStatementPartialAnswer = dbConnection?.prepareStatement(sqlPartialAnswerQuery)
+            preparedStatementQuestion = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString, Statement.RETURN_GENERATED_KEYS)
+            preparedStatementPartialAnswer = dbConnection?.prepareStatement(sqlPartialAnswerQuery, Statement.RETURN_GENERATED_KEYS)
 
             preparedStatementQuestion?.setString(1, question.questionText)
             preparedStatementQuestion?.setString(2, question.questionType)
@@ -68,16 +66,13 @@ class QuestionDAO : IQuestionDAO {
             preparedStatementQuestion?.setString(7, question.answerType)
             preparedStatementQuestion?.setString(8, question.answerTypePluginVersion)
 
-            val insertedRows = preparedStatementQuestion?.executeUpdate()
-            if (insertedRows == 1) {
-                val idQuery = "SELECT LAST_INSERT_ID() AS ID"
-                val idPreparedStatement = dbConnection?.prepareStatement(idQuery)
-                val result = idPreparedStatement?.executeQuery()
-                        ?: throw DatabaseException("Error while interacting with the database")
+            preparedStatementQuestion?.executeUpdate()
+                    ?: throw DatabaseException("Couldn't insert question")
 
-                while (result.next()) {
-                    val questionId = result.getInt("ID")
-                    questionToReturn = question.copy(questionId = questionId)
+            preparedStatementQuestion.generatedKeys.use {
+                if (it.next()) {
+                    val questionId = it.getInt(1)
+                    question.questionId = questionId
 
                     question.partialAnswers.forEach {
                         preparedStatementPartialAnswer?.setInt(1, questionId)
@@ -86,8 +81,16 @@ class QuestionDAO : IQuestionDAO {
                     }
                     preparedStatementPartialAnswer?.executeBatch()
                             ?: throw DatabaseException("Couldn't insert partial answer batch")
+
+                    preparedStatementPartialAnswer.generatedKeys.use {
+                        var iter = 0
+                        while (it.next()) {
+                            question.partialAnswers[iter++].id = it.getInt(1)
+                        }
+                    }
                 }
             }
+
         } catch (e: SQLException) {
             val message = "Something went wrong while inserting a question in the database"
             logger.error(message, e)
@@ -96,7 +99,7 @@ class QuestionDAO : IQuestionDAO {
             MySQLConnection.closeConnection(dbConnection)
             MySQLConnection.closeStatement(preparedStatementQuestion)
         }
-        return questionToReturn
+        return question
     }
 
     /**
