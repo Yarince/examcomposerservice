@@ -29,7 +29,7 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
     } else {
         filteredQuestions.forEach {
             // The lower the rating, the more relevant the question is because of the low score on the question
-            val rating = it.nGood.toDouble() / it.nResults
+            val rating = it.nCorrect.toDouble() / it.nResults
 
             if (mostRelevantQuestion == null)
                 mostRelevantQuestion = Pair(it.questionId, rating)
@@ -43,5 +43,5 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
 }
 
 internal fun getFirstAskedQuestion(questionsInCategory: List<QuestionResult>, questionDAO: IQuestionDAO): Question {
-    return questionDAO.getQuestionById(questionsInCategory.sortedBy { it.practiceTestResultId }.first().questionId)
+    return questionDAO.getQuestionById(questionsInCategory.sortedBy { it.submittedExamId }.first().questionId)
 }

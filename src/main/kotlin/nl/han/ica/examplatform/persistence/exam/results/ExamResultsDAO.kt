@@ -26,7 +26,7 @@ class ExamResultsDAO : IExamResultsDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val query = """SELECT PRACTICETESTRESULTID, Q.QUESTIONID, CATEGORYNAME, QUESTIONTEXT, QUESTIONTYPE, RESULT
+        val query = """SELECT SUBMITTEDEXAMID, Q.QUESTIONID, CATEGORYNAME, QUESTIONTEXT, QUESTIONTYPE, RESULT
             FROM QUESTION Q INNER JOIN PRACTICETEST_QUESTION_RESULT P
             ON Q.QUESTIONID = P.QUESTIONID INNER JOIN CATEGORIES_OF_QUESTION COQ
             ON COQ.QUESTIONID = Q.QUESTIONID INNER JOIN CATEGORY C ON
@@ -39,13 +39,13 @@ class ExamResultsDAO : IExamResultsDAO {
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
             val results = ArrayList<PracticeExamResult>()
             while (rs.next()) {
-                val examId = rs.getInt("PRACTICETESTRESULTID")
+                val examId = rs.getInt("SUBMITTEDEXAMID")
                 val questionId = rs.getInt("QUESTIONID")
                 val questionResult = QuestionResult(questionId,
                         categories = arrayListOf(rs.getString("CATEGORYNAME")),
                         questionText = rs.getString("QUESTIONTEXT"),
                         type = rs.getString("QUESTIONTYPE"),
-                        practiceTestResultId = examId,
+                        submittedExamId = examId,
                         wasCorrect = rs.getBoolean("RESULT"))
                 val result = results.find { it.examId == examId }
                 if (result == null) {
