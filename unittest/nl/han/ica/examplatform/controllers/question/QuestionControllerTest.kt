@@ -37,13 +37,12 @@ class QuestionControllerTest {
                 questionOrderInExam = 1,
                 questionType = "OpenQuestion",
                 questionText = "name",
-                questionPoints = 5,
                 courseId = 1,
                 examType = "Tentamen",
                 answerType = "OpenQuestion",
                 answerTypePluginVersion = "1.0",
-                pluginVersion = "1.0",
-                partial_answers = arrayListOf())
+                questionTypePluginVersion = "1.0",
+                partialAnswers = arrayListOf())
         val expectedStatusCode = HttpStatus.CREATED
 
         doReturn(ResponseEntity(expectedResultBody, expectedStatusCode)).`when`(questionService).addQuestion(expectedResultBody)

@@ -7,5 +7,5 @@ interface IClassDAO {
      *
      * @return [ArrayList]<[String]> The classes
      */
-    fun getAllClasses() : ArrayList<String>
+    fun getAllClasses(): ArrayList<String>
 }

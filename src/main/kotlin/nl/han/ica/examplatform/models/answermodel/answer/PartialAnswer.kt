@@ -4,11 +4,11 @@ import nl.han.ica.examplatform.models.question.Question
 
 /**
  * Represents a word that has to be in the given answer.
- * Each partial_answers is worth a amount of points.
+ * Each partialAnswers is worth a amount of points.
  *
  * @param id [Int] The ID of the partial answer
  * @param text [String] The text of the partial answer
- * @param points [Int] The amount of points this partial_answers is worth in a [Answer] of a [Question]
+ * @param points [Int] The amount of points this partialAnswers is worth in a [Answer] of a [Question]
  */
 data class PartialAnswer(
         val id: Int? = null,
