@@ -607,7 +607,6 @@ class QuestionDAO : IQuestionDAO {
            VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?
         """
 
-        // TODO: don't set partial answer id on new
         try {
             preparedStatement = conn?.prepareStatement(updateQuestionQuery)
             preparedStatement?.setString(1, question.examType)
