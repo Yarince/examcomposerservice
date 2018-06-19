@@ -8,6 +8,7 @@ import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
 import java.sql.*
 import java.sql.SQLException
+import java.util.*
 
 /**
  * Database access object that handles all database queries regarding [Question].
@@ -601,6 +602,11 @@ class QuestionDAO : IQuestionDAO {
                 QUESTIONTYPEPLUGINVERSION = ?
             WHERE QUESTIONID = ?"""
 
+        val updatePartialAnswerQuery = """
+           INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT)
+           VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?
+        """
+
         try {
             preparedStatement = conn?.prepareStatement(updateQuestionQuery)
             preparedStatement?.setString(1, question.examType)
@@ -612,6 +618,32 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setString(7, question.questionTypePluginVersion)
             preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
             preparedStatement?.executeUpdate()
+
+            val preparedStatementPartialAnswer = conn?.prepareStatement(updatePartialAnswerQuery, Statement.RETURN_GENERATED_KEYS)
+            val newPartialAnswerIds = ArrayDeque<Int>()
+            question.partialAnswers.forEachIndexed { index, partialAnswer ->
+                partialAnswer.id?.let {
+                    preparedStatementPartialAnswer?.setInt(1, it)
+                } ?: run {
+                    newPartialAnswerIds.add(index)
+                    preparedStatementPartialAnswer?.setNull(1, java.sql.Types.INTEGER)
+                }
+
+                preparedStatementPartialAnswer?.setInt(2, question.questionId
+                        ?: throw DatabaseException("Can't update partial answer without question ID"))
+                preparedStatementPartialAnswer?.setString(3, partialAnswer.text)
+                preparedStatementPartialAnswer?.setString(4, partialAnswer.text)
+                preparedStatementPartialAnswer?.addBatch()
+            }
+            preparedStatementPartialAnswer?.executeBatch()
+                    ?: throw DatabaseException("Couldn't insert partial answer batch")
+
+            preparedStatementPartialAnswer.generatedKeys.use {
+                while (it.next())
+                    question.partialAnswers[newPartialAnswerIds.pop()].id = it.getInt(1)
+
+            }
+
         } catch (e: SQLException) {
             logger.error("Something went wrong while updating questions", e)
             throw DatabaseException("Error while interacting with the database")
