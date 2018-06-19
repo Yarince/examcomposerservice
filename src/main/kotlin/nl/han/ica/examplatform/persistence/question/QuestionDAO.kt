@@ -219,18 +219,15 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlSubQuestionQuery = """
             SELECT
-                Q.QUESTIONID,
-                QE.SEQUENCENUMBER,
-                QE.QUESTIONID,
+                QUESTIONID,
                 QUESTIONTYPE,
                 QUESTIONTEXT,
-                QUESTIONPOINTS,
                 COURSEID,
                 EXAMTYPENAME,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION,
                 QUESTIONTYPEPLUGINVERSION
-            FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
+            FROM QUESTION
             WHERE PARENTQUESTIONID = ?;"""
 
         for ((index, _) in categories.withIndex()) {
@@ -534,33 +531,29 @@ class QuestionDAO : IQuestionDAO {
         var preparedQuestionStatement: PreparedStatement? = null
 
         val sqlQuestionQuery = """
-                SELECT DISTINCT
-                    Q.QUESTIONID,
-                    QIE.SEQUENCENUMBER,
-                    Q.QUESTIONTYPE,
-                    Q.QUESTIONTEXT,
-                    QIE.QUESTIONPOINTS,
-                    Q.COURSEID,
-                    Q.EXAMTYPENAME,
-                    Q.QUESTIONTYPEPLUGINVERSION,
-                    Q.ANSWERTYPE,
-                    Q.ANSWERTYPEPLUGINVERSION
-                FROM QUESTION Q
-                JOIN QUESTION_IN_EXAM QIE
-                    ON Q.QUESTIONID = QIE.QUESTIONID
-                WHERE Q.QUESTIONID = ?;"""
+            SELECT DISTINCT
+                QUESTIONID,
+                QUESTIONTYPE,
+                QUESTIONTEXT,
+                COURSEID,
+                EXAMTYPENAME,
+                QUESTIONTYPEPLUGINVERSION,
+                ANSWERTYPE,
+                ANSWERTYPEPLUGINVERSION
+            FROM QUESTION
+            WHERE QUESTIONID = ?;"""
 
         val sqlSubQuestionQuery = """
             SELECT
-                Q.QUESTIONID,
-                Q.QUESTIONTYPE,
-                Q.QUESTIONTEXT,
-                Q.COURSEID,
-                Q.EXAMTYPENAME,
-                Q.QUESTIONTYPEPLUGINVERSION,
-                Q.ANSWERTYPE,
-                Q.ANSWERTYPEPLUGINVERSION
-            FROM QUESTION Q
+                QUESTIONID,
+                QUESTIONTYPE,
+                QUESTIONTEXT,
+                COURSEID,
+                EXAMTYPENAME,
+                QUESTIONTYPEPLUGINVERSION,
+                ANSWERTYPE,
+                ANSWERTYPEPLUGINVERSION
+            FROM QUESTION
             WHERE PARENTQUESTIONID = ?;"""
 
         val questions: ArrayList<Question>
