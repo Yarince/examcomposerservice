@@ -91,7 +91,6 @@ class QuestionDAO : IQuestionDAO {
                     }
                 }
             }
-
         } catch (e: SQLException) {
             val message = "Something went wrong while inserting a question in the database"
             logger.error(message, e)
@@ -535,17 +534,17 @@ class QuestionDAO : IQuestionDAO {
         var preparedQuestionStatement: PreparedStatement? = null
 
         val sqlQuestionQuery = """
-            SELECT DISTINCT
-                QUESTIONID,
-                QUESTIONTYPE,
-                QUESTIONTEXT,
-                COURSEID,
-                EXAMTYPENAME,
-                QUESTIONTYPEPLUGINVERSION,
-                ANSWERTYPE,
-                ANSWERTYPEPLUGINVERSION
-            FROM QUESTION
-            WHERE QUESTIONID = ?;"""
+                SELECT DISTINCT
+                    QUESTIONID,
+                    QUESTIONTYPE,
+                    QUESTIONTEXT,
+                    COURSEID,
+                    EXAMTYPENAME,
+                    QUESTIONTYPEPLUGINVERSION,
+                    ANSWERTYPE,
+                    ANSWERTYPEPLUGINVERSION
+                FROM QUESTION
+                WHERE QUESTIONID = ?"""
 
         val sqlSubQuestionQuery = """
             SELECT
@@ -558,7 +557,7 @@ class QuestionDAO : IQuestionDAO {
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION
-            WHERE PARENTQUESTIONID = ?;"""
+            WHERE PARENTQUESTIONID = ?"""
 
         val questions: ArrayList<Question>
         try {
@@ -693,5 +692,50 @@ class QuestionDAO : IQuestionDAO {
         }
 
         return thereAreAnswersGivenToQuestions
+    }
+
+    /**
+     * Gets the questions that a student hasn't answered yet in a course.
+     *
+     * @param studentNr [Int] the studentNumber
+     * @param courseId [Int] the ID of the course
+     * @return [ArrayList]<[Question]> the questions
+     */
+    override fun getQuestionsNotAnsweredByStudentInCourse(studentNr: Int, courseId: Int): ArrayList<Question> {
+        var conn: Connection? = null
+        var preparedStatement: PreparedStatement? = null
+
+        val query = """SELECT * FROM QUESTION"""
+        return try {
+            conn = MySQLConnection.getConnection()
+            preparedStatement = conn?.prepareStatement(query)
+            preparedStatement?.setInt(1, studentNr)
+            preparedStatement?.setInt(2, courseId)
+            val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
+            val results = ArrayList<Question>()
+            while (rs.next()) {
+                val questionId = rs.getInt("QUESTIONID")
+                results.add(Question(
+                        courseId = rs.getInt("COURSEID"),
+                        questionText = rs.getString("QUESTIONTEXT"),
+                        questionType = rs.getString("QUESTIONTYPE"),
+                        questionTypePluginVersion = rs.getString("QUESTIONTYPEPLUGINVERSION"),
+                        categories = getCategoriesOfQuestion(questionId, conn),
+                        answerType = rs.getString("ANSWERTYPE"),
+                        answerTypePluginVersion = rs.getString("ANSWERTYPEPLUGINVERSION"),
+                        examType = rs.getString("EXAMTYPENAME"),
+                        partialAnswers = getPartialAnswers(conn, questionId),
+                        questionId = questionId
+                ))
+            }
+            results
+        } catch (e: SQLException) {
+            val message = "Something went wrong while getting questions"
+            logger.error(message, e)
+            throw DatabaseException(message, e)
+        } finally {
+            MySQLConnection.closeConnection(conn)
+            preparedStatement?.close()
+        }
     }
 }

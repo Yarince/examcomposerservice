@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.business.exam
 
+import nl.han.ica.examplatform.business.exam.practice.generatePracticeExam
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.exam.InvalidExamException
 import nl.han.ica.examplatform.models.exam.Exam
@@ -8,6 +9,7 @@ import nl.han.ica.examplatform.models.exam.SimpleExam
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.exam.ExamDAO
 import nl.han.ica.examplatform.persistence.exam.IExamDAO
+import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import nl.han.ica.examplatform.persistence.question.QuestionDAO
 import org.springframework.http.HttpStatus
@@ -17,13 +19,16 @@ import org.springframework.stereotype.Service
 /**
  * Exam service for handling requests related to the [Exam] model.
  *
- * @param examDAO [ExamDAO] The ExamDAO
- * @param questionDAO [QuestionDAO] The QuestionDAO
+ * @param examDAO [IExamDAO] The ExamDAO
+ * @param questionDAO [IQuestionDAO] The QuestionDAO
+ * @param categoryDAO [ICategoryDAO] the CategoryDAO
+ * @param examResultsDAO [IExamResultsDAO] the ExamResultDAO
  */
 @Service
 class ExamService(private val examDAO: IExamDAO,
                   private val questionDAO: IQuestionDAO,
-                  private val categoryDAO: ICategoryDAO) {
+                  private val categoryDAO: ICategoryDAO,
+                  private val examResultsDAO: IExamResultsDAO) {
 
 
     private val logger = loggerFor(javaClass)
@@ -81,8 +86,8 @@ class ExamService(private val examDAO: IExamDAO,
      * @param courseId [Int] The ID of the course of which the exam should be generated
      * @return [ResponseEntity]<Exam> practice [PracticeExam]
      */
-    fun generatePracticeExam(courseId: Int, studentNr: Int): ResponseEntity<PracticeExam> =
-            ResponseEntity(generatePracticeExam(courseId, studentNr, questionDAO, categoryDAO), HttpStatus.CREATED)
+    fun generatePersonalPracticeExam(courseId: Int, studentNr: Int): ResponseEntity<PracticeExam> =
+            ResponseEntity(generatePracticeExam(courseId, studentNr, questionDAO, categoryDAO, examResultsDAO), HttpStatus.CREATED)
 
     /**
      * Adds a class to an exam.
