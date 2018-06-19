@@ -39,12 +39,12 @@ class AnswerControllerIntegrationTest {
     private var builder: UriComponentsBuilder? = null
 
     private val testPartialAnswer = PartialAnswer(
-            id = -99999999,
+            id = -888,
             text = "Partial Answer",
             points = 3)
 
     private val testQuestion = Question(
-            questionId = -99999999,
+            questionId = -999,
             questionType = "OpenQuestion",
             courseId = 1,
             examType = "Tentamen",
@@ -77,44 +77,49 @@ class AnswerControllerIntegrationTest {
                 `QUESTIONTYPEPLUGINVERSION`,
                 `ANSWERTYPE`,
                 `ANSWERTYPEPLUGINVERSION`
-            ) VALUE (
-                ${testQuestion.questionId},
-                '${testQuestion.examType}',
-                ${testQuestion.courseId},
-                '${testQuestion.questionType}',
-                '${testQuestion.pluginVersion}',
-                '${testQuestion.answerType}',
-                '${testQuestion.answerTypePluginVersion}'
-            );"""
+            ) VALUE (?, ?, ?, ?, ?, ?, ?)"""
 
         val insertAnswerSQL = """
             INSERT INTO `PARTIAL_ANSWER` (
               `PARTIALANSWERID`,
               `QUESTIONID`,
               `PARTIALANSWERTEXT`
-            ) VALUES (
-              ${testPartialAnswer.id},
-              ${testAnswer.questionId},
-              '${testPartialAnswer.text}'
-            );"""
+            ) VALUES (?, ?, ?)"""
 
         val preparedStatementQuestion: PreparedStatement? = databaseConnection?.prepareStatement(insertQuestionSQL)
-        val preparedStatementAnswer: PreparedStatement? = databaseConnection?.prepareStatement(insertAnswerSQL)
+        preparedStatementQuestion?.setInt(1, testQuestion.questionId!!)
+        preparedStatementQuestion?.setString(2, testQuestion.examType)
+        preparedStatementQuestion?.setInt(3, testQuestion.courseId)
+        preparedStatementQuestion?.setString(4, testQuestion.questionType)
+        preparedStatementQuestion?.setString(5, testQuestion.pluginVersion)
+        preparedStatementQuestion?.setString(6, testQuestion.answerType)
+        preparedStatementQuestion?.setString(7, testQuestion.answerTypePluginVersion)
+
         preparedStatementQuestion?.executeUpdate()
+
+        val preparedStatementAnswer: PreparedStatement? = databaseConnection?.prepareStatement(insertAnswerSQL)
+        preparedStatementAnswer?.setInt(1, testPartialAnswer.id!!)
+        preparedStatementAnswer?.setInt(2, testQuestion.questionId!!)
+        preparedStatementAnswer?.setString(3, testPartialAnswer.text)
+
         preparedStatementAnswer?.executeUpdate()
     }
 
     @After
-    @Rollback
     fun tearDown() {
         databaseConnection = MySQLConnection.getConnection()
 
-        val deleteAnswerSQL = "DELETE FROM PARTIAL_ANSWER WHERE PARTIALANSWERID = ${testPartialAnswer.id}"
-        val deleteQuestionSQL = "DELETE FROM QUESTION WHERE QUESTIONID = ${testQuestion.questionId}"
+        val deleteAnswerSQL = "DELETE FROM PARTIAL_ANSWER WHERE QUESTIONID = ?"
+        val deleteQuestionSQL = "DELETE FROM QUESTION WHERE QUESTIONID = ?"
 
         val preparedStatementAnswer: PreparedStatement? = databaseConnection?.prepareStatement(deleteAnswerSQL)
-        val preparedStatementQuestion: PreparedStatement? = databaseConnection?.prepareStatement(deleteQuestionSQL)
+        preparedStatementAnswer?.setInt(1, testQuestion.questionId!!)
+
         preparedStatementAnswer?.executeUpdate()
+
+        val preparedStatementQuestion: PreparedStatement? = databaseConnection?.prepareStatement(deleteQuestionSQL)
+        preparedStatementQuestion?.setInt(1, testQuestion.questionId!!)
+
         preparedStatementQuestion?.executeUpdate()
     }
 
