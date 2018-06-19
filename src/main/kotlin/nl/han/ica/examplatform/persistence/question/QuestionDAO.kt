@@ -6,9 +6,9 @@ import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
 import org.springframework.stereotype.Repository
-import java.sql.Connection
-import java.sql.PreparedStatement
+import java.sql.*
 import java.sql.SQLException
+import java.util.*
 
 /**
  * Database access object that handles all database queries regarding [Question].
@@ -25,7 +25,6 @@ class QuestionDAO : IQuestionDAO {
      * @return [Question] the inserted question
      */
     override fun insertQuestion(question: Question, parentQuestionId: Int?): Question {
-        var questionToReturn = question
         var dbConnection: Connection? = null
         var preparedStatementQuestion: PreparedStatement? = null
         val preparedStatementPartialAnswer: PreparedStatement?
@@ -52,8 +51,8 @@ class QuestionDAO : IQuestionDAO {
         """
         try {
             dbConnection = MySQLConnection.getConnection()
-            preparedStatementQuestion = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString)
-            preparedStatementPartialAnswer = dbConnection?.prepareStatement(sqlPartialAnswerQuery)
+            preparedStatementQuestion = dbConnection?.prepareStatement(sqlQueryStringInsertQuestionString, Statement.RETURN_GENERATED_KEYS)
+            preparedStatementPartialAnswer = dbConnection?.prepareStatement(sqlPartialAnswerQuery, Statement.RETURN_GENERATED_KEYS)
 
             preparedStatementQuestion?.setString(1, question.questionText)
             preparedStatementQuestion?.setString(2, question.questionType)
@@ -68,16 +67,13 @@ class QuestionDAO : IQuestionDAO {
             preparedStatementQuestion?.setString(7, question.answerType)
             preparedStatementQuestion?.setString(8, question.answerTypePluginVersion)
 
-            val insertedRows = preparedStatementQuestion?.executeUpdate()
-            if (insertedRows == 1) {
-                val idQuery = "SELECT LAST_INSERT_ID() AS ID"
-                val idPreparedStatement = dbConnection?.prepareStatement(idQuery)
-                val result = idPreparedStatement?.executeQuery()
-                        ?: throw DatabaseException("Error while interacting with the database")
+            preparedStatementQuestion?.executeUpdate()
+                    ?: throw DatabaseException("Couldn't insert question")
 
-                while (result.next()) {
-                    val questionId = result.getInt("ID")
-                    questionToReturn = question.copy(questionId = questionId)
+            preparedStatementQuestion.generatedKeys.use {
+                if (it.next()) {
+                    val questionId = it.getInt(1)
+                    question.questionId = questionId
 
                     question.partialAnswers.forEach {
                         preparedStatementPartialAnswer?.setInt(1, questionId)
@@ -86,6 +82,13 @@ class QuestionDAO : IQuestionDAO {
                     }
                     preparedStatementPartialAnswer?.executeBatch()
                             ?: throw DatabaseException("Couldn't insert partial answer batch")
+
+                    preparedStatementPartialAnswer.generatedKeys.use {
+                        var iter = 0
+                        while (it.next()) {
+                            question.partialAnswers[iter++].id = it.getInt(1)
+                        }
+                    }
                 }
             }
         } catch (e: SQLException) {
@@ -96,7 +99,7 @@ class QuestionDAO : IQuestionDAO {
             MySQLConnection.closeConnection(dbConnection)
             MySQLConnection.closeStatement(preparedStatementQuestion)
         }
-        return questionToReturn
+        return question
     }
 
     /**
@@ -219,18 +222,15 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlSubQuestionQuery = """
             SELECT
-                Q.QUESTIONID,
-                QE.SEQUENCENUMBER,
-                QE.QUESTIONID,
+                QUESTIONID,
                 QUESTIONTYPE,
                 QUESTIONTEXT,
-                QUESTIONPOINTS,
                 COURSEID,
                 EXAMTYPENAME,
                 ANSWERTYPE,
                 ANSWERTYPEPLUGINVERSION,
                 QUESTIONTYPEPLUGINVERSION
-            FROM QUESTION as Q left JOIN QUESTION_IN_EXAM as QE ON Q.QUESTIONID = QE.QUESTIONID
+            FROM QUESTION
             WHERE PARENTQUESTIONID = ?;"""
 
         for ((index, _) in categories.withIndex()) {
@@ -548,15 +548,15 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlSubQuestionQuery = """
             SELECT
-                Q.QUESTIONID,
-                Q.QUESTIONTYPE,
-                Q.QUESTIONTEXT,
-                Q.COURSEID,
-                Q.EXAMTYPENAME,
-                Q.QUESTIONTYPEPLUGINVERSION,
-                Q.ANSWERTYPE,
-                Q.ANSWERTYPEPLUGINVERSION
-            FROM QUESTION Q
+                QUESTIONID,
+                QUESTIONTYPE,
+                QUESTIONTEXT,
+                COURSEID,
+                EXAMTYPENAME,
+                QUESTIONTYPEPLUGINVERSION,
+                ANSWERTYPE,
+                ANSWERTYPEPLUGINVERSION
+            FROM QUESTION
             WHERE PARENTQUESTIONID = ?"""
 
         val questions: ArrayList<Question>
@@ -601,6 +601,11 @@ class QuestionDAO : IQuestionDAO {
                 QUESTIONTYPEPLUGINVERSION = ?
             WHERE QUESTIONID = ?"""
 
+        val updatePartialAnswerQuery = """
+           INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT)
+           VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?
+        """
+
         try {
             preparedStatement = conn?.prepareStatement(updateQuestionQuery)
             preparedStatement?.setString(1, question.examType)
@@ -612,6 +617,32 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setString(7, question.questionTypePluginVersion)
             preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
             preparedStatement?.executeUpdate()
+
+            val preparedStatementPartialAnswer = conn?.prepareStatement(updatePartialAnswerQuery, Statement.RETURN_GENERATED_KEYS)
+            val newPartialAnswerIds = ArrayDeque<Int>()
+            question.partialAnswers.forEachIndexed { index, partialAnswer ->
+                partialAnswer.id?.let {
+                    preparedStatementPartialAnswer?.setInt(1, it)
+                } ?: run {
+                    newPartialAnswerIds.add(index)
+                    preparedStatementPartialAnswer?.setNull(1, java.sql.Types.INTEGER)
+                }
+
+                preparedStatementPartialAnswer?.setInt(2, question.questionId
+                        ?: throw DatabaseException("Can't update partial answer without question ID"))
+                preparedStatementPartialAnswer?.setString(3, partialAnswer.text)
+                preparedStatementPartialAnswer?.setString(4, partialAnswer.text)
+                preparedStatementPartialAnswer?.addBatch()
+            }
+            preparedStatementPartialAnswer?.executeBatch()
+                    ?: throw DatabaseException("Couldn't insert partial answer batch")
+
+            preparedStatementPartialAnswer.generatedKeys.use {
+                while (it.next())
+                    question.partialAnswers[newPartialAnswerIds.pop()].id = it.getInt(1)
+
+            }
+
         } catch (e: SQLException) {
             logger.error("Something went wrong while updating questions", e)
             throw DatabaseException("Error while interacting with the database")

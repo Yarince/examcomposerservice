@@ -24,7 +24,7 @@ import nl.han.ica.examplatform.models.exam.Exam
  */
 data class Question(
         @ApiModelProperty(notes = "The ID of the question")
-        val questionId: Int? = null,
+        var questionId: Int? = null,
         @ApiModelProperty(notes = "Order of question in an Exam")
         val questionOrderInExam: Int? = null,
         @ApiModelProperty(notes = "This is the name of the plugin used, e.g. OpenQuestion", required = true)
