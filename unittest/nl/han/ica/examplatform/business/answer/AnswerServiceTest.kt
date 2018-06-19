@@ -1,7 +1,6 @@
 package nl.han.ica.examplatform.business.answer
 
-import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
 import nl.han.ica.examplatform.persistence.answer.AnswerDAO
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,18 +19,42 @@ internal class AnswerServiceTest {
     @InjectMocks
     private lateinit var answerService: AnswerService
 
-    @Test(expected = CouldNotAddAnswerToQuestionException::class)
-    fun testAddAnswerToQuestionError() {
+    @Test
+    fun testAddOrUpdateAnswerInQuestion() {
         val answer = Answer(questionId = 1)
-        doThrow(RuntimeException("DAO Exception")).`when`(answerDAO).addAnswerToQuestion(answer)
-        answerService.addAnswerToQuestion(answer)
+
+        answerService.addOrUpdateAnswerInQuestion(answer)
+        verify(answerDAO, times(1)).addOrUpdateAnswerInQuestion(answer)
     }
 
     @Test
-    fun testAddAnswerToQuestion() {
+    fun testAddOrUpdateAnswerInQuestionInExam(){
         val answer = Answer(questionId = 1)
+        val examID  = 1
 
-        answerService.addAnswerToQuestion(answer)
-        verify(answerDAO, times(1)).addAnswerToQuestion(answer)
+        answerService.addOrUpdateAnswerInQuestionInExam(answer, examID)
+        verify(answerDAO,
+                times(1))
+                .addOrUpdateAnswerInQuestionInExam(answer, examID)
+    }
+
+    @Test
+    fun testGetAnswerForQuestion(){
+        val questionId = 1
+
+        answerService.getAnswerForQuestion(questionId)
+        verify(answerDAO,
+                times(1))
+                .getAnswerForQuestion(questionId)
+    }
+
+    @Test
+    fun testGetAnswersForExam(){
+        val examId = 1
+
+        answerService.getAnswersForExam(examId)
+        verify(answerDAO,
+                times(1))
+                .getAnswersForExam(examId)
     }
 }

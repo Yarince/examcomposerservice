@@ -1,10 +1,9 @@
 package nl.han.ica.examplatform.controllers.answer
 
 import nl.han.ica.examplatform.business.answer.AnswerService
-import nl.han.ica.examplatform.controllers.responseexceptions.CouldNotAddAnswerToQuestionException
-import nl.han.ica.examplatform.controllers.responseexceptions.InvalidAnswerException
-import nl.han.ica.examplatform.models.answerModel.answer.Answer
-import nl.han.ica.examplatform.models.answerModel.answer.Keyword
+import nl.han.ica.examplatform.business.answer.CouldNotAddAnswerToQuestionException
+import nl.han.ica.examplatform.models.answermodel.answer.Answer
+import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,7 +15,7 @@ import org.springframework.http.HttpStatus
 import kotlin.test.assertEquals
 
 @RunWith(MockitoJUnitRunner::class)
-internal class AnswerControllerTest {
+class AnswerControllerTest {
 
     @InjectMocks
     private lateinit var answerController: AnswerController
@@ -25,32 +24,34 @@ internal class AnswerControllerTest {
     private lateinit var answerService: AnswerService
 
     private val answer: Answer = Answer(
-            5,
-            arrayOf(Keyword("sad", 7.7F))
+            questionId = 5,
+            description = "Description",
+            partial_answers = arrayListOf(PartialAnswer(id = 1, text = "sad", points = 7)),
+            points = 5
     )
 
     @Test
     fun testAddAnswerToQuestion() {
         val result = answerController.addAnswerToQuestion(answer)
         Assert.assertNotNull(result)
-        assertEquals(HttpStatus.OK, result)
+        assertEquals(HttpStatus.CREATED, result)
     }
 
     @Test(expected = InvalidAnswerException::class)
     fun testAddAnswerToQuestionInvalidAnswerException() {
-        Mockito.doThrow(IllegalArgumentException("DAO Exception")).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(IllegalArgumentException("DAO Exception")).`when`(answerService).addOrUpdateAnswerInQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 
     @Test(expected = CouldNotAddAnswerToQuestionException::class)
     fun testAddAnswerToQuestionCouldNotAddAnswerToQuestionException() {
-        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null, false, false)).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(CouldNotAddAnswerToQuestionException("message", null)).`when`(answerService).addOrUpdateAnswerInQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 
     @Test(expected = RuntimeException::class)
     fun testAddAnswerToQuestionRuntimeException() {
-        Mockito.doThrow(RuntimeException("DAO Exception")).`when`(answerService).addAnswerToQuestion(answer)
+        Mockito.doThrow(RuntimeException("DAO Exception")).`when`(answerService).addOrUpdateAnswerInQuestion(answer)
         answerController.addAnswerToQuestion(answer)
     }
 }
