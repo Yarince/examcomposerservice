@@ -535,20 +535,16 @@ class QuestionDAO : IQuestionDAO {
 
         val sqlQuestionQuery = """
                 SELECT DISTINCT
-                    Q.QUESTIONID,
-                    QIE.SEQUENCENUMBER,
-                    Q.QUESTIONTYPE,
-                    Q.QUESTIONTEXT,
-                    QIE.QUESTIONPOINTS,
-                    Q.COURSEID,
-                    Q.EXAMTYPENAME,
-                    Q.QUESTIONTYPEPLUGINVERSION,
-                    Q.ANSWERTYPE,
-                    Q.ANSWERTYPEPLUGINVERSION
-                FROM QUESTION Q
-                JOIN QUESTION_IN_EXAM QIE
-                    ON Q.QUESTIONID = QIE.QUESTIONID
-                WHERE Q.QUESTIONID = ?;"""
+                    QUESTIONID,
+                    QUESTIONTYPE,
+                    QUESTIONTEXT,
+                    COURSEID,
+                    EXAMTYPENAME,
+                    QUESTIONTYPEPLUGINVERSION,
+                    ANSWERTYPE,
+                    ANSWERTYPEPLUGINVERSION
+                FROM QUESTION
+                WHERE QUESTIONID = ?"""
 
         val sqlSubQuestionQuery = """
             SELECT
@@ -561,7 +557,7 @@ class QuestionDAO : IQuestionDAO {
                 Q.ANSWERTYPE,
                 Q.ANSWERTYPEPLUGINVERSION
             FROM QUESTION Q
-            WHERE PARENTQUESTIONID = ?;"""
+            WHERE PARENTQUESTIONID = ?"""
 
         val questions: ArrayList<Question>
         try {
