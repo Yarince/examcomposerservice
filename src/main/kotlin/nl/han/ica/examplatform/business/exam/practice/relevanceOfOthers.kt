@@ -25,17 +25,20 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
 
     if (filteredQuestions.isEmpty() && questionsOfCategory.isNotEmpty()) {
         // add question that hasn't been answered by anyone
-        mostRelevantQuestion = Pair(questionsOfCategory[0].questionId!!, 100.0)
+        questionsOfCategory[0].questionId?.let {
+            mostRelevantQuestion = Pair(it, 100.0)
+        }
     } else {
         filteredQuestions.forEach {
             // The lower the rating, the more relevant the question is because of the low score on the question
             val rating = it.nCorrect.toDouble() / it.nResults
 
-            if (mostRelevantQuestion == null)
+            mostRelevantQuestion?.let {
+                if (rating < it.second)
+                    mostRelevantQuestion = Pair(it.first, rating)
+            } ?: run {
                 mostRelevantQuestion = Pair(it.questionId, rating)
-            else
-                if (rating < mostRelevantQuestion!!.second)
-                    mostRelevantQuestion = Pair(it.questionId, rating)
+            }
         }
     }
 

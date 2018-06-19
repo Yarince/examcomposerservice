@@ -19,8 +19,10 @@ import org.springframework.stereotype.Service
 /**
  * Exam service for handling requests related to the [Exam] model.
  *
- * @param examDAO [ExamDAO] The ExamDAO
- * @param questionDAO [QuestionDAO] The QuestionDAO
+ * @param examDAO [IExamDAO] The ExamDAO
+ * @param questionDAO [IQuestionDAO] The QuestionDAO
+ * @param categoryDAO [ICategoryDAO] the CategoryDAO
+ * @param examResultsDAO [IExamResultsDAO] the ExamResultDAO
  */
 @Service
 class ExamService(private val examDAO: IExamDAO,

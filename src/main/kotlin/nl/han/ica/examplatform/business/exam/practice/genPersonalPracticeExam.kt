@@ -20,8 +20,19 @@ import kotlin.collections.ArrayList
  * @param examResultsDAO [IExamResultsDAO] DAO needed to retrieve exam results
  * @return [ArrayList]<[Question]> contains the questions for the exam
  */
-fun generatePersonalExam(previousResults: ArrayList<PracticeExamResult>, courseId: Int, studentNr: Int, categories: ArrayList<String>, questionDAO: IQuestionDAO, examResultsDAO: IExamResultsDAO): ArrayList<Question> {
-    val questionsAnswered: ArrayList<QuestionResult> = examResultsDAO.getPreviousResultsOfStudent(studentNr, courseId).map { it.questions }.toTypedArray().reduce { acc, arrayList -> acc.plus(arrayList).toCollection(arrayListOf()) }
+fun generatePersonalExam(previousResults: ArrayList<PracticeExamResult>,
+                         courseId: Int,
+                         studentNr: Int,
+                         categories: ArrayList<String>,
+                         questionDAO: IQuestionDAO,
+                         examResultsDAO: IExamResultsDAO): ArrayList<Question> {
+    val questionsAnswered: ArrayList<QuestionResult> = examResultsDAO.getPreviousResultsOfStudent(studentNr, courseId)
+            .map { it.questions }.toTypedArray()
+            .reduce { acc, arrayList ->
+                acc.plus(arrayList)
+                        .toCollection(arrayListOf())
+            }
+
     val questionsNotAnswered: ArrayList<Question> = questionDAO.getQuestionsByCourse(courseId).filter { q ->
         questionsAnswered.find { it.questionId == q.questionId } == null
     }.toCollection(arrayListOf())
@@ -30,7 +41,15 @@ fun generatePersonalExam(previousResults: ArrayList<PracticeExamResult>, courseI
     return addQuestionToExam(courseId, studentNr, examResultsDAO, questionDAO, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
 }
 
-private fun addQuestionToExam(courseId: Int, studentNr: Int, examResultsDAO: IExamResultsDAO, questionDAO: IQuestionDAO, notYetAskedQuestions: ArrayList<Question>, alreadyAskedQuestions: ArrayList<QuestionResult>, ratedCategories: List<Pair<String, Double>>, currentCategory: Pair<String, Double>, questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
+private fun addQuestionToExam(courseId: Int,
+                              studentNr: Int,
+                              examResultsDAO: IExamResultsDAO,
+                              questionDAO: IQuestionDAO,
+                              notYetAskedQuestions: ArrayList<Question>,
+                              alreadyAskedQuestions: ArrayList<QuestionResult>,
+                              ratedCategories: List<Pair<String, Double>>,
+                              currentCategory: Pair<String, Double>,
+                              questionsInExam: ArrayList<Question> = ArrayList()): ArrayList<Question> {
     // Return if the category is not in the list with categories
     if (!ratedCategories.contains(currentCategory))
         return questionsInExam
@@ -83,7 +102,8 @@ private fun questionOfCategoryWillBeAdded(chanceToGetAdded: Double): Boolean {
 }
 
 /**
- * Checks if the exam has enough questions or meets other demands
+ * Checks if the exam has enough questions or meets other demands.
+ * The 33% and the 10 are not magic numbers because they originate from the research paper.
  */
 private fun checkIfExamCompliesToPrerequisites(exam: ArrayList<Question>, allQuestionsSize: Int): Boolean {
     val thresholdForPercentage = 0
