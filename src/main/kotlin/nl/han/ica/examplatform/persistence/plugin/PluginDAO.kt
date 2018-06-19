@@ -24,7 +24,7 @@ class PluginDAO : IPluginDAO {
      */
     override fun getAllPlugins(): ArrayList<Plugin> {
         val dbConnection: Connection? = MySQLConnection.getConnection()
-        val dbQuery = "SELECT PluginId, PluginName, QUESTIONTYPEVERSION, PluginDescription FROM PLUGIN"
+        val dbQuery = "SELECT PluginId, PluginName, PLUGINVERSION, PluginDescription FROM PLUGIN"
         val preparedStatement: PreparedStatement? = dbConnection?.prepareStatement(dbQuery)
 
         val result = arrayListOf<Plugin>()
