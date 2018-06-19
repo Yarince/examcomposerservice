@@ -570,6 +570,11 @@ class QuestionDAO : IQuestionDAO {
             QUESTIONTEXT = ?, QUESTIONTYPE = ?, ANSWERTYPE = ?,
             ANSWERTYPEPLUGINVERSION = ?, PLUGINVERSION = ? WHERE QUESTIONID = ?"""
 
+        val updatePartialAnswerQuery = """
+           INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT)
+           VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?
+        """
+        // TODO: don't set partial answer id on new
         try {
             preparedStatement = conn?.prepareStatement(updateQuestionQuery)
             preparedStatement?.setString(1, question.examType)
@@ -582,6 +587,19 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
 
             preparedStatement?.executeUpdate()
+
+            val preparedStatementPartialAnswer = conn?.prepareStatement(updatePartialAnswerQuery)
+            for (partialAnswer in question.partialAnswers) {
+                preparedStatementPartialAnswer?.setInt(1, partialAnswer.id
+                        ?: throw DatabaseException("Can't update partial answer without ID"))
+                preparedStatementPartialAnswer?.setInt(2, question.questionId
+                        ?: throw DatabaseException("Can't update partial answer without question ID"))
+                preparedStatementPartialAnswer?.setString(3, partialAnswer.text)
+                preparedStatementPartialAnswer?.setString(4, partialAnswer.text)
+                preparedStatementPartialAnswer?.addBatch()
+            }
+            preparedStatementPartialAnswer?.executeBatch()
+
         } catch (e: SQLException) {
             logger.error("Something went wrong while updating questions", e)
             throw DatabaseException("Error while interacting with the database")
