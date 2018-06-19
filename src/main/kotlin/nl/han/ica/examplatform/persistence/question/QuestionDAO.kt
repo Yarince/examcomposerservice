@@ -620,12 +620,12 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.executeUpdate()
 
             val preparedStatementPartialAnswer = conn?.prepareStatement(updatePartialAnswerQuery, Statement.RETURN_GENERATED_KEYS)
-            val newPartialAnswers = ArrayDeque<Int>()
+            val newPartialAnswerIds = ArrayDeque<Int>()
             question.partialAnswers.forEachIndexed { index, partialAnswer ->
                 partialAnswer.id?.let {
                     preparedStatementPartialAnswer?.setInt(1, it)
                 } ?: run {
-                    newPartialAnswers.add(index)
+                    newPartialAnswerIds.add(index)
                     preparedStatementPartialAnswer?.setNull(1, java.sql.Types.INTEGER)
                 }
 
@@ -640,7 +640,7 @@ class QuestionDAO : IQuestionDAO {
 
             preparedStatementPartialAnswer.generatedKeys.use {
                 while (it.next())
-                    question.partialAnswers[newPartialAnswers.pop()].id = it.getInt(1)
+                    question.partialAnswers[newPartialAnswerIds.pop()].id = it.getInt(1)
 
             }
 
