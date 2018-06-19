@@ -8,7 +8,6 @@ import nl.han.ica.examplatform.models.question.Question
  * This is <b>not</b> a answer that is given by a student.
  *
  * @param questionId [Int] The id of the [Question] this answer is for
- * @param example_answer [String] An example answer
  * @param description [String] The description of the Question
  * @param partial_answers [ArrayList]<[PartialAnswer]> List of parts that need to be in the answer
  * @param points [Int] The total amount of point for a question

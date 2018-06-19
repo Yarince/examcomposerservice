@@ -84,31 +84,15 @@ internal class ExamServiceTest {
                 examType = "Exam",
                 questions = arrayListOf(Question(
                         questionType = "OpenQuestion",
-                        questionPoints = 1,
                         courseId = 1,
                         examType = "Tentamen",
                         answerType = "OpenQuestion",
                         answerTypePluginVersion = "1.0",
                         questionTypePluginVersion = "1.0",
-                        partial_answers = arrayListOf())))
+                        partialAnswers = arrayListOf())))
 
         examService.checkExam(exam)
     }
-
-    @Test
-    fun testCheckExamNoException() {
-        val exam = Exam(
-                null,
-                "name-0",
-                10,
-                Date(6000),
-                courseId = 1,
-                version = 1,
-                examType = "Tentamen")
-
-        examService.checkExam(exam)
-    }
-
     @Test
     fun testAddExam() {
         val examInserted = Exam(
@@ -193,13 +177,12 @@ internal class ExamServiceTest {
                 readyForDownload = false,
                 questions = arrayListOf(Question(
                         questionType = "OpenQuestion",
-                        questionPoints = 1,
+                        courseId = 1,
                         examType = "Tentamen",
-                        questionTypePluginVersion = "1.0",
                         answerType = "OpenQuestion",
                         answerTypePluginVersion = "1.0",
-                        courseId = 1,
-                        partial_answers = arrayListOf())),
+                        questionTypePluginVersion = "1.0",
+                        partialAnswers = arrayListOf())),
                 decryptionCodes = "decryptionCodes",
                 classes = arrayListOf("class 1", "class 2"))
         val expected: ResponseEntity<Exam> = ResponseEntity(exam, HttpStatus.ACCEPTED)

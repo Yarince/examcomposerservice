@@ -29,9 +29,12 @@ class AnswerDAO : IAnswerDAO {
      */
     override fun addOrUpdateAnswerInQuestion(answer: Answer) {
         if (answer.partial_answers == null || answer.partial_answers.size < 1)
-            throw DatabaseException("Please provide partial_answers to for question")
+            throw DatabaseException("Please provide partialAnswers to for question")
 
-        val query = "INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT) value (?,?,?) on DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?"
+        val query = """
+            INSERT INTO PARTIAL_ANSWER (PARTIALANSWERID, QUESTIONID, PARTIALANSWERTEXT)
+            VALUE (?,?,?) ON DUPLICATE KEY UPDATE PARTIALANSWERTEXT = ?
+            """
 
         val conn: Connection? = MySQLConnection.getConnection()
         val preparedStatement = conn?.prepareStatement(query)
@@ -65,7 +68,7 @@ class AnswerDAO : IAnswerDAO {
      */
     override fun addOrUpdateAnswerInQuestionInExam(answer: Answer, examId: Int) {
         if (answer.partial_answers == null || answer.partial_answers.size < 1)
-            throw DatabaseException("Please provide partial_answers to for question")
+            throw DatabaseException("Please provide partialAnswers to for question")
 
         val paInQeQuery = "INSERT INTO PARTIAL_ANSWER_IN_QUESTION_IN_EXAM (PARTIALANSWERID, QUESTIONID, EXAMID, POINTS) value (?,?,?,?) on DUPLICATE KEY UPDATE POINTS = ?"
 
@@ -107,7 +110,7 @@ class AnswerDAO : IAnswerDAO {
         var preparedQuestionStatement: PreparedStatement? = null
         val preparedQuestionStatement2: PreparedStatement?
 
-        val sqlQuestionQuery = "SELECT Q.ANSWERTEXT, Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
+        val sqlQuestionQuery = "SELECT Q.ASSESSMENTCOMMENTS FROM QUESTION Q WHERE QUESTIONID = ?"
 
         val sqlPartialQuery = """
             SELECT
@@ -177,19 +180,15 @@ class AnswerDAO : IAnswerDAO {
                 PARTIALANSWERTEXT,
                 PA.PARTIALANSWERID,
                 PAIQIE.POINTS,
-                ANSWERTEXT,
-                Q.QUESTIONID
+                PA.QUESTIONID
             FROM PARTIAL_ANSWER PA
                 JOIN PARTIAL_ANSWER_IN_QUESTION_IN_EXAM PAIQIE
                     ON PA.PARTIALANSWERID = PAIQIE.PARTIALANSWERID
-                JOIN QUESTION Q
-                    on PA.QUESTIONID = Q.QUESTIONID
             WHERE PAIQIE.EXAMID = ?"""
 
 
         val sqlQuestionQuery = """
             SELECT
-                ANSWERTEXT,
                 Q.QUESTIONID,
                 Q.ASSESSMENTCOMMENTS
             FROM QUESTION_IN_EXAM QE LEFT JOIN QUESTION Q
