@@ -202,8 +202,9 @@ class ExamDAO : IExamDAO {
             INSERT INTO QUESTION_IN_EXAM (
                 EXAMID,
                 QUESTIONID,
-                SEQUENCENUMBER)
-            VALUES (?, ?, ?)
+                SEQUENCENUMBER,
+                QUESTIONPOINTS)
+            VALUES (?, ?, ?, ?)
         """
 
         val sqlPartialAnswerQuery = """
@@ -226,6 +227,8 @@ class ExamDAO : IExamDAO {
                         ?: throw DatabaseException("Can't insert question without ID"))
                 preparedStatementQuestion?.setInt(3, question.questionOrderInExam
                         ?: throw DatabaseException("Can't insert question without sequence number"))
+                preparedStatementQuestion?.setInt(4, question.questionPoints
+                        ?: throw DatabaseException("Can't update question without question points"))
                 preparedStatementQuestion?.addBatch()
 
                 val preparedStatementPartialAnswer = conn?.prepareStatement(sqlPartialAnswerQuery)
@@ -298,9 +301,9 @@ class ExamDAO : IExamDAO {
             WHERE EXAMID = ?
             """
         val sqlQuestionQuery = """
-            INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER)
-            VALUE (?, ?, ?)
-            ON DUPLICATE KEY UPDATE SEQUENCENUMBER = ?
+            INSERT INTO QUESTION_IN_EXAM (EXAMID, QUESTIONID, SEQUENCENUMBER, QUESTIONPOINTS)
+            VALUE (?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE SEQUENCENUMBER = ?, QUESTIONPOINTS = ?
         """
 
         val sqlPartialAnswerQuery = """
@@ -333,8 +336,12 @@ class ExamDAO : IExamDAO {
                             ?: throw DatabaseException("Can't update question without ID"))
                     preparedStatementQuestion?.setInt(3, question.questionOrderInExam
                             ?: throw DatabaseException("Can't update question without sequence number"))
-                    preparedStatementQuestion?.setInt(4, question.questionOrderInExam
+                    preparedStatementQuestion?.setInt(4, question.questionPoints
+                            ?: throw DatabaseException("Can't update question without question points"))
+                    preparedStatementQuestion?.setInt(5, question.questionOrderInExam
                             ?: throw DatabaseException("Can't update question without sequence number"))
+                    preparedStatementQuestion?.setInt(6, question.questionPoints
+                            ?: throw DatabaseException("Can't update question without question points"))
                     preparedStatementQuestion?.execute()
 
                     val preparedStatementPartialAnswer = conn?.prepareStatement(sqlPartialAnswerQuery)
