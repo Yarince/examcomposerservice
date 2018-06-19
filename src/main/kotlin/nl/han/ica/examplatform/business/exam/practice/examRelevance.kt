@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.business.exam.practice
 
 
-import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
+import nl.han.ica.examplatform.models.question.QuestionResult
 import kotlin.math.pow
 
 data class PracticeExamResult(val examId: Int, val studentNr: Int, val questions: ArrayList<QuestionResult>)

@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.persistence.exam.results
 
 import nl.han.ica.examplatform.business.exam.practice.PracticeExamResult
-import nl.han.ica.examplatform.business.exam.practice.models.QuestionResultStats
+import nl.han.ica.examplatform.models.question.QuestionResultStats
 
 /**
  * Interface for Exam PracticeExamResult DAO

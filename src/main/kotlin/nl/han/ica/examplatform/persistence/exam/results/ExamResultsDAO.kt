@@ -1,8 +1,8 @@
 package nl.han.ica.examplatform.persistence.exam.results
 
 import nl.han.ica.examplatform.business.exam.practice.PracticeExamResult
-import nl.han.ica.examplatform.business.exam.practice.models.QuestionResult
-import nl.han.ica.examplatform.business.exam.practice.models.QuestionResultStats
+import nl.han.ica.examplatform.models.question.QuestionResult
+import nl.han.ica.examplatform.models.question.QuestionResultStats
 import nl.han.ica.examplatform.config.logger.loggerFor
 import nl.han.ica.examplatform.controllers.DatabaseException
 import nl.han.ica.examplatform.persistence.databaseconnection.MySQLConnection
