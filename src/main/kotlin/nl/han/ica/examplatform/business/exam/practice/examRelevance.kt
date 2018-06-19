@@ -4,15 +4,9 @@ package nl.han.ica.examplatform.business.exam.practice
 import nl.han.ica.examplatform.models.exam.PracticeExamResult
 import kotlin.math.pow
 
-internal fun getExamRelevance(studentNr: Int, results: ArrayList<PracticeExamResult>): ArrayList<Pair<Int, Double>> {
-    //return results.map { r -> Pair(r.examId, calculateRelevanceOfPracticeExam(results.size, )) }
-    val practiceExamsOfAStudentPairedWithTheirWeightingAscending: ArrayList<Pair<Int, Double>> = ArrayList()
-    for (oefentoetsen in results) {
-        if (oefentoetsen.studentNr == studentNr) {
-            practiceExamsOfAStudentPairedWithTheirWeightingAscending.add(Pair(oefentoetsen.examId, calculateRelevanceOfPracticeExam(amountOfPracticeExamsOfAStudent(oefentoetsen.studentNr, results), results.indexOf(oefentoetsen) + 1)))
-        }
-    }
-    return practiceExamsOfAStudentPairedWithTheirWeightingAscending
+internal fun getExamRelevance(results: ArrayList<PracticeExamResult>): ArrayList<Pair<Int, Double>> {
+    return results.map { Pair(it.examId, calculateRelevanceOfPracticeExam(results.size, results.indexOf(it) + 1)) }
+            .toCollection(arrayListOf())
 }
 
 internal tailrec fun recurPow(n: Int, iterator: Int = 0, total: Double = 0.0): Double {
@@ -27,14 +21,4 @@ internal tailrec fun recurMultiplication(n: Int, iterator: Int = 1, total: Int =
 
 internal fun calculateRelevanceOfPracticeExam(amountOfPracticeExams: Int, importanceRanking: Int): Double {
     return 100 / (recurPow(amountOfPracticeExams)) * recurMultiplication(importanceRanking)
-}
-
-internal fun amountOfPracticeExamsOfAStudent(studentNr: Int, data: ArrayList<PracticeExamResult>): Int {
-    var total = 0
-    for (oefentoetsen in data) {
-        if (oefentoetsen.studentNr == studentNr) {
-            total++
-        }
-    }
-    return total
 }

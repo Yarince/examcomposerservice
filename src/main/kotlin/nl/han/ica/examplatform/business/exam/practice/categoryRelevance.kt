@@ -4,7 +4,7 @@ import nl.han.ica.examplatform.models.exam.PracticeExamResult
 import nl.han.ica.examplatform.models.question.QuestionResult
 
 internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayList<PracticeExamResult>, categories: ArrayList<String>): List<Pair<String, Double>> {
-    val examRelevance: ArrayList<Pair<Int, Double>> = getExamRelevance(studentNr, results)
+    val examRelevance: ArrayList<Pair<Int, Double>> = getExamRelevance(results)
 
     val mapOfCategoriesAndTheirRelevancePercentages = mutableMapOf<String, Double>()
     for (result in results) {
