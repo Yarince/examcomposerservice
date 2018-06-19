@@ -9,6 +9,17 @@ import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.ArrayList
 
+/**
+ * Generates a personalized exam based on previous results and results of others.
+ *
+ * @param previousResults [ArrayList]<[PracticeExamResult]> previous exams of the student
+ * @param courseId [Int] the course ID for the exam
+ * @param studentNr [Int] the studentnumber of the student for the exam
+ * @param categories [ArrayList]<[String]> all the available categories in the course
+ * @param questionDAO [IQuestionDAO] DAO needed to retrieve questions
+ * @param examResultsDAO [IExamResultsDAO] DAO needed to retrieve exam results
+ * @return [ArrayList]<[Question]> contains the questions for the exam
+ */
 fun generatePersonalExam(previousResults: ArrayList<PracticeExamResult>, courseId: Int, studentNr: Int, categories: ArrayList<String>, questionDAO: IQuestionDAO, examResultsDAO: IExamResultsDAO): ArrayList<Question> {
     val questionsAnswered: ArrayList<QuestionResult> = examResultsDAO.getPreviousResultsOfStudent(studentNr, courseId).map { it.questions }.toTypedArray().reduce { acc, arrayList -> acc.plus(arrayList).toCollection(arrayListOf()) }
     val questionsNotAnswered: ArrayList<Question> = questionDAO.getQuestionsByCourse(courseId).filter { q ->
@@ -16,7 +27,6 @@ fun generatePersonalExam(previousResults: ArrayList<PracticeExamResult>, courseI
     }.toCollection(arrayListOf())
 
     val ratedCategories = categoriesWithRelevancePercentages(studentNr, previousResults, categories)
-    ratedCategories.forEach { println(it) }
     return addQuestionToExam(courseId, studentNr, examResultsDAO, questionDAO, questionsNotAnswered, questionsAnswered.toCollection(arrayListOf()), ratedCategories, ratedCategories.last())
 }
 
@@ -59,7 +69,6 @@ private fun addQuestionToExam(courseId: Int, studentNr: Int, examResultsDAO: IEx
         ratedCategories.last()
     else
         ratedCategories[indexOfCurrentCategory - 1]
-
 
     // Recursively add more questions
     return addQuestionToExam(courseId, studentNr, examResultsDAO, questionDAO, notYetAskedQuestions, alreadyAskedQuestions, ratedCategoriesWithoutEmptyQuestions, nextCategory, questionsInExam)

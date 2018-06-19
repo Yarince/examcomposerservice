@@ -8,7 +8,7 @@ import nl.han.ica.examplatform.persistence.question.IQuestionDAO
 
 /**
  * Here the results of other students on this subject should be analysed.
- * After this the worst performed question should be returned.
+ * After this the worst performed question is returned.
  *
  * @param category the category of which the question should be about
  * @return [Question] the first made question of the student
@@ -42,13 +42,6 @@ internal fun getMostRelevantNotAssessedQuestionOfCategory(category: String, ques
     return questions.find { it.questionId == mostRelevantQuestion?.first }
 }
 
-/**
- * Here a request should be made to get the question of the category that is the furthest into the past.
- * Probably best to let the db do this
- *
- * @param questionsInCategory the questions in the category
- * @return [Question] the first made question of the student
- */
 internal fun getFirstAskedQuestion(questionsInCategory: List<QuestionResult>, questionDAO: IQuestionDAO): Question {
     return questionDAO.getQuestionById(questionsInCategory.sortedBy { it.practiceTestResultId }.first().questionId)
 }
