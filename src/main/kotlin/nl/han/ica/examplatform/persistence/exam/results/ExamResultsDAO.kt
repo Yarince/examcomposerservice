@@ -91,7 +91,7 @@ class ExamResultsDAO : IExamResultsDAO {
                                                             WHERE COQ.QUESTIONID = Q.QUESTIONID AND EXISTS(
                                                                                                             SELECT 1
                                                                                                             FROM CATEGORY C
-                                                                                                            WHERE C.CATEGORYID = COQ.CATEGORYID AND C.CATEGORYNAME = "APP"
+                                                                                                            WHERE C.CATEGORYID = COQ.CATEGORYID AND C.CATEGORYNAME = ?
                                                                                                             )
                                                             )
             ) ) AS NCORRECT
@@ -105,7 +105,7 @@ class ExamResultsDAO : IExamResultsDAO {
                                                             WHERE COQ.QUESTIONID = Q.QUESTIONID AND EXISTS(
                                                                                                             SELECT 1
                                                                                                             FROM CATEGORY C
-                                                                                                            WHERE C.CATEGORYID = COQ.CATEGORYID AND C.CATEGORYNAME = "APP"
+                                                                                                            WHERE C.CATEGORYID = COQ.CATEGORYID AND C.CATEGORYNAME = ?
                                                                                                             )
                                                             )
             )
@@ -114,7 +114,7 @@ class ExamResultsDAO : IExamResultsDAO {
         return try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(query)
-            preparedStatement?.setInt(1, studentNr)
+            preparedStatement?.setString(1, category)
             preparedStatement?.setString(2, category)
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
             val results = ArrayList<QuestionResultStats>()
