@@ -47,6 +47,7 @@ fun addRandomQuestionsToPracticeExam(questions: Array<Question>, strippedQuestio
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size >= 10) return exam
     if (subjectsAvailable.isEmpty()) return exam
+    if (strippedQuestions.isEmpty()) return exam
 
     // Gets the list of questions in the current subject
     val currentSubjectList: List<Question>?
