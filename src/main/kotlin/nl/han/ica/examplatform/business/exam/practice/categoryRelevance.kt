@@ -1,5 +1,6 @@
 package nl.han.ica.examplatform.business.exam.practice
 
+import nl.han.ica.examplatform.models.exam.PracticeExamResult
 import nl.han.ica.examplatform.models.question.QuestionResult
 
 internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayList<PracticeExamResult>, categories: ArrayList<String>): List<Pair<String, Double>> {

@@ -1,6 +1,7 @@
 package nl.han.ica.examplatform.business.exam.practice
 
 import nl.han.ica.examplatform.models.exam.PracticeExam
+import nl.han.ica.examplatform.models.exam.PracticeExamResult
 import nl.han.ica.examplatform.models.question.Question
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO

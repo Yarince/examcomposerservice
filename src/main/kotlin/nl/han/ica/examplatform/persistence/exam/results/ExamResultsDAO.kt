@@ -1,6 +1,6 @@
 package nl.han.ica.examplatform.persistence.exam.results
 
-import nl.han.ica.examplatform.business.exam.practice.PracticeExamResult
+import nl.han.ica.examplatform.models.exam.PracticeExamResult
 import nl.han.ica.examplatform.models.question.QuestionResult
 import nl.han.ica.examplatform.models.question.QuestionResultStats
 import nl.han.ica.examplatform.config.logger.loggerFor

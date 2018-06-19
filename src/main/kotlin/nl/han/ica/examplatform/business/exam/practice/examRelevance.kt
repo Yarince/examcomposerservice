@@ -1,10 +1,8 @@
 package nl.han.ica.examplatform.business.exam.practice
 
 
-import nl.han.ica.examplatform.models.question.QuestionResult
+import nl.han.ica.examplatform.models.exam.PracticeExamResult
 import kotlin.math.pow
-
-data class PracticeExamResult(val examId: Int, val studentNr: Int, val questions: ArrayList<QuestionResult>)
 
 internal fun getExamRelevance(studentNr: Int, results: ArrayList<PracticeExamResult>): ArrayList<Pair<Int, Double>> {
     //return results.map { r -> Pair(r.examId, calculateRelevanceOfPracticeExam(results.size, )) }
