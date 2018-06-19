@@ -15,7 +15,7 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayLi
                 continue@categoryLoop
 
             val percentageQuestionsAnsweredCorrectly = questionsOfCategoryInExam
-                    .map { q -> if (q.wasCorrect != null && q.wasCorrect) 0.0 else 100.0 }
+                    .map { q -> if (q.wasCorrect) 0.0 else 100.0 }
                     .reduce { acc, i -> acc + i } / questionsOfCategoryInExam.size
             val currentExamRelevance = examRelevance.find { it.first == result.examId } ?: continue@categoryLoop
             val reducedPercentage = (percentageQuestionsAnsweredCorrectly * currentExamRelevance.second) / 100

@@ -11,6 +11,9 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.SQLException
 
+/**
+ * DAO for retrieving exam results.
+ */
 @Repository
 class ExamResultsDAO : IExamResultsDAO {
     private val logger = loggerFor(javaClass)
@@ -26,14 +29,15 @@ class ExamResultsDAO : IExamResultsDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val query = """SELECT SUBMITTEDEXAMID, Q.QUESTIONID, CATEGORYNAME, QUESTIONTEXT, QUESTIONTYPE, RESULT
-            FROM QUESTION Q INNER JOIN PRACTICETEST_QUESTION_RESULT P
-            ON Q.QUESTIONID = P.QUESTIONID INNER JOIN CATEGORIES_OF_QUESTION COQ
-            ON COQ.QUESTIONID = Q.QUESTIONID INNER JOIN CATEGORY C ON
-            COQ.CATEGORYID = C.CATEGORYID WHERE COURSEID = ? AND STUDENTNUMBER = ?"""
+        val getResultsQuery = """SELECT SUBMITTEDEXAMID, Q.QUESTIONID, CATEGORYNAME, QUESTIONTEXT, QUESTIONTYPE, RESULT
+            FROM QUESTION Q
+            INNER JOIN PRACTICETEST_QUESTION_RESULT P ON Q.QUESTIONID = P.QUESTIONID
+            INNER JOIN CATEGORIES_OF_QUESTION COQ ON COQ.QUESTIONID = Q.QUESTIONID
+            INNER JOIN CATEGORY C ON COQ.CATEGORYID = C.CATEGORYID
+            WHERE COURSEID = ? AND STUDENTNUMBER = ?"""
         return try {
             dbConnection = MySQLConnection.getConnection()
-            preparedStatement = dbConnection?.prepareStatement(query)
+            preparedStatement = dbConnection?.prepareStatement(getResultsQuery)
             preparedStatement?.setInt(1, courseId)
             preparedStatement?.setInt(2, studentNr)
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")
@@ -83,7 +87,7 @@ class ExamResultsDAO : IExamResultsDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val query = """SELECT PQR.QUESTIONID, COUNT(PQR.QUESTIONID) AS NRESULTS, (SELECT COUNT(PQR.RESULT) FROM PRACTICETEST_QUESTION_RESULT PQR WHERE PQR.RESULT=TRUE AND EXISTS(SELECT 1
+        val getResultsOfOthersQuery = """SELECT PQR.QUESTIONID, COUNT(PQR.QUESTIONID) AS NRESULTS, (SELECT COUNT(PQR.RESULT) FROM PRACTICETEST_QUESTION_RESULT PQR WHERE PQR.RESULT=TRUE AND EXISTS(SELECT 1
             FROM QUESTION Q
             WHERE PQR.QUESTIONID = Q.QUESTIONID AND EXISTS(
                                                             SELECT 1
@@ -113,7 +117,7 @@ class ExamResultsDAO : IExamResultsDAO {
         """
         return try {
             dbConnection = MySQLConnection.getConnection()
-            preparedStatement = dbConnection?.prepareStatement(query)
+            preparedStatement = dbConnection?.prepareStatement(getResultsOfOthersQuery)
             preparedStatement?.setString(1, category)
             preparedStatement?.setString(2, category)
             val rs = preparedStatement?.executeQuery() ?: throw DatabaseException("Couldn't execute statement")

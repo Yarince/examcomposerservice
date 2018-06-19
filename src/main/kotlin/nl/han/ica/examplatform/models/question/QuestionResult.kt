@@ -17,6 +17,6 @@ data class QuestionResult(
         val questionText: String,
         val categories: ArrayList<String>,
         val type: String,
-        val submittedExamId: Int? = null,
-        val wasCorrect: Boolean? = null
+        val submittedExamId: Int,
+        val wasCorrect: Boolean
 )
