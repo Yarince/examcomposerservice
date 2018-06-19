@@ -11,7 +11,7 @@ import nl.han.ica.examplatform.models.question.Question
  * @param points [Int] The amount of points this partialAnswers is worth in a [Answer] of a [Question]
  */
 data class PartialAnswer(
-        val id: Int? = null,
+        var id: Int? = null,
         val text: String,
         val points: Int? = null
 )
