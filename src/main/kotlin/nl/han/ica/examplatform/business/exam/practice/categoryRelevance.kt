@@ -7,20 +7,23 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayLi
 
     val mapOfCategoriesAndTheirRelevancePercentages = mutableMapOf<String, Double>()
     for (result in results) {
-        if (result.studentNr != studentNr) break
+        if (result.studentNr != studentNr) continue
         categoryLoop@ for (category in categories) {
-            val toetsVragen: List<QuestionResult> = result.questions.filter { it.categories.contains(category) }
-            if (toetsVragen.isEmpty())
+            val questionsOfCategoryInExam: List<QuestionResult> = result.questions.filter { it.categories.contains(category) }
+            if (questionsOfCategoryInExam.isEmpty())
                 continue@categoryLoop
 
-            val percentageGoodQuestions = toetsVragen.map { q -> if (q.wasCorrect!!) 0.0 else 100.0 }.reduce { acc, i -> acc + i } / toetsVragen.size
-            val huidigeToetsPercentage = examRelevance.find { it.first == result.examId }
-            val reducedPercentage = (percentageGoodQuestions * huidigeToetsPercentage!!.second) / 100
-            if (mapOfCategoriesAndTheirRelevancePercentages.containsKey(category)) {
-                mapOfCategoriesAndTheirRelevancePercentages[category] = mapOfCategoriesAndTheirRelevancePercentages[category]!! + reducedPercentage
-            } else {
+            val percentageQuestionsAnsweredCorrectly = questionsOfCategoryInExam
+                    .map { q -> if (q.wasCorrect!!) 0.0 else 100.0 }
+                    .reduce { acc, i -> acc + i } / questionsOfCategoryInExam.size
+            val currentExamRelevance = examRelevance.find { it.first == result.examId } ?: continue@categoryLoop
+            val reducedPercentage = (percentageQuestionsAnsweredCorrectly * currentExamRelevance.second) / 100
+
+            if (mapOfCategoriesAndTheirRelevancePercentages.containsKey(category))
+                mapOfCategoriesAndTheirRelevancePercentages[category] = (mapOfCategoriesAndTheirRelevancePercentages[category]
+                        ?: continue@categoryLoop) + reducedPercentage
+            else
                 mapOfCategoriesAndTheirRelevancePercentages[category] = reducedPercentage
-            }
         }
     }
 
