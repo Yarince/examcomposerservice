@@ -8,10 +8,10 @@ internal fun categoriesWithRelevancePercentages(studentNr: Int, results: ArrayLi
     val mapOfCategoriesAndTheirRelevancePercentages = mutableMapOf<String, Double>()
     for (result in results) {
         if (result.studentNr != studentNr) break
-        for (category in categories) {
+        categoryLoop@ for (category in categories) {
             val toetsVragen: List<QuestionResult> = result.questions.filter { it.categories.contains(category) }
             if (toetsVragen.isEmpty())
-                break
+                continue@categoryLoop
 
             val percentageGoodQuestions = toetsVragen.map { q -> if (q.wasCorrect!!) 0.0 else 100.0 }.reduce { acc, i -> acc + i } / toetsVragen.size
             val huidigeToetsPercentage = examRelevance.find { it.first == result.examId }
