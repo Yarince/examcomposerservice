@@ -85,8 +85,7 @@ class QuestionDAO : IQuestionDAO {
                     preparedStatementPartialAnswer.generatedKeys.use {
                         var iter = 0
                         while (it.next()) {
-                            question.partialAnswers[iter].id = it.getInt(1)
-                            iter++
+                            question.partialAnswers[iter++].id = it.getInt(1)
                         }
                     }
                 }

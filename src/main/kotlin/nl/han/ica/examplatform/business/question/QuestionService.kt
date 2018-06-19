@@ -37,11 +37,9 @@ class QuestionService(
 
                 val insertedQuestion = questionDAO.insertQuestion(question)
 
-                insertedQuestion.questionId?.let {
-                    question.subQuestions?.let {
-                        it.forEach {
-                            addSubQuestion(it, insertedQuestion.questionId)
-                        }
+                insertedQuestion.questionId?.let { insertedId ->
+                    question.subQuestions?.forEach { subQuestion ->
+                        addSubQuestion(subQuestion, insertedId)
                     }
                 }
 
@@ -61,12 +59,11 @@ class QuestionService(
         insertedQuestion.questionId?.let {
             categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
         }
-        if (insertedQuestion.questionId == null) return
-        if (question.subQuestions == null) return
-        if (question.subQuestions.isEmpty()) return
 
-        question.subQuestions.forEach {
-            addSubQuestion(it, insertedQuestion.questionId)
+        insertedQuestion.questionId?.let { insertedId ->
+            question.subQuestions?.forEach { subQuestion ->
+                addSubQuestion(subQuestion, insertedId)
+            }
         }
     }
 
