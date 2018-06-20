@@ -46,7 +46,7 @@ class QuestionController(
      * @param question [Question] The question that should be inserted
      * @return [ResponseEntity]<[Question]> The inserted question
      */
-    @PostMapping("{parentQuestionId}")
+    @PostMapping("/{parentQuestionId}")
     @ApiOperation(value = "Create a sub question", notes = "Create a sub question.\n QuestionId and partialAnswer Ids should be null")
     @ApiResponses(
             ApiResponse(code = 201, message = "Created"),
@@ -54,7 +54,7 @@ class QuestionController(
     )
     fun createSubQuestion(
             @ApiParam(value = "The ID of the parent you want to create the sub question for.", required = true)
-            @PathVariable("Parent question id") parentQuestionId: Int,
+            @PathVariable("parentQuestionId") parentQuestionId: Int,
             @ApiParam(value = "Question object", required = true)
             @RequestBody question: Question
     ): ResponseEntity<Question> = questionService.addSubQuestion(question, parentQuestionId)
