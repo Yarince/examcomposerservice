@@ -1,7 +1,7 @@
 package nl.han.ica.examplatform.models.exam
 
 import io.swagger.annotations.ApiModelProperty
-import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.models.question.QuestionInPracticeExam
 
 /**
  * Represents a exam for practise purposes
@@ -12,5 +12,5 @@ data class PracticeExam(
         @ApiModelProperty(notes = "The ID of the course that the exam is for", required = true)
         val courseId: Int,
         @ApiModelProperty(notes = "The questions in the exam")
-        val questions: ArrayList<Question>
+        val questions: List<QuestionInPracticeExam>
 )

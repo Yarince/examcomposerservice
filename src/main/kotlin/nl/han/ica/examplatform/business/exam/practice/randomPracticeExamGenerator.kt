@@ -3,6 +3,7 @@ package nl.han.ica.examplatform.business.exam.practice
 import nl.han.ica.examplatform.models.exam.PracticeExam
 import nl.han.ica.examplatform.models.exam.PracticeExamResult
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.models.question.QuestionInPracticeExam
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
@@ -29,7 +30,20 @@ fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDA
         generatePersonalExam(previousResults, courseId, studentNr, categoriesInCourse, questionDAO, examResultsDAO)
     }
 
-    return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam)
+    return PracticeExam(name = "Practice exam", courseId = courseId, questions = practiceExam.map { QuestionInPracticeExam(
+            questionId = it.questionId,
+            questionOrderInExam = it.questionOrderInExam,
+            questionType = it.questionType,
+            questionText = it.questionText,
+            questionPoints = it.questionPoints,
+            courseId = it.courseId,
+            answerType = it.answerType,
+            answerTypePluginVersion = it.answerTypePluginVersion,
+            questionTypePluginVersion = it.questionTypePluginVersion,
+            categories = it.categories,
+            pluginData = it.pluginData,
+            subQuestions = it.subQuestions
+    ) })
 }
 
 /**
