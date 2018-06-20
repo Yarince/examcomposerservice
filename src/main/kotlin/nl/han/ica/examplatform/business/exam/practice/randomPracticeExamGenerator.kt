@@ -18,7 +18,7 @@ import java.util.concurrent.*
  * @return [PracticeExam] returns a practiceExam
  */
 fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDAO, categoryDAO: ICategoryDAO, examResultsDAO: IExamResultsDAO): PracticeExam {
-    val questionsInCourse = questionDAO.getQuestionsByCourse(courseId)
+    val questionsInCourse = questionDAO.getQuestionsByCourse(courseId).filter { it.categories.isNotEmpty() }.toTypedArray()
     val categoriesInCourse = categoryDAO.getCategoriesByCourse(courseId)
 
     val previousResults: ArrayList<PracticeExamResult>? = examResultsDAO.getPreviousResultsOfStudent(studentNr, courseId) // Should be limited to 10 results
@@ -47,6 +47,7 @@ fun generatePracticeExam(courseId: Int, studentNr: Int, questionDAO: IQuestionDA
 fun addRandomQuestionsToPracticeExam(questions: Array<Question>, strippedQuestions: Array<Question>, subjectsAvailable: List<String>, iterator: Int = 0, iteratorForward: Boolean = true, exam: ArrayList<Question> = arrayListOf()): ArrayList<Question> {
     // If the exam contains 50% of the questions, exit this function
     if (exam.size > 0) if (exam.size >= 10) return exam
+    if (questions.isEmpty()) return exam
     if (subjectsAvailable.isEmpty()) return exam
     if (strippedQuestions.isEmpty()) return exam
 
