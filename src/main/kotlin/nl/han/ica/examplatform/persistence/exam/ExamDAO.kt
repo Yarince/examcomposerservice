@@ -231,6 +231,17 @@ class ExamDAO : IExamDAO {
                         ?: throw DatabaseException("Can't update question without question points"))
                 preparedStatementQuestion?.addBatch()
 
+                for (subQuestion in getSubQuestions(question)) {
+                    preparedStatementQuestion?.setInt(1, exam.examId)
+                    preparedStatementQuestion?.setInt(2, subQuestion.questionId
+                            ?: throw DatabaseException("Can't insert subQuestion without ID"))
+                    preparedStatementQuestion?.setInt(3, subQuestion.questionOrderInExam
+                            ?: throw DatabaseException("Can't insert subQuestion without sequence number"))
+                    preparedStatementQuestion?.setInt(4, subQuestion.questionPoints
+                            ?: throw DatabaseException("Can't insert subQuestion without question points"))
+                    preparedStatementQuestion?.addBatch()
+                }
+
                 val preparedStatementPartialAnswer = conn?.prepareStatement(sqlPartialAnswerQuery)
                 for (partialAnswer in question.partialAnswers) {
                     preparedStatementPartialAnswer?.setInt(1, exam.examId)
@@ -255,6 +266,16 @@ class ExamDAO : IExamDAO {
         }
 
         return exam
+    }
+
+    private fun getSubQuestions(question: Question): Array<Question> {
+        val subQuestions: ArrayList<Question>? = question.subQuestions
+        val result: ArrayList<Question> = arrayListOf()
+        if (subQuestions != null && subQuestions.isNotEmpty()) {
+            for (subQuestion: Question in subQuestions)
+                result.addAll(getSubQuestions(subQuestion))
+        }
+        return result.toTypedArray()
     }
 
     override fun addClassesToExam(examId: Int, classes: ArrayList<String>): HttpStatus {
@@ -342,7 +363,22 @@ class ExamDAO : IExamDAO {
                             ?: throw DatabaseException("Can't update question without sequence number"))
                     preparedStatementQuestion?.setInt(6, question.questionPoints
                             ?: throw DatabaseException("Can't update question without question points"))
-                    preparedStatementQuestion?.execute()
+                    preparedStatementQuestion?.addBatch()
+
+                    for (subQuestion: Question in getSubQuestions(question)) {
+                        preparedStatementQuestion?.setInt(1, exam.examId)
+                        preparedStatementQuestion?.setInt(2, subQuestion.questionId
+                                ?: throw DatabaseException("Can't update subQuestion without ID"))
+                        preparedStatementQuestion?.setInt(3, subQuestion.questionOrderInExam
+                                ?: throw DatabaseException("Can't update subQuestion without sequence number"))
+                        preparedStatementQuestion?.setInt(4, subQuestion.questionPoints
+                                ?: throw DatabaseException("Can't update subQuestion without question points"))
+                        preparedStatementQuestion?.setInt(5, subQuestion.questionOrderInExam
+                                ?: throw DatabaseException("Can't update subQuestion without sequence number"))
+                        preparedStatementQuestion?.setInt(6, question.questionPoints
+                                ?: throw DatabaseException("Can't update subQuestion without question points"))
+                        preparedStatementQuestion?.addBatch()
+                    }
 
                     val preparedStatementPartialAnswer = conn?.prepareStatement(sqlPartialAnswerQuery)
                     for (partialAnswer in question.partialAnswers) {
@@ -358,6 +394,7 @@ class ExamDAO : IExamDAO {
                         preparedStatementPartialAnswer?.addBatch()
                     }
                     preparedStatementPartialAnswer?.executeBatch()
+                    preparedStatementQuestion?.executeBatch()
                 }
             }
         } catch (e: SQLException) {
