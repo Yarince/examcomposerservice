@@ -54,7 +54,7 @@ class QuestionService(
                 throw QuestionNotInsertedException(message, e)
             }
 
-    private fun addSubQuestion(question: Question, parentQuestionId: Int) {
+    fun addSubQuestion(question: Question, parentQuestionId: Int): ResponseEntity<Question> {
         val insertedQuestion = questionDAO.insertQuestion(question, parentQuestionId)
         insertedQuestion.questionId?.let {
             categoryDAO.addCategoriesToQuestion(insertedQuestion.categories, it)
@@ -65,6 +65,7 @@ class QuestionService(
                 addSubQuestion(subQuestion, insertedId)
             }
         }
+        return ResponseEntity(question, HttpStatus.CREATED)
     }
 
     private fun getAllCategoriesInQuestionAndSubQuestions(
