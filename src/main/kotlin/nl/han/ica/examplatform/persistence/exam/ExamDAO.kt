@@ -269,13 +269,12 @@ class ExamDAO : IExamDAO {
     }
 
     private fun getSubQuestions(question: Question): Array<Question> {
-        val subQuestions: ArrayList<Question>? = question.subQuestions
-        val result: ArrayList<Question> = arrayListOf()
-        if (subQuestions != null && subQuestions.isNotEmpty()) {
+        val subQuestions: ArrayList<Question> = question.subQuestions ?: arrayListOf()
+        if (subQuestions.isNotEmpty()) {
             for (subQuestion: Question in subQuestions)
-                result.addAll(getSubQuestions(subQuestion))
+                subQuestions.addAll(getSubQuestions(subQuestion))
         }
-        return result.toTypedArray()
+        return subQuestions.toTypedArray()
     }
 
     override fun addClassesToExam(examId: Int, classes: ArrayList<String>): HttpStatus {
