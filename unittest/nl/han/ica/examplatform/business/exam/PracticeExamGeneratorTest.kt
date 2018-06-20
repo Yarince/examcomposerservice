@@ -4,6 +4,7 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import nl.han.ica.examplatform.business.exam.practice.generatePracticeExam
 import nl.han.ica.examplatform.models.question.Question
+import nl.han.ica.examplatform.models.question.QuestionInPracticeExam
 import nl.han.ica.examplatform.persistence.category.ICategoryDAO
 import nl.han.ica.examplatform.persistence.exam.results.IExamResultsDAO
 import nl.han.ica.examplatform.persistence.question.IQuestionDAO
@@ -55,7 +56,7 @@ internal class PracticeExamGeneratorTest {
         assertEquals(10, result.questions.size)
 
         // Check if all categories are in the practice exam
-        val filteredQuestions: MutableMap<String, List<Question>> = mutableMapOf()
+        val filteredQuestions: MutableMap<String, List<QuestionInPracticeExam>> = mutableMapOf()
         for (category in categories) {
             filteredQuestions[category] = result.questions.filter { it.categories.contains(category) }
         }

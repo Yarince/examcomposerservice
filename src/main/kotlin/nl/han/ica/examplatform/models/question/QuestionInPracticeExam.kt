@@ -2,11 +2,9 @@ package nl.han.ica.examplatform.models.question
 
 import io.swagger.annotations.ApiModelProperty
 import nl.han.ica.examplatform.models.answermodel.answer.Answer
-import nl.han.ica.examplatform.models.answermodel.answer.PartialAnswer
-import nl.han.ica.examplatform.models.exam.Exam
 
 /**
- * Represents a question that can be asked in a [Exam].
+ * Represents a question that can be asked in a [PracticeExam].
  * A Question needs to have a [Answer] connected to it.
  *
  * @param questionId [Int] The id that the Question has in the database
@@ -15,16 +13,14 @@ import nl.han.ica.examplatform.models.exam.Exam
  * @param questionText [String] The sentence that makes a request for information
  * @param questionPoints [Int] The amount of point the question is worth
  * @param courseId [Int] The ID of the course the question is for
- * @param examType [String] The type of exam the question is for
  * @param answerType [String] The type of answer expected
  * @param answerTypePluginVersion [String] The version of the answer type plugin
  * @param questionTypePluginVersion [String] The version of the plugin used as question type
  * @param categories [ArrayList]<[String]> The list of categories of this question
- * @param partialAnswers [Array]<[PartialAnswer]> List of partial answers of a question
  * @param pluginData [String] The data needed for the plugin
  * @param subQuestions [Array]<[Question]> List of questions that represent one larger question
  */
-data class Question(
+data class QuestionInPracticeExam(
         @ApiModelProperty(notes = "The ID of the question")
         var questionId: Int? = null,
         @ApiModelProperty(notes = "Order of question in an Exam")
@@ -37,8 +33,6 @@ data class Question(
         val questionPoints: Int? = null,
         @ApiModelProperty(notes = "ID of the course", required = true)
         val courseId: Int,
-        @ApiModelProperty(notes = "Type of exam the question is for", required = true)
-        val examType: String,
         @ApiModelProperty(notes = "The type of answer expected", required = true)
         val answerType: String,
         @ApiModelProperty(notes = "The version of the answer type plugin", required = true)
@@ -49,8 +43,6 @@ data class Question(
         val categories: ArrayList<String> = arrayListOf(),
         @ApiModelProperty(notes = "The extra data necessary for the plugin")
         val pluginData: String? = null,
-        @ApiModelProperty(notes = "Partial answers of the question. Required if the question is not a noQuestion type")
-        val partialAnswers: ArrayList<PartialAnswer>,
         @ApiModelProperty(notes = "A question can contain subQuestions when the type is noQuestion")
         val subQuestions: ArrayList<Question>? = null
 )

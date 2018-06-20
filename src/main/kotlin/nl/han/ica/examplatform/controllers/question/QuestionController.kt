@@ -29,7 +29,7 @@ class QuestionController(
      * @return [ResponseEntity]<[Question]> The inserted question
      */
     @PostMapping()
-    @ApiOperation(value = "Create a question", notes = "Create a question")
+    @ApiOperation(value = "Create a question", notes = "Create a question. \n QuestionId and partialAnswer Ids should be null")
     @ApiResponses(
             ApiResponse(code = 201, message = "Created"),
             ApiResponse(code = 500, message = "Internal server error")
@@ -38,6 +38,26 @@ class QuestionController(
             @ApiParam(value = "Question object", required = true)
             @RequestBody question: Question
     ): ResponseEntity<Question> = questionService.addQuestion(question)
+
+    /**
+     * HTTP REST function to add a new sub Question to the system.
+     * Returns the newly added Question.
+     *
+     * @param question [Question] The question that should be inserted
+     * @return [ResponseEntity]<[Question]> The inserted question
+     */
+    @PostMapping("/{parentQuestionId}")
+    @ApiOperation(value = "Create a sub question", notes = "Create a sub question.\n QuestionId and partialAnswer Ids should be null")
+    @ApiResponses(
+            ApiResponse(code = 201, message = "Created"),
+            ApiResponse(code = 500, message = "Internal server error")
+    )
+    fun createSubQuestion(
+            @ApiParam(value = "The ID of the parent you want to create the sub question for.", required = true)
+            @PathVariable("parentQuestionId") parentQuestionId: Int,
+            @ApiParam(value = "Question object", required = true)
+            @RequestBody question: Question
+    ): ResponseEntity<Question> = questionService.addSubQuestion(question, parentQuestionId)
 
     /**
      * Endpoint for getting questions for a course.
