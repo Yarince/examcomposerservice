@@ -169,6 +169,7 @@ class QuestionDAO : IQuestionDAO {
                 EXAMTYPENAME,
                 QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
+                PLUGINDATA,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION
             WHERE PARENTQUESTIONID = ?;"""
@@ -232,6 +233,7 @@ class QuestionDAO : IQuestionDAO {
                 COURSEID,
                 EXAMTYPENAME,
                 ANSWERTYPE,
+                PLUGINDATA,
                 ANSWERTYPEPLUGINVERSION,
                 QUESTIONTYPEPLUGINVERSION
             FROM QUESTION
@@ -266,6 +268,7 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
+                        pluginData = questionRs.getString("PLUGINDATA"),
                         questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                         categories = getCategoriesOfQuestion(questionId, conn),
                         partialAnswers = getPartialAnswers(conn, questionId),
@@ -740,6 +743,7 @@ class QuestionDAO : IQuestionDAO {
                         answerType = rs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = rs.getString("ANSWERTYPEPLUGINVERSION"),
                         examType = rs.getString("EXAMTYPENAME"),
+                        pluginData = rs.getString("PLUGINDATA"),
                         partialAnswers = getPartialAnswers(conn, questionId),
                         questionId = questionId
                 ))
