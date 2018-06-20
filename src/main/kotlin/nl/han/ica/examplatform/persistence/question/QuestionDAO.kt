@@ -38,9 +38,10 @@ class QuestionDAO : IQuestionDAO {
                 EXAMTYPENAME,
                 QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
+                PLUGINDATA,
                 ANSWERTYPEPLUGINVERSION
                 )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
         val sqlPartialAnswerQuery = """
            INSERT INTO PARTIAL_ANSWER (
@@ -65,7 +66,8 @@ class QuestionDAO : IQuestionDAO {
             preparedStatementQuestion?.setString(5, question.examType)
             preparedStatementQuestion?.setString(6, question.questionTypePluginVersion)
             preparedStatementQuestion?.setString(7, question.answerType)
-            preparedStatementQuestion?.setString(8, question.answerTypePluginVersion)
+            preparedStatementQuestion?.setString(8, question.pluginData)
+            preparedStatementQuestion?.setString(9, question.answerTypePluginVersion)
 
             preparedStatementQuestion?.executeUpdate()
                     ?: throw DatabaseException("Couldn't insert question")
@@ -112,7 +114,7 @@ class QuestionDAO : IQuestionDAO {
         var dbConnection: Connection? = null
         var preparedStatement: PreparedStatement? = null
 
-        val queryCheckExists = "SELECT QUESTIONTEXT FROM QUESTION WHERE QUESTIONID = ?"
+        val queryCheckExists = "SELECT 1 FROM QUESTION WHERE QUESTIONID = ?"
         try {
             dbConnection = MySQLConnection.getConnection()
             preparedStatement = dbConnection?.prepareStatement(queryCheckExists)
@@ -151,6 +153,7 @@ class QuestionDAO : IQuestionDAO {
                 EXAMTYPENAME,
                 QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
+                PLUGINDATA,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION
             WHERE
@@ -166,6 +169,7 @@ class QuestionDAO : IQuestionDAO {
                 EXAMTYPENAME,
                 QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
+                PLUGINDATA,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION
             WHERE PARENTQUESTIONID = ?;"""
@@ -213,6 +217,7 @@ class QuestionDAO : IQuestionDAO {
                 ANSWERTYPEPLUGINVERSION,
                 QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
+                PLUGINDATA,
                 ANSWERTYPEPLUGINVERSION
             FROM QUESTION Q INNER JOIN CATEGORIES_OF_QUESTION COQ ON
                 Q.QUESTIONID = COQ.QUESTIONID
@@ -228,6 +233,7 @@ class QuestionDAO : IQuestionDAO {
                 COURSEID,
                 EXAMTYPENAME,
                 ANSWERTYPE,
+                PLUGINDATA,
                 ANSWERTYPEPLUGINVERSION,
                 QUESTIONTYPEPLUGINVERSION
             FROM QUESTION
@@ -262,6 +268,7 @@ class QuestionDAO : IQuestionDAO {
                         examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
+                        pluginData = questionRs.getString("PLUGINDATA"),
                         questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                         categories = getCategoriesOfQuestion(questionId, conn),
                         partialAnswers = getPartialAnswers(conn, questionId),
@@ -304,6 +311,7 @@ class QuestionDAO : IQuestionDAO {
                 Q.EXAMTYPENAME,
                 Q.QUESTIONTYPEPLUGINVERSION,
                 Q.ANSWERTYPE,
+                Q.PLUGINDATA,
                 Q.ANSWERTYPEPLUGINVERSION
             FROM QUESTION AS Q INNER JOIN QUESTION_IN_EXAM AS QE
                 ON Q.QUESTIONID = QE.QUESTIONID
@@ -319,6 +327,7 @@ class QuestionDAO : IQuestionDAO {
                 Q.QUESTIONTEXT,
                 Q.COURSEID,
                 Q.EXAMTYPENAME,
+                Q.PLUGINDATA,
                 Q.ANSWERTYPE,
                 Q.ANSWERTYPEPLUGINVERSION,
                 Q.QUESTIONTYPEPLUGINVERSION
@@ -344,6 +353,7 @@ class QuestionDAO : IQuestionDAO {
                         courseId = questionRs.getInt("COURSEID"),
                         examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
+                        pluginData = questionRs.getString("PLUGINDATA"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                         questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                         categories = getCategoriesOfQuestion(questionRs.getInt("QUESTIONID"), conn),
@@ -382,6 +392,7 @@ class QuestionDAO : IQuestionDAO {
                     answerType = questionRs.getString("ANSWERTYPE"),
                     answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                     questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
+                    pluginData = questionRs.getString("PLUGINDATA"),
                     categories = getCategoriesOfQuestion(questionId, conn),
                     partialAnswers = getPartialAnswers(conn, questionId),
                     subQuestions = getSubQuestionsOfQuestion(questionId, conn, sqlSubQuestionQuery)
@@ -460,6 +471,7 @@ class QuestionDAO : IQuestionDAO {
                         questionPoints = questionRs.getInt("QUESTIONPOINTS"),
                         examType = questionRs.getString("EXAMTYPENAME"),
                         answerType = questionRs.getString("ANSWERTYPE"),
+                        pluginData = questionRs.getString("PLUGINDATA"),
                         answerTypePluginVersion = questionRs.getString("ANSWERTYPEPLUGINVERSION"),
                         questionTypePluginVersion = questionRs.getString("QUESTIONTYPEPLUGINVERSION"),
                         categories = getCategoriesOfQuestion(questionId, conn),
@@ -545,7 +557,8 @@ class QuestionDAO : IQuestionDAO {
                     EXAMTYPENAME,
                     QUESTIONTYPEPLUGINVERSION,
                     ANSWERTYPE,
-                    ANSWERTYPEPLUGINVERSION
+                    ANSWERTYPEPLUGINVERSION,
+                    PLUGINDATA
                 FROM QUESTION
                 WHERE QUESTIONID = ?"""
 
@@ -558,7 +571,8 @@ class QuestionDAO : IQuestionDAO {
                 EXAMTYPENAME,
                 QUESTIONTYPEPLUGINVERSION,
                 ANSWERTYPE,
-                ANSWERTYPEPLUGINVERSION
+                ANSWERTYPEPLUGINVERSION,
+                PLUGINDATA
             FROM QUESTION
             WHERE PARENTQUESTIONID = ?"""
 
@@ -601,6 +615,7 @@ class QuestionDAO : IQuestionDAO {
                 QUESTIONTYPE = ?,
                 ANSWERTYPE = ?,
                 ANSWERTYPEPLUGINVERSION = ?,
+                PLUGINDATA = ?,
                 QUESTIONTYPEPLUGINVERSION = ?
             WHERE QUESTIONID = ?"""
 
@@ -617,8 +632,9 @@ class QuestionDAO : IQuestionDAO {
             preparedStatement?.setString(4, question.questionType)
             preparedStatement?.setString(5, question.answerType)
             preparedStatement?.setString(6, question.answerTypePluginVersion)
-            preparedStatement?.setString(7, question.questionTypePluginVersion)
-            preparedStatement?.setInt(8, question.questionId ?: throw DatabaseException("No questionID provided"))
+            preparedStatement?.setString(7, question.pluginData)
+            preparedStatement?.setString(8, question.questionTypePluginVersion)
+            preparedStatement?.setInt(9, question.questionId ?: throw DatabaseException("No questionID provided"))
             preparedStatement?.executeUpdate()
 
             val preparedStatementPartialAnswer = conn?.prepareStatement(updatePartialAnswerQuery, Statement.RETURN_GENERATED_KEYS)
@@ -727,6 +743,7 @@ class QuestionDAO : IQuestionDAO {
                         answerType = rs.getString("ANSWERTYPE"),
                         answerTypePluginVersion = rs.getString("ANSWERTYPEPLUGINVERSION"),
                         examType = rs.getString("EXAMTYPENAME"),
+                        pluginData = rs.getString("PLUGINDATA"),
                         partialAnswers = getPartialAnswers(conn, questionId),
                         questionId = questionId
                 ))
