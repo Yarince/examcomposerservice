@@ -641,7 +641,7 @@ class QuestionDAO : IQuestionDAO {
                     ?: throw DatabaseException("Couldn't insert partial answer batch")
 
             preparedStatementPartialAnswer.generatedKeys.use {
-                while (it.next())
+                while (it.next() && !newPartialAnswerIds.isEmpty())
                     question.partialAnswers[newPartialAnswerIds.pop()].id = it.getInt(1)
 
             }
