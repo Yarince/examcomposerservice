@@ -14,6 +14,27 @@ import java.sql.SQLException
  */
 @Repository
 class DecryptionCodeDAO : IDecryptionCodeDAO {
+    override fun getAllDecryptionCodes(): ArrayList<Pair<String, String>> {
+        val sqlRetrieveExamDecryptKeyQuery = "SELECT DECRYPTKEY, EXAMNAME FROM EXAM"
+
+        val conn: Connection? = MySQLConnection.getConnection()
+
+        val preparedStatement: PreparedStatement? = conn?.prepareStatement(sqlRetrieveExamDecryptKeyQuery)
+
+        return try {
+            val resultSet = preparedStatement?.executeQuery()
+                    ?: throw DatabaseException("Error while fetching decryption codes from the database.")
+
+            val decryptionCodes = ArrayList<Pair<String, String>>()
+            while(resultSet.next()) {
+                decryptionCodes.add(Pair(resultSet.getString("EXAMNAME"), resultSet.getString("DECRYPTKEY") ?: "No decrypt key available"))
+            }
+            decryptionCodes
+        } catch (e: SQLException) {
+            logger.error("Error retrieving exam decryption keys", e)
+            throw DatabaseException("Error while retrieving exam decryption keys")
+        }
+    }
 
     private val logger = loggerFor(javaClass)
 

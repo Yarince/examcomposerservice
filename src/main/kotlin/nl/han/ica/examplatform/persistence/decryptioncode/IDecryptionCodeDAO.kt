@@ -7,4 +7,6 @@ interface IDecryptionCodeDAO {
      * @return [String] decryption code
      */
     fun getDecryptionCode(examId: Int): String
+
+    fun getAllDecryptionCodes(): ArrayList<Pair<String, String>>
 }

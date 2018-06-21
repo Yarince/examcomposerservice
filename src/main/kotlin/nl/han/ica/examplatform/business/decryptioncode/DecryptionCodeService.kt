@@ -18,4 +18,7 @@ class DecryptionCodeService(private val decryptionCodeDAO: IDecryptionCodeDAO) {
      */
     fun getDecryptionCode(examId: Int): ResponseEntity<String> =
             ResponseEntity(decryptionCodeDAO.getDecryptionCode(examId), HttpStatus.OK)
+
+    fun getAllDecryptionCodes(): ResponseEntity<ArrayList<Pair<String, String>>> =
+            ResponseEntity(decryptionCodeDAO.getAllDecryptionCodes(), HttpStatus.OK)
 }
