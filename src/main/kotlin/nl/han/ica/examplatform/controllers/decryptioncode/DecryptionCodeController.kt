@@ -35,4 +35,22 @@ class DecryptionCodeController(private val decryptionCodeService: DecryptionCode
             @PathVariable("examId") examId: Int
     ): ResponseEntity<String> =
             decryptionCodeService.getDecryptionCode(examId)
+
+    /**
+     * Returns the decryption code to unlock the exam
+     *
+     * @return [String]
+     */
+    @GetMapping()
+    @ApiOperation(
+            value = "Returns all the decryption codes",
+            response = Array<String>::class
+    )
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Decryption code received"),
+            ApiResponse(code = 400, message = "Invalid Answer"),
+            ApiResponse(code = 500, message = "Something went wrong")
+    )
+    fun getDecryptionCode(): ResponseEntity<ArrayList<Pair<String, String>>> =
+            decryptionCodeService.getAllDecryptionCodes()
 }
